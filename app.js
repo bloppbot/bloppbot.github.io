@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function renderStats() {
     const data = INHOUSE_DATA;
-    const players = Object.keys(data.players).filter(id => data.players[id].games > 0);
+    const players = Object.keys(data.players);
     
     document.getElementById('total-players').textContent = players.length;
     document.getElementById('total-matches').textContent = data.matches.length;
@@ -27,9 +27,8 @@ function renderLeaderboard() {
     const data = INHOUSE_DATA;
     const tbody = document.getElementById('leaderboard-body');
     
-    // Build leaderboard
+    // Build leaderboard (show all registered players)
     const leaderboard = Object.entries(data.players)
-        .filter(([id, p]) => p.games > 0)
         .map(([steamId, p]) => ({
             steamId,
             name: PLAYER_NAMES[steamId] || steamId,
