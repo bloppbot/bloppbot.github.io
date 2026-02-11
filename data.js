@@ -3,22 +3,32 @@
 
 const INHOUSE_DATA = {
   "settings": {
-    "mu": 25.0,
+    "mu": 25,
     "sigma": 8.333,
     "beta": 4.167,
     "tau": 0.0833,
-    "drawProbability": 0.0
+    "drawProbability": 0
   },
-  "players": {},
+  "players": {
+    "174635828": {
+      "name": "Admiral rat",
+      "mu": 25,
+      "sigma": 8.333,
+      "games": 0,
+      "wins": 0,
+      "losses": 0,
+      "lastPlayed": null
+    }
+  },
   "matches": [],
   "leagueUrl": null,
   "lastScraped": null
 };
 
 const PLAYER_NAMES = {
-  "249844811": "blopp",
-  "153867895": "Space Cowboy",
   "12853293": "Drea",
+  "153867895": "Space Cowboy",
   "174635828": "Admiral rat",
+  "249844811": "blopp",
   "400042038": "Ленске"
 };
