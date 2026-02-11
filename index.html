@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AD Inhouse League | BloppBOT</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="logo">🏠</span>
+            <span class="brand-text">AD Inhouse League</span>
+        </div>
+        <div class="nav-links">
+            <a href="#leaderboard" class="nav-link active">Leaderboard</a>
+            <a href="#matches" class="nav-link">Matches</a>
+            <a href="#stats" class="nav-link">Stats</a>
+        </div>
+        <div class="nav-info">
+            <span class="powered-by">Powered by BloppBOT</span>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="hero" class="hero">
+            <h1>AD Inhouse League</h1>
+            <p class="subtitle">TrueSkill-rated Ability Draft matches</p>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <span class="stat-value" id="total-players">0</span>
+                    <span class="stat-label">Players</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="total-matches">0</span>
+                    <span class="stat-label">Matches</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="last-updated">-</span>
+                    <span class="stat-label">Last Updated</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="leaderboard" class="section">
+            <h2>🏆 Leaderboard</h2>
+            <div class="table-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Rating</th>
+                            <th>μ</th>
+                            <th>σ</th>
+                            <th>Games</th>
+                            <th>W-L</th>
+                            <th>Winrate</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <tr>
+                            <td colspan="8" class="no-data">No games played yet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="matches" class="section">
+            <h2>📋 Recent Matches</h2>
+            <div class="matches-list" id="matches-list">
+                <div class="no-data">No matches recorded yet</div>
+            </div>
+        </section>
+
+        <section id="stats" class="section">
+            <h2>📊 League Stats</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <h3>Highest Rated</h3>
+                    <div id="highest-rated" class="stat-content">-</div>
+                </div>
+                <div class="stat-box">
+                    <h3>Most Games</h3>
+                    <div id="most-games" class="stat-content">-</div>
+                </div>
+                <div class="stat-box">
+                    <h3>Best Winrate</h3>
+                    <div id="best-winrate" class="stat-content">-</div>
+                </div>
+                <div class="stat-box">
+                    <h3>Current Streak</h3>
+                    <div id="current-streak" class="stat-content">-</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>AD Inhouse League • Managed by <a href="https://github.com/bloppbot">BloppBOT</a></p>
+        <p class="footer-sub">TrueSkill rating system • Data from blopp's Discord</p>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
