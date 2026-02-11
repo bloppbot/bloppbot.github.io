@@ -1,3 +1,11 @@
+/* === RUMBLE V STYLE - CYBERPUNK THEME === */
+
+@property --beam-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,147 +13,301 @@
 }
 
 :root {
-    --bg-primary: #0d1117;
-    --bg-secondary: #161b22;
-    --bg-tertiary: #21262d;
-    --border-color: #30363d;
-    --text-primary: #e6edf3;
-    --text-secondary: #8b949e;
-    --accent-green: #3fb950;
-    --accent-red: #f85149;
-    --accent-blue: #58a6ff;
-    --accent-gold: #d29922;
-    --accent-purple: #a371f7;
+    --bg-dark: #020502;
+    --bg-panel: rgba(10, 15, 10, 0.9);
+    --accent-green: #39ff14;
+    --accent-red: #ff2a2a;
+    --accent-gold: #ffd700;
+    --accent-silver: #c0c0c0;
+    --accent-bronze: #cd7f32;
+    --glass-border: rgba(57, 255, 20, 0.2);
+    --text-main: #e0e0e0;
+    --text-dim: #888;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
+    font-family: 'Rajdhani', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
     line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
 }
 
-/* Navigation */
+/* === BACKGROUND FX === */
+.cyber-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -3;
+    background: radial-gradient(ellipse at 50% 0%, #0d2e0d 0%, #050a05 40%, #020502 100%);
+}
+
+.particles {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -2;
+    background-image: radial-gradient(rgba(57, 255, 20, 0.15) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.4;
+    animation: particleDrift 40s linear infinite;
+}
+
+@keyframes particleDrift { 
+    0% { transform: translateY(0); } 
+    100% { transform: translateY(-60px); } 
+}
+
+.grid-floor {
+    position: fixed;
+    bottom: -20%; left: -50%; width: 200%; height: 80%;
+    background-image: 
+        linear-gradient(0deg, transparent 24%, rgba(57, 255, 20, 0.05) 25%, rgba(57, 255, 20, 0.05) 26%, transparent 27%, transparent 74%, rgba(57, 255, 20, 0.05) 75%, rgba(57, 255, 20, 0.05) 76%, transparent 77%, transparent),
+        linear-gradient(90deg, transparent 24%, rgba(57, 255, 20, 0.05) 25%, rgba(57, 255, 20, 0.05) 26%, transparent 27%, transparent 74%, rgba(57, 255, 20, 0.05) 75%, rgba(57, 255, 20, 0.05) 76%, transparent 77%, transparent);
+    background-size: 50px 50px;
+    transform: perspective(500px) rotateX(60deg);
+    z-index: -2;
+    pointer-events: none;
+    mask-image: linear-gradient(to top, black, transparent);
+    -webkit-mask-image: linear-gradient(to top, black, transparent);
+}
+
+.scanlines {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.03) 0px,
+        rgba(0, 0, 0, 0.03) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    opacity: 0.6;
+}
+
+/* === MATRIX RAIN === */
+.matrix-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+    opacity: 0.06;
+}
+
+.matrix-column {
+    position: absolute;
+    top: -100%;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: var(--accent-green);
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    animation: matrixFall linear infinite;
+    text-shadow: 0 0 10px var(--accent-green);
+}
+
+@keyframes matrixFall {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(calc(100vh + 100%)); }
+}
+
+/* === NAVIGATION === */
 .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
-    background-color: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    padding: 15px 30px;
+    background: rgba(2, 5, 2, 0.95);
+    border-bottom: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
 }
 
 .nav-brand {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 12px;
 }
 
 .logo {
     font-size: 1.5rem;
+    filter: drop-shadow(0 0 10px var(--accent-green));
 }
 
 .brand-text {
-    font-weight: 600;
-    font-size: 1.25rem;
+    font-family: 'Black Ops One', cursive;
+    font-size: 1.3rem;
+    color: var(--accent-green);
+    text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .nav-links {
     display: flex;
-    gap: 2rem;
+    gap: 10px;
 }
 
 .nav-link {
-    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--accent-green);
+    color: var(--accent-green);
+    padding: 8px 25px;
+    font-family: 'Black Ops One', cursive;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
     text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s;
+    font-size: 0.85rem;
 }
 
 .nav-link:hover, .nav-link.active {
-    color: var(--text-primary);
+    background: var(--accent-green);
+    color: #000;
+    box-shadow: 0 0 20px var(--accent-green);
 }
 
 .powered-by {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-/* Container */
+/* === CONTAINER === */
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 30px;
+    position: relative;
+    z-index: 1;
 }
 
-/* Hero Section */
+/* === HERO SECTION === */
 .hero {
     text-align: center;
-    padding: 3rem 0;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: 2rem;
+    padding: 60px 0;
+    margin-bottom: 40px;
+    position: relative;
 }
 
 .hero h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+    font-family: 'Black Ops One', cursive;
+    font-size: 4rem;
+    color: #fff;
+    text-transform: uppercase;
+    text-shadow: 0 0 30px var(--accent-green), 0 0 60px rgba(57, 255, 20, 0.3);
+    margin-bottom: 10px;
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    0% { text-shadow: 0 0 30px var(--accent-green), 0 0 60px rgba(57, 255, 20, 0.3); }
+    100% { text-shadow: 0 0 50px var(--accent-green), 0 0 100px rgba(57, 255, 20, 0.5); }
 }
 
 .subtitle {
-    color: var(--text-secondary);
-    font-size: 1.125rem;
-    margin-bottom: 2rem;
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 .hero-stats {
     display: flex;
     justify-content: center;
-    gap: 3rem;
+    gap: 50px;
 }
 
 .stat-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 25px 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: all 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(57, 255, 20, 0.2);
+    border-color: var(--accent-green);
 }
 
 .stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--accent-blue);
+    font-family: 'Black Ops One', cursive;
+    font-size: 2.5rem;
+    color: var(--accent-green);
+    text-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
 }
 
 .stat-label {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
+    color: var(--text-dim);
+    font-size: 0.85rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 2px;
+    margin-top: 5px;
 }
 
-/* Sections */
+/* === SECTIONS === */
 .section {
-    margin-bottom: 3rem;
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: sectionFadeIn 0.8s ease forwards;
+}
+
+.section:nth-child(2) { animation-delay: 0.1s; }
+.section:nth-child(3) { animation-delay: 0.2s; }
+.section:nth-child(4) { animation-delay: 0.3s; }
+
+@keyframes sectionFadeIn {
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .section h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--accent-blue);
+    font-family: 'Black Ops One', cursive;
+    font-size: 2rem;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px var(--accent-green);
+    position: relative;
     display: inline-block;
 }
 
-/* Leaderboard Table */
+.section h2::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: var(--accent-green);
+    margin-top: 8px;
+    box-shadow: 0 0 10px var(--accent-green);
+}
+
+/* === LEADERBOARD TABLE === */
 .table-container {
-    overflow-x: auto;
-    background-color: var(--bg-secondary);
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
+    background: var(--bg-panel);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
 }
 
 .leaderboard-table {
@@ -155,31 +317,35 @@ body {
 
 .leaderboard-table th,
 .leaderboard-table td {
-    padding: 1rem;
+    padding: 15px 20px;
     text-align: left;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid rgba(57, 255, 20, 0.1);
 }
 
 .leaderboard-table th {
-    background-color: var(--bg-tertiary);
-    font-weight: 600;
-    color: var(--text-secondary);
+    background: rgba(0,0,0,0.5);
+    font-family: 'Black Ops One', cursive;
+    font-size: 0.85rem;
+    color: var(--accent-green);
     text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
+    letter-spacing: 1px;
+}
+
+.leaderboard-table tbody tr {
+    transition: all 0.3s;
 }
 
 .leaderboard-table tbody tr:hover {
-    background-color: var(--bg-tertiary);
+    background: linear-gradient(90deg, rgba(57, 255, 20, 0.1) 0%, transparent 100%);
 }
 
 .leaderboard-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-.rank-1 { color: var(--accent-gold); font-weight: 700; }
-.rank-2 { color: #c0c0c0; font-weight: 600; }
-.rank-3 { color: #cd7f32; font-weight: 600; }
+.rank-1 { color: var(--accent-gold); font-weight: 700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+.rank-2 { color: var(--accent-silver); font-weight: 600; }
+.rank-3 { color: var(--accent-bronze); font-weight: 600; }
 
 .rating-positive { color: var(--accent-green); }
 .rating-negative { color: var(--accent-red); }
@@ -190,54 +356,58 @@ body {
 
 .no-data {
     text-align: center;
-    color: var(--text-secondary);
-    padding: 2rem;
+    color: var(--text-dim);
+    padding: 40px;
+    font-size: 1.1rem;
 }
 
-/* Matches List */
+/* === MATCHES LIST === */
 .matches-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 15px;
 }
 
 .match-card {
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 1.5rem;
+    background: var(--bg-panel);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 25px;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: 1rem;
+    gap: 20px;
     align-items: center;
+    transition: all 0.3s;
+}
+
+.match-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(57, 255, 20, 0.15);
+    border-color: var(--accent-green);
 }
 
 .match-team {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 8px;
 }
 
-.match-team.radiant {
-    text-align: left;
-}
-
-.match-team.dire {
-    text-align: right;
-}
+.match-team.radiant { text-align: left; }
+.match-team.dire { text-align: right; }
 
 .team-label {
-    font-size: 0.75rem;
+    font-family: 'Black Ops One', cursive;
+    font-size: 0.85rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-secondary);
+    letter-spacing: 1px;
 }
 
-.team-label.radiant { color: var(--accent-green); }
-.team-label.dire { color: var(--accent-red); }
+.team-label.radiant { color: var(--accent-green); text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }
+.team-label.dire { color: var(--accent-red); text-shadow: 0 0 10px rgba(255, 42, 42, 0.5); }
 
 .team-players {
-    font-size: 0.875rem;
+    font-size: 0.95rem;
+    color: var(--text-main);
 }
 
 .match-result {
@@ -245,14 +415,23 @@ body {
 }
 
 .match-vs {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text-secondary);
+    font-family: 'Black Ops One', cursive;
+    font-size: 1.8rem;
+    color: var(--accent-green);
+    text-shadow: 0 0 20px var(--accent-green);
+    animation: vsPulse 2s ease-in-out infinite;
+}
+
+@keyframes vsPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
 }
 
 .match-winner {
-    font-size: 0.75rem;
-    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .match-winner.radiant { color: var(--accent-green); }
@@ -260,70 +439,100 @@ body {
 
 .match-date {
     font-size: 0.75rem;
-    color: var(--text-secondary);
-    margin-top: 0.5rem;
+    color: var(--text-dim);
+    margin-top: 8px;
 }
 
-/* Stats Grid */
+/* === STATS GRID === */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
 }
 
 .stat-box {
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 1.5rem;
+    background: var(--bg-panel);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 25px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+}
+
+.stat-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(57, 255, 20, 0.2);
 }
 
 .stat-box h3 {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
+    font-family: 'Black Ops One', cursive;
+    font-size: 0.9rem;
+    color: var(--text-dim);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
 }
 
 .stat-content {
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent-green);
 }
 
-/* Footer */
+/* === FOOTER === */
 .footer {
     text-align: center;
-    padding: 2rem;
-    border-top: 1px solid var(--border-color);
-    margin-top: 2rem;
+    padding: 40px;
+    border-top: 1px solid var(--glass-border);
+    margin-top: 40px;
+    background: rgba(0,0,0,0.3);
 }
 
 .footer a {
-    color: var(--accent-blue);
+    color: var(--accent-green);
     text-decoration: none;
+    transition: all 0.3s;
 }
 
 .footer a:hover {
-    text-decoration: underline;
+    text-shadow: 0 0 10px var(--accent-green);
 }
 
 .footer-sub {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-top: 10px;
 }
 
-/* Responsive */
+/* === RESPONSIVE === */
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
-        gap: 1rem;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem;
     }
     
     .hero-stats {
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 20px;
     }
     
     .match-card {
