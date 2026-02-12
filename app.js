@@ -54,7 +54,14 @@ function renderLeaderboard() {
         return `
             <tr>
                 <td class="${rankClass}">#${i + 1}</td>
-                <td>${escapeHtml(p.name)}</td>
+                <td>
+                    ${escapeHtml(p.name)}
+                    <span class="player-links">
+                        <a href="https://www.dotabuff.com/players/${p.steamId}" target="_blank" title="Dotabuff">DB</a>
+                        <a href="https://www.opendota.com/players/${p.steamId}" target="_blank" title="OpenDota">OD</a>
+                        <a href="https://windrun.io/players/${p.steamId}" target="_blank" title="Windrun">WR</a>
+                    </span>
+                </td>
                 <td>${p.rating}</td>
                 <td>${p.games}</td>
                 <td>${p.wins}-${p.losses}</td>

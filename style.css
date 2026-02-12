@@ -545,3 +545,27 @@ body {
         text-align: center;
     }
 }
+
+/* === PLAYER PROFILE LINKS === */
+.player-links {
+    margin-left: 8px;
+    font-size: 0.75rem;
+}
+
+.player-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 2px 4px;
+    margin: 0 2px;
+    border-radius: 3px;
+    background: rgba(57, 255, 20, 0.1);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+    transition: all 0.2s ease;
+}
+
+.player-links a:hover {
+    color: var(--accent-green);
+    background: rgba(57, 255, 20, 0.2);
+    border-color: var(--accent-green);
+    text-shadow: 0 0 5px var(--accent-green);
+}
