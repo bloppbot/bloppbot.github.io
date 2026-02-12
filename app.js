@@ -57,9 +57,15 @@ function renderLeaderboard() {
                 <td>
                     ${escapeHtml(p.name)}
                     <span class="player-links">
-                        <a href="https://www.dotabuff.com/players/${p.steamId}" target="_blank" title="Dotabuff">DB</a>
-                        <a href="https://www.opendota.com/players/${p.steamId}" target="_blank" title="OpenDota">OD</a>
-                        <a href="https://windrun.io/players/${p.steamId}" target="_blank" title="Windrun">WR</a>
+                        <a href="https://www.dotabuff.com/players/${p.steamId}" target="_blank" title="Dotabuff" class="link-dotabuff">
+                            <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l6.9 3.45L12 11.09 5.1 7.63 12 4.18zM4 8.81l7 3.5v7.69l-7-3.5V8.81zm9 11.19v-7.69l7-3.5v7.69l-7 3.5z"/></svg>
+                        </a>
+                        <a href="https://www.opendota.com/players/${p.steamId}" target="_blank" title="OpenDota" class="link-opendota">
+                            <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                        </a>
+                        <a href="https://windrun.io/players/${p.steamId}" target="_blank" title="Windrun (Ability Draft)" class="link-windrun">
+                            <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M14.5 17c0 1.65-1.35 3-3 3s-3-1.35-3-3h2c0 .55.45 1 1 1s1-.45 1-1-.45-1-1-1H2v-2h9.5c1.65 0 3 1.35 3 3zM19 6.5C19 4.57 17.43 3 15.5 3S12 4.57 12 6.5h2c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S16.33 8 15.5 8H2v2h13.5c1.93 0 3.5-1.57 3.5-3.5zm-.5 4.5H2v2h16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5v2c1.93 0 3.5-1.57 3.5-3.5S20.43 11 18.5 11z"/></svg>
+                        </a>
                     </span>
                 </td>
                 <td>${p.rating}</td>
