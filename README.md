@@ -18,9 +18,10 @@ TrueSkill-rated Ability Draft inhouse games, managed by [BloppBOT](https://githu
 
 ## Rating System
 
-- **New players** start at μ=25, σ=8.333 (rating ≈ 0)
-- **Displayed rating** = μ - 3σ (conservative estimate)
-- **More games** = lower σ = more stable rating
+- **New players** start at **3000** rating
+- **Top players** reach ~**5000** after 100 games
+- **Formula:** (μ - 3σ) × 80 + 3000
+- **More games** = more stable rating
 - **Team performance** affects individual ratings
 
 ## Data

@@ -28,13 +28,13 @@ function renderLeaderboard() {
     const tbody = document.getElementById('leaderboard-body');
     
     // Build leaderboard (show all registered players)
+    // Rating formula: (μ - 3σ) × 80 + 3000
+    // New players start at ~3000, top players reach ~5000 after 100 games
     const leaderboard = Object.entries(data.players)
         .map(([steamId, p]) => ({
             steamId,
             name: PLAYER_NAMES[steamId] || steamId,
-            rating: Math.round((p.mu - 3 * p.sigma) * 10) / 10,
-            mu: Math.round(p.mu * 10) / 10,
-            sigma: Math.round(p.sigma * 10) / 10,
+            rating: Math.round((p.mu - 3 * p.sigma) * 80 + 3000),
             games: p.games,
             wins: p.wins,
             losses: p.losses,
@@ -49,16 +49,13 @@ function renderLeaderboard() {
     
     tbody.innerHTML = leaderboard.map((p, i) => {
         const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
-        const ratingClass = p.rating >= 0 ? 'rating-positive' : 'rating-negative';
         const wrClass = p.winrate >= 60 ? 'winrate-high' : p.winrate >= 45 ? 'winrate-mid' : 'winrate-low';
         
         return `
             <tr>
                 <td class="${rankClass}">#${i + 1}</td>
                 <td>${escapeHtml(p.name)}</td>
-                <td class="${ratingClass}">${p.rating}</td>
-                <td>${p.mu}</td>
-                <td>${p.sigma}</td>
+                <td>${p.rating}</td>
                 <td>${p.games}</td>
                 <td>${p.wins}-${p.losses}</td>
                 <td class="${wrClass}">${p.winrate}%</td>
