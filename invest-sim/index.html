@@ -8,16 +8,20 @@
 </head>
 <body>
   <header class="nav">
-    <h1>invest-sim</h1>
+    <a class="brand" href="#feed"><h1>invest-sim</h1></a>
     <nav>
+      <a href="#feed" data-view="feed">feed</a>
       <a href="#portfolio" data-view="portfolio">portfolio</a>
       <a href="#trade" data-view="trade">trade</a>
+      <a href="#watchlist" data-view="watchlist">watchlist</a>
       <a href="#leaderboard" data-view="leaderboard">leaderboard</a>
       <span id="user-slot"></span>
     </nav>
+    <button id="nav-toggle" aria-label="menu">☰</button>
   </header>
 
   <main id="app">
+
     <section id="auth" class="view">
       <h2>log in</h2>
       <form id="login-form">
@@ -29,9 +33,23 @@
       <p id="auth-msg"></p>
     </section>
 
+    <section id="feed" class="view hidden">
+      <h2>recent trades</h2>
+      <div class="feed-grid">
+        <div class="feed-main">
+          <ul id="feed-list"></ul>
+        </div>
+        <aside class="feed-side">
+          <h3>popular holdings</h3>
+          <ul id="popular-list"></ul>
+        </aside>
+      </div>
+    </section>
+
     <section id="portfolio" class="view hidden">
       <h2>portfolio</h2>
       <div id="portfolio-summary"></div>
+      <div id="portfolio-chart"></div>
       <table id="positions">
         <thead><tr><th>symbol</th><th>qty</th><th>avg cost</th><th>last</th><th>value</th><th>P/L</th></tr></thead>
         <tbody></tbody>
@@ -46,27 +64,92 @@
     <section id="trade" class="view hidden">
       <h2>place order</h2>
       <form id="trade-form">
-        <select name="kind">
-          <option value="stock">stock</option>
-          <option value="crypto">crypto</option>
-        </select>
-        <input name="symbol" placeholder="symbol (e.g. AAPL or bitcoin)" required>
-        <select name="side">
-          <option value="buy">buy</option>
-          <option value="sell">sell</option>
-        </select>
-        <input name="qty" type="number" step="any" min="0.0001" placeholder="quantity" required>
-        <button type="submit">submit</button>
+        <div class="trade-row">
+          <select name="kind">
+            <option value="stock">stock</option>
+            <option value="crypto">crypto</option>
+          </select>
+          <div class="autocomplete-wrap">
+            <input name="symbol" placeholder="symbol or company (e.g. AAPL, bitcoin)" autocomplete="off" required>
+            <ul id="symbol-suggestions" class="suggestions hidden"></ul>
+          </div>
+        </div>
+        <div id="symbol-info" class="symbol-info hidden"></div>
+        <div class="trade-row">
+          <select name="side">
+            <option value="buy">buy</option>
+            <option value="sell">sell</option>
+          </select>
+          <label class="qty-mode">
+            <input type="radio" name="qty_mode" value="qty" checked> qty
+          </label>
+          <label class="qty-mode">
+            <input type="radio" name="qty_mode" value="cash"> $ amount
+          </label>
+          <input name="qty" type="number" step="any" min="0.0001" placeholder="quantity">
+          <input name="cash" type="number" step="any" min="0.01" placeholder="$ amount" class="hidden">
+        </div>
+        <button type="submit">review order</button>
       </form>
       <p id="trade-msg"></p>
-      <div id="quote-preview"></div>
+    </section>
+
+    <section id="watchlist" class="view hidden">
+      <h2>watchlist</h2>
+      <p class="hint">star symbols to track them without holding.</p>
+      <table id="watchlist-table">
+        <thead><tr><th>symbol</th><th>name</th><th>price</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
     </section>
 
     <section id="leaderboard" class="view hidden">
       <h2>leaderboard</h2>
+      <div class="tabs" id="lb-tabs">
+        <button data-range="all" class="active">all-time</button>
+        <button data-range="weekly">7d</button>
+        <button data-range="daily">24h</button>
+      </div>
       <ol id="lb"></ol>
     </section>
+
+    <section id="user-profile" class="view hidden">
+      <button id="user-back">← back</button>
+      <div id="user-header"></div>
+      <div id="user-chart"></div>
+      <h3>positions</h3>
+      <table id="user-positions">
+        <thead><tr><th>symbol</th><th>qty</th><th>avg cost</th><th>last</th><th>value</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <h3>trade log</h3>
+      <table id="user-trades">
+        <thead><tr><th>time</th><th>side</th><th>symbol</th><th>qty</th><th>price</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="settings" class="view hidden">
+      <h2>edit profile</h2>
+      <form id="profile-form">
+        <label>avatar url <input name="avatar_url" placeholder="https://..."></label>
+        <label>bio <textarea name="bio" rows="3" maxlength="200"></textarea></label>
+        <button type="submit">save</button>
+      </form>
+      <p id="profile-msg"></p>
+    </section>
   </main>
+
+  <div id="modal-backdrop" class="hidden">
+    <div id="modal">
+      <h3 id="modal-title">confirm order</h3>
+      <div id="modal-body"></div>
+      <div class="modal-actions">
+        <button id="modal-cancel">cancel</button>
+        <button id="modal-confirm" class="primary">confirm</button>
+      </div>
+    </div>
+  </div>
 
   <script type="module" src="app.js"></script>
 </body>
