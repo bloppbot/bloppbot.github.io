@@ -197,8 +197,8 @@ async function loadPortfolio() {
   if (!currentUser) return;
   const [{ data: prof }, { data: positions }, { data: trades }, { data: snapshots }] = await Promise.all([
     sb.from('profiles').select('cash_usd').eq('id', currentUser.id).maybeSingle(),
-    sb.from('positions').select('*').order('symbol'),
-    sb.from('trades').select('*').order('ts', { ascending: false }).limit(50),
+    sb.from('positions').select('*').eq('user_id', currentUser.id).order('symbol'),
+    sb.from('trades').select('*').eq('user_id', currentUser.id).order('ts', { ascending: false }).limit(50),
     sb.from('portfolio_snapshots').select('ts, total_usd').eq('user_id', currentUser.id).order('ts', { ascending: true }).limit(500),
   ]);
 
