@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>bloppbot · invest-sim</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="nav">
+    <h1>invest-sim</h1>
+    <nav>
+      <a href="#portfolio" data-view="portfolio">portfolio</a>
+      <a href="#trade" data-view="trade">trade</a>
+      <a href="#leaderboard" data-view="leaderboard">leaderboard</a>
+      <span id="user-slot"></span>
+    </nav>
+  </header>
+
+  <main id="app">
+    <section id="auth" class="view">
+      <h2>log in</h2>
+      <form id="login-form">
+        <input name="username" placeholder="username" autocomplete="username" required>
+        <input name="password" type="password" placeholder="password" autocomplete="current-password" required>
+        <button type="submit">log in</button>
+        <button type="button" id="signup-btn">sign up</button>
+      </form>
+      <p id="auth-msg"></p>
+    </section>
+
+    <section id="portfolio" class="view hidden">
+      <h2>portfolio</h2>
+      <div id="portfolio-summary"></div>
+      <table id="positions">
+        <thead><tr><th>symbol</th><th>qty</th><th>avg cost</th><th>last</th><th>value</th><th>P/L</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <h3>trade log</h3>
+      <table id="trades">
+        <thead><tr><th>time</th><th>side</th><th>symbol</th><th>qty</th><th>price</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="trade" class="view hidden">
+      <h2>place order</h2>
+      <form id="trade-form">
+        <select name="kind">
+          <option value="stock">stock</option>
+          <option value="crypto">crypto</option>
+        </select>
+        <input name="symbol" placeholder="symbol (e.g. AAPL or bitcoin)" required>
+        <select name="side">
+          <option value="buy">buy</option>
+          <option value="sell">sell</option>
+        </select>
+        <input name="qty" type="number" step="any" min="0.0001" placeholder="quantity" required>
+        <button type="submit">submit</button>
+      </form>
+      <p id="trade-msg"></p>
+      <div id="quote-preview"></div>
+    </section>
+
+    <section id="leaderboard" class="view hidden">
+      <h2>leaderboard</h2>
+      <ol id="lb"></ol>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
