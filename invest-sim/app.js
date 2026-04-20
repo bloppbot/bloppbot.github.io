@@ -505,24 +505,17 @@ async function loadUserProfile(username) {
   `;
   drawChart($('#user-chart'), buildSeries(snapshots, total));
 
-  // Positions: only visible if this is the current user (due to RLS on positions).
-  // For other users we just show recent trades.
-  let positionsRows;
-  if (currentUser && currentUser.id === prof.id) {
-    const { data: positions } = await sb.from('positions').select('*').order('symbol');
-    const syms = (positions || []).map(p => p.symbol);
-    const prices = syms.length
-      ? Object.fromEntries(((await sb.from('prices_cache').select('*').in('symbol', syms)).data || [])
-          .map(r => [`${r.kind}:${r.symbol}`, Number(r.price_usd)]))
-      : {};
-    positionsRows = (positions || []).map(p => {
-      const last = prices[`${p.kind}:${p.symbol}`];
-      const value = last ? last * Number(p.qty) : null;
-      return `<tr><td>${esc(p.symbol)}</td><td>${fmtQty(p.qty)}</td><td>${fmt(p.avg_cost_usd)}</td><td>${fmt(last)}</td><td>${fmt(value)}</td></tr>`;
-    }).join('');
-  } else {
-    positionsRows = '<tr><td colspan="5" class="empty">positions are private</td></tr>';
-  }
+  const { data: positions } = await sb.from('positions').select('*').eq('user_id', prof.id).order('symbol');
+  const syms = (positions || []).map(p => p.symbol);
+  const prices = syms.length
+    ? Object.fromEntries(((await sb.from('prices_cache').select('*').in('symbol', syms)).data || [])
+        .map(r => [`${r.kind}:${r.symbol}`, Number(r.price_usd)]))
+    : {};
+  const positionsRows = (positions || []).map(p => {
+    const last = prices[`${p.kind}:${p.symbol}`];
+    const value = last ? last * Number(p.qty) : null;
+    return `<tr><td>${esc(p.symbol)}</td><td>${fmtQty(p.qty)}</td><td>${fmt(p.avg_cost_usd)}</td><td>${fmt(last)}</td><td>${fmt(value)}</td></tr>`;
+  }).join('');
   $('#user-positions tbody').innerHTML = positionsRows || '<tr><td colspan="5" class="empty">no positions</td></tr>';
 
   $('#user-trades tbody').innerHTML = (publicTrades || []).map(t => `
