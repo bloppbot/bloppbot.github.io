@@ -668,6 +668,61 @@
         }
         .pool-note i { color: var(--accent-gold); }
 
+        .distribution-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 28px;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .dist-item {
+            background: rgba(0,0,0,0.45);
+            border: 1px solid var(--glass-border-dim);
+            border-top: 3px solid var(--text-dim);
+            border-radius: 3px;
+            padding: 14px 8px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transition: transform 0.2s;
+        }
+        .dist-item:hover { transform: translateY(-3px); }
+        .dist-item .place {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+        }
+        .dist-item .percent {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--accent-cream);
+            margin-top: 2px;
+        }
+        .dist-item .dist-team {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-style: italic;
+            margin-top: 2px;
+        }
+        .dist-item.rank-1 {
+            border-top-color: var(--accent-gold);
+            box-shadow: 0 0 16px rgba(255,183,43,0.2);
+        }
+        .dist-item.rank-1 .place { color: var(--accent-gold); text-shadow: 0 0 10px rgba(255,183,43,0.4); }
+        .dist-item.rank-2 { border-top-color: #c0c0c0; }
+        .dist-item.rank-2 .place { color: #d8d8d8; }
+        .dist-item.rank-3 { border-top-color: #cd7f32; }
+        .dist-item.rank-3 .place { color: #e19653; }
+        .dist-item.rank-4 .place { color: var(--text-main); }
+
         .donate-btn {
             display: inline-flex;
             align-items: center;
@@ -913,6 +968,28 @@
                     <i class="fa-solid fa-star star"></i>
                     Historically &#x2248; 1000&euro;+ with community additions
                     <i class="fa-solid fa-star star"></i>
+                </div>
+                <div class="distribution-grid">
+                    <div class="dist-item rank-1">
+                        <span class="place">1st</span>
+                        <span class="percent">50%</span>
+                        <span class="dist-team">TBD</span>
+                    </div>
+                    <div class="dist-item rank-2">
+                        <span class="place">2nd</span>
+                        <span class="percent">25%</span>
+                        <span class="dist-team">TBD</span>
+                    </div>
+                    <div class="dist-item rank-3">
+                        <span class="place">3rd</span>
+                        <span class="percent">15%</span>
+                        <span class="dist-team">TBD</span>
+                    </div>
+                    <div class="dist-item rank-4">
+                        <span class="place">4th</span>
+                        <span class="percent">10%</span>
+                        <span class="dist-team">TBD</span>
+                    </div>
                 </div>
                 <p class="pool-note">
                     <i class="fa-solid fa-heart"></i> Community donations push the pool well past the base every year. Distribution across placements gets locked in once the bracket is set.
