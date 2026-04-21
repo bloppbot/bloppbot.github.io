@@ -668,6 +668,32 @@
         }
         .pool-note i { color: var(--accent-gold); }
 
+        .donate-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 26px;
+            padding: 14px 34px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-soft));
+            color: #0a0505;
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 1.05rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-radius: 3px;
+            border: 1px solid var(--accent-gold);
+            box-shadow: 0 4px 18px rgba(255,183,43,0.3);
+            transition: all 0.25s;
+        }
+        .donate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255,183,43,0.6);
+            background: #fff;
+        }
+        .donate-btn i { font-size: 1.1rem; }
+
         /* === SIGNUP === */
         .signup-card {
             background: linear-gradient(135deg, rgba(255,183,43,0.08), rgba(178,34,34,0.08));
@@ -888,8 +914,11 @@
                     <i class="fa-solid fa-star star"></i>
                 </div>
                 <p class="pool-note">
-                    <i class="fa-solid fa-heart"></i> Community donations push the pool well past the base every year. Details on how to contribute will be posted on Discord closer to tournament time. Distribution across placements gets locked in once the bracket is set.
+                    <i class="fa-solid fa-heart"></i> Community donations push the pool well past the base every year. Distribution across placements gets locked in once the bracket is set.
                 </p>
+                <a href="https://www.paypal.com/donate/?hosted_button_id=BZR9A4LCPZD8E" target="_blank" rel="noopener" class="donate-btn">
+                    <i class="fa-brands fa-paypal"></i> Donate to the Pool
+                </a>
             </div>
         </section>
 
