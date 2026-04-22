@@ -38,12 +38,15 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+            background-color: var(--bg-dark);
+        }
 
         body {
             min-height: 100vh;
             font-family: 'Rajdhani', sans-serif;
-            background-color: var(--bg-dark);
             color: var(--text-main);
             overflow-x: hidden;
             display: flex;
@@ -54,7 +57,7 @@
         .bg-base {
             position: fixed;
             inset: 0;
-            z-index: -4;
+            z-index: 0;
             background:
                 radial-gradient(ellipse at 50% 0%, #2a0a0a 0%, #1a0606 35%, #0a0505 70%, #050303 100%);
         }
@@ -62,7 +65,7 @@
         .bg-vignette {
             position: fixed;
             inset: 0;
-            z-index: -3;
+            z-index: 0;
             background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,0,0,0.6) 100%);
             pointer-events: none;
         }
@@ -70,7 +73,7 @@
         .bg-crest {
             position: fixed;
             inset: 0;
-            z-index: -3;
+            z-index: 0;
             pointer-events: none;
             display: flex;
             align-items: center;
@@ -92,11 +95,12 @@
         .bg-particles {
             position: fixed;
             inset: 0;
-            z-index: -2;
+            z-index: 0;
             background-image: radial-gradient(rgba(255,183,43,0.12) 1px, transparent 1px);
             background-size: 80px 80px;
             opacity: 0.5;
             animation: particleDrift 60s linear infinite;
+            will-change: transform;
         }
         @keyframes particleDrift { 0% { transform: translateY(0); } 100% { transform: translateY(-80px); } }
 
