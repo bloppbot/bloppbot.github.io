@@ -879,6 +879,87 @@
             transform: translateX(6px);
         }
 
+        /* === NATIONS TABLE === */
+        .nations-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            padding: 30px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+        }
+        .nations-preamble {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 1rem;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .nations-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Rajdhani', sans-serif;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        .nations-table th {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 14px 20px;
+            border-bottom: 2px solid var(--glass-border);
+            text-align: left;
+        }
+        .nations-table th:last-child { text-align: right; }
+        .nations-table td {
+            padding: 14px 20px;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--glass-border-dim);
+            transition: background 0.2s;
+        }
+        .nations-table td:last-child {
+            text-align: right;
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            color: var(--accent-gold);
+            font-size: 1.3rem;
+        }
+        .nations-table tbody tr:hover td {
+            background: rgba(255,183,43,0.04);
+        }
+        .nations-table .flag {
+            font-size: 1.4rem;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+        .nations-table tfoot td {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            color: var(--accent-cream);
+            border-bottom: none;
+            border-top: 2px solid var(--glass-border);
+            padding-top: 18px;
+        }
+        .nations-table tfoot td:last-child {
+            font-size: 1.4rem;
+            color: var(--accent-gold);
+        }
+        .nations-note {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-top: 22px;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+
         .footer {
             text-align: center;
             padding: 32px 0;
@@ -932,6 +1013,7 @@
             <a href="#about" class="nav-btn"><i class="fa-solid fa-scroll"></i> Format</a>
             <a href="#prizepool" class="nav-btn"><i class="fa-solid fa-trophy"></i> Prize Pool</a>
             <a href="#signup" class="nav-btn primary"><i class="fa-solid fa-pen-to-square"></i> Sign Up</a>
+            <a href="#nations" class="nav-btn"><i class="fa-solid fa-flag"></i> Nations</a>
             <a href="#past" class="nav-btn"><i class="fa-solid fa-film"></i> Last Cup</a>
             <a href="#bracket" class="nav-btn"><i class="fa-solid fa-sitemap"></i> Bracket</a>
             <a href="https://discord.gg/sQFwGxFYFB" target="_blank" class="nav-btn discord"><i class="fa-brands fa-discord"></i> Discord</a>
@@ -1016,6 +1098,33 @@
                 <div class="signup-meta">
                     <i class="fa-solid fa-circle-info"></i> Questions? Hit us up on Discord.
                 </div>
+            </div>
+        </section>
+
+        <section id="nations" class="section-wrapper">
+            <h2 class="section-title">Nations Represented</h2>
+            <div class="nations-card">
+                <p class="nations-preamble">Current confirmed signups by country. 8 strongest nations will advance once signups close.</p>
+                <table class="nations-table">
+                    <thead>
+                        <tr>
+                            <th>Country</th>
+                            <th>Players</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><span class="flag">🇺🇸</span>USA</td><td>4</td></tr>
+                        <tr><td><span class="flag">🇬🇧</span>United Kingdom</td><td>3</td></tr>
+                        <tr><td><span class="flag">🇷🇺</span>Russia</td><td>2</td></tr>
+                        <tr><td><span class="flag">🇩🇰</span>Denmark</td><td>2</td></tr>
+                        <tr><td><span class="flag">🇩🇪</span>Germany</td><td>1</td></tr>
+                        <tr><td><span class="flag">🇲🇾</span>Malaysia</td><td>1</td></tr>
+                    </tbody>
+                    <tfoot>
+                        <tr><td>Total</td><td>13</td></tr>
+                    </tfoot>
+                </table>
+                <p class="nations-note">Updated as new confirmed signups come in.</p>
             </div>
         </section>
 
