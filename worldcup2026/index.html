@@ -879,6 +879,108 @@
             transform: translateX(6px);
         }
 
+        /* === POOL BREAKDOWN + DONORS === */
+        .pool-breakdown {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            color: var(--accent-cream);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin: 4px 0 12px;
+        }
+        .pool-breakdown strong {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+        .donors-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            padding: 28px 30px;
+            margin-top: 24px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+        }
+        .donors-heading {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 1.3rem;
+            color: var(--accent-gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .donors-heading i {
+            color: var(--accent-crimson);
+            filter: drop-shadow(0 0 8px var(--accent-crimson));
+        }
+        .donors-subheading {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-style: italic;
+            letter-spacing: 1px;
+            margin-top: -12px;
+            margin-bottom: 22px;
+        }
+        .donors-footer {
+            text-align: center;
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px dashed var(--glass-border-dim);
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .donors-footer strong { color: var(--accent-gold); font-weight: 700; }
+        .donors-footer i { color: var(--accent-crimson); margin: 0 6px; }
+        .donors-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 10px;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+        .donor-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.35);
+            border: 1px solid var(--glass-border-dim);
+            border-left: 3px solid var(--accent-gold);
+            border-radius: 3px;
+            padding: 10px 14px;
+            transition: all 0.2s;
+        }
+        .donor-row:hover {
+            border-color: var(--accent-gold);
+            background: rgba(255,183,43,0.06);
+            transform: translateX(2px);
+        }
+        .donor-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .donor-amount {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            color: var(--accent-gold);
+            font-size: 1rem;
+            letter-spacing: 1px;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+
         /* === NATIONS TABLE === */
         .nations-card {
             background: var(--bg-panel);
@@ -1049,8 +1151,9 @@
             <h2 class="section-title">Prize Pool</h2>
             <div class="prize-card">
                 <div class="trophy-3d">🏆</div>
-                <div class="base-pool-label">Base Pool (Host)</div>
-                <div class="total-prize">250&euro;</div>
+                <div class="base-pool-label" id="pool-label">Base Pool (Host)</div>
+                <div class="total-prize" id="total-prize-amount">250&euro;</div>
+                <div class="pool-breakdown" id="pool-breakdown" hidden></div>
                 <div class="prize-historic">
                     <i class="fa-solid fa-star star"></i>
                     Historically &#x2248; 1000&euro;+ with community additions
@@ -1084,6 +1187,12 @@
                 <a href="https://www.paypal.com/donate/?hosted_button_id=BZR9A4LCPZD8E" target="_blank" rel="noopener" class="donate-btn">
                     <i class="fa-brands fa-paypal"></i> Donate to the Pool
                 </a>
+            </div>
+            <div class="donors-card" id="donors-card" hidden>
+                <div class="donors-heading"><i class="fa-solid fa-shield-halved"></i> Hall of Heroes</div>
+                <p class="donors-subheading">Honoring the prize pool for the community</p>
+                <div class="donors-list" id="donor-list"></div>
+                <div class="donors-footer" id="donors-footer"></div>
             </div>
         </section>
 
@@ -1334,6 +1443,81 @@
         }
         setInterval(updateCountdown, 1000);
         updateCountdown();
+
+        // === DONATIONS ===
+        const DONO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcwKLHNGLdUvDJxa9kEFGVk6J9B2caeyWIUKmTvT_dGAJHwJs2F70xU3enZ3YCUamrqET_xhBnwOEf/pub?output=csv';
+        const BASE_POOL = 250;
+
+        function parseCSV(text) {
+            const rows = [];
+            let row = [], field = '', inQuote = false;
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i];
+                if (inQuote) {
+                    if (c === '"' && text[i+1] === '"') { field += '"'; i++; }
+                    else if (c === '"') inQuote = false;
+                    else field += c;
+                } else if (c === '"') inQuote = true;
+                else if (c === ',') { row.push(field); field = ''; }
+                else if (c === '\n' || c === '\r') {
+                    if (field !== '' || row.length) { row.push(field); rows.push(row); row = []; field = ''; }
+                    if (c === '\r' && text[i+1] === '\n') i++;
+                } else field += c;
+            }
+            if (field !== '' || row.length) { row.push(field); rows.push(row); }
+            return rows;
+        }
+
+        function esc(s) {
+            return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        }
+
+        function fmtAmount(n) {
+            return (Number.isInteger(n) ? n.toString() : n.toFixed(2)) + '€';
+        }
+
+        async function loadDonations() {
+            try {
+                const res = await fetch(DONO_CSV, { cache: 'no-store' });
+                if (!res.ok) return;
+                const rows = parseCSV(await res.text());
+                if (rows.length < 2) return;
+
+                const donors = rows.slice(1)
+                    .map(r => {
+                        const name = (r[0] || '').trim() || 'Anonymous';
+                        const raw = (r[1] || '').replace(/\s/g, '').replace(',', '.');
+                        const m = raw.match(/(\d+(?:\.\d+)?)/);
+                        return { name, amount: m ? parseFloat(m[1]) : 0 };
+                    })
+                    .filter(d => d.amount > 0);
+
+                if (donors.length === 0) return;
+
+                const totalDonated = donors.reduce((s, d) => s + d.amount, 0);
+                const combined = BASE_POOL + totalDonated;
+
+                document.getElementById('total-prize-amount').textContent = fmtAmount(combined);
+                document.getElementById('pool-label').textContent = 'Total Prize Pool';
+
+                const breakdown = document.getElementById('pool-breakdown');
+                breakdown.innerHTML = `Base Pool: ${BASE_POOL}€ (host) + <strong>${fmtAmount(totalDonated)}</strong> community`;
+                breakdown.hidden = false;
+
+                const listEl = document.getElementById('donor-list');
+                listEl.innerHTML = donors.slice().reverse().map(d =>
+                    `<div class="donor-row"><span class="donor-name">${esc(d.name)}</span><span class="donor-amount">${fmtAmount(d.amount)}</span></div>`
+                ).join('');
+
+                const footer = document.getElementById('donors-footer');
+                footer.innerHTML = `<strong>${donors.length}</strong> contributor${donors.length === 1 ? '' : 's'} <i class="fa-solid fa-heart"></i>`;
+
+                document.getElementById('donors-card').hidden = false;
+            } catch (e) {
+                console.error('Donation load failed', e);
+            }
+        }
+        loadDonations();
     </script>
 </body>
 </html>
