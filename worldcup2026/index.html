@@ -1221,7 +1221,7 @@
                             <th>Players</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="nations-tbody">
                         <tr><td><span class="flag">🇺🇸</span>USA</td><td>5</td></tr>
                         <tr><td><span class="flag">🇬🇧</span>United Kingdom</td><td>3</td></tr>
                         <tr><td><span class="flag">🇷🇺</span>Russia</td><td>2</td></tr>
@@ -1230,10 +1230,10 @@
                         <tr><td><span class="flag">🇲🇾</span>Malaysia</td><td>1</td></tr>
                     </tbody>
                     <tfoot>
-                        <tr><td>Total</td><td>14</td></tr>
+                        <tr><td>Total</td><td id="nations-total">14</td></tr>
                     </tfoot>
                 </table>
-                <p class="nations-note">Updated as new confirmed signups come in.</p>
+                <p class="nations-note">Live count — updates automatically as new signups are confirmed.</p>
             </div>
         </section>
 
@@ -1518,6 +1518,124 @@
             }
         }
         loadDonations();
+
+        // === SIGNUPS / NATIONS ===
+        const SIGNUP_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRdN3LB7Mqkw-MvWhUkhUqkV0B9bpm1KpGNG_5wwTWaKmctRbjJc1tak2xdoxohB1fkK9o04TiZq-ge/pub?output=csv';
+
+        const COUNTRY_ALIASES = [
+            { re: /\b(usa|america|united\s*states|u\.s\.a?\.?)\b/, iso: 'US', name: 'USA' },
+            { re: /\b(uk|u\.k\.|united\s*kingdom|england|britain|scotland|wales)\b/, iso: 'GB', name: 'United Kingdom' },
+            { re: /\brussia\b/, iso: 'RU', name: 'Russia' },
+            { re: /\bgermany\b/, iso: 'DE', name: 'Germany' },
+            { re: /\bdenmark\b/, iso: 'DK', name: 'Denmark' },
+            { re: /\bmalaysia\b/, iso: 'MY', name: 'Malaysia' },
+            { re: /\bsweden\b/, iso: 'SE', name: 'Sweden' },
+            { re: /\bnorway\b/, iso: 'NO', name: 'Norway' },
+            { re: /\bfinland\b/, iso: 'FI', name: 'Finland' },
+            { re: /\bfrance\b/, iso: 'FR', name: 'France' },
+            { re: /\bspain\b/, iso: 'ES', name: 'Spain' },
+            { re: /\bitaly\b/, iso: 'IT', name: 'Italy' },
+            { re: /\b(netherlands|holland|dutch)\b/, iso: 'NL', name: 'Netherlands' },
+            { re: /\bbelgium\b/, iso: 'BE', name: 'Belgium' },
+            { re: /\bpoland\b/, iso: 'PL', name: 'Poland' },
+            { re: /\bukraine\b/, iso: 'UA', name: 'Ukraine' },
+            { re: /\baustria\b/, iso: 'AT', name: 'Austria' },
+            { re: /\b(switzerland|swiss)\b/, iso: 'CH', name: 'Switzerland' },
+            { re: /\bportugal\b/, iso: 'PT', name: 'Portugal' },
+            { re: /\bireland\b/, iso: 'IE', name: 'Ireland' },
+            { re: /\bgreece\b/, iso: 'GR', name: 'Greece' },
+            { re: /\bromania\b/, iso: 'RO', name: 'Romania' },
+            { re: /\bczech\b/, iso: 'CZ', name: 'Czechia' },
+            { re: /\bhungary\b/, iso: 'HU', name: 'Hungary' },
+            { re: /\bbulgaria\b/, iso: 'BG', name: 'Bulgaria' },
+            { re: /\bserbia\b/, iso: 'RS', name: 'Serbia' },
+            { re: /\bcroatia\b/, iso: 'HR', name: 'Croatia' },
+            { re: /\bslovakia\b/, iso: 'SK', name: 'Slovakia' },
+            { re: /\bslovenia\b/, iso: 'SI', name: 'Slovenia' },
+            { re: /\b(turkey|türkiye)\b/, iso: 'TR', name: 'Turkey' },
+            { re: /\bestonia\b/, iso: 'EE', name: 'Estonia' },
+            { re: /\blatvia\b/, iso: 'LV', name: 'Latvia' },
+            { re: /\blithuania\b/, iso: 'LT', name: 'Lithuania' },
+            { re: /\biceland\b/, iso: 'IS', name: 'Iceland' },
+            { re: /\bbelarus\b/, iso: 'BY', name: 'Belarus' },
+            { re: /\bkazakhstan\b/, iso: 'KZ', name: 'Kazakhstan' },
+            { re: /\bcanada\b/, iso: 'CA', name: 'Canada' },
+            { re: /\bmexico\b/, iso: 'MX', name: 'Mexico' },
+            { re: /\bbrazil\b/, iso: 'BR', name: 'Brazil' },
+            { re: /\bargentina\b/, iso: 'AR', name: 'Argentina' },
+            { re: /\bchile\b/, iso: 'CL', name: 'Chile' },
+            { re: /\bperu\b/, iso: 'PE', name: 'Peru' },
+            { re: /\bcolombia\b/, iso: 'CO', name: 'Colombia' },
+            { re: /\baustralia\b/, iso: 'AU', name: 'Australia' },
+            { re: /\bnew\s*zealand\b/, iso: 'NZ', name: 'New Zealand' },
+            { re: /\bchina\b/, iso: 'CN', name: 'China' },
+            { re: /\bjapan\b/, iso: 'JP', name: 'Japan' },
+            { re: /\bkorea\b/, iso: 'KR', name: 'South Korea' },
+            { re: /\bindia\b/, iso: 'IN', name: 'India' },
+            { re: /\bsingapore\b/, iso: 'SG', name: 'Singapore' },
+            { re: /\bthailand\b/, iso: 'TH', name: 'Thailand' },
+            { re: /\bvietnam\b/, iso: 'VN', name: 'Vietnam' },
+            { re: /\bindonesia\b/, iso: 'ID', name: 'Indonesia' },
+            { re: /\bphilippines\b/, iso: 'PH', name: 'Philippines' },
+            { re: /\bisrael\b/, iso: 'IL', name: 'Israel' },
+            { re: /\bsouth\s*africa\b/, iso: 'ZA', name: 'South Africa' },
+            { re: /\begypt\b/, iso: 'EG', name: 'Egypt' },
+        ];
+
+        function isoToFlag(iso) {
+            if (!iso || iso.length !== 2) return '🏳️';
+            return [...iso.toUpperCase()].map(c => String.fromCodePoint(0x1F1E6 + c.charCodeAt(0) - 65)).join('');
+        }
+
+        function normalizeCountry(raw) {
+            const s = (raw || '').toLowerCase().trim();
+            if (!s) return { iso: '??', name: 'Unknown', flag: '🏳️' };
+            for (const a of COUNTRY_ALIASES) {
+                if (a.re.test(s)) return { iso: a.iso, name: a.name, flag: isoToFlag(a.iso) };
+            }
+            const fallback = raw.trim().replace(/\b\w/g, c => c.toUpperCase());
+            return { iso: '??', name: fallback, flag: '🏳️' };
+        }
+
+        async function loadSignups() {
+            try {
+                const res = await fetch(SIGNUP_CSV, { cache: 'no-store' });
+                if (!res.ok) return;
+                const rows = parseCSV(await res.text());
+                if (rows.length < 2) return;
+
+                const header = rows[0].map(h => (h || '').toLowerCase());
+                const countryIdx = header.findIndex(h => h.includes('country'));
+                const confirmIdx = header.findIndex(h => h.includes('confirmed in disco'));
+                if (countryIdx === -1 || confirmIdx === -1) return;
+
+                const counts = new Map();
+                for (const row of rows.slice(1)) {
+                    if ((row[confirmIdx] || '').trim().toLowerCase() !== 'y') continue;
+                    const c = normalizeCountry(row[countryIdx]);
+                    const key = c.iso + '|' + c.name;
+                    if (!counts.has(key)) counts.set(key, { ...c, count: 0 });
+                    counts.get(key).count++;
+                }
+
+                const sorted = [...counts.values()].sort((a, b) =>
+                    b.count - a.count || a.name.localeCompare(b.name)
+                );
+                const total = sorted.reduce((s, c) => s + c.count, 0);
+
+                const tbody = document.getElementById('nations-tbody');
+                if (tbody && sorted.length > 0) {
+                    tbody.innerHTML = sorted.map(c =>
+                        `<tr><td><span class="flag">${c.flag}</span>${esc(c.name)}</td><td>${c.count}</td></tr>`
+                    ).join('');
+                }
+                const totalEl = document.getElementById('nations-total');
+                if (totalEl) totalEl.textContent = total;
+            } catch (e) {
+                console.error('Signup load failed', e);
+            }
+        }
+        loadSignups();
     </script>
 </body>
 </html>
