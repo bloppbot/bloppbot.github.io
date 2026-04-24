@@ -879,6 +879,60 @@
             transform: translateX(6px);
         }
 
+        /* === CASTERS === */
+        .casters-section { text-align: center; }
+        .casters-grid {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .caster-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            transition: transform 0.3s;
+        }
+        .caster-card:hover { transform: translateY(-6px); }
+        .caster-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-gold);
+            box-shadow: 0 0 24px rgba(255,183,43,0.35);
+            transition: all 0.3s;
+        }
+        .caster-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(255,183,43,0.6);
+        }
+        .caster-name {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: var(--accent-cream);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .caster-links {
+            display: flex;
+            gap: 18px;
+        }
+        .caster-links a {
+            color: var(--text-dim);
+            font-size: 1.4rem;
+            transition: all 0.25s;
+        }
+        .caster-links a:hover {
+            color: var(--accent-gold);
+            text-shadow: 0 0 12px rgba(255,183,43,0.6);
+            transform: translateY(-2px);
+        }
+
         /* === POOL BREAKDOWN + DONORS === */
         .pool-breakdown {
             font-family: 'Rajdhani', sans-serif;
@@ -1387,6 +1441,27 @@
                     <div class="leg-item"><span class="leg-dot lb"></span>Lower Bracket</div>
                     <div class="leg-item"><span class="leg-dot gf"></span>Grand Final</div>
                     <div class="leg-item">All times CEST &bull; Schedule subject to change</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="casters" class="section-wrapper casters-section">
+            <h2 class="section-title">Your Casters</h2>
+            <div class="casters-grid">
+                <div class="caster-card">
+                    <img src="https://i.imgur.com/lZGfLl5.png" alt="BloPP" class="caster-img">
+                    <div class="caster-name">BloPP!</div>
+                    <div class="caster-links">
+                        <a href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener" title="Twitch"><i class="fa-brands fa-twitch"></i></a>
+                        <a href="https://www.youtube.com/@bloppdota2" target="_blank" rel="noopener" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="caster-card">
+                    <img src="https://i.imgur.com/Xepb7mq.png" alt="Young Elodin" class="caster-img">
+                    <div class="caster-name">Young Elodin</div>
+                    <div class="caster-links">
+                        <a href="https://www.twitch.tv/young_elodin" target="_blank" rel="noopener" title="Twitch"><i class="fa-brands fa-twitch"></i></a>
+                    </div>
                 </div>
             </div>
         </section>
