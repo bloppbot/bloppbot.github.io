@@ -1088,9 +1088,21 @@
             background: rgba(255,183,43,0.04);
         }
         .nations-table .flag {
-            font-size: 1.4rem;
+            display: inline-block;
             margin-right: 12px;
             vertical-align: middle;
+            line-height: 0;
+        }
+        .nations-table .flag img {
+            width: 28px;
+            height: auto;
+            border-radius: 2px;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.35);
+            vertical-align: middle;
+        }
+        .nations-table .flag .flag-fallback {
+            font-size: 1.4rem;
+            line-height: 1;
         }
         .nations-table tfoot td {
             font-family: 'Cinzel', serif;
@@ -1276,12 +1288,12 @@
                         </tr>
                     </thead>
                     <tbody id="nations-tbody">
-                        <tr><td><span class="flag">🇺🇸</span>USA</td><td>5</td></tr>
-                        <tr><td><span class="flag">🇬🇧</span>United Kingdom</td><td>3</td></tr>
-                        <tr><td><span class="flag">🇷🇺</span>Russia</td><td>2</td></tr>
-                        <tr><td><span class="flag">🇩🇰</span>Denmark</td><td>2</td></tr>
-                        <tr><td><span class="flag">🇩🇪</span>Germany</td><td>1</td></tr>
-                        <tr><td><span class="flag">🇲🇾</span>Malaysia</td><td>1</td></tr>
+                        <tr><td><span class="flag"><img src="https://flagcdn.com/us.svg" alt="US" loading="lazy"></span>USA</td><td>5</td></tr>
+                        <tr><td><span class="flag"><img src="https://flagcdn.com/gb.svg" alt="GB" loading="lazy"></span>United Kingdom</td><td>3</td></tr>
+                        <tr><td><span class="flag"><img src="https://flagcdn.com/ru.svg" alt="RU" loading="lazy"></span>Russia</td><td>2</td></tr>
+                        <tr><td><span class="flag"><img src="https://flagcdn.com/dk.svg" alt="DK" loading="lazy"></span>Denmark</td><td>2</td></tr>
+                        <tr><td><span class="flag"><img src="https://flagcdn.com/de.svg" alt="DE" loading="lazy"></span>Germany</td><td>1</td></tr>
+                        <tr><td><span class="flag"><img src="https://flagcdn.com/my.svg" alt="MY" loading="lazy"></span>Malaysia</td><td>1</td></tr>
                     </tbody>
                     <tfoot>
                         <tr><td>Total</td><td id="nations-total">14</td></tr>
@@ -1698,18 +1710,21 @@
         ];
 
         function isoToFlag(iso) {
-            if (!iso || iso.length !== 2) return '🏳️';
-            return [...iso.toUpperCase()].map(c => String.fromCodePoint(0x1F1E6 + c.charCodeAt(0) - 65)).join('');
+            if (!iso || iso.length !== 2 || iso === '??') {
+                return '<span class="flag-fallback">🏳️</span>';
+            }
+            const code = iso.toLowerCase();
+            return `<img src="https://flagcdn.com/${code}.svg" alt="${iso}" loading="lazy">`;
         }
 
         function normalizeCountry(raw) {
             const s = (raw || '').toLowerCase().trim();
-            if (!s) return { iso: '??', name: 'Unknown', flag: '🏳️' };
+            if (!s) return { iso: '??', name: 'Unknown', flag: isoToFlag('??') };
             for (const a of COUNTRY_ALIASES) {
                 if (a.re.test(s)) return { iso: a.iso, name: a.name, flag: isoToFlag(a.iso) };
             }
             const fallback = raw.trim().replace(/\b\w/g, c => c.toUpperCase());
-            return { iso: '??', name: fallback, flag: '🏳️' };
+            return { iso: '??', name: fallback, flag: isoToFlag('??') };
         }
 
         async function loadSignups() {
