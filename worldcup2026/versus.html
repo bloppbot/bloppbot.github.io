@@ -21,12 +21,8 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
 .panel{position:absolute;inset:0;overflow:hidden;}
 .panel.left{clip-path:polygon(0 0, 54.5% 0, 45.5% 100%, 0 100%);z-index:2;}
 .panel.right{clip-path:polygon(54.5% 0, 100% 0, 100% 100%, 45.5% 100%);z-index:2;}
-.panel img{position:absolute;top:50%;height:1140px;width:auto;transform:translateY(-50%);
-  image-rendering:auto;will-change:transform;}
-.panel.left  img{animation:driftL 26s ease-in-out infinite alternate;}
-.panel.right img{animation:driftR 26s ease-in-out infinite alternate;}
-@keyframes driftL{0%{transform:translateY(-50%) scale(1.0)}100%{transform:translateY(-50.5%) scale(1.045)}}
-@keyframes driftR{0%{transform:translateY(-50%) scale(1.045)}100%{transform:translateY(-50.5%) scale(1.0)}}
+.panel video{position:absolute;top:50%;height:1140px;width:auto;transform:translateY(-50%);
+  object-fit:cover;background:transparent;}
 /* darken toward the seam so the two scenes blend */
 .panel .seamshade{position:absolute;inset:0;pointer-events:none;}
 .panel.left  .seamshade{background:linear-gradient(100deg,transparent 62%,rgba(2,5,9,.78) 96%);}
@@ -135,9 +131,9 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
 </head>
 <body>
 <div id="stage">
-  <!-- split scenes -->
-  <div class="panel left"><img id="imgLeft" alt=""><div class="seamshade"></div></div>
-  <div class="panel right"><img id="imgRight" alt=""><div class="seamshade"></div></div>
+  <!-- split scenes (animated loops, poster = still image while loading) -->
+  <div class="panel left"><video id="imgLeft" autoplay loop muted playsinline></video><div class="seamshade"></div></div>
+  <div class="panel right"><video id="imgRight" autoplay loop muted playsinline></video><div class="seamshade"></div></div>
   <div class="seam"></div>
 
   <div class="grade"></div>
@@ -172,19 +168,21 @@ const NATIONS={USA:{name:'USA'},Germany:{name:'Germany'},Russia:{name:'Russia'},
 const ALIASES={'united kingdom':'UK','great britain':'UK','britain':'UK','england':'UK','gb':'UK','usa':'USA','america':'USA','united states':'USA','deutschland':'Germany','kazakstan':'Kazakhstan'};
 function resolveNation(k,fb){if(!k)return fb;const r=String(k).trim();if(NATIONS[r])return r;const l=r.toLowerCase();if(ALIASES[l])return ALIASES[l];return Object.keys(NATIONS).find(x=>x.toLowerCase()===l)||fb;}
 
-// scene images are 1168x784; scaled to 1140 tall -> ~1698 wide.
+// loop videos are 1280x720; scaled to 1140 tall -> ~2027 wide.
 // place the (centered) fighter at 1/4 and 3/4 of the 1920 stage.
-function placeImg(img,side){
-  img.onload=()=>{
-    const w=img.naturalWidth*(1140/img.naturalHeight);
+function placeVid(vid,side){
+  vid.onloadedmetadata=()=>{
+    const w=vid.videoWidth*(1140/vid.videoHeight);
     const cx= side==='left' ? 1920*0.25 : 1920*0.75;
-    img.style.left=(cx-w/2)+'px';
+    vid.style.left=(cx-w/2)+'px';
+    vid.play().catch(()=>{});
   };
 }
 function buildSide(side,natKey){
-  const img=document.getElementById(side==='left'?'imgLeft':'imgRight');
-  placeImg(img,side);
-  img.src='sprites/v4_'+natKey.toLowerCase()+'.png';
+  const vid=document.getElementById(side==='left'?'imgLeft':'imgRight');
+  placeVid(vid,side);
+  vid.poster='sprites/v4_'+natKey.toLowerCase()+'.png';
+  vid.src='sprites/loop_'+natKey.toLowerCase()+'.mp4';
 }
 
 const params=new URLSearchParams(location.search);
