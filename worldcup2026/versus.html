@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AD World Cup 2026 — Versus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold-hi:#ffe9a8; --gold:#e8b35a; --gold-deep:#b87818;
+  --teal:#5fd6e6; --ink:#d4e6ee;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink);}
+#stage{position:absolute;top:50%;left:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);
+  transform-origin:center center;background:#04070c;overflow:hidden;}
+
+/* ================= SPLIT SCENE PANELS ================= */
+.panel{position:absolute;inset:0;overflow:hidden;}
+.panel.left{clip-path:polygon(0 0, 54.5% 0, 45.5% 100%, 0 100%);z-index:2;}
+.panel.right{clip-path:polygon(54.5% 0, 100% 0, 100% 100%, 45.5% 100%);z-index:2;}
+.panel img{position:absolute;top:50%;height:1140px;width:auto;transform:translateY(-50%);
+  image-rendering:auto;will-change:transform;}
+.panel.left  img{animation:driftL 26s ease-in-out infinite alternate;}
+.panel.right img{animation:driftR 26s ease-in-out infinite alternate;}
+@keyframes driftL{0%{transform:translateY(-50%) scale(1.0)}100%{transform:translateY(-50.5%) scale(1.045)}}
+@keyframes driftR{0%{transform:translateY(-50%) scale(1.045)}100%{transform:translateY(-50.5%) scale(1.0)}}
+/* darken toward the seam so the two scenes blend */
+.panel .seamshade{position:absolute;inset:0;pointer-events:none;}
+.panel.left  .seamshade{background:linear-gradient(100deg,transparent 62%,rgba(2,5,9,.78) 96%);}
+.panel.right .seamshade{background:linear-gradient(260deg,transparent 62%,rgba(2,5,9,.78) 96%);}
+/* entrance */
+.panel.left {animation:slideL 1.1s cubic-bezier(.2,.85,.25,1) both;}
+.panel.right{animation:slideR 1.1s cubic-bezier(.2,.85,.25,1) both;}
+@keyframes slideL{0%{transform:translateX(-70px);opacity:0}100%{transform:translateX(0);opacity:1}}
+@keyframes slideR{0%{transform:translateX(70px);opacity:0}100%{transform:translateX(0);opacity:1}}
+
+/* glowing diagonal seam */
+.seam{position:absolute;left:50%;top:50%;width:3px;height:1500px;z-index:6;pointer-events:none;
+  transform:translate(-50%,-50%) rotate(-9.2deg);
+  background:linear-gradient(to bottom,transparent 4%,rgba(232,179,90,.85) 30%,rgba(255,233,168,.95) 50%,rgba(232,179,90,.85) 70%,transparent 96%);
+  box-shadow:0 0 22px 3px rgba(232,179,90,.45), 0 0 70px 14px rgba(232,179,90,.18);
+  animation:seamPulse 5s ease-in-out infinite;}
+@keyframes seamPulse{0%,100%{opacity:.8}50%{opacity:1}}
+
+/* ================= CENTER VS ================= */
+.center{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:560px;z-index:30;
+  display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.vs-halo{position:absolute;width:560px;height:560px;border-radius:50%;
+  background:radial-gradient(circle,rgba(4,7,12,.78) 0%,rgba(4,7,12,.35) 42%,transparent 68%);}
+.vs{position:relative;font-family:'Cinzel',serif;font-weight:900;font-size:210px;line-height:1;letter-spacing:6px;
+  background:linear-gradient(180deg,var(--gold-hi) 12%,var(--gold) 55%,var(--gold-deep) 92%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 26px rgba(232,179,90,.55)) drop-shadow(0 0 70px rgba(216,120,40,.35)) drop-shadow(0 6px 14px rgba(0,0,0,.8));
+  animation:vsIn 1s cubic-bezier(.2,.9,.25,1.15) .45s both, vsBreathe 5s ease-in-out 1.5s infinite;}
+@keyframes vsIn{0%{opacity:0;transform:scale(2.1)}100%{opacity:1;transform:scale(1)}}
+@keyframes vsBreathe{0%,100%{filter:drop-shadow(0 0 26px rgba(232,179,90,.55)) drop-shadow(0 0 70px rgba(216,120,40,.35)) drop-shadow(0 6px 14px rgba(0,0,0,.8))}
+  50%{filter:drop-shadow(0 0 38px rgba(232,179,90,.75)) drop-shadow(0 0 95px rgba(216,120,40,.5)) drop-shadow(0 6px 14px rgba(0,0,0,.8))}}
+
+/* ================= TITLE BAR (bottom, reference style) ================= */
+.bottom-shade{position:absolute;left:0;right:0;bottom:0;height:420px;z-index:20;pointer-events:none;
+  background:linear-gradient(to top,rgba(2,4,8,.96) 0%,rgba(2,4,8,.72) 38%,transparent 100%);}
+.top-shade{position:absolute;left:0;right:0;top:0;height:170px;z-index:20;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(2,4,8,.8) 0%,transparent 100%);}
+
+.titlebar{position:absolute;left:50%;bottom:64px;transform:translateX(-50%);z-index:35;text-align:center;width:1860px;}
+.kicker{font-family:'Cinzel',serif;font-weight:700;font-size:25px;letter-spacing:13px;color:#cfe3ea;opacity:0;
+  text-shadow:0 0 14px rgba(95,214,230,.35), 0 2px 6px rgba(0,0,0,.9);
+  animation:fadeUp .9s ease .7s forwards;}
+.main-title{margin-top:14px;font-family:'Cinzel',serif;font-weight:900;font-size:96px;line-height:1.04;letter-spacing:7px;opacity:0;white-space:nowrap;
+  background:linear-gradient(180deg,var(--gold-hi) 10%,var(--gold) 56%,var(--gold-deep) 94%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 22px rgba(232,179,90,.5)) drop-shadow(0 0 60px rgba(216,120,40,.3)) drop-shadow(0 4px 10px rgba(0,0,0,.85));
+  animation:fadeUp 1s ease .95s forwards;}
+.main-title .sep{display:inline-block;font-size:54px;letter-spacing:4px;margin:0 30px;transform:translateY(-12px);
+  background:linear-gradient(180deg,var(--gold-hi) 10%,var(--gold) 56%,var(--gold-deep) 94%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;opacity:.92;}
+.score-line{margin-top:10px;font-family:'Cinzel',serif;font-weight:700;font-size:34px;letter-spacing:10px;color:#e6d2a8;display:none;opacity:0;
+  text-shadow:0 0 16px rgba(232,179,90,.4), 0 2px 6px rgba(0,0,0,.9);animation:fadeUp 1s ease 1.25s forwards;}
+@keyframes fadeUp{0%{opacity:0;transform:translateY(22px)}100%{opacity:1;transform:translateY(0)}}
+
+/* ornate divider, like the reference */
+.divider{margin:22px auto 0;width:1080px;height:26px;position:relative;opacity:0;animation:fadeUp 1s ease 1.15s forwards;}
+.divider .line{position:absolute;top:50%;height:3px;width:470px;transform:translateY(-50%);
+  background:linear-gradient(90deg,transparent,#cdd6dd 70%,#f2f6f8);box-shadow:0 0 10px rgba(220,235,240,.5);}
+.divider .line.l{left:0;}
+.divider .line.r{right:0;transform:translateY(-50%) scaleX(-1);}
+.divider .gem{position:absolute;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%) rotate(45deg);
+  background:linear-gradient(135deg,#f7fafb,#9fb3bd);box-shadow:0 0 16px rgba(220,235,240,.8);}
+.divider .gem::before,.divider .gem::after{content:'';position:absolute;width:8px;height:8px;background:inherit;box-shadow:inherit;}
+.divider .gem::before{left:-26px;top:5px;}
+.divider .gem::after{right:-26px;top:5px;}
+
+/* ================= EMBERS ================= */
+.ember{position:absolute;width:4px;height:4px;border-radius:50%;z-index:25;opacity:0;pointer-events:none;
+  animation:emberFloat linear infinite;}
+@keyframes emberFloat{0%{transform:translate(0,0);opacity:0}8%{opacity:.85}55%{opacity:.55}
+  100%{transform:translate(46px,-560px);opacity:0}}
+
+/* ================= GRADE / GRAIN / VIGNETTE ================= */
+.grade{position:absolute;inset:0;z-index:18;pointer-events:none;mix-blend-mode:soft-light;
+  background:linear-gradient(180deg,rgba(20,60,70,.5),rgba(10,25,35,.3));}
+.vignette{position:absolute;inset:0;z-index:50;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 44%,transparent 46%,rgba(0,0,0,.66) 100%);}
+.grain{position:absolute;inset:0;z-index:51;pointer-events:none;opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+/* picker */
+#picker{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:999;display:flex;gap:10px;align-items:center;
+  background:rgba(8,10,14,.94);border:1px solid rgba(232,179,90,.5);border-radius:6px;padding:9px 13px;
+  font-family:'Share Tech Mono',monospace;transition:opacity .4s;box-shadow:0 8px 30px rgba(0,0,0,.6);}
+#picker.hidden{opacity:0;pointer-events:none;}
+#picker select{background:#0c0f14;color:var(--ink);border:1px solid rgba(232,179,90,.5);border-radius:4px;padding:6px 10px;
+  font-family:'Share Tech Mono',monospace;font-size:14px;}
+#picker .vs-mini{color:var(--gold);font-family:'Cinzel',serif;font-weight:900;font-size:15px;}
+#picker button{background:var(--gold);color:#1a1206;border:none;border-radius:4px;padding:6px 12px;font-weight:800;cursor:pointer;}
+#picker .hint{color:#6f8597;font-size:11px;margin-left:6px;max-width:240px;line-height:1.25;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- split scenes -->
+  <div class="panel left"><img id="imgLeft" alt=""><div class="seamshade"></div></div>
+  <div class="panel right"><img id="imgRight" alt=""><div class="seamshade"></div></div>
+  <div class="seam"></div>
+
+  <div class="grade"></div>
+  <div class="top-shade"></div>
+  <div class="bottom-shade"></div>
+
+  <!-- center VS -->
+  <div class="center"><div class="vs-halo"></div><div class="vs">VS</div></div>
+
+  <!-- bottom title -->
+  <div class="titlebar">
+    <div class="kicker" id="kicker">AD WORLD CUP 2026 · GROUP STAGE</div>
+    <div class="main-title" id="mainTitle"></div>
+    <div class="divider"><div class="line l"></div><div class="gem"></div><div class="line r"></div></div>
+    <div class="score-line" id="scoreLine"></div>
+  </div>
+
+  <div class="vignette"></div><div class="grain"></div>
+</div>
+
+<div id="picker">
+  <select id="selL"></select><span class="vs-mini">VS</span><select id="selR"></select>
+  <button id="swapBtn">⇄</button>
+  <span class="hint">?left=USA&amp;right=Germany&amp;round=Grand%20Final&amp;score=1-0&amp;clean=1</span>
+</div>
+
+<script>
+const NATIONS={USA:{name:'USA'},Germany:{name:'Germany'},Russia:{name:'Russia'},
+  Ukraine:{name:'Ukraine'},Kazakhstan:{name:'Kazakhstan'},UK:{name:'United Kingdom'},
+  Brazil:{name:'Brazil'},Algeria:{name:'Algeria'}};
+const ALIASES={'united kingdom':'UK','great britain':'UK','britain':'UK','england':'UK','gb':'UK','usa':'USA','america':'USA','united states':'USA','deutschland':'Germany','kazakstan':'Kazakhstan'};
+function resolveNation(k,fb){if(!k)return fb;const r=String(k).trim();if(NATIONS[r])return r;const l=r.toLowerCase();if(ALIASES[l])return ALIASES[l];return Object.keys(NATIONS).find(x=>x.toLowerCase()===l)||fb;}
+
+// scene images are 1168x784; scaled to 1140 tall -> ~1698 wide.
+// place the (centered) fighter at 1/4 and 3/4 of the 1920 stage.
+function placeImg(img,side){
+  img.onload=()=>{
+    const w=img.naturalWidth*(1140/img.naturalHeight);
+    const cx= side==='left' ? 1920*0.25 : 1920*0.75;
+    img.style.left=(cx-w/2)+'px';
+  };
+}
+function buildSide(side,natKey){
+  const img=document.getElementById(side==='left'?'imgLeft':'imgRight');
+  placeImg(img,side);
+  img.src='sprites/v2_'+natKey.toLowerCase()+'.jpg';
+}
+
+const params=new URLSearchParams(location.search);
+let leftKey=resolveNation(params.get('left'),'USA');
+let rightKey=resolveNation(params.get('right'),'Germany');
+const roundTxt=params.get('round'),scoreTxt=params.get('score'),clean=params.get('clean')==='1';
+function render(){
+  buildSide('left',leftKey); buildSide('right',rightKey);
+  document.getElementById('kicker').textContent='AD WORLD CUP 2026 · '+(roundTxt||'Group Stage').toUpperCase();
+  document.getElementById('mainTitle').innerHTML=
+    NATIONS[leftKey].name.toUpperCase()+'<span class="sep">VS</span>'+NATIONS[rightKey].name.toUpperCase();
+  if(scoreTxt){const sl=document.getElementById('scoreLine');sl.style.display='block';sl.textContent=scoreTxt.replace(/-/g,' — ');}
+  // shrink title until it fits on one line
+  const mt=document.getElementById('mainTitle');
+  let fs=96;mt.style.fontSize=fs+'px';
+  while(mt.scrollWidth>1820&&fs>54){fs-=4;mt.style.fontSize=fs+'px';}
+  selL.value=leftKey; selR.value=rightKey;
+}
+const picker=document.getElementById('picker'),selL=document.getElementById('selL'),selR=document.getElementById('selR');
+Object.keys(NATIONS).forEach(k=>{selL.add(new Option(NATIONS[k].name,k));selR.add(new Option(NATIONS[k].name,k));});
+selL.onchange=()=>{leftKey=selL.value;render();};
+selR.onchange=()=>{rightKey=selR.value;render();};
+document.getElementById('swapBtn').onclick=()=>{[leftKey,rightKey]=[rightKey,leftKey];render();};
+let hideT;function poke(){if(clean){picker.classList.add('hidden');return;}picker.classList.remove('hidden');clearTimeout(hideT);hideT=setTimeout(()=>picker.classList.add('hidden'),3500);}
+if(clean){picker.style.display='none';}else{addEventListener('mousemove',poke);poke();}
+const stage=document.getElementById('stage');
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(-50%,-50%) scale(${s})`;}
+addEventListener('resize',fit);fit();
+// embers drifting up
+(function(){for(let i=0;i<22;i++){const e=document.createElement('div');e.className='ember';
+  e.style.left=(Math.random()*100)+'%';e.style.top=(60+Math.random()*40)+'%';
+  const c=Math.random()<.7?'#e8a85a':'#ffd98a';e.style.background=c;e.style.boxShadow='0 0 8px '+c;
+  e.style.animationDelay=(Math.random()*14)+'s';e.style.animationDuration=(11+Math.random()*9)+'s';
+  stage.appendChild(e);}})();
+render();
+</script>
+</body>
+</html>
