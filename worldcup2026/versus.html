@@ -75,11 +75,14 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
   animation:fadeUp .9s ease .7s forwards;}
 /* country left — VS centered — country right */
 .names-row{margin-top:14px;display:flex;align-items:center;width:100%;opacity:0;animation:fadeUp 1s ease .95s forwards;}
-.names-row .cname{flex:1 1 0;font-family:'Cinzel',serif;font-weight:900;font-size:84px;line-height:1.04;letter-spacing:6px;white-space:nowrap;text-align:center;
+.names-row .cname{flex:1 1 0;font-family:'Cinzel',serif;font-weight:900;font-size:84px;line-height:1.04;letter-spacing:6px;white-space:nowrap;
+  /* names hug the VS, like the divider lines below: left name ends just before it, right name starts just after */
+  text-align:right;
   background:linear-gradient(180deg,var(--gold-hi) 10%,var(--gold) 56%,var(--gold-deep) 94%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   filter:drop-shadow(0 0 22px rgba(232,179,90,.5)) drop-shadow(0 0 60px rgba(216,120,40,.3)) drop-shadow(0 4px 10px rgba(0,0,0,.85));}
-.names-row .sep{flex:0 0 200px;font-family:'Cinzel',serif;font-weight:900;font-size:50px;letter-spacing:4px;text-align:center;opacity:.92;
+.names-row .cname:last-child{text-align:left;}
+.names-row .sep{flex:0 0 190px;font-family:'Cinzel',serif;font-weight:900;font-size:50px;letter-spacing:4px;text-align:center;opacity:.92;
   background:linear-gradient(180deg,var(--gold-hi) 10%,var(--gold) 56%,var(--gold-deep) 94%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   filter:drop-shadow(0 0 16px rgba(232,179,90,.45)) drop-shadow(0 3px 8px rgba(0,0,0,.85));}
