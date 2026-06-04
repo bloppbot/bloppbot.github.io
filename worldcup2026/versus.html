@@ -37,9 +37,10 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
 @keyframes slideL{0%{transform:translateX(-70px);opacity:0}100%{transform:translateX(0);opacity:1}}
 @keyframes slideR{0%{transform:translateX(70px);opacity:0}100%{transform:translateX(0);opacity:1}}
 
-/* glowing diagonal seam */
+/* glowing diagonal seam — angle MUST match the panel clip-path:
+   clip edge runs 54.5% (top) -> 45.5% (bottom) = atan(0.09*1920/1080) = 9.08deg clockwise */
 .seam{position:absolute;left:50%;top:50%;width:3px;height:1500px;z-index:6;pointer-events:none;
-  transform:translate(-50%,-50%) rotate(-9.2deg);
+  transform:translate(-50%,-50%) rotate(9.08deg) translateZ(0);
   background:linear-gradient(to bottom,transparent 4%,rgba(232,179,90,.85) 30%,rgba(255,233,168,.95) 50%,rgba(232,179,90,.85) 70%,transparent 96%);
   box-shadow:0 0 22px 3px rgba(232,179,90,.45), 0 0 70px 14px rgba(232,179,90,.18);
   animation:seamPulse 5s ease-in-out infinite;}
@@ -50,14 +51,17 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
   display:flex;align-items:center;justify-content:center;pointer-events:none;}
 .vs-halo{position:absolute;width:560px;height:560px;border-radius:50%;
   background:radial-gradient(circle,rgba(4,7,12,.78) 0%,rgba(4,7,12,.35) 42%,transparent 68%);}
+/* breathing glow as its own composited layer (opacity anim only — no filter anims, kills FPS) */
+.vs-breathe{position:absolute;width:620px;height:430px;border-radius:50%;pointer-events:none;will-change:opacity;
+  background:radial-gradient(ellipse,rgba(232,179,90,.34) 0%,rgba(216,120,40,.16) 45%,transparent 70%);
+  animation:breatheOp 5s ease-in-out 1.5s infinite;opacity:0;}
+@keyframes breatheOp{0%,100%{opacity:.35}50%{opacity:1}}
 .vs{position:relative;font-family:'Cinzel',serif;font-weight:900;font-size:210px;line-height:1;letter-spacing:6px;
   background:linear-gradient(180deg,var(--gold-hi) 12%,var(--gold) 55%,var(--gold-deep) 92%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   filter:drop-shadow(0 0 26px rgba(232,179,90,.55)) drop-shadow(0 0 70px rgba(216,120,40,.35)) drop-shadow(0 6px 14px rgba(0,0,0,.8));
-  animation:vsIn 1s cubic-bezier(.2,.9,.25,1.15) .45s both, vsBreathe 5s ease-in-out 1.5s infinite;}
+  animation:vsIn 1s cubic-bezier(.2,.9,.25,1.15) .45s both;}
 @keyframes vsIn{0%{opacity:0;transform:scale(2.1)}100%{opacity:1;transform:scale(1)}}
-@keyframes vsBreathe{0%,100%{filter:drop-shadow(0 0 26px rgba(232,179,90,.55)) drop-shadow(0 0 70px rgba(216,120,40,.35)) drop-shadow(0 6px 14px rgba(0,0,0,.8))}
-  50%{filter:drop-shadow(0 0 38px rgba(232,179,90,.75)) drop-shadow(0 0 95px rgba(216,120,40,.5)) drop-shadow(0 6px 14px rgba(0,0,0,.8))}}
 
 /* ================= TITLE BAR (bottom, reference style) ================= */
 .bottom-shade{position:absolute;left:0;right:0;bottom:0;height:420px;z-index:20;pointer-events:none;
@@ -69,14 +73,16 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
 .kicker{font-family:'Cinzel',serif;font-weight:700;font-size:25px;letter-spacing:13px;color:#cfe3ea;opacity:0;
   text-shadow:0 0 14px rgba(95,214,230,.35), 0 2px 6px rgba(0,0,0,.9);
   animation:fadeUp .9s ease .7s forwards;}
-.main-title{margin-top:14px;font-family:'Cinzel',serif;font-weight:900;font-size:96px;line-height:1.04;letter-spacing:7px;opacity:0;white-space:nowrap;
+/* country left — VS centered — country right */
+.names-row{margin-top:14px;display:flex;align-items:center;width:100%;opacity:0;animation:fadeUp 1s ease .95s forwards;}
+.names-row .cname{flex:1 1 0;font-family:'Cinzel',serif;font-weight:900;font-size:84px;line-height:1.04;letter-spacing:6px;white-space:nowrap;text-align:center;
   background:linear-gradient(180deg,var(--gold-hi) 10%,var(--gold) 56%,var(--gold-deep) 94%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 0 22px rgba(232,179,90,.5)) drop-shadow(0 0 60px rgba(216,120,40,.3)) drop-shadow(0 4px 10px rgba(0,0,0,.85));
-  animation:fadeUp 1s ease .95s forwards;}
-.main-title .sep{display:inline-block;font-size:54px;letter-spacing:4px;margin:0 30px;transform:translateY(-12px);
+  filter:drop-shadow(0 0 22px rgba(232,179,90,.5)) drop-shadow(0 0 60px rgba(216,120,40,.3)) drop-shadow(0 4px 10px rgba(0,0,0,.85));}
+.names-row .sep{flex:0 0 200px;font-family:'Cinzel',serif;font-weight:900;font-size:50px;letter-spacing:4px;text-align:center;opacity:.92;
   background:linear-gradient(180deg,var(--gold-hi) 10%,var(--gold) 56%,var(--gold-deep) 94%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;opacity:.92;}
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 16px rgba(232,179,90,.45)) drop-shadow(0 3px 8px rgba(0,0,0,.85));}
 .score-line{margin-top:10px;font-family:'Cinzel',serif;font-weight:700;font-size:34px;letter-spacing:10px;color:#e6d2a8;display:none;opacity:0;
   text-shadow:0 0 16px rgba(232,179,90,.4), 0 2px 6px rgba(0,0,0,.9);animation:fadeUp 1s ease 1.25s forwards;}
 @keyframes fadeUp{0%{opacity:0;transform:translateY(22px)}100%{opacity:1;transform:translateY(0)}}
@@ -117,6 +123,11 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
 #picker .vs-mini{color:var(--gold);font-family:'Cinzel',serif;font-weight:900;font-size:15px;}
 #picker button{background:var(--gold);color:#1a1206;border:none;border-radius:4px;padding:6px 12px;font-weight:800;cursor:pointer;}
 #picker .hint{color:#6f8597;font-size:11px;margin-left:6px;max-width:240px;line-height:1.25;}
+#pickerToggle{position:fixed;top:12px;right:14px;z-index:1000;width:38px;height:38px;border-radius:6px;cursor:pointer;
+  background:rgba(8,10,14,.7);border:1px solid rgba(232,179,90,.35);color:rgba(232,179,90,.55);font-size:18px;
+  transition:opacity .3s,color .3s,border-color .3s;opacity:.35;}
+#pickerToggle:hover{opacity:1;}
+#pickerToggle.active{opacity:1;color:var(--gold);border-color:var(--gold);box-shadow:0 0 12px rgba(232,179,90,.35);}
 </style>
 </head>
 <body>
@@ -131,12 +142,12 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
   <div class="bottom-shade"></div>
 
   <!-- center VS -->
-  <div class="center"><div class="vs-halo"></div><div class="vs">VS</div></div>
+  <div class="center"><div class="vs-halo"></div><div class="vs-breathe"></div><div class="vs">VS</div></div>
 
   <!-- bottom title -->
   <div class="titlebar">
     <div class="kicker" id="kicker">AD WORLD CUP 2026 · GROUP STAGE</div>
-    <div class="main-title" id="mainTitle"></div>
+    <div class="names-row"><span class="cname" id="cnameL"></span><span class="sep">VS</span><span class="cname" id="cnameR"></span></div>
     <div class="divider"><div class="line l"></div><div class="gem"></div><div class="line r"></div></div>
     <div class="score-line" id="scoreLine"></div>
   </div>
@@ -144,7 +155,8 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
   <div class="vignette"></div><div class="grain"></div>
 </div>
 
-<div id="picker">
+<button id="pickerToggle" title="Country selection">⚑</button>
+<div id="picker" class="hidden">
   <select id="selL"></select><span class="vs-mini">VS</span><select id="selR"></select>
   <button id="swapBtn">⇄</button>
   <span class="hint">?left=USA&amp;right=Germany&amp;round=Grand%20Final&amp;score=1-0&amp;clean=1</span>
@@ -179,13 +191,14 @@ const roundTxt=params.get('round'),scoreTxt=params.get('score'),clean=params.get
 function render(){
   buildSide('left',leftKey); buildSide('right',rightKey);
   document.getElementById('kicker').textContent='AD WORLD CUP 2026 · '+(roundTxt||'Group Stage').toUpperCase();
-  document.getElementById('mainTitle').innerHTML=
-    NATIONS[leftKey].name.toUpperCase()+'<span class="sep">VS</span>'+NATIONS[rightKey].name.toUpperCase();
   if(scoreTxt){const sl=document.getElementById('scoreLine');sl.style.display='block';sl.textContent=scoreTxt.replace(/-/g,' — ');}
-  // shrink title until it fits on one line
-  const mt=document.getElementById('mainTitle');
-  let fs=96;mt.style.fontSize=fs+'px';
-  while(mt.scrollWidth>1820&&fs>54){fs-=4;mt.style.fontSize=fs+'px';}
+  // one name per side, shrink each until it fits its half
+  [['cnameL',leftKey],['cnameR',rightKey]].forEach(([id,key])=>{
+    const el=document.getElementById(id);
+    el.textContent=NATIONS[key].name.toUpperCase();
+    let fs=84;el.style.fontSize=fs+'px';
+    while(el.scrollWidth>800&&fs>44){fs-=4;el.style.fontSize=fs+'px';}
+  });
   selL.value=leftKey; selR.value=rightKey;
 }
 const picker=document.getElementById('picker'),selL=document.getElementById('selL'),selR=document.getElementById('selR');
@@ -193,8 +206,12 @@ Object.keys(NATIONS).forEach(k=>{selL.add(new Option(NATIONS[k].name,k));selR.ad
 selL.onchange=()=>{leftKey=selL.value;render();};
 selR.onchange=()=>{rightKey=selR.value;render();};
 document.getElementById('swapBtn').onclick=()=>{[leftKey,rightKey]=[rightKey,leftKey];render();};
-let hideT;function poke(){if(clean){picker.classList.add('hidden');return;}picker.classList.remove('hidden');clearTimeout(hideT);hideT=setTimeout(()=>picker.classList.add('hidden'),3500);}
-if(clean){picker.style.display='none';}else{addEventListener('mousemove',poke);poke();}
+// explicit on/off toggle instead of mousemove auto-show
+const toggle=document.getElementById('pickerToggle');
+let pickerOn=false;
+function setPicker(on){pickerOn=on;picker.classList.toggle('hidden',!on);toggle.classList.toggle('active',on);}
+toggle.onclick=()=>setPicker(!pickerOn);
+if(clean){picker.style.display='none';toggle.style.display='none';}else{setPicker(false);}
 const stage=document.getElementById('stage');
 function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(-50%,-50%) scale(${s})`;}
 addEventListener('resize',fit);fit();
