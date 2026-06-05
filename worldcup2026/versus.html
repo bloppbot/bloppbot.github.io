@@ -127,6 +127,13 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
   transition:opacity .3s,color .3s,border-color .3s;opacity:.35;}
 #pickerToggle:hover{opacity:1;}
 #pickerToggle.active{opacity:1;color:var(--gold);border-color:var(--gold);box-shadow:0 0 12px rgba(232,179,90,.35);}
+
+/* mobile: picker must fit the viewport (was overflowing both edges, left select unreachable) */
+@media (max-width:760px){
+  #picker{left:8px;right:60px;transform:none;flex-wrap:wrap;justify-content:center;gap:8px;padding:8px 10px;}
+  #picker select{flex:1 1 100px;min-width:0;font-size:16px;} /* 16px stops iOS zoom-on-focus */
+  #picker .hint{display:none;}
+}
 </style>
 </head>
 <body>
