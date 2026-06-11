@@ -131,6 +131,90 @@
             background: var(--bg-panel);
             background-clip: padding-box;
         }
+        .px-card-pad { position: relative; z-index: 1; }
+
+        /* inner video backdrop (prize card) */
+        .card-bg-video {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.33;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* pixel-dissolve section reveals */
+        body.js .reveal { opacity: 0; }
+        body.js .reveal.revealed {
+            animation: pixelIn 0.45s steps(5) forwards;
+        }
+        @keyframes pixelIn {
+            0%   { opacity: 0; transform: translateY(16px); filter: contrast(1.8) brightness(1.7) saturate(0.4); }
+            100% { opacity: 1; transform: none; filter: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            body.js .reveal { opacity: 1; animation: none; }
+        }
+
+        /* CRT boot overlay */
+        .crt-boot {
+            position: fixed; inset: 0;
+            background: #000;
+            z-index: 10001;
+            display: flex; align-items: center; justify-content: center;
+            animation: bootFade 0.35s ease 1.05s forwards;
+        }
+        .crt-boot .boot-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(1rem, 3.4vw, 2rem);
+            color: var(--accent-gold);
+            text-shadow: 0 0 24px rgba(255,170,60,0.8);
+            animation: tubeOn 0.55s steps(4) both, bootFlicker 0.3s steps(2) 0.55s 2;
+        }
+        @keyframes tubeOn {
+            0% { transform: scaleY(0.02) scaleX(1.4); filter: brightness(6); }
+            60% { transform: scaleY(1.06) scaleX(1); }
+            100% { transform: none; filter: none; }
+        }
+        @keyframes bootFlicker { 50% { opacity: 0.4; } }
+        @keyframes bootFade { to { opacity: 0; visibility: hidden; } }
+
+        /* countdown tick flip */
+        .cd-num.tick { animation: numFlip 0.22s steps(3); }
+        @keyframes numFlip {
+            0% { transform: scaleY(0.15); filter: brightness(2.2); }
+            100% { transform: none; filter: none; }
+        }
+
+        /* tactile press + scrollbar + table hover */
+        .nav-btn:active, .donate-btn:active, .signup-btn:active, .playlist-link:active, .caster-links a:active {
+            transform: translate(2px, 2px) !important;
+            box-shadow: inset 0 0 0 2px rgba(0,0,0,0.45), 1px 1px 0 rgba(0,0,0,0.7) !important;
+        }
+        ::-webkit-scrollbar { width: 14px; background: var(--bg-deeper); }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold-deep);
+            border: 3px solid var(--bg-deeper);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-gold-soft); }
+        .nations-table tbody tr { transition: background .12s; }
+        .nations-table tbody tr:hover td {
+            background: rgba(255,217,122,0.07);
+            box-shadow: inset 3px 0 0 var(--accent-gold-deep);
+        }
+
+        /* footer robot walker */
+        .robot-walker {
+            position: fixed;
+            bottom: 0;
+            left: 100vw;
+            height: 110px;
+            z-index: 80;
+            pointer-events: none;
+            image-rendering: pixelated;
+        }
+        .robot-walker.walking { animation: robotCross 26s linear forwards; }
+        @keyframes robotCross { from { transform: translateX(0); } to { transform: translateX(calc(-100vw - 160px)); } }
         .px-card-pad { padding: 18px 34px 30px; }
         @media (max-width: 640px) { .px-card-pad { padding: 12px 16px 20px; } }
 
@@ -276,38 +360,32 @@
         }
         .ics-link:hover { color: var(--accent-gold); border-color: var(--accent-gold-deep); }
 
-        /* === PARALLAX SCENE DIVIDERS === */
+        /* === LIVING SCENE DIVIDERS (video bands) === */
         .scene-divider {
             position: relative;
             width: 100vw;
             margin: 50px calc(50% - 50vw) 0;
             height: 32vh;
             min-height: 220px;
-            background-position: center 30%;
-            background-size: cover;
-            background-attachment: fixed;
-            image-rendering: pixelated;
+            overflow: hidden;
             border-top: 4px solid var(--accent-gold-deep);
             border-bottom: 4px solid var(--accent-gold-deep);
             box-shadow: inset 0 0 36px rgba(2,8,10,0.55);
+            background: var(--bg-deeper);
+        }
+        .scene-divider video {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+            image-rendering: pixelated;
         }
         .scene-divider::after {
             content: '';
             position: absolute; inset: 0;
             background: linear-gradient(rgba(5,13,16,0.18), transparent 40%, rgba(5,13,16,0.22));
         }
-        .scene-divider.trophy { background-image: url('assets/scene_04_trophy.jpg'); }
-        .scene-divider.arena  { background-image: url('assets/scene_03_arena.jpg'); }
-        .scene-divider.stadium{ background-image: url('assets/scene_01_stadium.jpg'); }
         @media (max-width: 900px) { .scene-divider { height: 24vh; } }
-        /* iOS/touch: background-attachment:fixed is broken there (image scales against the
-           whole document) — fall back to scroll on any touch device */
-        @media (hover: none), (pointer: coarse) {
-            .scene-divider { background-attachment: scroll; }
-        }
-        @supports (-webkit-touch-callout: none) {
-            .scene-divider { background-attachment: scroll; }
-        }
 
         /* === SECTIONS === */
         .section-wrapper { margin: 56px 0; }
@@ -699,11 +777,14 @@
             </div>
         </section>
 
-        <div class="scene-divider trophy" aria-hidden="true"></div>
+        <div class="scene-divider" aria-hidden="true"><video autoplay muted loop playsinline poster="assets/scene_04_trophy.jpg"><source src="assets/div_04_trophy.mp4" type="video/mp4"></video></div>
 
         <section id="prizepool" class="section-wrapper">
             <h2 class="section-title">PRIZE POOL</h2>
             <div class="px-card prize-card">
+                <video class="card-bg-video" autoplay muted loop playsinline poster="assets/scene_04_trophy.jpg" aria-hidden="true">
+                    <source src="assets/div_04_trophy.mp4" type="video/mp4">
+                </video>
                 <div class="px-card-pad">
                     <img src="assets/crest_trophy.png" alt="Trophy crest" class="crest-img">
                     <div class="base-pool-label" id="pool-label">Base Pool (Host)</div>
@@ -821,7 +902,7 @@
             </div>
         </section>
 
-        <div class="scene-divider arena" aria-hidden="true"></div>
+        <div class="scene-divider" aria-hidden="true"><video autoplay muted loop playsinline poster="assets/scene_03_arena.jpg"><source src="assets/div_03_arena.mp4" type="video/mp4"></video></div>
 
         <section id="bracket" class="section-wrapper">
             <h2 class="section-title">BRACKET</h2>
@@ -960,7 +1041,7 @@
             </div>
         </section>
 
-        <div class="scene-divider stadium" aria-hidden="true"></div>
+        <div class="scene-divider" aria-hidden="true"><video autoplay muted loop playsinline poster="assets/scene_02_gate.jpg"><source src="assets/div_02_gate.mp4" type="video/mp4"></video></div>
 
         <section id="casters" class="section-wrapper casters-section">
             <h2 class="section-title">YOUR CASTERS</h2>
@@ -995,6 +1076,59 @@
     </footer>
 
     <script>
+        document.body.classList.add('js');
+
+        // === CRT BOOT (first visit per session) ===
+        if (!sessionStorage.getItem('wc_booted')) {
+            sessionStorage.setItem('wc_booted', '1');
+            const boot = document.createElement('div');
+            boot.className = 'crt-boot';
+            boot.innerHTML = '<div class="boot-title">AD WORLD CUP</div>';
+            document.body.appendChild(boot);
+            setTimeout(() => boot.remove(), 1600);
+        }
+
+        // === SCENE VIDEO MANAGER (play when visible, pause when not) ===
+        (function videoManager() {
+            const vids = document.querySelectorAll('.scene-divider video, .card-bg-video');
+            const io = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    const v = e.target;
+                    if (e.isIntersecting) v.play().catch(()=>{});
+                    else v.pause();
+                });
+            }, { rootMargin: '120px 0px' });
+            vids.forEach(v => io.observe(v));
+        })();
+
+        // === PIXEL-DISSOLVE SCROLL REVEALS ===
+        (function reveals() {
+            const targets = document.querySelectorAll('.section-wrapper, .scene-divider');
+            targets.forEach(t => t.classList.add('reveal'));
+            const io = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+                });
+            }, { rootMargin: '0px 0px -8% 0px' });
+            targets.forEach(t => io.observe(t));
+        })();
+
+        // === FOOTER ROBOT (wanders by every few minutes) ===
+        (function robotWalker() {
+            function walk() {
+                const v = document.createElement('video');
+                v.className = 'robot-walker';
+                v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
+                v.src = 'assets/robot_walk.webm';
+                v.addEventListener('error', () => v.remove());
+                document.body.appendChild(v);
+                requestAnimationFrame(() => v.classList.add('walking'));
+                setTimeout(() => v.remove(), 27000);
+            }
+            setTimeout(walk, 45000);                       // first stroll after 45s
+            setInterval(walk, 200000 + Math.random() * 90000); // then every ~3-5 min
+        })();
+
         // === PIXEL EMBERS ===
         (function createEmbers() {
             for (let i = 0; i < 26; i++) {
@@ -1056,10 +1190,19 @@
             const minutes = Math.floor((distance % 3600000) / 60000);
             const seconds = Math.floor((distance % 60000) / 1000);
             const pad = n => n < 10 ? '0' + n : n;
-            document.getElementById('cd-days').textContent = pad(days);
-            document.getElementById('cd-hours').textContent = pad(hours);
-            document.getElementById('cd-minutes').textContent = pad(minutes);
-            document.getElementById('cd-seconds').textContent = pad(seconds);
+            const setNum = (id, val) => {
+                const el = document.getElementById(id);
+                if (el.textContent !== String(val)) {
+                    el.textContent = val;
+                    el.classList.remove('tick');
+                    void el.offsetWidth;            // restart the flip animation
+                    el.classList.add('tick');
+                }
+            };
+            setNum('cd-days', pad(days));
+            setNum('cd-hours', pad(hours));
+            setNum('cd-minutes', pad(minutes));
+            setNum('cd-seconds', pad(seconds));
         }
         setInterval(updateCountdown, 1000);
         updateCountdown();
