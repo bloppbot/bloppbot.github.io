@@ -299,7 +299,15 @@
         .scene-divider.trophy { background-image: url('assets/scene_04_trophy.jpg'); }
         .scene-divider.arena  { background-image: url('assets/scene_03_arena.jpg'); }
         .scene-divider.stadium{ background-image: url('assets/scene_01_stadium.jpg'); }
-        @media (max-width: 900px) { .scene-divider { background-attachment: scroll; height: 24vh; } }
+        @media (max-width: 900px) { .scene-divider { height: 24vh; } }
+        /* iOS/touch: background-attachment:fixed is broken there (image scales against the
+           whole document) — fall back to scroll on any touch device */
+        @media (hover: none), (pointer: coarse) {
+            .scene-divider { background-attachment: scroll; }
+        }
+        @supports (-webkit-touch-callout: none) {
+            .scene-divider { background-attachment: scroll; }
+        }
 
         /* === SECTIONS === */
         .section-wrapper { margin: 56px 0; }
