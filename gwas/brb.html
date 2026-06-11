@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GWAS break overlay</title>
+<!--
+  Transparent animated overlay for OBS (made by BloppBOT, bleep bloop).
+  A wooden sign hangs from two ropes and sways gently; a pixel cat sleeps on top,
+  tail dangling over the edge. Matches the cozy pixel-art cat room break loop.
+
+  OBS: Add Source -> Browser -> Local file -> this .html, size 1920x1080.
+
+  URL options (add after .html?):
+    text=YOUR TEXT        override the sign text (A-Z 0-9 ! - . : only)
+    dots=1                animated "..." after the text
+    y=0.36                vertical center of the sign (0..1)
+    s=9                   pixel scale of the lettering
+    cat=0                 hide the cat
+    bg=1                  preview only: draws the cat-room art behind (png next to file)
+-->
+<style>
+  html,body{margin:0;background:transparent;overflow:hidden}
+  canvas{display:block}
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script>
+const CONFIG = {
+  text: 'BE RIGHT BACK',
+  dots: false,
+  yFrac: 0.36,
+  scale: 9,
+  cat: true,
+};
+const qp = new URLSearchParams(location.search);
+if (qp.get('text')) CONFIG.text = qp.get('text').toUpperCase();
+if (qp.has('dots')) CONFIG.dots = qp.get('dots') === '1';
+if (qp.get('y'))    CONFIG.yFrac = +qp.get('y');
+if (qp.get('s'))    CONFIG.scale = +qp.get('s');
+if (qp.has('cat'))  CONFIG.cat = qp.get('cat') !== '0';
+
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+
+/* ---------- 5x7 pixel font ---------- */
+const FONT = {
+ 'A':[14,17,17,31,17,17,17],'B':[30,17,17,30,17,17,30],'C':[14,17,16,16,16,17,14],
+ 'D':[30,17,17,17,17,17,30],'E':[31,16,16,30,16,16,31],'F':[31,16,16,30,16,16,16],
+ 'G':[14,17,16,23,17,17,14],'H':[17,17,17,31,17,17,17],'I':[14,4,4,4,4,4,14],
+ 'J':[7,2,2,2,2,18,12],'K':[17,18,20,24,20,18,17],'L':[16,16,16,16,16,16,31],
+ 'M':[17,27,21,21,17,17,17],'N':[17,25,21,19,17,17,17],'O':[14,17,17,17,17,17,14],
+ 'P':[30,17,17,30,16,16,16],'Q':[14,17,17,17,21,18,13],'R':[30,17,17,30,20,18,17],
+ 'S':[15,16,16,14,1,1,30],'T':[31,4,4,4,4,4,4],'U':[17,17,17,17,17,17,14],
+ 'V':[17,17,17,17,17,10,4],'W':[17,17,17,21,21,21,10],'X':[17,17,10,4,10,17,17],
+ 'Y':[17,17,10,4,4,4,4],'Z':[31,1,2,4,8,16,31],
+ '0':[14,17,19,21,25,17,14],'1':[4,12,4,4,4,4,14],'2':[14,17,1,2,4,8,31],
+ '3':[31,2,4,2,1,17,14],'4':[2,6,10,18,31,2,2],'5':[31,16,30,1,1,17,14],
+ '6':[6,8,16,30,17,17,14],'7':[31,1,2,4,8,8,8],'8':[14,17,17,14,17,17,14],
+ '9':[14,17,17,15,1,2,12],'!':[4,4,4,4,4,0,4],'-':[0,0,0,31,0,0,0],
+ '.':[0,0,0,0,0,12,12],':':[0,12,12,0,12,12,0],' ':[0,0,0,0,0,0,0],
+};
+function drawText(c,str,x,y,s,color){
+  c.fillStyle=color;
+  for(let i=0;i<str.length;i++){
+    const g=FONT[str[i]]||FONT[' '];
+    for(let r=0;r<7;r++)for(let col=0;col<5;col++)
+      if(g[r]&(1<<(4-col))) c.fillRect(x+i*6*s+col*s,y+r*s,s,s);
+  }
+}
+const textW=(str,s)=>(str.length*6-1)*s;
+
+/* ---------- palette: warm wood + cream paint (deliberately NOT the worldcup gold/teal) ---------- */
+const WOOD='#8a5a32', WOOD_DARK='#6e4523', WOOD_LIGHT='#a06c3e', WOOD_EDGE='#4a2f17';
+const PAINT='#f6e8c8', PAINT_SHADOW='#3c2614';
+const ROPE='#b08d57', ROPE_DARK='#8a6c3f';
+
+/* ---------- build the sign as an offscreen pixel canvas ---------- */
+const S = CONFIG.scale;
+const dotsExtra = CONFIG.dots ? 4*6*S : 0;
+const tw = textW(CONFIG.text,S) + dotsExtra;
+const padX = 5*S, padY = 4*S;
+const signW = tw + padX*2, signH = 7*S + padY*2;
+
+function buildSign(){
+  const c=document.createElement('canvas');
+  c.width=signW; c.height=signH;
+  const x=c.getContext('2d');
+  // planks
+  x.fillStyle=WOOD; x.fillRect(0,0,signW,signH);
+  const plankH=Math.round(signH/3);
+  x.fillStyle=WOOD_DARK;
+  for(let p=1;p<3;p++) x.fillRect(0,p*plankH,signW,Math.max(2,S/3));
+  // grain flecks (deterministic)
+  x.fillStyle=WOOD_LIGHT;
+  let seed=7;
+  const rnd=()=> (seed=(seed*16807)%2147483647)/2147483647;
+  for(let i=0;i<signW*signH/900;i++){
+    const gx=Math.floor(rnd()*signW/4)*4, gy=Math.floor(rnd()*signH/4)*4;
+    x.fillRect(gx,gy,Math.floor(2+rnd()*5)*2,2);
+  }
+  x.fillStyle=WOOD_DARK;
+  for(let i=0;i<signW*signH/1400;i++){
+    const gx=Math.floor(rnd()*signW/4)*4, gy=Math.floor(rnd()*signH/4)*4;
+    x.fillRect(gx,gy,Math.floor(1+rnd()*4)*2,2);
+  }
+  // border + corner nails
+  x.fillStyle=WOOD_EDGE;
+  const b=Math.max(3,Math.round(S/2));
+  x.fillRect(0,0,signW,b); x.fillRect(0,signH-b,signW,b);
+  x.fillRect(0,0,b,signH); x.fillRect(signW-b,0,b,signH);
+  x.fillStyle='#d9d2c4';
+  const n=Math.max(3,Math.round(S/2));
+  for(const [nx,ny] of [[b+2,b+2],[signW-b-2-n,b+2],[b+2,signH-b-2-n],[signW-b-2-n,signH-b-2-n]])
+    x.fillRect(nx,ny,n,n);
+  // painted text: dark drop shadow then cream
+  drawText(x,CONFIG.text,padX+Math.round(S/2),padY+Math.round(S/2),S,PAINT_SHADOW);
+  drawText(x,CONFIG.text,padX,padY,S,PAINT);
+  return c;
+}
+const sign=buildSign();
+
+/* ---------- sleeping cat (loaf, breathing, tail dangles over the sign edge) ---------- */
+const CAT_BODY = [
+'  B    B            ',
+'  BB  BB            ',
+'  BBBBBB            ',
+' BBBBBBBBBBBBBBBB   ',
+' BBDBBDBBBBBOOBBBB  ',
+' BBBOOBBBBBBBBBBBB  ',
+' BBBBBBBBBBBBOOBBBB ',
+'  BBBBBBBBBBBBBBBB  ',
+'   BBBBBBBBBBBBBB   ',
+];
+const CAT_COL={'B':'#3b3028','D':'#1c1612','O':'#b06a30','Z':'#e8ddc6'};
+function drawSprite(c,rows,ox,oy,s,headBob){
+  for(let r=0;r<rows.length;r++){
+    // breathing: ears + head top settle 1px on exhale (overlap, never holes)
+    const sag=(headBob && r<=2) ? s : 0;
+    for(let col=0;col<rows[r].length;col++){
+      const ch=rows[r][col]; if(ch===' ')continue;
+      c.fillStyle=CAT_COL[ch]; c.fillRect(ox+col*s, oy+r*s+sag, s, s);
+    }
+  }
+}
+/* dangling tail segments (drawn as chunky pixels along a curve, overlapping = connected) */
+function drawTail(c,ox,oy,s,t){
+  const len=9;
+  let prevX=ox;
+  for(let i=0;i<len;i++){
+    const sw=Math.sin(t*1.3+i*0.55)*(i/len)*s*1.6;
+    const x=Math.round((ox+sw)/s)*s;
+    c.fillStyle=(i>len-3)?'#2a221c':'#3b3028';
+    const lo=Math.min(x,prevX), hi=Math.max(x,prevX);
+    c.fillRect(lo, oy+i*s, hi-lo+s, s);   // spans any jump -> segments always connect
+    prevX=x;
+  }
+}
+/* offscreen cat layer: drawn unrotated each frame, blitted as ONE image so the
+   sign rotation can't cut AA seams between the pixel rects */
+const catLayer=document.createElement('canvas');
+const catCtx=catLayer.getContext('2d');
+
+/* ---------- optional preview background ---------- */
+let bgImg=null;
+if(qp.get('bg')==='1'){ const i=new Image(); i.onload=()=>bgImg=i; i.src='gwas_room_pixel_2k.png'; }
+
+/* ---------- dot sprites for the "..." animation ---------- */
+function makeDots(n){
+  const c=document.createElement('canvas');
+  c.width=textW('...',S)+S; c.height=8*S;
+  const x=c.getContext('2d');
+  const str='.'.repeat(n);
+  drawText(x,str,Math.round(S/2),Math.round(S/2),S,PAINT_SHADOW);
+  drawText(x,str,0,0,S,PAINT);
+  return c;
+}
+const dotCanvases=[null,makeDots(1),makeDots(2),makeDots(3)];
+
+/* ---------- render loop ---------- */
+const cs=Math.max(3,Math.round(S*0.6));   // cat pixel scale
+function frame(now){
+  requestAnimationFrame(frame);
+  const t=now/1000;
+  ctx.clearRect(0,0,W,H);
+  if(bgImg) ctx.drawImage(bgImg,0,0,W,H);
+
+  // pendulum sway around a pivot high above the sign
+  const ang=Math.sin(t*0.55)*0.020;                 // ~±1.15°
+  const signCX=W/2, signCY=H*CONFIG.yFrac;
+  const pivotY=signCY-signH/2-H*0.45;               // pivot well above (gentle arc)
+  ctx.save();
+  ctx.imageSmoothingEnabled=false;
+  ctx.translate(signCX,pivotY);
+  ctx.rotate(ang);
+  ctx.translate(-signCX,-pivotY);
+
+  // ropes from pivot area down to the sign's top corners
+  const ringL=signCX-signW/2+signW*0.12, ringR=signCX+signW/2-signW*0.12;
+  const ringY=signCY-signH/2+4;
+  for(const [rx,col,off] of [[ringL,ROPE,0],[ringL,ROPE_DARK,3],[ringR,ROPE,0],[ringR,ROPE_DARK,3]]){
+    ctx.strokeStyle=col; ctx.lineWidth=5;
+    ctx.beginPath(); ctx.moveTo(signCX+(rx-signCX)*0.25+off, 0); ctx.lineTo(rx+off, ringY); ctx.stroke();
+  }
+
+  // the sign
+  ctx.drawImage(sign, Math.round(signCX-signW/2), Math.round(signCY-signH/2));
+
+  // animated dots painted on the sign after the text
+  if(CONFIG.dots){
+    const n=Math.floor(t*1.5)%4;
+    if(n>0) ctx.drawImage(dotCanvases[n],
+      Math.round(signCX-signW/2+padX+textW(CONFIG.text,S)+S),
+      Math.round(signCY-signH/2+padY));
+  }
+
+  // cat asleep on top of the sign, tail hanging over the front edge
+  if(CONFIG.cat){
+    const catW=20*cs, catH=9*cs;
+    const catX=Math.round(signCX+signW/2-catW-signW*0.06);
+    const catY=Math.round(signCY-signH/2-catH+Math.max(3,Math.round(S/2)));
+    const breath=Math.sin(t*1.1)>0;
+    // compose unrotated on the offscreen layer, blit as one image (no AA seams)
+    const tailLen=10*cs, margin=4*cs;
+    catLayer.width=catW+margin*2; catLayer.height=catH+tailLen+margin;
+    catCtx.clearRect(0,0,catLayer.width,catLayer.height);
+    drawSprite(catCtx,CAT_BODY,margin,0,cs,breath);
+    drawTail(catCtx,margin+17*cs,catH-cs,cs,t);
+    ctx.drawImage(catLayer,catX-margin,catY);
+  }
+  ctx.restore();
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
