@@ -8,35 +8,45 @@
     <meta property="og:title" content="AD World Cup 2026">
     <meta property="og:description" content="The Ability Draft World Cup returns. 8 teams, double-elim, July 25-26, 2026. Signups open.">
     <meta property="og:type" content="website">
-    <meta name="theme-color" content="#ffb72b">
+    <meta property="og:image" content="https://bloppbot.github.io/worldcup2026/assets/og.jpg">
+    <meta name="twitter:image" content="https://bloppbot.github.io/worldcup2026/assets/og.jpg">
+    <meta name="theme-color" content="#0d2228">
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23ffb72b'>🏆</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23ffd97a'>🏆</text></svg>">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Cinzel:wght@500;700;900&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-dark: #0a0505;
-            --bg-deeper: #050303;
-            --bg-panel: rgba(22, 12, 12, 0.92);
-            --bg-panel-solid: #160c0c;
-            --accent-gold: #ffb72b;
-            --accent-gold-soft: #d99820;
-            --accent-crimson: #b22222;
-            --accent-crimson-dim: #5a1414;
+            --bg-dark: #081519;
+            --bg-deeper: #050d10;
+            --bg-panel: rgba(10, 28, 34, 0.88);
+            --bg-panel-solid: #0d2228;
+            --bg-stone: #14323a;
+            --accent-gold: #ffd97a;
+            --accent-gold-soft: #e8a33d;
+            --accent-gold-deep: #b97c20;
+            --accent-teal: #8df5ea;
+            --accent-teal-dim: #2a6a66;
             --accent-cream: #f4e4bc;
             --accent-discord: #5865F2;
-            --glass-border: rgba(255, 183, 43, 0.25);
-            --glass-border-dim: rgba(255, 183, 43, 0.12);
-            --text-main: #e8e0d0;
-            --text-dim: #a89888;
+            --glass-border: rgba(255, 217, 122, 0.35);
+            --glass-border-dim: rgba(255, 217, 122, 0.15);
+            --text-main: #dceae6;
+            --text-dim: #8fb0aa;
+            --px: 3px; /* global "pixel" unit for chunky shadows */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* pixel cursors */
+        html, body { cursor: url('assets/cursor.png') 1 1, auto; }
+        a, button, .nav-btn, .v4-tile, .ics-link, .donate-btn, .signup-btn, .playlist-link {
+            cursor: url('assets/cursor_hand.png') 7 2, pointer;
+        }
 
         html {
             scroll-behavior: smooth;
@@ -46,1295 +56,779 @@
 
         body {
             min-height: 100vh;
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'VT323', monospace;
+            font-size: 21px;
             color: var(--text-main);
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
         }
 
+        img, video { image-rendering: pixelated; }
+
         /* === BACKGROUND LAYERS === */
         .bg-base {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
+            position: fixed; inset: 0; z-index: 0;
             background:
-                radial-gradient(ellipse at 50% 0%, #2a0a0a 0%, #1a0606 35%, #0a0505 70%, #050303 100%);
+                linear-gradient(rgba(8,21,25,0.82), rgba(5,13,16,0.94)),
+                url('assets/scene_02_gate.jpg') center / cover no-repeat;
+            image-rendering: pixelated;
         }
-
         .bg-vignette {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,0,0,0.6) 100%);
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(circle at 50% 40%, transparent 25%, rgba(2,8,10,0.75) 100%);
             pointer-events: none;
         }
 
-        .bg-crest {
+        /* gold pixel embers (filled by JS) */
+        .ember {
             position: fixed;
-            inset: 0;
-            z-index: 0;
+            width: 4px; height: 4px;
+            background: var(--accent-gold);
+            box-shadow: 0 0 6px rgba(255,180,70,0.8);
+            opacity: 0;
+            z-index: 1;
             pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0.055;
-            overflow: hidden;
+            animation: emberRise linear infinite;
         }
-        .bg-crest::before {
-            content: '🏆';
-            font-size: 60vh;
-            filter: drop-shadow(0 0 60px var(--accent-gold));
-            animation: crestSway 18s ease-in-out infinite;
-        }
-        @keyframes crestSway {
-            0%, 100% { transform: rotate(-2deg) scale(1); }
-            50% { transform: rotate(2deg) scale(1.04); }
-        }
-
-        .bg-particles {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            background-image: radial-gradient(rgba(255,183,43,0.12) 1px, transparent 1px);
-            background-size: 80px 80px;
-            opacity: 0.5;
-            animation: particleDrift 60s linear infinite;
-            will-change: transform;
-        }
-        @keyframes particleDrift { 0% { transform: translateY(0); } 100% { transform: translateY(-80px); } }
-
-        .bg-noise {
-            position: fixed;
-            inset: 0;
-            z-index: 9998;
-            pointer-events: none;
-            opacity: 0.035;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        .ember:nth-child(odd) { background: var(--accent-gold-soft); width: 3px; height: 3px; }
+        @keyframes emberRise {
+            0%   { transform: translateY(0) translateX(0); opacity: 0; }
+            8%   { opacity: 0.9; }
+            70%  { opacity: 0.5; }
+            100% { transform: translateY(-55vh) translateX(4vw); opacity: 0; }
         }
 
         .scanlines {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 9999;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0,0,0,0.04) 0px,
-                rgba(0,0,0,0.04) 1px,
-                transparent 1px,
-                transparent 3px
-            );
-            opacity: 0.5;
+            position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.16) 0 1px, transparent 1px 4px);
             mix-blend-mode: multiply;
         }
 
         .mouse-glow {
-            position: fixed;
-            width: 500px; height: 500px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,183,43,0.12) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 1;
+            position: fixed; width: 240px; height: 240px;
             transform: translate(-50%, -50%);
-            transition: opacity 0.4s;
-            opacity: 0;
+            background: radial-gradient(circle, rgba(255,217,122,0.07) 0%, transparent 65%);
+            border-radius: 50%;
+            pointer-events: none; z-index: 2;
+            opacity: 0; transition: opacity .6s;
         }
         .mouse-glow.active { opacity: 1; }
 
-        .ember {
-            position: fixed;
-            width: 3px; height: 3px;
-            border-radius: 50%;
-            background: var(--accent-gold);
-            box-shadow: 0 0 10px var(--accent-gold), 0 0 20px rgba(255,183,43,0.6);
-            pointer-events: none;
-            z-index: 2;
-            opacity: 0;
-            animation: emberFloat 18s infinite ease-in-out;
-        }
-        @keyframes emberFloat {
-            0%, 100% { transform: translate(0,0); opacity: 0; }
-            10% { opacity: 0.7; }
-            50% { transform: translate(30px, -120px); opacity: 1; }
-            90% { opacity: 0.7; }
-        }
-
+        /* === LAYOUT === */
         .container {
-            width: 96%;
-            max-width: 1280px;
+            position: relative; z-index: 3;
+            width: min(1180px, 94vw);
             margin: 0 auto;
             flex: 1;
-            padding: 30px 0 80px;
-            position: relative;
-            z-index: 1;
         }
 
-        /* === HEADER === */
-        .header {
-            text-align: center;
-            margin: 30px 0 40px;
+        /* === PIXEL FRAME CARD (9-slice from generated stone frame) === */
+        .px-card {
+            position: relative;
+            border: 42px solid transparent;
+            border-image: url('assets/frame.png') 150 round;
+            background: var(--bg-panel);
+            background-clip: padding-box;
+        }
+        .px-card-pad { padding: 18px 34px 30px; }
+        @media (max-width: 640px) { .px-card-pad { padding: 12px 16px 20px; } }
+
+        /* === HERO === */
+        .hero {
+            margin-top: 26px;
             position: relative;
         }
-        .crest-icon {
-            font-size: 3rem;
-            color: var(--accent-gold);
-            filter: drop-shadow(0 0 20px rgba(255,183,43,0.6));
-            animation: crestFloat 4s ease-in-out infinite;
+        .hero-screen {
+            position: relative;
+            border: 42px solid transparent;
+            border-image: url('assets/frame.png') 150 round;
+            background: #000;
+            background-clip: padding-box;
+            overflow: hidden;
         }
-        @keyframes crestFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        .hero-video {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            max-height: 46vh;
+            object-fit: cover;
+        }
+        .hero-overlay {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end;
+            padding-bottom: 5.5%;
+            background: linear-gradient(rgba(5,13,16,0.05) 40%, rgba(5,13,16,0.78) 92%);
+            text-align: center;
         }
         .h-title {
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 4.8rem;
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            background: linear-gradient(180deg, #fff5d6 0%, var(--accent-gold) 50%, #8a5c10 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 4px 12px rgba(255,183,43,0.3));
-            opacity: 0;
-            animation: titleRise 1.2s ease 0.2s forwards;
-            line-height: 1;
-            margin: 12px 0 4px;
-        }
-        @keyframes titleRise {
-            from { opacity: 0; transform: translateY(20px); letter-spacing: 20px; }
-            to { opacity: 1; transform: translateY(0); letter-spacing: 8px; }
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(1.4rem, 4.6vw, 3.2rem);
+            color: var(--accent-gold);
+            text-shadow:
+                var(--px) var(--px) 0 #3a2406,
+                calc(var(--px) * 2) calc(var(--px) * 2) 0 rgba(0,0,0,0.65),
+                0 0 26px rgba(255,170,60,0.55);
+            letter-spacing: 2px;
+            line-height: 1.25;
         }
         .h-sub {
-            font-family: 'Cinzel', serif;
-            font-weight: 500;
-            font-size: 1.4rem;
-            letter-spacing: 14px;
-            color: var(--accent-cream);
-            text-transform: uppercase;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 1.2s forwards;
-            margin-bottom: 16px;
+            margin-top: 14px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.6rem, 1.6vw, 1rem);
+            color: var(--accent-teal);
+            text-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.8), 0 0 16px rgba(60,230,215,0.6);
+            animation: subPulse 2.6s ease-in-out infinite;
         }
+        @keyframes subPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
         .h-divider {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 18px;
-            width: 100%;
-            max-width: 520px;
-            margin: 0 auto;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 1.5s forwards;
+            display: flex; align-items: center; gap: 12px;
+            margin: 14px auto 0; width: min(420px, 70%);
         }
-        .h-divider .line {
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-        }
-        .h-divider .ornament {
-            color: var(--accent-gold);
-            font-size: 1.2rem;
-            filter: drop-shadow(0 0 8px var(--accent-gold));
-        }
-        .tagline {
-            margin-top: 18px;
-            font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
-            color: var(--accent-gold);
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 1.8s forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .h-divider .line { flex: 1; height: 3px; background: linear-gradient(90deg, transparent, var(--accent-gold-deep)); }
+        .h-divider .line:last-child { background: linear-gradient(90deg, var(--accent-gold-deep), transparent); }
+        .h-divider .ornament { color: var(--accent-gold); font-size: 1rem; text-shadow: 2px 2px 0 rgba(0,0,0,0.7); }
 
-        /* === NAV === */
+        /* === NAV (sticky — always available) === */
         .nav-bar {
             position: sticky;
             top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 14px;
-            margin-bottom: 50px;
-            background: rgba(10, 5, 5, 0.96);
-            padding: 16px 10px;
-            border-top: 1px solid var(--glass-border-dim);
-            border-bottom: 1px solid var(--glass-border);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+            z-index: 50;
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 10px;
+            margin: 26px calc(50% - 50vw) 8px;
+            width: 100vw;
+            padding: 12px 10px;
+            background: rgba(5, 13, 16, 0.92);
+            border-bottom: 3px solid rgba(255, 217, 122, 0.25);
+            backdrop-filter: blur(2px);
         }
         .nav-btn {
-            background: transparent;
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
-            padding: 9px 24px;
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.25s;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.62rem;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            border-radius: 2px;
+            color: var(--accent-cream);
+            background: var(--bg-stone);
+            padding: 12px 16px;
+            border: 3px solid var(--accent-gold-deep);
+            box-shadow:
+                inset 0 0 0 2px rgba(0,0,0,0.45),
+                var(--px) var(--px) 0 rgba(0,0,0,0.7);
+            transition: transform .08s steps(2), background .15s;
         }
         .nav-btn:hover {
-            background: var(--accent-gold);
-            color: #0a0505;
-            box-shadow: 0 0 20px rgba(255,183,43,0.5);
+            background: #1c4750;
+            color: var(--accent-gold);
+            transform: translate(-2px, -2px);
+            box-shadow:
+                inset 0 0 0 2px rgba(0,0,0,0.45),
+                calc(var(--px) * 2) calc(var(--px) * 2) 0 rgba(0,0,0,0.7);
         }
         .nav-btn.primary {
-            background: var(--accent-gold);
-            color: #0a0505;
+            background: var(--accent-gold-deep);
+            color: #1b1206;
+            border-color: var(--accent-gold);
         }
-        .nav-btn.primary:hover {
-            background: #fff;
-            box-shadow: 0 0 25px var(--accent-gold);
-        }
-        .nav-btn.discord {
-            border-color: var(--accent-discord);
-            color: var(--accent-discord);
-        }
-        .nav-btn.discord:hover {
-            background: var(--accent-discord);
-            color: #fff;
-            box-shadow: 0 0 20px var(--accent-discord);
-        }
+        .nav-btn.primary:hover { background: var(--accent-gold-soft); color: #140d04; }
+        .nav-btn.discord { border-color: var(--accent-discord); }
+        .nav-btn.discord:hover { background: #2c3580; color: #fff; }
 
         /* === COUNTDOWN === */
-        .countdown-container {
-            text-align: center;
-            margin: 0 auto 70px;
-            max-width: 860px;
-            background: linear-gradient(90deg, transparent, rgba(40, 20, 10, 0.7), transparent);
-            padding: 28px 20px;
-            border-top: 1px solid var(--glass-border);
-            border-bottom: 1px solid var(--glass-border);
-            position: relative;
-            opacity: 0;
-            animation: fadeIn 1s ease 0.6s forwards;
-        }
+        .countdown-container { text-align: center; margin: 30px 0 10px; }
         .countdown-label {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            color: var(--text-dim);
-            letter-spacing: 6px;
-            margin-bottom: 18px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-teal);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+            margin-bottom: 16px;
         }
-        .countdown-timer { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
+        .countdown-timer { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
         .cd-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 80px;
-            padding: 10px 16px;
-            background: rgba(0,0,0,0.35);
-            border: 1px solid var(--glass-border-dim);
-            border-radius: 4px;
+            min-width: 96px;
+            background: var(--bg-stone);
+            border: 3px solid var(--accent-gold-deep);
+            box-shadow: inset 0 0 0 2px rgba(0,0,0,0.5), var(--px) var(--px) 0 rgba(0,0,0,0.7);
+            padding: 14px 10px 10px;
         }
         .cd-num {
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 3rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.7rem;
             color: var(--accent-gold);
-            text-shadow: 0 0 20px rgba(255,183,43,0.5);
-            line-height: 1;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.7);
         }
         .cd-text {
-            font-size: 0.75rem;
-            color: var(--accent-cream);
-            text-transform: uppercase;
-            letter-spacing: 3px;
             margin-top: 8px;
-        }
-
-        /* === SECTION BASE === */
-        .section-wrapper {
-            max-width: 1100px;
-            margin: 0 auto 80px;
-            padding: 0 16px;
-        }
-        .section-title {
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 2.4rem;
-            text-align: center;
-            color: var(--accent-cream);
-            letter-spacing: 5px;
-            margin-bottom: 30px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            color: var(--text-dim);
             text-transform: uppercase;
         }
-        .section-title::after {
+        .ics-link {
+            display: inline-block;
+            margin-top: 16px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.52rem;
+            color: var(--accent-teal);
+            text-decoration: none;
+            border-bottom: 2px dashed var(--accent-teal-dim);
+            padding-bottom: 3px;
+        }
+        .ics-link:hover { color: var(--accent-gold); border-color: var(--accent-gold-deep); }
+
+        /* === PARALLAX SCENE DIVIDERS === */
+        .scene-divider {
+            position: relative;
+            width: 100vw;
+            margin: 50px calc(50% - 50vw) 0;
+            height: 32vh;
+            min-height: 220px;
+            background-position: center 30%;
+            background-size: cover;
+            background-attachment: fixed;
+            image-rendering: pixelated;
+            border-top: 4px solid var(--accent-gold-deep);
+            border-bottom: 4px solid var(--accent-gold-deep);
+            box-shadow: inset 0 0 36px rgba(2,8,10,0.55);
+        }
+        .scene-divider::after {
             content: '';
-            display: block;
-            width: 120px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-            margin: 14px auto 0;
-            box-shadow: 0 0 8px var(--accent-gold);
+            position: absolute; inset: 0;
+            background: linear-gradient(rgba(5,13,16,0.18), transparent 40%, rgba(5,13,16,0.22));
+        }
+        .scene-divider.trophy { background-image: url('assets/scene_04_trophy.jpg'); }
+        .scene-divider.arena  { background-image: url('assets/scene_03_arena.jpg'); }
+        .scene-divider.stadium{ background-image: url('assets/scene_01_stadium.jpg'); }
+        @media (max-width: 900px) { .scene-divider { background-attachment: scroll; height: 24vh; } }
+
+        /* === SECTIONS === */
+        .section-wrapper { margin: 56px 0; }
+        .section-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.95rem, 2.4vw, 1.5rem);
+            color: var(--accent-gold);
+            text-align: center;
+            text-shadow: var(--px) var(--px) 0 #3a2406, calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6);
+            margin-bottom: 8px;
+        }
+        .section-title::before, .section-title::after { content: ' ◆ '; color: var(--accent-teal-dim); font-size: 0.8em; }
+        .title-sub {
+            text-align: center;
+            color: var(--text-dim);
+            margin-bottom: 22px;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
         }
 
-        /* === ABOUT === */
-        .about-card {
-            background: var(--bg-panel);
-            border: 1px solid var(--glass-border);
-            border-radius: 6px;
-            padding: 36px 34px;
-            font-size: 1.1rem;
-            line-height: 1.75;
-            color: var(--text-main);
-            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-        }
-        .about-card strong { color: var(--accent-gold); }
-        .about-card .date-highlight {
-            display: inline-block;
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 1.45rem;
-            color: var(--accent-gold);
-            letter-spacing: 3px;
-            margin: 6px 0;
-        }
+        .about-card p, .past-card p { font-size: 1.25rem; line-height: 1.45; }
+        strong { color: var(--accent-gold); font-weight: normal; }
+        .date-highlight { color: var(--accent-teal); }
+
         .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 14px;
-            margin-top: 28px;
+            display: flex; flex-wrap: wrap; gap: 12px;
+            margin-top: 22px;
         }
         .info-chip {
-            background: rgba(40, 20, 10, 0.55);
-            border: 1px solid var(--glass-border-dim);
-            border-radius: 4px;
-            padding: 16px 20px;
-            text-align: center;
-        }
-        .info-chip .label {
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 6px;
-            display: block;
-        }
-        .info-chip .value {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            color: var(--accent-gold);
-            font-size: 1.05rem;
-            letter-spacing: 1px;
-        }
-
-        /* === BRACKET === */
-        .bracket-preamble {
-            text-align: center;
-            color: var(--text-dim);
-            max-width: 700px;
-            margin: 0 auto 32px;
-            font-size: 1.05rem;
-            line-height: 1.6;
-        }
-        .bracket-wrap {
-            background: var(--bg-panel);
-            border: 1px solid var(--glass-border);
-            border-radius: 6px;
-            padding: 28px 18px;
-            overflow-x: auto;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-        }
-        .bracket-day {
-            margin-bottom: 36px;
-        }
-        .bracket-day:last-child { margin-bottom: 0; }
-        .day-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 22px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed var(--glass-border-dim);
-        }
-        .day-header .day-label {
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 1.3rem;
-            color: var(--accent-gold);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-        .day-header .day-date {
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            color: var(--text-dim);
-            font-size: 1.05rem;
-            letter-spacing: 1px;
-        }
-        .rounds-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 16px;
-        }
-        .round-block {
-            background: rgba(0,0,0,0.35);
-            border: 1px solid var(--glass-border-dim);
-            border-radius: 4px;
-            padding: 14px;
-        }
-        .round-title {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--accent-gold);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .round-title .bo-pill {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.7rem;
-            letter-spacing: 1px;
-            background: var(--accent-crimson-dim);
-            color: var(--accent-cream);
-            padding: 2px 8px;
-            border-radius: 2px;
-            border: 1px solid var(--accent-crimson);
-        }
-        .round-desc {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
-        .match-box {
-            background: var(--bg-panel-solid);
-            border: 1px solid var(--glass-border-dim);
-            border-radius: 3px;
+            flex: 1 1 120px;
+            background: var(--bg-stone);
+            border: 3px solid var(--glass-border-dim);
+            box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.55);
             padding: 10px 12px;
-            margin-bottom: 8px;
-            transition: all 0.2s;
-        }
-        .match-box:last-child { margin-bottom: 0; }
-        .match-box:hover {
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 12px rgba(255,183,43,0.15);
-        }
-        .match-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-        }
-        .match-meta .match-id { color: var(--accent-gold-soft); font-weight: 700; }
-        .match-time { color: var(--accent-cream); }
-        .match-slot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 4px 0;
-            font-size: 0.95rem;
-        }
-        .match-slot + .match-slot {
-            border-top: 1px solid rgba(255,183,43,0.08);
-        }
-        .slot-team {
-            color: var(--text-main);
-            font-weight: 600;
-        }
-        .slot-team.tbd {
-            color: var(--text-dim);
-            font-style: italic;
-            font-weight: 500;
-        }
-        .slot-score {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            color: var(--text-dim);
-            min-width: 20px;
             text-align: center;
         }
-        .bracket-legend {
-            margin-top: 22px;
-            padding-top: 18px;
-            border-top: 1px dashed var(--glass-border-dim);
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 22px;
-            font-size: 0.85rem;
-            color: var(--text-dim);
-        }
-        .bracket-legend .leg-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .bracket-legend .leg-dot {
-            width: 10px; height: 10px;
-            border-radius: 2px;
-            border: 1px solid var(--accent-gold);
-        }
-        .bracket-legend .leg-dot.ub { background: rgba(255,183,43,0.5); }
-        .bracket-legend .leg-dot.lb { background: rgba(178,34,34,0.5); border-color: var(--accent-crimson); }
-        .bracket-legend .leg-dot.gf { background: var(--accent-gold); }
+        .info-chip .label { display: block; font-size: 0.95rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; }
+        .info-chip .value { display: block; font-family: 'Press Start 2P', monospace; font-size: 0.72rem; color: var(--accent-teal); margin-top: 8px; }
 
-        /* === PRIZE POOL === */
-        .prize-card {
-            background: var(--bg-panel);
-            border: 1px solid var(--accent-gold);
-            border-radius: 6px;
-            padding: 40px 32px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(255,183,43,0.12), 0 8px 40px rgba(0,0,0,0.5);
+        /* === PRIZE === */
+        .prize-card { text-align: center; }
+        .crest-img {
+            width: min(260px, 56vw);
+            margin: 4px auto 6px;
+            display: block;
+            filter: drop-shadow(0 0 22px rgba(255,170,60,0.35));
+            animation: crestFloat 5s ease-in-out infinite;
         }
-        .prize-card::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255,183,43,0.06), transparent 60%);
-            animation: prizeSpin 10s linear infinite;
-            z-index: 0;
-        }
-        @keyframes prizeSpin { to { transform: rotate(360deg); } }
-        .prize-card > * { position: relative; z-index: 1; }
-
-        .trophy-3d {
-            font-size: 4.8rem;
-            display: inline-block;
-            animation: trophyFloat 3.5s ease-in-out infinite;
-            filter: drop-shadow(0 0 40px rgba(255,183,43,0.6));
-        }
-        @keyframes trophyFloat {
-            0%, 100% { transform: translateY(0) rotate(-3deg); }
-            50% { transform: translateY(-12px) rotate(3deg); }
-        }
+        @keyframes crestFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         .base-pool-label {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            margin-top: 14px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+            font-family: 'Press Start 2P', monospace; font-size: 0.6rem;
+            color: var(--text-dim); text-transform: uppercase;
         }
         .total-prize {
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 5rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(1.8rem, 5vw, 3rem);
             color: var(--accent-gold);
-            text-shadow: 0 0 30px rgba(255,183,43,0.5), 0 0 60px rgba(255,183,43,0.25);
-            letter-spacing: 3px;
-            margin: 6px 0 6px;
-            line-height: 1;
+            margin: 12px 0 6px;
+            text-shadow: var(--px) var(--px) 0 #3a2406, calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6), 0 0 30px rgba(255,170,60,0.45);
         }
-        .prize-historic {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 8px 18px;
-            background: rgba(255,183,43,0.12);
-            border: 1px solid var(--accent-gold);
-            border-radius: 3px;
-            color: var(--accent-gold);
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 0.95rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .prize-historic .star { margin: 0 4px; }
-        .pool-note {
-            margin-top: 24px;
-            color: var(--text-dim);
-            font-size: 1rem;
-            line-height: 1.65;
-            max-width: 580px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .pool-note i { color: var(--accent-gold); }
-
+        .pool-breakdown { color: var(--text-dim); font-size: 1.1rem; }
+        .prize-historic { margin: 14px 0; color: var(--accent-teal); font-size: 1.15rem; }
+        .prize-historic .star { color: var(--accent-gold-soft); }
         .distribution-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 28px;
-            max-width: 640px;
-            margin-left: auto;
-            margin-right: auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px; margin: 18px 0 8px;
         }
         .dist-item {
-            background: rgba(0,0,0,0.45);
-            border: 1px solid var(--glass-border-dim);
-            border-top: 3px solid var(--text-dim);
-            border-radius: 3px;
-            padding: 14px 8px 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            transition: transform 0.2s;
+            background: var(--bg-stone);
+            border: 3px solid var(--glass-border-dim);
+            box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.55);
+            padding: 12px 8px;
+            display: flex; flex-direction: column; gap: 6px;
         }
-        .dist-item:hover { transform: translateY(-3px); }
-        .dist-item .place {
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-        }
-        .dist-item .percent {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--accent-cream);
-            margin-top: 2px;
-        }
-        .dist-item .dist-team {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-style: italic;
-            margin-top: 2px;
-        }
-        .dist-item.rank-1 {
-            border-top-color: var(--accent-gold);
-            box-shadow: 0 0 16px rgba(255,183,43,0.2);
-        }
-        .dist-item.rank-1 .place { color: var(--accent-gold); text-shadow: 0 0 10px rgba(255,183,43,0.4); }
-        .dist-item.rank-2 { border-top-color: #c0c0c0; }
-        .dist-item.rank-2 .place { color: #d8d8d8; }
-        .dist-item.rank-3 { border-top-color: #cd7f32; }
-        .dist-item.rank-3 .place { color: #e19653; }
-        .dist-item.rank-4 .place { color: var(--text-main); }
+        .dist-item.rank-1 { border-color: var(--accent-gold); }
+        .dist-item.rank-2 { border-color: #c8ccd2; }
+        .dist-item.rank-3 { border-color: #b9763a; }
+        .dist-item .place { font-family: 'Press Start 2P', monospace; font-size: 0.7rem; color: var(--accent-cream); }
+        .dist-item.rank-1 .place { color: var(--accent-gold); }
+        .dist-item .percent { font-family: 'Press Start 2P', monospace; font-size: 1rem; color: var(--accent-teal); }
+        .dist-item .dist-team { font-size: 1rem; color: var(--text-dim); }
+        .pool-note { color: var(--text-dim); font-size: 1.05rem; margin-top: 10px; }
+        .pool-note .heart, .donors-footer .heart { color: #e2574c; }
 
-        .donate-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 26px;
-            padding: 14px 34px;
-            background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-soft));
-            color: #0a0505;
+        .donate-btn, .signup-btn, .playlist-link {
+            display: inline-block;
+            margin-top: 18px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
             text-decoration: none;
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 1.05rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            border-radius: 3px;
-            border: 1px solid var(--accent-gold);
-            box-shadow: 0 4px 18px rgba(255,183,43,0.3);
-            transition: all 0.25s;
+            color: #1b1206;
+            background: var(--accent-gold-deep);
+            border: 3px solid var(--accent-gold);
+            padding: 14px 22px;
+            box-shadow: inset 0 0 0 2px rgba(0,0,0,0.25), var(--px) var(--px) 0 rgba(0,0,0,0.7);
+            transition: transform .08s steps(2), background .15s;
         }
-        .donate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(255,183,43,0.6);
-            background: #fff;
+        .donate-btn:hover, .signup-btn:hover, .playlist-link:hover {
+            background: var(--accent-gold-soft);
+            transform: translate(-2px, -2px);
+            box-shadow: inset 0 0 0 2px rgba(0,0,0,0.25), calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.7);
         }
-        .donate-btn i { font-size: 1.1rem; }
+
+        .donors-card { margin-top: 26px; text-align: center; }
+        .donors-heading {
+            font-family: 'Press Start 2P', monospace; font-size: 0.85rem;
+            color: var(--accent-gold);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.7);
+        }
+        .donors-subheading { color: var(--text-dim); margin: 8px 0 14px; }
+        .donors-list { max-width: 460px; margin: 0 auto; }
+        .donor-row {
+            display: flex; justify-content: space-between;
+            padding: 7px 12px;
+            border-bottom: 2px dashed rgba(255,217,122,0.15);
+            font-size: 1.15rem;
+        }
+        .donor-name { color: var(--accent-cream); }
+        .donor-amount { color: var(--accent-teal); }
+        .donors-footer { margin-top: 12px; color: var(--text-dim); }
 
         /* === SIGNUP === */
-        .signup-card {
-            background: linear-gradient(135deg, rgba(255,183,43,0.08), rgba(178,34,34,0.08));
-            border: 2px solid var(--accent-gold);
-            border-radius: 8px;
-            padding: 48px 32px;
-            text-align: center;
-            box-shadow: 0 0 50px rgba(255,183,43,0.15);
-            position: relative;
-            overflow: hidden;
-        }
-        .signup-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-            animation: scanLine 2.8s linear infinite;
-        }
-        @keyframes scanLine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
+        .signup-card { text-align: center; }
         .signup-heading {
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 2.1rem;
-            color: var(--accent-gold);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            text-shadow: 0 0 24px rgba(255,183,43,0.5);
+            font-family: 'Press Start 2P', monospace; font-size: 0.95rem;
+            color: var(--accent-teal);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+            margin-bottom: 14px;
         }
-        .signup-sub {
-            color: var(--text-main);
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            max-width: 620px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.65;
-        }
-        .signup-sub strong { color: var(--accent-gold); font-weight: 700; }
-        .signup-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 14px;
+        .signup-deadline {
+            display: inline-block;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.62rem;
+            color: #1b1206;
             background: var(--accent-gold);
-            color: #0a0505;
-            padding: 18px 46px;
-            border-radius: 3px;
-            text-decoration: none;
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 1.25rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            transition: all 0.3s;
-            box-shadow: 0 6px 24px rgba(255,183,43,0.3);
-            animation: signupPulse 2.4s ease-in-out infinite;
-        }
-        @keyframes signupPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 6px 24px rgba(255,183,43,0.3); }
-            50% { transform: scale(1.03); box-shadow: 0 10px 44px rgba(255,183,43,0.6); }
-        }
-        .signup-btn:hover {
-            transform: scale(1.08) !important;
-            background: #fff;
-            color: #0a0505;
-            box-shadow: 0 12px 52px rgba(255,183,43,0.8);
-        }
-        .signup-meta {
-            margin-top: 24px;
-            font-size: 0.9rem;
-            color: var(--text-dim);
-        }
-        .signup-meta i { color: var(--accent-gold); }
-
-        /* === PAST CUP === */
-        .past-card {
-            background: var(--bg-panel);
-            border: 1px solid var(--glass-border);
-            border-radius: 6px;
-            padding: 30px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-        }
-        .past-card p {
-            color: var(--text-main);
-            margin-bottom: 22px;
-            font-size: 1.05rem;
-            line-height: 1.65;
-        }
-        .video-wrap {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-            height: 0;
-            border-radius: 6px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 0 40px rgba(255,183,43,0.15);
-        }
-        .video-wrap iframe {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            border: 0;
-        }
-        .playlist-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-            color: var(--accent-gold);
-            text-decoration: none;
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: all 0.25s;
-        }
-        .playlist-link:hover {
-            text-shadow: 0 0 12px var(--accent-gold);
-            transform: translateX(6px);
-        }
-
-        /* === CASTERS === */
-        .casters-section { text-align: center; }
-        .casters-grid {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-        .caster-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 14px;
-            padding: 14px;
-            transition: transform 0.3s;
-        }
-        .caster-card:hover { transform: translateY(-6px); }
-        .caster-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--accent-gold);
-            box-shadow: 0 0 24px rgba(255,183,43,0.35);
-            transition: all 0.3s;
-        }
-        .caster-img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(255,183,43,0.6);
-        }
-        .caster-name {
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 1.2rem;
-            color: var(--accent-cream);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .caster-links {
-            display: flex;
-            gap: 18px;
-        }
-        .caster-links a {
-            color: var(--text-dim);
-            font-size: 1.4rem;
-            transition: all 0.25s;
-        }
-        .caster-links a:hover {
-            color: var(--accent-gold);
-            text-shadow: 0 0 12px rgba(255,183,43,0.6);
-            transform: translateY(-2px);
-        }
-
-        /* === POOL BREAKDOWN + DONORS === */
-        .pool-breakdown {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1rem;
-            color: var(--accent-cream);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin: 4px 0 12px;
-        }
-        .pool-breakdown strong {
-            color: var(--accent-gold);
-            font-weight: 700;
-        }
-        .donors-card {
-            background: var(--bg-panel);
-            border: 1px solid var(--glass-border);
-            border-radius: 6px;
-            padding: 28px 30px;
-            margin-top: 24px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-        }
-        .donors-heading {
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 1.3rem;
-            color: var(--accent-gold);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-align: center;
-            margin-bottom: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-        .donors-heading i {
-            color: var(--accent-crimson);
-            filter: drop-shadow(0 0 8px var(--accent-crimson));
-        }
-        .donors-subheading {
-            text-align: center;
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            font-style: italic;
-            letter-spacing: 1px;
-            margin-top: -12px;
-            margin-bottom: 22px;
-        }
-        .donors-footer {
-            text-align: center;
-            margin-top: 22px;
-            padding-top: 18px;
-            border-top: 1px dashed var(--glass-border-dim);
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .donors-footer strong { color: var(--accent-gold); font-weight: 700; }
-        .donors-footer i { color: var(--accent-crimson); margin: 0 6px; }
-        .donors-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 10px;
-            max-width: 820px;
-            margin: 0 auto;
-        }
-        .donor-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.35);
-            border: 1px solid var(--glass-border-dim);
-            border-left: 3px solid var(--accent-gold);
-            border-radius: 3px;
+            border: 3px solid var(--accent-gold-deep);
+            box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.6);
             padding: 10px 14px;
-            transition: all 0.2s;
+            margin-bottom: 16px;
+            animation: subPulse 2.2s ease-in-out infinite;
         }
-        .donor-row:hover {
-            border-color: var(--accent-gold);
-            background: rgba(255,183,43,0.06);
-            transform: translateX(2px);
-        }
-        .donor-name {
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 600;
-            color: var(--text-main);
-            font-size: 1rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .donor-amount {
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            color: var(--accent-gold);
-            font-size: 1rem;
-            letter-spacing: 1px;
-            margin-left: 10px;
-            flex-shrink: 0;
-        }
+        .signup-sub { max-width: 720px; margin: 0 auto; font-size: 1.2rem; line-height: 1.45; }
+        .signup-meta { margin-top: 14px; color: var(--text-dim); font-size: 1.05rem; }
 
-        /* === NATIONS TABLE === */
-        .nations-card {
-            background: var(--bg-panel);
-            border: 1px solid var(--glass-border);
-            border-radius: 6px;
-            padding: 30px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+        /* === NATIONS === */
+        .v4-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 22px;
         }
-        .nations-preamble {
-            text-align: center;
-            color: var(--text-dim);
-            font-size: 1rem;
-            margin-bottom: 24px;
-            line-height: 1.6;
+        .v4-tile {
+            position: relative;
+            border: 3px solid var(--glass-border-dim);
+            box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.6);
+            overflow: hidden;
+            aspect-ratio: 832 / 1248;
+            background: var(--bg-deeper);
+            cursor: pointer;
+            transition: transform .1s steps(2), border-color .15s;
         }
+        .v4-tile:hover { transform: translateY(-4px); border-color: var(--accent-gold); }
+        .v4-tile video, .v4-tile img {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .v4-tile.mystery { border-color: var(--accent-gold-deep); animation: mysteryPulse 3s ease-in-out infinite; }
+        @keyframes mysteryPulse {
+            0%,100% { filter: brightness(1); }
+            50% { filter: brightness(1.25) drop-shadow(0 0 14px rgba(255,200,90,0.5)); }
+        }
+        .v4-note { text-align: center; color: var(--text-dim); font-size: 1rem; margin-bottom: 22px; }
+
+        .nations-preamble { font-size: 1.2rem; margin-bottom: 16px; }
         .nations-table {
             width: 100%;
             border-collapse: collapse;
-            font-family: 'Rajdhani', sans-serif;
-            max-width: 640px;
-            margin: 0 auto;
+            font-size: 1.2rem;
         }
         .nations-table th {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: var(--accent-gold);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            padding: 14px 20px;
-            border-bottom: 2px solid var(--glass-border);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
             text-align: left;
+            color: var(--accent-teal);
+            border-bottom: 3px solid var(--accent-gold-deep);
+            padding: 8px 10px;
         }
         .nations-table th:last-child { text-align: right; }
         .nations-table td {
-            padding: 14px 20px;
-            color: var(--text-main);
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-bottom: 1px solid var(--glass-border-dim);
-            transition: background 0.2s;
+            padding: 8px 10px;
+            border-bottom: 2px solid rgba(141,245,234,0.08);
         }
-        .nations-table td:last-child {
-            text-align: right;
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            color: var(--accent-gold);
-            font-size: 1.3rem;
-        }
-        .nations-table tbody tr:hover td {
-            background: rgba(255,183,43,0.04);
-        }
-        .nations-table .flag {
-            display: inline-block;
-            margin-right: 12px;
-            vertical-align: middle;
-            line-height: 0;
-        }
-        .nations-table .flag img {
-            width: 28px;
-            height: auto;
-            border-radius: 2px;
-            box-shadow: 0 0 0 1px rgba(0,0,0,0.35);
-            vertical-align: middle;
-        }
-        .nations-table .flag .flag-fallback {
-            font-size: 1.4rem;
-            line-height: 1;
-        }
+        .nations-table td:last-child { text-align: right; color: var(--accent-gold); font-family: 'Press Start 2P', monospace; font-size: 0.75rem; }
         .nations-table tfoot td {
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-size: 0.95rem;
-            color: var(--accent-cream);
-            border-bottom: none;
-            border-top: 2px solid var(--glass-border);
-            padding-top: 18px;
+            border-bottom: none; border-top: 3px solid var(--accent-gold-deep);
+            color: var(--accent-cream); font-family: 'Press Start 2P', monospace; font-size: 0.7rem;
         }
-        .nations-table tfoot td:last-child {
-            font-size: 1.4rem;
-            color: var(--accent-gold);
-        }
-        .nations-note {
-            text-align: center;
-            color: var(--text-dim);
-            font-size: 0.85rem;
-            margin-top: 22px;
-            font-style: italic;
-            letter-spacing: 1px;
-        }
+        .flag { display: inline-block; width: 30px; margin-right: 10px; vertical-align: -3px; }
+        .flag img { width: 100%; border: 1px solid rgba(0,0,0,0.6); image-rendering: auto; }
+        .flag-fallback { font-size: 1rem; }
+        .nations-note { margin-top: 14px; color: var(--text-dim); font-size: 1rem; text-align: center; }
 
-        .footer {
-            text-align: center;
-            padding: 32px 0;
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--glass-border-dim);
+        /* === PAST CUP === */
+        .video-wrap {
+            margin-top: 18px;
             position: relative;
-            z-index: 1;
+            aspect-ratio: 16 / 9;
+            border: 3px solid var(--accent-gold-deep);
+            box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.7);
+            background: #000;
         }
-        .footer a { color: var(--accent-gold); text-decoration: none; }
-        .footer a:hover { text-shadow: 0 0 10px var(--accent-gold); }
+        .video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
-        /* === RESPONSIVE === */
-        @media (max-width: 768px) {
-            .h-title { font-size: 2.6rem; letter-spacing: 4px; }
-            .h-sub { font-size: 0.95rem; letter-spacing: 8px; }
-            .tagline { font-size: 0.85rem; letter-spacing: 4px; }
-            .cd-num { font-size: 2rem; }
-            .cd-box { min-width: 64px; padding: 8px 10px; }
-            .countdown-timer { gap: 14px; }
-            .section-title { font-size: 1.6rem; letter-spacing: 3px; }
-            .signup-heading { font-size: 1.4rem; letter-spacing: 2px; }
-            .signup-btn { font-size: 1rem; padding: 14px 28px; letter-spacing: 2px; }
-            .nav-btn { padding: 6px 14px; font-size: 0.75rem; letter-spacing: 1px; }
-            .total-prize { font-size: 3rem; }
+        /* === BRACKET === */
+        .bracket-preamble { text-align: center; color: var(--text-dim); font-size: 1.15rem; margin-bottom: 22px; }
+        .bracket-wrap { display: flex; flex-direction: column; gap: 30px; }
+        .day-header {
+            display: flex; align-items: baseline; gap: 16px;
+            margin-bottom: 14px; flex-wrap: wrap;
+        }
+        .day-label {
+            font-family: 'Press Start 2P', monospace; font-size: 0.85rem;
+            color: var(--accent-gold);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.7);
+        }
+        .day-date { color: var(--text-dim); font-size: 1.1rem; }
+        .rounds-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+            gap: 14px;
+            align-items: start;
+        }
+        .round-block {
+            background: var(--bg-stone);
+            border: 3px solid var(--glass-border-dim);
+            box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.55);
+            padding: 12px;
+        }
+        .round-title {
+            font-family: 'Press Start 2P', monospace; font-size: 0.58rem;
+            color: var(--accent-teal); line-height: 1.6;
+        }
+        .bo-pill {
+            display: inline-block;
+            font-size: 0.5rem;
+            background: var(--accent-gold-deep); color: #1b1206;
+            padding: 3px 6px; margin-left: 6px;
+            border: 2px solid var(--accent-gold);
+        }
+        .round-desc { color: var(--text-dim); font-size: 0.98rem; margin: 8px 0 10px; line-height: 1.3; }
+        .match-box {
+            background: rgba(5,13,16,0.65);
+            border: 2px solid rgba(255,217,122,0.18);
+            margin-bottom: 10px;
+            padding: 8px;
+        }
+        .match-meta {
+            display: flex; justify-content: space-between;
+            font-size: 0.95rem; color: var(--text-dim);
+            border-bottom: 2px dashed rgba(141,245,234,0.12);
+            padding-bottom: 5px; margin-bottom: 6px;
+        }
+        .match-id { color: var(--accent-gold-soft); font-family: 'Press Start 2P', monospace; font-size: 0.5rem; }
+        .match-slot { display: flex; justify-content: space-between; padding: 3px 0; font-size: 1.1rem; }
+        .slot-team.tbd { color: var(--text-dim); }
+        .slot-score { color: var(--accent-teal); }
+        .bracket-legend {
+            display: flex; flex-wrap: wrap; gap: 18px;
+            justify-content: center;
+            color: var(--text-dim); font-size: 1rem;
+        }
+        .leg-item { display: flex; align-items: center; gap: 7px; }
+        .leg-dot { width: 10px; height: 10px; display: inline-block; }
+        .leg-dot.ub { background: var(--accent-gold); }
+        .leg-dot.lb { background: var(--accent-teal); }
+        .leg-dot.gf { background: #e2574c; }
+
+        /* === CASTERS === */
+        .casters-card { text-align: center; }
+        .casters-img {
+            width: min(560px, 86%);
+            display: block;
+            margin: 0 auto;
+            filter: drop-shadow(0 10px 18px rgba(0,0,0,0.5));
+        }
+        .casters-names {
+            display: flex; justify-content: center; gap: clamp(30px, 12vw, 150px);
+            margin-top: 6px; flex-wrap: wrap;
+        }
+        .caster-name {
+            font-family: 'Press Start 2P', monospace; font-size: 0.72rem;
+            color: var(--accent-gold);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.7);
+        }
+        .caster-links { margin-top: 10px; display: flex; gap: 10px; justify-content: center; }
+        .caster-links a {
+            font-family: 'Press Start 2P', monospace; font-size: 0.5rem;
+            color: var(--accent-cream); text-decoration: none;
+            background: var(--bg-stone);
+            border: 2px solid var(--accent-gold-deep);
+            padding: 7px 9px;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.6);
+        }
+        .caster-links a:hover { color: var(--accent-gold); background: #1c4750; }
+
+        /* === FOOTER === */
+        .footer {
+            position: relative; z-index: 3;
+            text-align: center;
+            padding: 26px 10px 30px;
+            color: var(--text-dim);
+            font-size: 1.05rem;
+            border-top: 3px solid rgba(255,217,122,0.15);
+            margin-top: 30px;
+            background: rgba(5,13,16,0.8);
+        }
+        .footer a { color: var(--accent-teal); text-decoration: none; }
+        .footer a:hover { color: var(--accent-gold); }
+
+        @media (max-width: 640px) {
+            body { font-size: 19px; }
+            .px-card, .hero-screen { border-width: 28px; border-image-slice: 150; }
+            .cd-box { min-width: 72px; }
+            .cd-num { font-size: 1.2rem; }
+            .nav-btn { font-size: 0.52rem; padding: 10px 10px; }
         }
     </style>
 </head>
 <body>
     <div class="bg-base"></div>
-    <div class="bg-crest"></div>
-    <div class="bg-particles"></div>
     <div class="bg-vignette"></div>
-    <div class="bg-noise"></div>
     <div class="scanlines"></div>
     <div class="mouse-glow" id="mouseGlow"></div>
 
     <div class="container">
-        <header class="header">
-            <h1 class="h-title">AD World Cup</h1>
-            <div class="h-sub">MMXXVI</div>
-            <div class="h-divider">
-                <span class="line"></span>
-                <span class="ornament">❖</span>
-                <span class="line"></span>
+        <header class="hero">
+            <div class="hero-screen">
+                <video class="hero-video" autoplay muted loop playsinline poster="assets/scene_01_stadium.jpg">
+                    <source src="assets/loop_01_stadium.mp4" type="video/mp4">
+                </video>
+                <div class="hero-overlay">
+                    <h1 class="h-title">AD WORLD CUP</h1>
+                    <div class="h-divider">
+                        <span class="line"></span>
+                        <span class="ornament">◆</span>
+                        <span class="line"></span>
+                    </div>
+                    <div class="h-sub">JULY 25 — 26 ★ 2026</div>
+                </div>
             </div>
-            <div class="tagline">July 25 &mdash; 26 &bull; 2026</div>
         </header>
 
         <nav class="nav-bar">
-            <a href="#about" class="nav-btn"><i class="fa-solid fa-scroll"></i> Format</a>
-            <a href="#prizepool" class="nav-btn"><i class="fa-solid fa-trophy"></i> Prize Pool</a>
-            <a href="#signup" class="nav-btn primary"><i class="fa-solid fa-pen-to-square"></i> Sign Up</a>
-            <a href="#nations" class="nav-btn"><i class="fa-solid fa-flag"></i> Nations</a>
-            <a href="#past" class="nav-btn"><i class="fa-solid fa-film"></i> Last Cup</a>
-            <a href="#bracket" class="nav-btn"><i class="fa-solid fa-sitemap"></i> Bracket</a>
-            <a href="https://discord.gg/sQFwGxFYFB" target="_blank" class="nav-btn discord"><i class="fa-brands fa-discord"></i> Discord</a>
+            <a href="#about" class="nav-btn">FORMAT</a>
+            <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
+            <a href="#signup" class="nav-btn primary">SIGN UP</a>
+            <a href="#nations" class="nav-btn">NATIONS</a>
+            <a href="#past" class="nav-btn">LAST CUP</a>
+            <a href="#bracket" class="nav-btn">BRACKET</a>
+            <a href="https://discord.gg/sQFwGxFYFB" target="_blank" class="nav-btn discord">DISCORD</a>
         </nav>
 
         <div class="countdown-container">
-            <div class="countdown-label">Tournament Starts In</div>
+            <div class="countdown-label">TOURNAMENT STARTS IN</div>
             <div class="countdown-timer">
                 <div class="cd-box"><div class="cd-num" id="cd-days">00</div><div class="cd-text">Days</div></div>
                 <div class="cd-box"><div class="cd-num" id="cd-hours">00</div><div class="cd-text">Hours</div></div>
                 <div class="cd-box"><div class="cd-num" id="cd-minutes">00</div><div class="cd-text">Mins</div></div>
                 <div class="cd-box"><div class="cd-num" id="cd-seconds">00</div><div class="cd-text">Secs</div></div>
             </div>
+            <a href="#" id="ics-btn" class="ics-link">+ ADD TO CALENDAR</a>
         </div>
 
         <section id="about" class="section-wrapper">
-            <h2 class="section-title">Format</h2>
-            <div class="about-card">
-                <p>The Ability Draft <strong>World Cup</strong> returns. <strong>8 teams</strong>, <strong>double-elimination</strong>, played across two days.</p>
-                <p style="margin-top: 12px;">Day one opens with a seeding round of best-of-ones to place teams into the upper and lower brackets. Day two runs through the lower bracket matches, lower-bracket final, and grand final &mdash; all best-of-three.</p>
-                <p style="margin-top: 12px;">Save the dates: <span class="date-highlight">July 25 &ndash; 26, 2026</span></p>
-                <div class="info-grid">
-                    <div class="info-chip"><span class="label">Teams</span><span class="value">8</span></div>
-                    <div class="info-chip"><span class="label">Format</span><span class="value">Double Elim</span></div>
-                    <div class="info-chip"><span class="label">Duration</span><span class="value">2 Days</span></div>
-                    <div class="info-chip"><span class="label">Server</span><span class="value">EU West</span></div>
-                    <div class="info-chip"><span class="label">Entry</span><span class="value">Free</span></div>
+            <h2 class="section-title">FORMAT</h2>
+            <div class="px-card about-card">
+                <div class="px-card-pad">
+                    <p>The Ability Draft <strong>World Cup</strong> returns. <strong>8 teams</strong>, <strong>double-elimination</strong>, played across two days.</p>
+                    <p style="margin-top: 12px;">Day one opens with a seeding round of best-of-ones to place teams into the upper and lower brackets. Day two runs through the lower bracket matches, lower-bracket final, and grand final &mdash; all best-of-three.</p>
+                    <p style="margin-top: 12px;">Save the dates: <span class="date-highlight">July 25 &ndash; 26, 2026</span></p>
+                    <div class="info-grid">
+                        <div class="info-chip"><span class="label">Teams</span><span class="value">8</span></div>
+                        <div class="info-chip"><span class="label">Format</span><span class="value">DOUBLE ELIM</span></div>
+                        <div class="info-chip"><span class="label">Duration</span><span class="value">2 DAYS</span></div>
+                        <div class="info-chip"><span class="label">Server</span><span class="value">EU WEST</span></div>
+                        <div class="info-chip"><span class="label">Entry</span><span class="value">FREE</span></div>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <div class="scene-divider trophy" aria-hidden="true"></div>
+
         <section id="prizepool" class="section-wrapper">
-            <h2 class="section-title">Prize Pool</h2>
-            <div class="prize-card">
-                <div class="trophy-3d">🏆</div>
-                <div class="base-pool-label" id="pool-label">Base Pool (Host)</div>
-                <div class="total-prize" id="total-prize-amount">250&euro;</div>
-                <div class="pool-breakdown" id="pool-breakdown" hidden></div>
-                <div class="prize-historic">
-                    <i class="fa-solid fa-star star"></i>
-                    Historically &#x2248; 1000&euro;+ with community additions
-                    <i class="fa-solid fa-star star"></i>
+            <h2 class="section-title">PRIZE POOL</h2>
+            <div class="px-card prize-card">
+                <div class="px-card-pad">
+                    <img src="assets/crest_trophy.png" alt="Trophy crest" class="crest-img">
+                    <div class="base-pool-label" id="pool-label">Base Pool (Host)</div>
+                    <div class="total-prize" id="total-prize-amount">250&euro;</div>
+                    <div class="pool-breakdown" id="pool-breakdown" hidden></div>
+                    <div class="prize-historic">
+                        <span class="star">★</span>
+                        Historically &#x2248; 1000&euro;+ with community additions
+                        <span class="star">★</span>
+                    </div>
+                    <div class="distribution-grid">
+                        <div class="dist-item rank-1">
+                            <span class="place">1ST</span>
+                            <span class="percent">50%</span>
+                            <span class="dist-team">TBD</span>
+                        </div>
+                        <div class="dist-item rank-2">
+                            <span class="place">2ND</span>
+                            <span class="percent">25%</span>
+                            <span class="dist-team">TBD</span>
+                        </div>
+                        <div class="dist-item rank-3">
+                            <span class="place">3RD</span>
+                            <span class="percent">15%</span>
+                            <span class="dist-team">TBD</span>
+                        </div>
+                        <div class="dist-item rank-4">
+                            <span class="place">4TH</span>
+                            <span class="percent">10%</span>
+                            <span class="dist-team">TBD</span>
+                        </div>
+                    </div>
+                    <p class="pool-note">
+                        <span class="heart">♥</span> Community donations push the pool well past the base every year &mdash; the split above is how placements share the total.
+                    </p>
+                    <a href="https://www.paypal.com/donate/?hosted_button_id=BZR9A4LCPZD8E" target="_blank" rel="noopener" class="donate-btn">
+                        DONATE TO THE POOL
+                    </a>
                 </div>
-                <div class="distribution-grid">
-                    <div class="dist-item rank-1">
-                        <span class="place">1st</span>
-                        <span class="percent">50%</span>
-                        <span class="dist-team">TBD</span>
-                    </div>
-                    <div class="dist-item rank-2">
-                        <span class="place">2nd</span>
-                        <span class="percent">25%</span>
-                        <span class="dist-team">TBD</span>
-                    </div>
-                    <div class="dist-item rank-3">
-                        <span class="place">3rd</span>
-                        <span class="percent">15%</span>
-                        <span class="dist-team">TBD</span>
-                    </div>
-                    <div class="dist-item rank-4">
-                        <span class="place">4th</span>
-                        <span class="percent">10%</span>
-                        <span class="dist-team">TBD</span>
-                    </div>
-                </div>
-                <p class="pool-note">
-                    <i class="fa-solid fa-heart"></i> Community donations push the pool well past the base every year &mdash; the split above is how placements share the total.
-                </p>
-                <a href="https://www.paypal.com/donate/?hosted_button_id=BZR9A4LCPZD8E" target="_blank" rel="noopener" class="donate-btn">
-                    <i class="fa-brands fa-paypal"></i> Donate to the Pool
-                </a>
             </div>
-            <div class="donors-card" id="donors-card" hidden>
-                <div class="donors-heading"><i class="fa-solid fa-shield-halved"></i> Hall of Heroes</div>
-                <p class="donors-subheading">Honoring the prize pool for the community</p>
-                <div class="donors-list" id="donor-list"></div>
-                <div class="donors-footer" id="donors-footer"></div>
+            <div class="px-card donors-card" id="donors-card" hidden>
+                <div class="px-card-pad">
+                    <div class="donors-heading">HALL OF HEROES</div>
+                    <p class="donors-subheading">Honoring the prize pool for the community</p>
+                    <div class="donors-list" id="donor-list"></div>
+                    <div class="donors-footer" id="donors-footer"></div>
+                </div>
             </div>
         </section>
 
         <section id="signup" class="section-wrapper">
-            <h2 class="section-title">Sign Up</h2>
-            <div class="signup-card">
-                <div class="signup-heading">Join The Cup</div>
-                <p class="signup-sub">Sign up as an individual &mdash; tell us <strong>who you are</strong> and <strong>which country you represent</strong>. Once signups close, the <strong>8 strongest countries</strong> advance. From each of those, the strongest player is nominated as captain and drafts four teammates from the remaining signups in their country.</p>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdVZTce_QlkPhLz8d85MhDWji1mqLd1o9kJWtUlmIFM5FmeoQ/viewform?usp=header" target="_blank" rel="noopener" class="signup-btn">
-                    <i class="fa-solid fa-scroll"></i> Open Signup Form
-                </a>
-                <div class="signup-meta">
-                    <i class="fa-solid fa-circle-info"></i> Questions? Hit us up on Discord.
+            <h2 class="section-title">SIGN UP</h2>
+            <div class="px-card signup-card">
+                <div class="px-card-pad">
+                    <div class="signup-heading">JOIN THE CUP</div>
+                    <div class="signup-deadline">⚠ LAST DAY TO SIGN UP: JULY 18, 2026 ⚠</div>
+                    <p class="signup-sub">Sign up as an individual &mdash; tell us <strong>who you are</strong> and <strong>which country you represent</strong>. Once signups close, the <strong>8 strongest countries</strong> advance. From each of those, the strongest player is nominated as captain and drafts four teammates from the remaining signups in their country.</p>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdVZTce_QlkPhLz8d85MhDWji1mqLd1o9kJWtUlmIFM5FmeoQ/viewform?usp=header" target="_blank" rel="noopener" class="signup-btn">
+                        OPEN SIGNUP FORM
+                    </a>
+                    <div class="signup-meta">Questions? Hit us up on Discord.</div>
                 </div>
             </div>
         </section>
 
         <section id="nations" class="section-wrapper">
-            <h2 class="section-title">Nations Represented</h2>
-            <div class="nations-card">
-                <p class="nations-preamble">Current confirmed signups by country. 8 strongest nations will advance once signups close.</p>
-                <table class="nations-table">
-                    <thead>
-                        <tr>
-                            <th>Country</th>
-                            <th>Players</th>
-                        </tr>
-                    </thead>
-                    <tbody id="nations-tbody">
-                        <tr><td><span class="flag"><img src="https://flagcdn.com/us.svg" alt="US" loading="lazy"></span>USA</td><td>5</td></tr>
-                        <tr><td><span class="flag"><img src="https://flagcdn.com/gb.svg" alt="GB" loading="lazy"></span>United Kingdom</td><td>3</td></tr>
-                        <tr><td><span class="flag"><img src="https://flagcdn.com/ru.svg" alt="RU" loading="lazy"></span>Russia</td><td>2</td></tr>
-                        <tr><td><span class="flag"><img src="https://flagcdn.com/dk.svg" alt="DK" loading="lazy"></span>Denmark</td><td>2</td></tr>
-                        <tr><td><span class="flag"><img src="https://flagcdn.com/de.svg" alt="DE" loading="lazy"></span>Germany</td><td>1</td></tr>
-                        <tr><td><span class="flag"><img src="https://flagcdn.com/my.svg" alt="MY" loading="lazy"></span>Malaysia</td><td>1</td></tr>
-                    </tbody>
-                    <tfoot>
-                        <tr><td>Total</td><td id="nations-total">14</td></tr>
-                    </tfoot>
-                </table>
-                <p class="nations-note">Live count — updates automatically as new signups are confirmed.</p>
+            <h2 class="section-title">NATIONS REPRESENTED</h2>
+            <p class="title-sub">8 spots up for grabs — the final lineup locks when signups close</p>
+            <div class="v4-gallery" id="v4-gallery"></div>
+            <p class="v4-note">— nation cards from the archive, not the roster · hover to bring one to life —</p>
+            <div class="px-card nations-card">
+                <div class="px-card-pad">
+                    <p class="nations-preamble">Current confirmed signups by country. 8 strongest nations will advance once signups close.</p>
+                    <table class="nations-table">
+                        <thead>
+                            <tr>
+                                <th>COUNTRY</th>
+                                <th>PLAYERS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nations-tbody">
+                            <tr><td><span class="flag"><img src="https://flagcdn.com/us.svg" alt="US" loading="lazy"></span>USA</td><td>5</td></tr>
+                            <tr><td><span class="flag"><img src="https://flagcdn.com/gb.svg" alt="GB" loading="lazy"></span>United Kingdom</td><td>3</td></tr>
+                            <tr><td><span class="flag"><img src="https://flagcdn.com/ru.svg" alt="RU" loading="lazy"></span>Russia</td><td>2</td></tr>
+                            <tr><td><span class="flag"><img src="https://flagcdn.com/dk.svg" alt="DK" loading="lazy"></span>Denmark</td><td>2</td></tr>
+                            <tr><td><span class="flag"><img src="https://flagcdn.com/de.svg" alt="DE" loading="lazy"></span>Germany</td><td>1</td></tr>
+                            <tr><td><span class="flag"><img src="https://flagcdn.com/my.svg" alt="MY" loading="lazy"></span>Malaysia</td><td>1</td></tr>
+                        </tbody>
+                        <tfoot>
+                            <tr><td>Total</td><td id="nations-total">14</td></tr>
+                        </tfoot>
+                    </table>
+                    <p class="nations-note">Live count — updates automatically as new signups are confirmed.</p>
+                </div>
             </div>
         </section>
 
         <section id="past" class="section-wrapper">
-            <h2 class="section-title">Relive The Last Cup</h2>
-            <div class="past-card">
-                <p>Haven't seen the previous World Cup? Here's the full playlist &mdash; group stages, clutch plays, and every moment leading to the final.</p>
-                <div class="video-wrap">
-                    <iframe
-                        src="https://www.youtube.com/embed/videoseries?list=PLoLUotDWBel4FczbDUnbyF2CjjPz5r0xe"
-                        title="Previous AD World Cup Playlist"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                        loading="lazy"></iframe>
+            <h2 class="section-title">RELIVE THE LAST CUP</h2>
+            <div class="px-card past-card">
+                <div class="px-card-pad">
+                    <p>Haven't seen the previous World Cup? Here's the full playlist &mdash; group stages, clutch plays, and every moment leading to the final.</p>
+                    <div class="video-wrap">
+                        <iframe
+                            src="https://www.youtube.com/embed/videoseries?list=PLoLUotDWBel4FczbDUnbyF2CjjPz5r0xe"
+                            title="Previous AD World Cup Playlist"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            loading="lazy"></iframe>
+                    </div>
+                    <a href="https://www.youtube.com/watch?v=qXD9hsq2TwM&list=PLoLUotDWBel4FczbDUnbyF2CjjPz5r0xe" target="_blank" rel="noopener" class="playlist-link">
+                        ▶ WATCH ON YOUTUBE
+                    </a>
                 </div>
-                <a href="https://www.youtube.com/watch?v=qXD9hsq2TwM&list=PLoLUotDWBel4FczbDUnbyF2CjjPz5r0xe" target="_blank" rel="noopener" class="playlist-link">
-                    <i class="fa-brands fa-youtube"></i> Watch on YouTube
-                    <i class="fa-solid fa-arrow-right"></i>
-                </a>
             </div>
         </section>
 
+        <div class="scene-divider arena" aria-hidden="true"></div>
+
         <section id="bracket" class="section-wrapper">
-            <h2 class="section-title">Bracket</h2>
+            <h2 class="section-title">BRACKET</h2>
             <p class="bracket-preamble">Eight teams, double-elimination. Day 1 is all Bo1 with two games running in parallel; everything from UB Finals onward is Bo3. Teams are TBD until signups close.</p>
-            <div class="bracket-wrap">
+            <div class="px-card">
+                <div class="px-card-pad bracket-wrap">
                 <!-- DAY 1 -->
                 <div class="bracket-day">
                     <div class="day-header">
-                        <span class="day-label">Day 1</span>
+                        <span class="day-label">DAY 1</span>
                         <span class="day-date">Saturday, July 25, 2026</span>
                     </div>
                     <div class="rounds-row">
                         <div class="round-block">
-                            <div class="round-title">Seeding R1 <span class="bo-pill">Bo1</span></div>
+                            <div class="round-title">SEEDING R1 <span class="bo-pill">BO1</span></div>
                             <div class="round-desc">All 8 teams play &mdash; winners go up, losers drop</div>
                             <div class="match-box">
                                 <div class="match-meta"><span class="match-id">SR1 #1</span><span class="match-time">17:00 CEST</span></div>
@@ -1358,7 +852,7 @@
                             </div>
                         </div>
                         <div class="round-block">
-                            <div class="round-title">Seeding R2 <span class="bo-pill">Bo1</span></div>
+                            <div class="round-title">SEEDING R2 <span class="bo-pill">BO1</span></div>
                             <div class="round-desc">SR1 winners &mdash; winner advances to UB Finals</div>
                             <div class="match-box">
                                 <div class="match-meta"><span class="match-id">SR2 #1</span><span class="match-time">19:00 CEST</span></div>
@@ -1372,7 +866,7 @@
                             </div>
                         </div>
                         <div class="round-block">
-                            <div class="round-title">SR1 Losers <span class="bo-pill">Bo1</span></div>
+                            <div class="round-title">SR1 LOSERS <span class="bo-pill">BO1</span></div>
                             <div class="round-desc">SR1 losers &mdash; win or go home</div>
                             <div class="match-box">
                                 <div class="match-meta"><span class="match-id">SL #1</span><span class="match-time">20:00 CEST</span></div>
@@ -1386,7 +880,7 @@
                             </div>
                         </div>
                         <div class="round-block">
-                            <div class="round-title">Lower Bracket R1 <span class="bo-pill">Bo1</span></div>
+                            <div class="round-title">LOWER BRACKET R1 <span class="bo-pill">BO1</span></div>
                             <div class="round-desc">SR2 losers meet SL winners, cross-paired</div>
                             <div class="match-box">
                                 <div class="match-meta"><span class="match-id">LB R1 #1</span><span class="match-time">21:00 CEST</span></div>
@@ -1400,7 +894,7 @@
                             </div>
                         </div>
                         <div class="round-block">
-                            <div class="round-title">Upper Bracket Finals <span class="bo-pill">Bo3</span></div>
+                            <div class="round-title">UPPER BRACKET FINALS <span class="bo-pill">BO3</span></div>
                             <div class="round-desc">SR2 winners decide who goes straight to the Grand Final</div>
                             <div class="match-box">
                                 <div class="match-meta"><span class="match-id">UB F</span><span class="match-time">22:00 CEST</span></div>
@@ -1414,12 +908,12 @@
                 <!-- DAY 2 -->
                 <div class="bracket-day">
                     <div class="day-header">
-                        <span class="day-label">Day 2</span>
+                        <span class="day-label">DAY 2</span>
                         <span class="day-date">Sunday, July 26, 2026</span>
                     </div>
                     <div class="rounds-row">
                         <div class="round-block">
-                            <div class="round-title">Lower Bracket SF <span class="bo-pill">Bo3</span></div>
+                            <div class="round-title">LOWER BRACKET SF <span class="bo-pill">BO3</span></div>
                             <div class="round-desc">The two LB R1 winners fight for the LB Final slot</div>
                             <div class="match-box">
                                 <div class="match-meta"><span class="match-id">LB SF</span><span class="match-time">17:00 CEST</span></div>
@@ -1428,7 +922,7 @@
                             </div>
                         </div>
                         <div class="round-block">
-                            <div class="round-title">Lower Bracket Final <span class="bo-pill">Bo3</span></div>
+                            <div class="round-title">LOWER BRACKET FINAL <span class="bo-pill">BO3</span></div>
                             <div class="round-desc">LB SF winner vs UB Finals loser &mdash; last chance to reach the Grand Final</div>
                             <div class="match-box">
                                 <div class="match-meta"><span class="match-id">LB F</span><span class="match-time">19:30 CEST</span></div>
@@ -1437,7 +931,7 @@
                             </div>
                         </div>
                         <div class="round-block">
-                            <div class="round-title">Grand Final <span class="bo-pill">Bo3</span></div>
+                            <div class="round-title">GRAND FINAL <span class="bo-pill">BO3</span></div>
                             <div class="round-desc">One final match. Winner takes the cup.</div>
                             <div class="match-box">
                                 <div class="match-meta"><span class="match-id">GF</span><span class="match-time">22:00 CEST</span></div>
@@ -1454,25 +948,34 @@
                     <div class="leg-item"><span class="leg-dot gf"></span>Grand Final</div>
                     <div class="leg-item">All times CEST &bull; Schedule subject to change</div>
                 </div>
+                </div>
             </div>
         </section>
 
+        <div class="scene-divider stadium" aria-hidden="true"></div>
+
         <section id="casters" class="section-wrapper casters-section">
-            <h2 class="section-title">Your Casters</h2>
-            <div class="casters-grid">
-                <div class="caster-card">
-                    <img src="https://i.imgur.com/lZGfLl5.png" alt="BloPP" class="caster-img">
-                    <div class="caster-name">BloPP!</div>
-                    <div class="caster-links">
-                        <a href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener" title="Twitch"><i class="fa-brands fa-twitch"></i></a>
-                        <a href="https://www.youtube.com/@bloppdota2" target="_blank" rel="noopener" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                    </div>
-                </div>
-                <div class="caster-card">
-                    <img src="https://i.imgur.com/Xepb7mq.png" alt="Young Elodin" class="caster-img">
-                    <div class="caster-name">Young Elodin</div>
-                    <div class="caster-links">
-                        <a href="https://www.twitch.tv/young_elodin" target="_blank" rel="noopener" title="Twitch"><i class="fa-brands fa-twitch"></i></a>
+            <h2 class="section-title">YOUR CASTERS</h2>
+            <div class="px-card casters-card">
+                <div class="px-card-pad">
+                    <video class="casters-img" autoplay muted loop playsinline poster="assets/casters.png" aria-label="BloPP and Young Elodin at the caster desk">
+                        <source src="assets/casters_anim.webm" type="video/webm">
+                        <img src="assets/casters.png" alt="BloPP and Young Elodin at the caster desk">
+                    </video>
+                    <div class="casters-names">
+                        <div>
+                            <div class="caster-name">BLOPP!</div>
+                            <div class="caster-links">
+                                <a href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener" title="Twitch">TWITCH</a>
+                                <a href="https://www.youtube.com/@bloppdota2" target="_blank" rel="noopener" title="YouTube">YOUTUBE</a>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="caster-name">YOUNG ELODIN</div>
+                            <div class="caster-links">
+                                <a href="https://www.twitch.tv/young_elodin" target="_blank" rel="noopener" title="Twitch">TWITCH</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1484,13 +987,13 @@
     </footer>
 
     <script>
-        // === EMBERS ===
+        // === PIXEL EMBERS ===
         (function createEmbers() {
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 26; i++) {
                 const e = document.createElement('div');
                 e.className = 'ember';
                 e.style.left = Math.random() * 100 + '%';
-                e.style.top = Math.random() * 100 + '%';
+                e.style.top = (40 + Math.random() * 60) + '%';
                 e.style.animationDelay = (Math.random() * 18) + 's';
                 e.style.animationDuration = (Math.random() * 12 + 12) + 's';
                 document.body.appendChild(e);
@@ -1508,6 +1011,28 @@
             mouseTimeout = setTimeout(() => mouseGlow.classList.remove('active'), 1000);
         });
 
+        // === V4 NATION GALLERY (hover to play the loop) ===
+        (function buildGallery() {
+            const NATIONS = ['germany','usa','uk','russia','ukraine','brazil','kazakhstan','algeria'];
+            const wrap = document.getElementById('v4-gallery');
+            wrap.innerHTML = `
+                <div class="v4-tile mystery" title="Who claims a spot? Sign up!">
+                    <video autoplay muted loop playsinline poster="sprites/v4_mystery.png" aria-label="Unknown contender">
+                        <source src="sprites/loop_mystery.mp4" type="video/mp4">
+                    </video>
+                </div>` + NATIONS.map(n => `
+                <div class="v4-tile" data-nation="${n}">
+                    <video muted loop playsinline preload="none" poster="sprites/v4_${n}.png">
+                        <source src="sprites/loop_${n}.mp4" type="video/mp4">
+                    </video>
+                </div>`).join('');
+            wrap.querySelectorAll('.v4-tile').forEach(tile => {
+                const v = tile.querySelector('video');
+                tile.addEventListener('mouseenter', () => { v.play().catch(()=>{}); });
+                tile.addEventListener('mouseleave', () => { v.pause(); });
+            });
+        })();
+
         // === COUNTDOWN ===
         const targetDate = new Date("2026-07-25T17:00:00+02:00").getTime();
         function updateCountdown() {
@@ -1515,7 +1040,7 @@
             const distance = targetDate - now;
             if (distance < 0) {
                 document.querySelector('.countdown-container').innerHTML =
-                    "<div class='countdown-label' style='color:var(--accent-gold);font-size:1.4rem;'>🏆 Tournament Live</div>";
+                    "<div class='countdown-label' style='color:var(--accent-gold);font-size:1.1rem;'>🏆 TOURNAMENT LIVE</div>";
                 return;
             }
             const days = Math.floor(distance / 86400000);
@@ -1530,6 +1055,53 @@
         }
         setInterval(updateCountdown, 1000);
         updateCountdown();
+
+        // === KONAMI CODE: spider invasion 🕷 ===
+        (function konami() {
+            const SEQ = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+            let pos = 0, active = false;
+            document.addEventListener('keydown', (e) => {
+                pos = (e.key === SEQ[pos]) ? pos + 1 : (e.key === SEQ[0] ? 1 : 0);
+                if (pos < SEQ.length) return;
+                pos = 0;
+                if (active) return;
+                active = true;
+                const vids = ['LEFT','RIGHT'].map(side => {
+                    const v = document.createElement('video');
+                    v.src = `assets/spider_strip_${side}.webm`;
+                    v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
+                    Object.assign(v.style, {
+                        position: 'fixed', top: '0', height: '100vh', width: 'auto',
+                        [side === 'LEFT' ? 'left' : 'right']: '0',
+                        zIndex: 9000, pointerEvents: 'none',
+                    });
+                    document.body.appendChild(v);
+                    return v;
+                });
+                setTimeout(() => { vids.forEach(v => v.remove()); active = false; }, 16000);
+            });
+        })();
+
+        // === ADD TO CALENDAR (.ics download) ===
+        document.getElementById('ics-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            const ics = [
+                'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//AD World Cup//EN',
+                'BEGIN:VEVENT',
+                'UID:adworldcup2026@bloppbot.github.io',
+                'DTSTART:20260725T150000Z',
+                'DTEND:20260726T210000Z',
+                'SUMMARY:AD World Cup 2026',
+                'DESCRIPTION:8 teams\\, double elimination\\, two days of Ability Draft. https://bloppbot.github.io/worldcup2026/',
+                'URL:https://bloppbot.github.io/worldcup2026/',
+                'END:VEVENT','END:VCALENDAR'
+            ].join('\r\n');
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+            a.download = 'ad-worldcup-2026.ics';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        });
 
         // === DONATIONS ===
         const DONO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcwKLHNGLdUvDJxa9kEFGVk6J9B2caeyWIUKmTvT_dGAJHwJs2F70xU3enZ3YCUamrqET_xhBnwOEf/pub?output=csv';
@@ -1597,7 +1169,7 @@
                 ).join('');
 
                 const footer = document.getElementById('donors-footer');
-                footer.innerHTML = `<strong>${donors.length}</strong> contributor${donors.length === 1 ? '' : 's'} <i class="fa-solid fa-heart"></i>`;
+                footer.innerHTML = `<strong>${donors.length}</strong> contributor${donors.length === 1 ? '' : 's'} <span class="heart">♥</span>`;
 
                 document.getElementById('donors-card').hidden = false;
             } catch (e) {
