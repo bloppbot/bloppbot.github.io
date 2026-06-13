@@ -18,7 +18,10 @@
   html,body{margin:0;padding:0}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    color:var(--ink); background:var(--foam); line-height:1.5; padding-bottom:60px;
+    color:var(--ink); line-height:1.5; padding-bottom:60px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='22'%3E%3Cpath d='M0 13 Q22 3 45 13 T90 13' fill='none' stroke='%231f7fb8' stroke-width='2' opacity='0.07'/%3E%3C/svg%3E") repeat,
+      linear-gradient(180deg,#e9f3fb 0%, #f4f9fc 70%);
   }
 
   /* ---------- HERO ---------- */
@@ -62,7 +65,12 @@
   /* ---------- MENU CARDS ---------- */
   .day{
     background:#fff; border:1px solid var(--line); border-radius:16px;
-    margin:0 0 14px; overflow:hidden; box-shadow:0 2px 8px rgba(16,80,126,.07);
+    margin:0 0 14px; overflow:hidden; box-shadow:0 3px 12px rgba(16,80,126,.09);
+    position:relative;
+  }
+  .day::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:3px; z-index:1;
+    background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));
   }
   .day>h3{
     margin:0; padding:13px 15px; font-size:1.05rem; font-family:'Cinzel',serif; font-weight:600;
@@ -70,9 +78,9 @@
     border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px;
   }
   .day>h3 .num{
-    background:var(--navy); color:var(--gold2); width:28px;height:28px;border-radius:50%;
-    display:inline-flex;align-items:center;justify-content:center;font-size:.9rem;flex:0 0 auto;
-    font-family:'VT323',monospace;
+    background:var(--navy); color:var(--gold2); width:30px;height:30px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;font-size:1rem;flex:0 0 auto;
+    font-family:'VT323',monospace; box-shadow:0 0 0 2px var(--gold2);
   }
   .meal{border-bottom:1px solid #eef4f8}
   .meal:last-child{border-bottom:none}
@@ -110,12 +118,15 @@
     border:1px solid var(--line);background:#fff;color:#b23b3b;border-radius:9px;
     padding:6px 11px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit
   }
-  .cat{background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:12px;overflow:hidden}
+  .cat{background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:12px;overflow:hidden;box-shadow:0 2px 8px rgba(16,80,126,.06)}
   .cat>h4{
     margin:0;padding:12px 15px;font-size:1rem;cursor:pointer;display:flex;align-items:center;gap:9px;
     background:linear-gradient(90deg,#f2f9fd,#fff);border-bottom:1px solid var(--line);font-weight:700
   }
-  .cat>h4 .emoji{font-size:1.15rem}
+  .cat>h4 .emoji{
+    font-size:1.05rem; width:32px; height:32px; border-radius:10px; flex:0 0 auto;
+    background:#eaf4fb; display:inline-flex; align-items:center; justify-content:center;
+  }
   .cat>h4 .count{margin-left:auto;font-size:.72rem;color:#6c8499;font-weight:700}
   .cat>h4 .chev{transition:.2s;color:#9bb3c6}
   .cat.collapsed .chev{transform:rotate(-90deg)}
@@ -158,8 +169,8 @@
 
 <div class="wrap">
   <section id="menu" class="active">
-    <p class="intro">Tippe auf ein Gericht, um das Rezept zu öffnen. Jeden Abend ein gekochtes Hauptgericht (alles auf dem Herd, kein Backofen), leichte Mittagessen für unterwegs. <span class="salad">Salat gibt's immer dazu.</span> Grundrezepte bleiben mild — Chilisaucen stehen am Tisch, jeder würzt selbst nach.</p>
-    <div class="tip">🥖 Brot &amp; Semmeln täglich frisch vor Ort kaufen. <b>Gegen Ende der Woche</b>, wenn keine Bäckerei in der Nähe ist, selber Pfannenbrot backen — Rezept bei Tag 7. 🐟 Fisch &amp; Fleisch möglichst frisch in der Marina holen.</div>
+    <p class="intro">Gericht antippen fürs Rezept. <span class="salad">Salat &amp; Chilisaucen immer am Tisch.</span></p>
+    <div class="tip">🥖 Brot &amp; Semmeln täglich frisch vor Ort. <b>Gegen Ende der Woche</b> selber backen — Rezept bei Tag 7. 🐟 Fisch &amp; Fleisch frisch in der Marina.</div>
     <div id="days"></div>
   </section>
 
@@ -203,17 +214,18 @@ const MENU = [
       "Tomaten und Mozzarella in Scheiben schneiden, abwechselnd auflegen.",
       "Mit Basilikum, Olivenöl, etwas Balsamico, Salz & Pfeffer anrichten.",
       "Frisches Baguette dazu."]}},
-   {lab:"Abend", dish:"Hühnergeschnetzeltes mit Reis & Gemüse", salad:"gemischter Salat",
+   {lab:"Abend", dish:"Erdäpfelgulasch", salad:"gemischter Salat",
     recipe:{serves:"7 Personen", ing:[
-      "2 kg Hühnerfilet in Streifen","3 Paprika, 2 Zucchini, 2 Zwiebeln",
-      "500 ml Schlagobers/Sahne","1 Brühwürfel","1,2 kg Reis",
-      "Öl, Salz, Pfeffer, Paprikapulver edelsüß, Petersilie"],
+      "3 kg Erdäpfel (festkochend)","4 Zwiebeln, 3 Knoblauchzehen",
+      "1 kg Frankfurter/Debreziner Würstel (in Scheiben)","3 EL Tomatenmark",
+      "2 EL Paprikapulver edelsüß","ca. 1,5 l Rindsuppe/Brühe",
+      "Öl, Salz, Pfeffer, Kümmel, Majoran, 2 Lorbeerblätter, Schuss Essig, Petersilie"],
     steps:[
-      "Hühnerstreifen salzen und portionsweise scharf anbraten, herausnehmen.",
-      "Zwiebeln + Paprika + Zucchini in der Pfanne anbraten.",
-      "Fleisch zurück, mit etwas Brühe ablöschen, Obers zugeben.",
-      "Kurz cremig einköcheln, mit Paprikapulver/Salz/Pfeffer abschmecken.",
-      "Reis kochen, Petersilie über das Geschnetzelte."]}},
+      "Zwiebeln in Öl goldgelb anrösten, Knoblauch + Tomatenmark kurz mitrösten.",
+      "Topf von der Hitze ziehen, Paprikapulver einrühren (darf nicht verbrennen), sofort mit Brühe aufgießen.",
+      "Kümmel, Majoran, Lorbeer + geschälte, gewürfelte Erdäpfel zugeben.",
+      "~20–25 Min weich köcheln, ein paar Stücke zerdrücken → bindet die Sauce.",
+      "Würstelscheiben zugeben, 5 Min ziehen lassen. Mit Salz, Pfeffer & Schuss Essig abschmecken, Petersilie drüber. Brot dazu."]}},
  ]},
  {title:"Tag 3", meals:[
    {lab:"Mittag", dish:"Thunfisch-Nudelsalat", note:"Vorabend mehr Penne kochen → kalt aus der Kühlbox.",
@@ -291,16 +303,15 @@ const MENU = [
       "Eier mit Käse & viel Pfeffer verrühren.",
       "Heiße abgetropfte Nudeln mit dem Speck mischen, Pfanne von der Hitze nehmen.",
       "Ei-Käse-Masse + Schuss Nudelwasser unterrühren bis cremig — NICHT mehr kochen, sonst wird's Rührei."]}},
-   {lab:"Notfall-Brot", dish:"🍞 Pfannenbrot selber backen", note:"Für gegen Ende der Woche, wenn frisches Brot ausgeht — ohne Backofen, direkt in der Pfanne.",
-    recipe:{serves:"~8 Fladen", ing:[
-      "1 kg Mehl","1 Pkg Trockenhefe (oder 2 TL Backpulver für schnell)","2 TL Salz",
-      "4 EL Olivenöl","ca. 500 ml lauwarmes Wasser"],
+   {lab:"Extra", dish:"🍞 Brot selber backen (Ofen)", note:"Für gegen Ende der Woche, wenn frisches Brot ausgeht.",
+    recipe:{serves:"1 großer Laib", ing:[
+      "500 g Mehl","1 Pkg Trockenhefe (7 g)","2 TL Salz","ca. 350 ml lauwarmes Wasser","Backpapier"],
     steps:[
-      "Mehl, Hefe und Salz mischen, Öl + Wasser zugeben und zu einem glatten Teig kneten.",
-      "Mit Hefe ~1 Std zugedeckt gehen lassen (mit Backpulver: gleich weiter).",
-      "Teig in ~8 Stücke teilen, dünn rund ausrollen.",
-      "In heißer, leicht geölter Pfanne ohne Deckel je ~2 Min pro Seite backen, bis goldbraune Blasen entstehen.",
-      "Warm servieren — passt zu Antipasti, Grillabend & Salaten."]}},
+      "Mehl, Hefe und Salz mischen, Wasser zugeben und ~5 Min zu einem glatten Teig kneten.",
+      "Zugedeckt ~1 Std gehen lassen, bis sich der Teig verdoppelt (über Nacht geht auch).",
+      "Ofen auf 220 °C vorheizen. Teig zu einem Laib formen, auf ein mit Backpapier belegtes Blech.",
+      "Oben 2–3 Mal einschneiden und ~30–35 Min goldbraun backen — klingt beim Klopfen hohl.",
+      "Auskühlen lassen. Passt zu Antipasti, Erdäpfelgulasch & Salaten."]}},
  ]},
  {title:"☕ Jeden Tag", meals:[
    {lab:"Frühstück", dish:"Semmeln/Brot, Aufschnitt, Käse, Eier", note:"+ Joghurt, Müsli, Obst, Kaffee, O-Saft"},
@@ -312,7 +323,8 @@ const MENU = [
 const SHOP = [
  {cat:"Fleisch, Wurst & Fisch", emoji:"🥩", items:[
    ["Faschiertes (gemischt)","1,8 kg","Bolognese"],
-   ["Hühnerfilet","2,5 kg","Geschnetzeltes + Wraps"],
+   ["Hühnerfilet","1 kg","Wraps + Salat-Topping"],
+   ["Frankfurter / Debreziner Würstel","1 kg","Erdäpfelgulasch"],
    ["Ćevapčići","1,5 kg","Tag 3 Pfanne"],
    ["Bratwürste","1,5 kg","Tag 3 Pfanne"],
    ["Guanciale / Pancetta gewürfelt","1,2 kg","Amatriciana + Carbonara + Frittata"],
@@ -324,7 +336,7 @@ const SHOP = [
    ["Eier","40 Stk","Frühstück, Carbonara, Frittata"],
    ["Butter","750 g",""],
    ["Milch (haltbar/UHT)","10 L","Kaffee, Müsli"],
-   ["Schlagobers / Sahne","1 L","Geschnetzeltes, Carbonara"],
+   ["Schlagobers / Sahne","0,5 L","optional cremigere Carbonara"],
    ["Joghurt (Becher)","18 Stk","Frühstück + Nudelsalat"],
    ["Parmesan / Pecorino","700 g","Pasta"],
    ["Mozzarella (Kugeln 125 g)","10 Stk","Caprese + Antipasti"],
@@ -351,20 +363,18 @@ const SHOP = [
    ["Paprika","1,5 kg","Geschnetzeltes, Frittata"],
    ["Zucchini","1,5 kg","Geschnetzeltes, Frittata"],
    ["Karotten","1,5 kg","Jause, Sauce"],
-   ["Kartoffeln","5 kg","Kartoffelsalat, Fisch"],
+   ["Erdäpfel/Kartoffeln","7 kg","Erdäpfelgulasch, Kartoffelsalat, Fisch"],
    ["Zitronen","8 Stk","Fisch + Drinks"],
    ["Basilikum","3 Töpfe","Caprese, Pasta"],
    ["Petersilie","2 Bund","Fisch, Sauce"],
    ["Rosmarin","1","Fisch & Kartoffeln"],
    ["Bananen, Äpfel, Orangen, Trauben","~5 kg","Frühstück & Jause"],
  ]},
- {cat:"Pasta, Reis & Brot-Backen", emoji:"🍝", items:[
+ {cat:"Pasta & Brot-Backen", emoji:"🍝", items:[
    ["Spaghetti","4 kg","Bolognese + Amatriciana + Carbonara"],
    ["Penne","1 kg","Thunfisch-Nudelsalat"],
-   ["Reis (Langkorn)","1,5 kg","Geschnetzeltes"],
-   ["Mehl","2 kg","Pfannenbrot + Frittata"],
-   ["Trockenhefe","1 Pkg","Pfannenbrot"],
-   ["Backpulver","1 Pkg","Pfannenbrot (Schnell-Variante)"],
+   ["Mehl","2 kg","Brot backen + Frittata"],
+   ["Trockenhefe","2 Pkg","Brot backen"],
  ]},
  {cat:"Konserven & Vorrat", emoji:"🥫", items:[
    ["Passierte Tomaten / Polpa (~400 g)","12 Pkg","Bolo + Amatriciana"],
@@ -424,6 +434,7 @@ const SHOP = [
    ["Alufolie + Frischhaltefolie","je 1",""],
    ["Gefrierbeutel (Zip)","1 Pkg",""],
    ["Servietten","3 Pkg",""],
+   ["Backpapier","1 Rolle","Brot backen"],
    ["Feuerzeug / Streichhölzer","2",""],
    ["Eis / Kühlakkus","nach Bedarf","Kühlbox"],
    ["Geschirrtücher","3",""],
