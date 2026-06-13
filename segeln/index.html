@@ -3,192 +3,207 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0b2a3f">
+<meta name="theme-color" content="#081519">
 <title>⛵ Segeltörn Italien</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛵</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0b2a3f; --navy2:#103b58; --sea:#1f7fb8; --foam:#eef6fb;
-    --gold:#e7b13b; --gold2:#f3cf78; --ink:#13212c; --line:#d3e3ee;
-    --ok:#2f9e63; --okbg:#e7f6ee; --cream:#fbf6ea;
+    --bg-dark:#081519; --bg-deeper:#050d10; --bg-stone:#14323a; --bg-panel:rgba(10,28,34,.9);
+    --gold:#ffd97a; --gold-soft:#e8a33d; --gold-deep:#b97c20;
+    --teal:#8df5ea; --teal-dim:#2a6a66; --cream:#f4e4bc;
+    --green:#7fe0a0;
+    --glass-dim:rgba(255,217,122,.15); --glass:rgba(255,217,122,.35);
+    --text:#dceae6; --text-dim:#8fb0aa; --px:3px;
   }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;padding:0}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{cursor:url('assets/cursor.png') 1 1, auto}
+  a,button,.tab,.meal.has-recipe .head,.cat>h4,ul.items li,.btn-reset{cursor:url('assets/cursor_hand.png') 7 2, pointer}
+  html{scroll-behavior:smooth; background:var(--bg-dark)}
   body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    color:var(--ink); line-height:1.5; padding-bottom:60px;
-    background:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='22'%3E%3Cpath d='M0 13 Q22 3 45 13 T90 13' fill='none' stroke='%231f7fb8' stroke-width='2' opacity='0.07'/%3E%3C/svg%3E") repeat,
-      linear-gradient(180deg,#e9f3fb 0%, #f4f9fc 70%);
+    min-height:100vh; font-family:'VT323',monospace; font-size:20px; color:var(--text);
+    overflow-x:hidden; padding-bottom:50px;
   }
+  img{image-rendering:pixelated}
+
+  /* background layers */
+  .bg-base{position:fixed; inset:0; z-index:0;
+    background:linear-gradient(rgba(8,21,25,.86),rgba(5,13,16,.95)), url('assets/hero.png') center/cover no-repeat;
+    image-rendering:pixelated; filter:blur(1px)}
+  .bg-vignette{position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:radial-gradient(circle at 50% 38%, transparent 24%, rgba(2,8,10,.8) 100%)}
+  .scanlines{position:fixed; inset:0; pointer-events:none; z-index:9999; mix-blend-mode:multiply;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,.15) 0 1px, transparent 1px 4px)}
+  .ember{position:fixed; width:4px; height:4px; background:var(--gold); box-shadow:0 0 6px rgba(255,180,70,.8);
+    opacity:0; z-index:1; pointer-events:none; animation:emberRise linear infinite}
+  .ember:nth-child(odd){background:var(--gold-soft); width:3px; height:3px}
+  @keyframes emberRise{0%{transform:translateY(0) translateX(0);opacity:0}8%{opacity:.9}70%{opacity:.45}
+    100%{transform:translateY(-60vh) translateX(3vw);opacity:0}}
+
+  .container{position:relative; z-index:3; width:min(820px,94vw); margin:0 auto}
 
   /* ---------- HERO ---------- */
-  header{
-    position:relative; height:40vh; min-height:240px; max-height:380px;
-    background:#0b2a3f center/cover no-repeat;
-    background-image:linear-gradient(180deg, rgba(7,24,38,.15) 0%, rgba(7,24,38,.05) 45%, rgba(7,24,38,.78) 100%), url('assets/hero.png');
-    display:flex; flex-direction:column; justify-content:flex-end; align-items:center;
-    text-align:center; padding:0 16px 22px; color:#fff;
-    image-rendering:pixelated;
-  }
-  header h1{
-    font-family:'Cinzel',serif; font-weight:800; margin:0;
-    font-size:clamp(1.9rem,7vw,3.2rem); letter-spacing:1px;
-    color:var(--gold2);
-    text-shadow:0 2px 0 #7a5410, 0 4px 18px rgba(0,0,0,.6);
-  }
-  header .sub{
-    font-family:'VT323',monospace; font-size:clamp(1.1rem,4vw,1.5rem);
-    letter-spacing:2px; color:#dcebf6; margin-top:2px; opacity:.95;
-    text-shadow:0 2px 8px rgba(0,0,0,.7);
-  }
+  .hero{position:relative; z-index:3; width:min(820px,94vw); margin:22px auto 0}
+  .hero-frame{position:relative; border:38px solid transparent; border-image:url('assets/frame.png') 150 round;
+    background:#000; background-clip:padding-box; overflow:hidden}
+  .hero-img{display:block; width:100%; aspect-ratio:16/9; max-height:42vh; object-fit:cover}
+  .hero-overlay{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;
+    justify-content:flex-end; padding-bottom:6%; text-align:center;
+    background:linear-gradient(rgba(5,13,16,.05) 38%, rgba(5,13,16,.82) 94%)}
+  .h-title{font-family:'Press Start 2P',monospace; font-size:clamp(1.05rem,4.4vw,2.4rem); color:var(--gold);
+    letter-spacing:2px; line-height:1.3;
+    text-shadow:var(--px) var(--px) 0 #3a2406, calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,.65), 0 0 24px rgba(255,170,60,.5)}
+  .h-sub{margin-top:12px; font-family:'Press Start 2P',monospace; font-size:clamp(.5rem,1.5vw,.8rem);
+    color:var(--teal); text-shadow:var(--px) var(--px) 0 rgba(0,0,0,.8), 0 0 14px rgba(60,230,215,.5);
+    animation:pulse 2.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .h-div{display:flex; align-items:center; gap:12px; margin:13px auto 0; width:min(360px,72%)}
+  .h-div .line{flex:1; height:3px; background:linear-gradient(90deg,transparent,var(--gold-deep))}
+  .h-div .line:last-child{background:linear-gradient(90deg,var(--gold-deep),transparent)}
+  .h-div .orn{color:var(--gold); text-shadow:2px 2px 0 rgba(0,0,0,.7)}
 
   /* ---------- TABS ---------- */
-  .tabs{
-    position:sticky; top:0; z-index:30; display:flex; gap:8px;
-    background:var(--navy); padding:9px 12px; box-shadow:0 3px 12px rgba(8,28,44,.35);
-  }
-  .tab{
-    flex:1; cursor:pointer; padding:11px 8px; font-size:.98rem; font-weight:700;
-    border-radius:11px; background:rgba(255,255,255,.08); color:#cfe6f4;
-    border:1px solid rgba(255,255,255,.12); transition:.15s; font-family:inherit;
-  }
-  .tab.active{background:var(--gold); color:#3a2a06; border-color:var(--gold2)}
+  .tabs{position:sticky; top:0; z-index:50; display:flex; gap:10px; justify-content:center;
+    width:100vw; margin:22px calc(50% - 50vw) 0; padding:12px 10px;
+    background:rgba(5,13,16,.92); border-bottom:3px solid rgba(255,217,122,.25); backdrop-filter:blur(2px)}
+  .tab{font-family:'Press Start 2P',monospace; font-size:.6rem; color:var(--cream); background:var(--bg-stone);
+    padding:13px 16px; border:3px solid var(--gold-deep);
+    box-shadow:inset 0 0 0 2px rgba(0,0,0,.45), var(--px) var(--px) 0 rgba(0,0,0,.7);
+    transition:transform .08s steps(2), background .15s}
+  .tab:hover{background:#1c4750; color:var(--gold); transform:translate(-2px,-2px);
+    box-shadow:inset 0 0 0 2px rgba(0,0,0,.45), calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,.7)}
+  .tab.active{background:var(--gold-deep); color:#1b1206; border-color:var(--gold)}
 
-  .wrap{max-width:780px; margin:0 auto; padding:0 14px}
-  section{display:none; padding:16px 0 30px}
+  section{display:none; padding:26px 0 10px}
   section.active{display:block}
-  .intro{font-size:.9rem; color:#3f5d72; margin:2px 2px 14px}
+  .intro{text-align:center; color:var(--text-dim); font-size:1.05rem; letter-spacing:1px; margin-bottom:18px}
 
-  /* ---------- MENU CARDS ---------- */
-  .day{
-    background:#fff; border:1px solid var(--line); border-radius:16px;
-    margin:0 0 14px; overflow:hidden; box-shadow:0 3px 12px rgba(16,80,126,.09);
-    position:relative;
-  }
-  .day::before{
-    content:""; position:absolute; top:0; left:0; right:0; height:3px; z-index:1;
-    background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));
-  }
-  .day>h3{
-    margin:0; padding:13px 15px; font-size:1.05rem; font-family:'Cinzel',serif; font-weight:600;
-    color:var(--navy); background:linear-gradient(90deg,#f2f9fd,#fff);
-    border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px;
-  }
-  .day>h3 .num{
-    background:var(--navy); color:var(--gold2); width:30px;height:30px;border-radius:50%;
-    display:inline-flex;align-items:center;justify-content:center;font-size:1rem;flex:0 0 auto;
-    font-family:'VT323',monospace; box-shadow:0 0 0 2px var(--gold2);
-  }
-  .meal{border-bottom:1px solid #eef4f8}
+  .tip{background:rgba(20,50,58,.65); border:3px solid var(--glass-dim);
+    box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.5); padding:12px 15px; font-size:1.05rem;
+    color:var(--text); margin-bottom:20px; line-height:1.4}
+  .tip b{color:var(--gold)}
+
+  /* ---------- MENU (stone panels) ---------- */
+  .day{background:var(--bg-stone); border:3px solid var(--glass-dim);
+    box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.55); margin:0 0 16px}
+  .day>h3{display:flex; align-items:center; gap:12px; padding:13px 15px;
+    font-family:'Press Start 2P',monospace; font-size:.66rem; color:var(--gold); letter-spacing:1px;
+    text-shadow:2px 2px 0 rgba(0,0,0,.7); border-bottom:3px solid var(--gold-deep);
+    background:rgba(5,13,16,.4)}
+  .day>h3 .num{background:var(--gold-deep); color:#1b1206; width:30px; height:30px; flex:0 0 auto;
+    display:inline-flex; align-items:center; justify-content:center; font-size:.7rem;
+    border:2px solid var(--gold); box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6)}
+  .meal{border-bottom:2px dashed rgba(255,217,122,.13)}
   .meal:last-child{border-bottom:none}
-  .meal .head{
-    padding:11px 15px; display:flex; align-items:flex-start; gap:10px;
-  }
-  .meal.has-recipe .head{cursor:pointer}
-  .meal .lab{
-    display:inline-block; font-size:.66rem; font-weight:800; text-transform:uppercase;
-    letter-spacing:.6px; color:var(--sea); margin-bottom:1px;
-  }
-  .meal .dish{font-weight:600}
-  .meal .note{font-size:.82rem; color:#5a7184; margin-top:1px}
-  .salad{color:#2f9e63; font-weight:600}
-  .meal .chev{margin-left:auto; color:#b6cad9; flex:0 0 auto; transition:.2s; font-size:1.1rem; line-height:1.4}
+  .meal .head{padding:12px 15px; display:flex; align-items:flex-start; gap:10px}
+  .meal.has-recipe .head:hover{background:rgba(255,217,122,.05)}
+  .meal .lab{display:inline-block; font-family:'Press Start 2P',monospace; font-size:.46rem;
+    letter-spacing:1px; color:var(--teal); margin-bottom:5px}
+  .meal .dish{font-size:1.32rem; color:var(--cream); line-height:1.15}
+  .meal .note{font-size:1.02rem; color:var(--text-dim); margin-top:2px}
+  .salad{color:var(--green)}
+  .meal .chev{margin-left:auto; color:var(--gold-deep); flex:0 0 auto; transition:.18s; font-size:1.1rem}
   .meal.open .chev{transform:rotate(90deg); color:var(--gold)}
-  .recipe{display:none; padding:2px 15px 15px; background:var(--cream); border-top:1px dashed #e6d8b6}
+  .recipe{display:none; padding:4px 16px 16px; background:rgba(5,13,16,.55); border-top:2px solid var(--gold-deep)}
   .meal.open .recipe{display:block}
-  .recipe .serves{font-size:.74rem; color:#9a7a2e; font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin:11px 0 7px}
-  .recipe h5{margin:11px 0 5px; font-size:.86rem; color:var(--navy); text-transform:uppercase; letter-spacing:.5px}
-  .recipe ul{margin:0; padding-left:18px}
-  .recipe ul li{margin:3px 0; font-size:.9rem}
-  .recipe ol{margin:0; padding-left:20px}
-  .recipe ol li{margin:5px 0; font-size:.9rem}
+  .recipe .serves{font-family:'Press Start 2P',monospace; font-size:.5rem; color:var(--gold-soft);
+    letter-spacing:1px; margin:13px 0 8px}
+  .recipe h5{font-family:'Press Start 2P',monospace; font-size:.55rem; color:var(--teal);
+    letter-spacing:1px; margin:14px 0 7px}
+  .recipe ul{margin:0; padding-left:20px}
+  .recipe ul li{margin:4px 0; font-size:1.12rem; color:var(--text)}
+  .recipe ol{margin:0; padding-left:22px}
+  .recipe ol li{margin:7px 0; font-size:1.12rem; color:var(--text)}
 
   /* ---------- SHOPPING ---------- */
-  .progress-card{
-    background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 15px;margin-bottom:14px;
-    position:sticky; top:60px; z-index:10; box-shadow:0 3px 10px rgba(16,80,126,.1);
-  }
-  .bar{height:13px;background:#e6eef4;border-radius:8px;overflow:hidden;margin:8px 0 5px}
-  .bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .25s}
-  .progress-row{display:flex;justify-content:space-between;align-items:center;font-size:.86rem}
-  .btn-reset{
-    border:1px solid var(--line);background:#fff;color:#b23b3b;border-radius:9px;
-    padding:6px 11px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit
-  }
-  .cat{background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:12px;overflow:hidden;box-shadow:0 2px 8px rgba(16,80,126,.06)}
-  .cat>h4{
-    margin:0;padding:12px 15px;font-size:1rem;cursor:pointer;display:flex;align-items:center;gap:9px;
-    background:linear-gradient(90deg,#f2f9fd,#fff);border-bottom:1px solid var(--line);font-weight:700
-  }
-  .cat>h4 .emoji{
-    font-size:1.05rem; width:32px; height:32px; border-radius:10px; flex:0 0 auto;
-    background:#eaf4fb; display:inline-flex; align-items:center; justify-content:center;
-  }
-  .cat>h4 .count{margin-left:auto;font-size:.72rem;color:#6c8499;font-weight:700}
-  .cat>h4 .chev{transition:.2s;color:#9bb3c6}
+  .progress-card{background:var(--bg-stone); border:3px solid var(--gold-deep);
+    box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6); padding:14px 16px; margin-bottom:18px;
+    position:sticky; top:62px; z-index:10}
+  .progress-row{display:flex; justify-content:space-between; align-items:center}
+  .progress-row strong{font-family:'Press Start 2P',monospace; font-size:.6rem; color:var(--gold)}
+  #pct{font-family:'Press Start 2P',monospace; font-size:.66rem; color:var(--teal)}
+  .bar{height:14px; background:var(--bg-deeper); border:2px solid rgba(0,0,0,.5); overflow:hidden; margin:10px 0 6px}
+  .bar>div{height:100%; width:0; background:linear-gradient(90deg,var(--gold-deep),var(--gold)); transition:width .25s}
+  .hint{color:var(--text-dim); font-size:1rem}
+  .btn-reset{font-family:'Press Start 2P',monospace; font-size:.5rem; color:var(--cream); background:var(--bg-stone);
+    border:3px solid var(--gold-deep); padding:9px 11px; box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6)}
+  .btn-reset:hover{background:#1c4750; color:var(--gold)}
+
+  .cat{background:var(--bg-stone); border:3px solid var(--glass-dim);
+    box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.55); margin-bottom:14px}
+  .cat>h4{display:flex; align-items:center; gap:11px; padding:13px 15px;
+    font-family:'Press Start 2P',monospace; font-size:.6rem; color:var(--teal); letter-spacing:.5px;
+    border-bottom:3px solid var(--gold-deep); background:rgba(5,13,16,.4)}
+  .cat>h4 .emoji{font-size:1.05rem; width:34px; height:34px; flex:0 0 auto; display:inline-flex;
+    align-items:center; justify-content:center; background:var(--bg-deeper); border:2px solid var(--glass-dim)}
+  .cat>h4 .count{margin-left:auto; font-size:.5rem; color:var(--gold)}
+  .cat>h4 .chev{color:var(--gold-deep); transition:.2s}
   .cat.collapsed .chev{transform:rotate(-90deg)}
   .cat.collapsed ul{display:none}
-  ul.items{list-style:none;margin:0;padding:4px 0}
-  ul.items li{
-    display:flex;align-items:flex-start;gap:12px;padding:11px 15px;
-    border-bottom:1px solid #eef4f8;cursor:pointer;user-select:none
-  }
+  ul.items{list-style:none}
+  ul.items li{display:flex; align-items:flex-start; gap:13px; padding:12px 15px;
+    border-bottom:2px dashed rgba(141,245,234,.1); user-select:none}
   ul.items li:last-child{border-bottom:none}
-  ul.items li .cb{
-    flex:0 0 auto;width:24px;height:24px;border:2px solid var(--sea);border-radius:6px;
-    display:inline-flex;align-items:center;justify-content:center;margin-top:1px;
-    font-size:16px;color:#fff;transition:.12s;background:#fff
-  }
-  ul.items li.done .cb{background:var(--ok);border-color:var(--ok)}
-  ul.items li.done .txt{text-decoration:line-through;color:#9aabb8}
+  ul.items li:hover{background:rgba(255,217,122,.04)}
+  ul.items li .cb{flex:0 0 auto; width:25px; height:25px; border:3px solid var(--gold-deep);
+    background:var(--bg-deeper); display:inline-flex; align-items:center; justify-content:center;
+    color:#1b1206; font-size:15px; box-shadow:inset 0 0 0 2px rgba(0,0,0,.4); transition:.1s}
+  ul.items li.done .cb{background:var(--gold); border-color:var(--gold)}
+  ul.items li.done .txt{color:var(--text-dim)}
+  ul.items li.done .q{text-decoration:line-through}
   .txt{flex:1}
-  .txt .q{font-weight:700}
-  .txt .x{font-size:.8rem;color:#6c8499;display:block}
+  .txt .q{font-size:1.18rem; color:var(--cream)}
+  .txt .x{display:block; font-size:.98rem; color:var(--text-dim)}
 
-  .tip{
-    background:var(--okbg);border:1px solid #bfe4cd;border-radius:13px;padding:11px 14px;
-    font-size:.86rem;margin-bottom:14px;color:#1f6b41
-  }
-  .tip b{color:#17643a}
-  footer{text-align:center;font-size:.78rem;color:#7d93a5;padding:20px 14px 8px;font-family:'VT323',monospace;letter-spacing:1px}
+  footer{text-align:center; font-family:'Press Start 2P',monospace; font-size:.5rem; color:var(--text-dim);
+    letter-spacing:1px; padding:26px 14px 10px; position:relative; z-index:3; line-height:1.8}
+  ::-webkit-scrollbar{width:13px; background:var(--bg-deeper)}
+  ::-webkit-scrollbar-thumb{background:var(--gold-deep); border:3px solid var(--bg-deeper)}
 </style>
 </head>
 <body>
-<header>
-  <h1>Segeltörn Italien</h1>
-  <div class="sub">Menü &amp; Einkauf an Bord</div>
+<div class="bg-base"></div>
+<div class="bg-vignette"></div>
+<div class="scanlines"></div>
+<div id="embers"></div>
+
+<header class="hero">
+  <div class="hero-frame">
+    <img class="hero-img" src="assets/hero.png" alt="Segelboot bei Sonnenuntergang">
+    <div class="hero-overlay">
+      <h1 class="h-title">Segeltörn<br>Italien</h1>
+      <div class="h-sub">Menü &amp; Einkauf an Bord</div>
+      <div class="h-div"><span class="line"></span><span class="orn">⚓</span><span class="line"></span></div>
+    </div>
+  </div>
 </header>
 
 <div class="tabs">
-  <button class="tab active" data-t="menu">🍝 Menüplan</button>
-  <button class="tab" data-t="shop">🛒 Einkaufsliste</button>
+  <button class="tab active" data-t="menu">🍝 Menü</button>
+  <button class="tab" data-t="shop">🛒 Einkauf</button>
 </div>
 
-<div class="wrap">
+<div class="container">
   <section id="menu" class="active">
-    <p class="intro">Gericht antippen fürs Rezept. <span class="salad">Salat &amp; Chilisaucen immer am Tisch.</span></p>
+    <p class="intro">Gericht antippen fürs Rezept.</p>
     <div class="tip">🥖 Brot &amp; Semmeln täglich frisch vor Ort. <b>Gegen Ende der Woche</b> selber backen — Rezept bei Tag 7. 🐟 Fisch &amp; Fleisch frisch in der Marina.</div>
     <div id="days"></div>
   </section>
 
   <section id="shop">
-    <div class="tip">✅ Häkchen werden <b>auf diesem Gerät gespeichert</b> — Liste zumachen, später weitermachen. Auf den Kategorie-Titel tippen klappt sie zu. Mengen sind für die ganze Crew über die Woche gerechnet.</div>
+    <div class="tip">✅ Häkchen werden <b>auf diesem Gerät gespeichert</b>. Auf den Kategorie-Titel tippen klappt sie zu.</div>
     <div class="progress-card">
-      <div class="progress-row"><strong>Fortschritt</strong><span id="pct">0 / 0</span></div>
+      <div class="progress-row"><strong>FORTSCHRITT</strong><span id="pct">0 / 0</span></div>
       <div class="bar"><div id="barfill"></div></div>
-      <div class="progress-row">
-        <span style="color:#6c8499">großzügig kalkuliert</span>
-        <button class="btn-reset" id="reset">↺ Zurücksetzen</button>
-      </div>
+      <div class="progress-row"><span class="hint">großzügig kalkuliert</span><button class="btn-reset" id="reset">↺ RESET</button></div>
     </div>
     <div id="lists"></div>
   </section>
 </div>
 
-<footer>⛵ erstellt von BloppBOT · gute Fahrt</footer>
+<footer>⛵ ERSTELLT VON BLOPPBOT · GUTE FAHRT</footer>
 
 <script>
 /* ===================== MENÜ + REZEPTE ===================== */
@@ -225,7 +240,7 @@ const MENU = [
       "Topf von der Hitze ziehen, Paprikapulver einrühren (darf nicht verbrennen), sofort mit Brühe aufgießen.",
       "Kümmel, Majoran, Lorbeer + geschälte, gewürfelte Erdäpfel zugeben.",
       "~20–25 Min weich köcheln, ein paar Stücke zerdrücken → bindet die Sauce.",
-      "Würstelscheiben zugeben, 5 Min ziehen lassen. Mit Salz, Pfeffer & Schuss Essig abschmecken, Petersilie drüber. Brot dazu."]}},
+      "Würstelscheiben zugeben, 5 Min ziehen lassen. Mit Salz, Pfeffer & Schuss Essig abschmecken, Petersilie drüber."]}},
  ]},
  {title:"Tag 3", meals:[
    {lab:"Mittag", dish:"Thunfisch-Nudelsalat", note:"Vorabend mehr Penne kochen → kalt aus der Kühlbox.",
@@ -237,7 +252,7 @@ const MENU = [
       "Thunfisch, Mais, gewürfelte Tomaten und fein geschnittene Zwiebel dazugeben.",
       "Mit Mayo/Joghurt (oder Öl) anrühren, mit Salz, Pfeffer & Zitrone abschmecken."]}},
    {lab:"Abend", dish:"Ćevapčići & Bratwürste aus der Pfanne", salad:"großer Salat & Kartoffelsalat",
-    note:"Kein Grill nötig — in der Pfanne anbraten.",
+    note:"In der Pfanne anbraten.",
     recipe:{serves:"7 Personen", ing:[
       "1,5 kg Ćevapčići","1,5 kg Bratwürste","Brot dazu",
       "Kartoffelsalat: 2 kg Kartoffeln, 1 Zwiebel, Brühe, Weißweinessig, Senf, Öl, Salz","Ajvar/Senf zum Servieren"],
@@ -282,14 +297,7 @@ const MENU = [
       "Tomaten, Gurken und Zwiebeln grob schneiden.",
       "Mit Oliven und Feta-Stücken mischen.",
       "Mit Olivenöl, Oregano, Salz & Pfeffer anmachen. Brot dazu."]}},
-   {lab:"Abend", dish:"Pizza-Abend in der Marina 🍕", salad:"",
-    note:"Essen gehen = freier Abend. Plan B an Bord: Frittata mit Gemüse + Salat.",
-    recipe:{serves:"Plan B: Frittata für 7", ing:[
-      "16 Eier","2 Zucchini, 2 Paprika, 1 Zwiebel","Parmesan","Öl, Salz, Pfeffer"],
-    steps:[
-      "Gemüse würfeln und in großer Pfanne weich anbraten.",
-      "Eier verquirlen, salzen/pfeffern, über das Gemüse gießen, Parmesan drauf.",
-      "Bei kleiner Hitze mit Deckel stocken lassen, in Stücke schneiden. Salat dazu."]}},
+   {lab:"Abend", dish:"Auswärts essen in der Marina ⚓", note:"Freier Abend — Lokal vor Ort, weniger Abwasch."},
  ]},
  {title:"Tag 7", meals:[
    {lab:"Mittag", dish:"Panini / Tramezzini", note:"Belegte Sandwiches mit Resten."},
@@ -333,7 +341,7 @@ const SHOP = [
    ["Prosciutto crudo","400 g","Antipasti"],
  ]},
  {cat:"Milch, Käse & Eier", emoji:"🧀", items:[
-   ["Eier","40 Stk","Frühstück, Carbonara, Frittata"],
+   ["Eier","40 Stk","Frühstück, Carbonara"],
    ["Butter","750 g",""],
    ["Milch (haltbar/UHT)","10 L","Kaffee, Müsli"],
    ["Schlagobers / Sahne","0,5 L","optional cremigere Carbonara"],
@@ -360,13 +368,13 @@ const SHOP = [
    ["Tomaten (zum Kochen)","2 kg","Sauce, Caprese"],
    ["Zwiebeln (gelb)","2,5 kg","alle Saucen & Gerichte"],
    ["Knoblauch","4 Knollen",""],
-   ["Paprika","1,5 kg","Geschnetzeltes, Frittata"],
-   ["Zucchini","1,5 kg","Geschnetzeltes, Frittata"],
+   ["Paprika","1,5 kg","Frittata, Salat"],
+   ["Zucchini","1,5 kg","Frittata"],
    ["Karotten","1,5 kg","Jause, Sauce"],
    ["Erdäpfel/Kartoffeln","7 kg","Erdäpfelgulasch, Kartoffelsalat, Fisch"],
    ["Zitronen","8 Stk","Fisch + Drinks"],
    ["Basilikum","3 Töpfe","Caprese, Pasta"],
-   ["Petersilie","2 Bund","Fisch, Sauce"],
+   ["Petersilie","2 Bund","Fisch, Sauce, Gulasch"],
    ["Rosmarin","1","Fisch & Kartoffeln"],
    ["Bananen, Äpfel, Orangen, Trauben","~5 kg","Frühstück & Jause"],
  ]},
@@ -378,19 +386,19 @@ const SHOP = [
  ]},
  {cat:"Konserven & Vorrat", emoji:"🥫", items:[
    ["Passierte Tomaten / Polpa (~400 g)","12 Pkg","Bolo + Amatriciana"],
-   ["Tomatenmark","2 Tuben",""],
+   ["Tomatenmark","2 Tuben","Bolo + Gulasch"],
    ["Thunfisch (Dosen)","6 Stk","Nudelsalat"],
-   ["Rinds- & Gemüsebrühe (Würfel)","je 1 Pkg","Sauce, Kartoffelsalat"],
+   ["Rinds- & Gemüsebrühe (Würfel)","je 1 Pkg","Sauce, Gulasch, Kartoffelsalat"],
    ["Ajvar","1 Glas","zum Tag-3-Essen"],
  ]},
  {cat:"Öl, Gewürze & Co.", emoji:"🧂", items:[
    ["Olivenöl (Kochen)","2 L",""],
    ["Speiseöl (neutral)","1 L","Braten"],
    ["Salz, Pfeffer (Mühle)","Vorrat",""],
-   ["Paprikapulver edelsüß","1 Glas","mild"],
-   ["Oregano, Rosmarin getr.","je 1",""],
+   ["Paprikapulver edelsüß","1 Glas","mild — auch fürs Gulasch"],
+   ["Oregano, Rosmarin, Kümmel, Majoran","je 1",""],
    ["Lorbeer, Muskat, Knoblauchpulver","je 1",""],
-   ["Chilisaucen (Sriracha, Tabasco, Sambal)","2–3 Flaschen","Grundrezept bleibt mild, jeder würzt selbst nach"],
+   ["Chilisaucen (Sriracha, Tabasco, Sambal)","2–3 Flaschen","Grundrezept mild, jeder würzt selbst nach"],
    ["Chiliflocken + frische Chili","1 Glas + ein paar","zum Nachwürzen am Tisch"],
    ["Suppenwürze (Maggi/Vegeta)","1","abschmecken"],
    ["Ketchup, Mayonnaise","je 1","Kartoffelsalat + Snack"],
@@ -526,6 +534,19 @@ document.querySelectorAll(".tab").forEach(t=>{
   });
 });
 render();
+
+/* ===================== EMBERS ===================== */
+(function(){
+  const box=document.getElementById("embers");
+  for(let i=0;i<14;i++){
+    const e=document.createElement("div"); e.className="ember";
+    e.style.left=(5+i*7)+"vw";
+    e.style.bottom="-10px";
+    e.style.animationDuration=(7+(i%5)*2)+"s";
+    e.style.animationDelay=(i*0.9)+"s";
+    box.appendChild(e);
+  }
+})();
 </script>
 </body>
 </html>
