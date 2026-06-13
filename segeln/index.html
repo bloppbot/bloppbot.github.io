@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b3a5b">
+<title>⛵ Segeltörn Italien — Menü & Einkauf (7 Personen)</title>
+<style>
+  :root{
+    --navy:#0b3a5b; --navy2:#10507e; --sea:#1f7fb8; --foam:#e8f4fb;
+    --gold:#e7b13b; --ink:#0e2436; --paper:#f7fbfe; --line:#cfe2ef;
+    --ok:#2f9e63; --okbg:#e4f6ec;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); background:var(--foam);
+    background-image:linear-gradient(180deg,#dff0fa 0%, #f7fbfe 240px);
+    line-height:1.5; padding-bottom:70px;
+  }
+  header{
+    background:linear-gradient(135deg,var(--navy),var(--sea));
+    color:#fff; padding:22px 16px 18px; text-align:center;
+    box-shadow:0 2px 10px rgba(11,58,91,.25);
+  }
+  header h1{margin:0 0 4px; font-size:1.35rem; letter-spacing:.3px}
+  header p{margin:0; font-size:.85rem; opacity:.9}
+  .wrap{max-width:760px; margin:0 auto; padding:0 14px}
+  /* Tabs */
+  .tabs{
+    position:sticky; top:0; z-index:20; display:flex; gap:6px;
+    background:var(--foam); padding:10px 14px; max-width:760px; margin:0 auto;
+    border-bottom:1px solid var(--line);
+  }
+  .tab{
+    flex:1; border:none; cursor:pointer; padding:11px 8px; font-size:.95rem; font-weight:700;
+    border-radius:11px; background:#fff; color:var(--navy); border:1px solid var(--line);
+    transition:.15s;
+  }
+  .tab.active{background:var(--navy); color:#fff; border-color:var(--navy)}
+  section{display:none; padding:14px 0 30px}
+  section.active{display:block}
+  /* Menü cards */
+  .day{
+    background:#fff; border:1px solid var(--line); border-radius:14px;
+    margin:0 0 14px; overflow:hidden; box-shadow:0 1px 4px rgba(16,80,126,.06);
+  }
+  .day h3{
+    margin:0; padding:12px 14px; font-size:1.02rem;
+    background:linear-gradient(90deg,#f0f8fd,#fff);
+    border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px;
+  }
+  .day h3 .num{
+    background:var(--navy); color:#fff; width:26px;height:26px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;flex:0 0 auto;
+  }
+  .meal{padding:9px 14px; border-bottom:1px dashed var(--line)}
+  .meal:last-child{border-bottom:none}
+  .meal .lab{
+    display:inline-block; font-size:.68rem; font-weight:800; text-transform:uppercase;
+    letter-spacing:.5px; color:var(--sea); margin-bottom:1px;
+  }
+  .meal .dish{font-weight:600}
+  .meal .note{font-size:.82rem; color:#5a7184}
+  /* Shopping */
+  .progress-card{
+    background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px;
+    position:sticky; top:62px; z-index:10; box-shadow:0 2px 8px rgba(16,80,126,.08);
+  }
+  .bar{height:12px;background:#e6eef4;border-radius:8px;overflow:hidden;margin:8px 0 4px}
+  .bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--gold),#f3c969);transition:width .25s}
+  .progress-row{display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
+  .btn-reset{
+    border:1px solid var(--line);background:#fff;color:#b23b3b;border-radius:9px;
+    padding:6px 10px;font-size:.78rem;font-weight:700;cursor:pointer
+  }
+  .cat{
+    background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden;
+  }
+  .cat>h4{
+    margin:0;padding:11px 14px;font-size:.98rem;cursor:pointer;display:flex;align-items:center;gap:8px;
+    background:linear-gradient(90deg,#f0f8fd,#fff);border-bottom:1px solid var(--line)
+  }
+  .cat>h4 .emoji{font-size:1.1rem}
+  .cat>h4 .count{margin-left:auto;font-size:.72rem;color:#6c8499;font-weight:700}
+  .cat>h4 .chev{transition:.2s;color:#9bb3c6}
+  .cat.collapsed .chev{transform:rotate(-90deg)}
+  .cat.collapsed ul{display:none}
+  ul.items{list-style:none;margin:0;padding:4px 0}
+  ul.items li{
+    display:flex;align-items:flex-start;gap:11px;padding:10px 14px;
+    border-bottom:1px solid #eef4f8;cursor:pointer;user-select:none
+  }
+  ul.items li:last-child{border-bottom:none}
+  ul.items li .cb{
+    flex:0 0 auto;width:23px;height:23px;border:2px solid var(--sea);border-radius:6px;
+    display:inline-flex;align-items:center;justify-content:center;margin-top:1px;
+    font-size:15px;color:#fff;transition:.12s;background:#fff
+  }
+  ul.items li.done .cb{background:var(--ok);border-color:var(--ok)}
+  ul.items li.done .txt{text-decoration:line-through;color:#9aabb8}
+  .txt{flex:1}
+  .txt .q{font-weight:700}
+  .txt .x{font-size:.8rem;color:#6c8499;display:block}
+  footer{text-align:center;font-size:.75rem;color:#7d93a5;padding:18px 14px 8px}
+  .tip{
+    background:var(--okbg);border:1px solid #bfe4cd;border-radius:12px;padding:11px 14px;
+    font-size:.85rem;margin-bottom:14px;color:#1f6b41
+  }
+  .tip b{color:#17643a}
+  .intro{font-size:.88rem;color:#46627a;margin:2px 2px 14px}
+</style>
+</head>
+<body>
+<header>
+  <h1>⛵ Segeltörn Italien</h1>
+  <p>7 Tage · 7 Personen · mild & österreichisch · bootstauglich</p>
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-t="menu">🍝 Menüplan</button>
+  <button class="tab" data-t="shop">🛒 Einkaufsliste</button>
+</div>
+
+<div class="wrap">
+
+<!-- ============ MENÜ ============ -->
+<section id="menu" class="active">
+  <p class="intro">Ein gekochtes Hauptgericht pro Abend (1–2 Töpfe, kein Backofen nötig), leichte/kalte Mittagessen für unterwegs, klassisches Frühstück jeden Tag. Alles mild gewürzt. Frühstück & Jause sind unten als Dauer-Setup gelistet.</p>
+
+  <div class="tip">🥖 <b>Brot & Semmeln am besten täglich frisch</b> in der Marina/im Ort kaufen (Italien = super Bäckereien). Auf der Liste steht Notvorrat (Toast + Baguette).</div>
+
+  <div class="day">
+    <h3><span class="num">1</span> Anreise / Einschiffung</h3>
+    <div class="meal"><span class="lab">Abend</span><div class="dish">Spaghetti Bolognese</div><div class="note">Klassiker, kommt bei allen an, robuste Zutaten. Ein Topf Sauce, ein Topf Nudeln.</div></div>
+  </div>
+
+  <div class="day">
+    <h3><span class="num">2</span></h3>
+    <div class="meal"><span class="lab">Mittag</span><div class="dish">Caprese + Baguette</div><div class="note">Tomate–Mozzarella–Basilikum, Olivenöl. Null Kochen, perfekt unterwegs.</div></div>
+    <div class="meal"><span class="lab">Abend</span><div class="dish">Hühnergeschnetzeltes mit Reis & Gemüse</div><div class="note">Hühnerfilet in Streifen, Paprika/Zucchini, milde Rahmsauce, dazu Reis. Pfanne + Topf.</div></div>
+  </div>
+
+  <div class="day">
+    <h3><span class="num">3</span></h3>
+    <div class="meal"><span class="lab">Mittag</span><div class="dish">Thunfisch-Nudelsalat</div><div class="note">Am Vorabend mehr Nudeln kochen → mit Thunfisch, Mais, Tomate, Zwiebel anrühren. Kalt aus der Kühlbox.</div></div>
+    <div class="meal"><span class="lab">Abend</span><div class="dish">Champignon-Risotto</div><div class="note">Ein-Topf-Gericht, Parmesan drüber. Sättigend und günstig für 7.</div></div>
+  </div>
+
+  <div class="day">
+    <h3><span class="num">4</span></h3>
+    <div class="meal"><span class="lab">Mittag</span><div class="dish">Jausenbrote / Wraps</div><div class="note">Schinken, Käse, Tomate, Gurke. Schnell & ohne Kochen.</div></div>
+    <div class="meal"><span class="lab">Abend</span><div class="dish">Wiener Saftgulasch mit Brot</div><div class="note">Großer Topf, schmeckt aufgewärmt sogar besser → Rest = Mittag Tag 5. Viel Zwiebel, edelsüßes Paprikapulver, mild.</div></div>
+  </div>
+
+  <div class="day">
+    <h3><span class="num">5</span></h3>
+    <div class="meal"><span class="lab">Mittag</span><div class="dish">Gulasch-Reste + frisches Brot</div><div class="note">Oder gemischter Salat dazu. Null Aufwand.</div></div>
+    <div class="meal"><span class="lab">Abend</span><div class="dish">Penne Napoli mit Mozzarella</div><div class="note">Penne in Tomatensauce, Mozzarella-Stücke + Basilikum. Schnell, mild, kindersicher.</div></div>
+  </div>
+
+  <div class="day">
+    <h3><span class="num">6</span></h3>
+    <div class="meal"><span class="lab">Mittag</span><div class="dish">Antipasti-Teller</div><div class="note">Prosciutto, Mozzarella, Tomaten, Oliven, Brot, Olivenöl. Apéro-Style an Bord.</div></div>
+    <div class="meal"><span class="lab">Abend</span><div class="dish">Pizza-Abend in der Marina 🍕</div><div class="note">Ein Abend essen gehen = freier Abend für die Crew, weniger Abwasch. (Plan B an Bord: Frittata mit Gemüse + Salat.)</div></div>
+  </div>
+
+  <div class="day">
+    <h3><span class="num">7</span></h3>
+    <div class="meal"><span class="lab">Brunch</span><div class="dish">Kaiserschmarrn 🇦🇹</div><div class="note">Österreich-Highlight zum Abschluss. Mit Rosinen & Staubzucker, dazu Marmelade/Apfelmus. Pfanne.</div></div>
+    <div class="meal"><span class="lab">Abend</span><div class="dish">Spaghetti Carbonara + grüner Salat</div><div class="note">Speck, Ei, Parmesan, Obers — mild & schnell. Resteverwertung Eier/Speck.</div></div>
+  </div>
+
+  <div class="day">
+    <h3>☕ Jeden Tag — Frühstück</h3>
+    <div class="meal"><div class="dish">Semmeln/Brot, Butter, Marmelade, Honig, Nutella</div></div>
+    <div class="meal"><div class="dish">Aufschnitt, Käse, Eier (Rührei oder weich)</div></div>
+    <div class="meal"><div class="dish">Joghurt, Müsli/Cornflakes, Obst</div></div>
+    <div class="meal"><div class="dish">Kaffee, Milch, O-Saft, Tee</div></div>
+  </div>
+
+  <div class="day">
+    <h3>🥨 Jause & Snacks (für zwischendurch)</h3>
+    <div class="meal"><div class="dish">Chips, Salzgebäck, Nüsse, Kekse, Schokolade, Müsliriegel, Obst, Karotten/Gurken</div></div>
+  </div>
+</section>
+
+<!-- ============ EINKAUF ============ -->
+<section id="shop">
+  <div class="tip">✅ Häkchen werden <b>automatisch auf diesem Gerät gespeichert</b> — Liste zumachen, später weitermachen, alles bleibt. Auf Kategorie-Titel tippen klappt sie zu.</div>
+
+  <div class="progress-card">
+    <div class="progress-row"><strong>Fortschritt</strong><span id="pct">0 / 0</span></div>
+    <div class="bar"><div id="barfill"></div></div>
+    <div class="progress-row">
+      <span id="hint" style="color:#6c8499">Mengen für 7 Personen / 7 Tage</span>
+      <button class="btn-reset" id="reset">↺ Alles zurücksetzen</button>
+    </div>
+  </div>
+
+  <div id="lists"></div>
+</section>
+
+</div><!-- /wrap -->
+
+<footer>⛵ erstellt von BloppBOT · Häkchen lokal gespeichert (localStorage) · gute Fahrt!</footer>
+
+<script>
+/* ---------- DATEN: Einkaufsliste ---------- */
+const DATA = [
+ {cat:"Fleisch & Wurst", emoji:"🥩", items:[
+   ["Faschiertes (gemischt)","1,2 kg","Bolognese"],
+   ["Hühnerfilet","1,5 kg","Geschnetzeltes + Wraps"],
+   ["Rindfleisch (Wadschinken/Schulter, gewürfelt)","1,5 kg","Gulasch"],
+   ["Speck / Pancetta gewürfelt","400 g","Carbonara + Frittata"],
+   ["Schinken & Salami (Aufschnitt)","1,5 kg","Frühstück + Jausen"],
+   ["Prosciutto crudo","300 g","Antipasti"],
+ ]},
+ {cat:"Milch, Käse & Eier", emoji:"🧀", items:[
+   ["Eier","30 Stk","Frühstück, Carbonara, Kaiserschmarrn, Frittata"],
+   ["Butter","500 g",""],
+   ["Milch (haltbar/UHT)","8 L","Kaffee, Müsli, Schmarrn"],
+   ["Schlagobers / Sahne","1 L","Sauce, Carbonara, Schmarrn"],
+   ["Joghurt (Becher)","12 Stk","Frühstück"],
+   ["Parmesan / Grana","400 g","Pasta + Risotto"],
+   ["Mozzarella (Kugeln 125 g)","8 Stk","Caprese + Napoli + Antipasti"],
+   ["Gouda/Emmentaler in Scheiben","1 kg","Frühstück"],
+ ]},
+ {cat:"Obst & Gemüse", emoji:"🥬", items:[
+   ["Tomaten","3 kg","Caprese, Salat, Sauce"],
+   ["Zwiebeln","3 kg","Gulasch braucht viel! + alles andere"],
+   ["Knoblauch","3 Knollen",""],
+   ["Paprika","1 kg","Geschnetzeltes, Salat"],
+   ["Zucchini","1 kg","Geschnetzeltes, Frittata"],
+   ["Champignons","1 kg","Risotto"],
+   ["Karotten","1 kg","Jause + Suppe/Sauce"],
+   ["Gurken","4 Stk","Salat, Jausen"],
+   ["Kartoffeln","3 kg","Beilage / Gulasch"],
+   ["Blattsalat (Eisberg/Romana)","4 Köpfe","Beilagensalat"],
+   ["Basilikum","2 Töpfe","Caprese, Napoli"],
+   ["Petersilie","1 Bund","Gulasch, Risotto"],
+   ["Zitronen","4 Stk",""],
+   ["Bananen, Äpfel, Orangen","gemischt ~3 kg","Frühstück & Jause"],
+ ]},
+ {cat:"Pasta, Reis & Co.", emoji:"🍝", items:[
+   ["Spaghetti","2 kg","Bolognese + Carbonara"],
+   ["Penne","1,5 kg","Napoli + Nudelsalat"],
+   ["Risotto-Reis (Arborio)","1 kg","Risotto"],
+   ["Reis (Langkorn)","1 kg","zum Geschnetzelten"],
+ ]},
+ {cat:"Konserven & Vorrat", emoji:"🥫", items:[
+   ["Passierte Tomaten / Polpa (je ~400 g)","8 Pkg","Bolo, Napoli, Gulasch"],
+   ["Tomatenmark","2 Tuben",""],
+   ["Thunfisch (Dosen)","6 Stk","Nudelsalat"],
+   ["Mais (Dosen)","2 Stk","Salat"],
+   ["Oliven","2 Gläser","Antipasti, Salat"],
+   ["Rinds- & Gemüsesuppe (Würfel/Brühe)","je 1 Pkg","Gulasch, Risotto"],
+   ["Apfelmus","2 Gläser","zum Kaiserschmarrn"],
+ ]},
+ {cat:"Backen, Öl & Gewürze", emoji:"🧂", items:[
+   ["Olivenöl","1 L",""],
+   ["Speiseöl (neutral)","1 L","Braten, Schmarrn"],
+   ["Balsamico + Weißweinessig","je 1","Salat"],
+   ["Mehl","1 kg","Kaiserschmarrn, Gulasch binden"],
+   ["Zucker + Vanillezucker","1 Pkg","Schmarrn"],
+   ["Rosinen","1 Pkg","Kaiserschmarrn"],
+   ["Salz, Pfeffer","Vorrat",""],
+   ["Paprikapulver edelsüß","1 Glas","Gulasch — mild!"],
+   ["Kümmel (gemahlen), Majoran, Lorbeer","klein","Gulasch"],
+   ["Oregano, Muskatnuss","klein","Pasta, Sauce"],
+   ["Senf, Ketchup, Mayonnaise","je 1",""],
+ ]},
+ {cat:"Frühstück & Brot", emoji:"🥐", items:[
+   ["Marmelade","2 Gläser",""],
+   ["Honig","1 Glas",""],
+   ["Nutella","1 Glas",""],
+   ["Müsli / Cornflakes","2 Pkg",""],
+   ["Toastbrot","2 Pkg","Notvorrat"],
+   ["Baguette (haltbar/Aufback)","4 Stk","Notvorrat — sonst frisch kaufen"],
+   ["Kaffee + Filter/Kapseln","Vorrat","je nach Maschine an Bord"],
+   ["Tee","1 Pkg",""],
+ ]},
+ {cat:"Snacks & Jause", emoji:"🥨", items:[
+   ["Chips & Salzgebäck","4 Pkg",""],
+   ["Nüsse (gemischt)","2 Pkg",""],
+   ["Kekse","3 Pkg",""],
+   ["Schokolade","5 Tafeln",""],
+   ["Müsliriegel","2 Boxen",""],
+ ]},
+ {cat:"Getränke", emoji:"🍹", items:[
+   ["Wasser still","24 L","viel einplanen!"],
+   ["Wasser sprudel","12 L",""],
+   ["Bier","2–3 Kästen",""],
+   ["Weißwein","6 Flaschen",""],
+   ["Rosé","3 Flaschen",""],
+   ["Prosecco","6 Flaschen","Aperol Spritz"],
+   ["Aperol","1–2 Flaschen",""],
+   ["O-Saft","6 L",""],
+   ["Limo / Cola","12 Stk",""],
+ ]},
+ {cat:"Bord & Haushalt", emoji:"🧽", items:[
+   ["Müllsäcke","1 Rolle",""],
+   ["Küchenrolle","4 Rollen",""],
+   ["Toilettenpapier","Vorrat","bootgeeignet/auflösend"],
+   ["Spülmittel + Schwämme","",""],
+   ["Alufolie + Frischhaltefolie","",""],
+   ["Gefrierbeutel (Zip)","1 Pkg","Reste/Marinade"],
+   ["Servietten","2 Pkg",""],
+   ["Feuerzeug / Streichhölzer","2",""],
+   ["Eis / Kühlakkus","nach Bedarf","Kühlbox"],
+   ["Geschirrtücher","2",""],
+ ]},
+];
+
+/* ---------- Render ---------- */
+const KEY="segeln-italien-shop-v1";
+let checked = JSON.parse(localStorage.getItem(KEY) || "{}");
+const listsEl = document.getElementById("lists");
+
+function id(c,i){return c+"::"+i;}
+
+function render(){
+  listsEl.innerHTML="";
+  DATA.forEach((cat,ci)=>{
+    const total=cat.items.length;
+    let done=0;
+    const ul=document.createElement("ul"); ul.className="items";
+    cat.items.forEach((it,ii)=>{
+      const key=id(ci,ii);
+      const isDone=!!checked[key];
+      if(isDone) done++;
+      const li=document.createElement("li");
+      li.className=isDone?"done":"";
+      li.innerHTML=`<span class="cb">${isDone?"✓":""}</span>
+        <span class="txt"><span class="q">${it[0]}</span>
+        <span class="x">${it[1]}${it[2]?" · "+it[2]:""}</span></span>`;
+      li.addEventListener("click",()=>{
+        checked[key]=!checked[key];
+        localStorage.setItem(KEY,JSON.stringify(checked));
+        render();
+      });
+      ul.appendChild(li);
+    });
+    const wrap=document.createElement("div"); wrap.className="cat";
+    const h=document.createElement("h4");
+    h.innerHTML=`<span class="emoji">${cat.emoji}</span> ${cat.cat}
+      <span class="count">${done}/${total}</span><span class="chev">▾</span>`;
+    h.addEventListener("click",()=>wrap.classList.toggle("collapsed"));
+    wrap.appendChild(h); wrap.appendChild(ul);
+    listsEl.appendChild(wrap);
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  let total=0,done=0;
+  DATA.forEach((c,ci)=>c.items.forEach((it,ii)=>{total++; if(checked[id(ci,ii)])done++;}));
+  document.getElementById("pct").textContent=done+" / "+total;
+  document.getElementById("barfill").style.width=(total?Math.round(done/total*100):0)+"%";
+}
+
+document.getElementById("reset").addEventListener("click",()=>{
+  if(confirm("Wirklich alle Häkchen löschen?")){
+    checked={}; localStorage.removeItem(KEY); render();
+  }
+});
+
+/* Tabs */
+document.querySelectorAll(".tab").forEach(t=>{
+  t.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll("section").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    document.getElementById(t.dataset.t).classList.add("active");
+    window.scrollTo(0,0);
+  });
+});
+
+render();
+</script>
+</body>
+</html>
