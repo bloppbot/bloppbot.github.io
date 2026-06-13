@@ -3,115 +3,152 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0b3a5b">
-<title>⛵ Segeltörn Italien — Menü & Einkauf (7 Mann)</title>
+<meta name="theme-color" content="#0b2a3f">
+<title>⛵ Segeltörn Italien</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=VT323&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0b3a5b; --navy2:#10507e; --sea:#1f7fb8; --foam:#e8f4fb;
-    --gold:#e7b13b; --ink:#0e2436; --paper:#f7fbfe; --line:#cfe2ef;
-    --ok:#2f9e63; --okbg:#e4f6ec;
+    --navy:#0b2a3f; --navy2:#103b58; --sea:#1f7fb8; --foam:#eef6fb;
+    --gold:#e7b13b; --gold2:#f3cf78; --ink:#13212c; --line:#d3e3ee;
+    --ok:#2f9e63; --okbg:#e7f6ee; --cream:#fbf6ea;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    color:var(--ink); background:var(--foam);
-    background-image:linear-gradient(180deg,#dff0fa 0%, #f7fbfe 240px);
-    line-height:1.5; padding-bottom:70px;
+    color:var(--ink); background:var(--foam); line-height:1.5; padding-bottom:60px;
   }
+
+  /* ---------- HERO ---------- */
   header{
-    background:linear-gradient(135deg,var(--navy),var(--sea));
-    color:#fff; padding:22px 16px 18px; text-align:center;
-    box-shadow:0 2px 10px rgba(11,58,91,.25);
+    position:relative; height:40vh; min-height:240px; max-height:380px;
+    background:#0b2a3f center/cover no-repeat;
+    background-image:linear-gradient(180deg, rgba(7,24,38,.15) 0%, rgba(7,24,38,.05) 45%, rgba(7,24,38,.78) 100%), url('assets/hero.png');
+    display:flex; flex-direction:column; justify-content:flex-end; align-items:center;
+    text-align:center; padding:0 16px 22px; color:#fff;
+    image-rendering:pixelated;
   }
-  header h1{margin:0 0 4px; font-size:1.35rem; letter-spacing:.3px}
-  header p{margin:0; font-size:.85rem; opacity:.9}
-  .wrap{max-width:760px; margin:0 auto; padding:0 14px}
+  header h1{
+    font-family:'Cinzel',serif; font-weight:800; margin:0;
+    font-size:clamp(1.9rem,7vw,3.2rem); letter-spacing:1px;
+    color:var(--gold2);
+    text-shadow:0 2px 0 #7a5410, 0 4px 18px rgba(0,0,0,.6);
+  }
+  header .sub{
+    font-family:'VT323',monospace; font-size:clamp(1.1rem,4vw,1.5rem);
+    letter-spacing:2px; color:#dcebf6; margin-top:2px; opacity:.95;
+    text-shadow:0 2px 8px rgba(0,0,0,.7);
+  }
+
+  /* ---------- TABS ---------- */
   .tabs{
-    position:sticky; top:0; z-index:20; display:flex; gap:6px;
-    background:var(--foam); padding:10px 14px; max-width:760px; margin:0 auto;
-    border-bottom:1px solid var(--line);
+    position:sticky; top:0; z-index:30; display:flex; gap:8px;
+    background:var(--navy); padding:9px 12px; box-shadow:0 3px 12px rgba(8,28,44,.35);
   }
   .tab{
-    flex:1; cursor:pointer; padding:11px 8px; font-size:.95rem; font-weight:700;
-    border-radius:11px; background:#fff; color:var(--navy); border:1px solid var(--line);
-    transition:.15s;
+    flex:1; cursor:pointer; padding:11px 8px; font-size:.98rem; font-weight:700;
+    border-radius:11px; background:rgba(255,255,255,.08); color:#cfe6f4;
+    border:1px solid rgba(255,255,255,.12); transition:.15s; font-family:inherit;
   }
-  .tab.active{background:var(--navy); color:#fff; border-color:var(--navy)}
-  section{display:none; padding:14px 0 30px}
+  .tab.active{background:var(--gold); color:#3a2a06; border-color:var(--gold2)}
+
+  .wrap{max-width:780px; margin:0 auto; padding:0 14px}
+  section{display:none; padding:16px 0 30px}
   section.active{display:block}
+  .intro{font-size:.9rem; color:#3f5d72; margin:2px 2px 14px}
+
+  /* ---------- MENU CARDS ---------- */
   .day{
-    background:#fff; border:1px solid var(--line); border-radius:14px;
-    margin:0 0 14px; overflow:hidden; box-shadow:0 1px 4px rgba(16,80,126,.06);
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    margin:0 0 14px; overflow:hidden; box-shadow:0 2px 8px rgba(16,80,126,.07);
   }
-  .day h3{
-    margin:0; padding:12px 14px; font-size:1.02rem;
-    background:linear-gradient(90deg,#f0f8fd,#fff);
-    border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px;
+  .day>h3{
+    margin:0; padding:13px 15px; font-size:1.05rem; font-family:'Cinzel',serif; font-weight:600;
+    color:var(--navy); background:linear-gradient(90deg,#f2f9fd,#fff);
+    border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px;
   }
-  .day h3 .num{
-    background:var(--navy); color:#fff; width:26px;height:26px;border-radius:50%;
-    display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;flex:0 0 auto;
+  .day>h3 .num{
+    background:var(--navy); color:var(--gold2); width:28px;height:28px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;font-size:.9rem;flex:0 0 auto;
+    font-family:'VT323',monospace;
   }
-  .meal{padding:9px 14px; border-bottom:1px dashed var(--line)}
+  .meal{border-bottom:1px solid #eef4f8}
   .meal:last-child{border-bottom:none}
+  .meal .head{
+    padding:11px 15px; display:flex; align-items:flex-start; gap:10px;
+  }
+  .meal.has-recipe .head{cursor:pointer}
   .meal .lab{
-    display:inline-block; font-size:.68rem; font-weight:800; text-transform:uppercase;
-    letter-spacing:.5px; color:var(--sea); margin-bottom:1px;
+    display:inline-block; font-size:.66rem; font-weight:800; text-transform:uppercase;
+    letter-spacing:.6px; color:var(--sea); margin-bottom:1px;
   }
   .meal .dish{font-weight:600}
-  .meal .note{font-size:.82rem; color:#5a7184}
-  .salad{color:#2f9e63;font-weight:600}
+  .meal .note{font-size:.82rem; color:#5a7184; margin-top:1px}
+  .salad{color:#2f9e63; font-weight:600}
+  .meal .chev{margin-left:auto; color:#b6cad9; flex:0 0 auto; transition:.2s; font-size:1.1rem; line-height:1.4}
+  .meal.open .chev{transform:rotate(90deg); color:var(--gold)}
+  .recipe{display:none; padding:2px 15px 15px; background:var(--cream); border-top:1px dashed #e6d8b6}
+  .meal.open .recipe{display:block}
+  .recipe .serves{font-size:.74rem; color:#9a7a2e; font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin:11px 0 7px}
+  .recipe h5{margin:11px 0 5px; font-size:.86rem; color:var(--navy); text-transform:uppercase; letter-spacing:.5px}
+  .recipe ul{margin:0; padding-left:18px}
+  .recipe ul li{margin:3px 0; font-size:.9rem}
+  .recipe ol{margin:0; padding-left:20px}
+  .recipe ol li{margin:5px 0; font-size:.9rem}
+
+  /* ---------- SHOPPING ---------- */
   .progress-card{
-    background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px;
-    position:sticky; top:62px; z-index:10; box-shadow:0 2px 8px rgba(16,80,126,.08);
+    background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 15px;margin-bottom:14px;
+    position:sticky; top:60px; z-index:10; box-shadow:0 3px 10px rgba(16,80,126,.1);
   }
-  .bar{height:12px;background:#e6eef4;border-radius:8px;overflow:hidden;margin:8px 0 4px}
-  .bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--gold),#f3c969);transition:width .25s}
-  .progress-row{display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
+  .bar{height:13px;background:#e6eef4;border-radius:8px;overflow:hidden;margin:8px 0 5px}
+  .bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .25s}
+  .progress-row{display:flex;justify-content:space-between;align-items:center;font-size:.86rem}
   .btn-reset{
     border:1px solid var(--line);background:#fff;color:#b23b3b;border-radius:9px;
-    padding:6px 10px;font-size:.78rem;font-weight:700;cursor:pointer
+    padding:6px 11px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit
   }
-  .cat{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+  .cat{background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:12px;overflow:hidden}
   .cat>h4{
-    margin:0;padding:11px 14px;font-size:.98rem;cursor:pointer;display:flex;align-items:center;gap:8px;
-    background:linear-gradient(90deg,#f0f8fd,#fff);border-bottom:1px solid var(--line)
+    margin:0;padding:12px 15px;font-size:1rem;cursor:pointer;display:flex;align-items:center;gap:9px;
+    background:linear-gradient(90deg,#f2f9fd,#fff);border-bottom:1px solid var(--line);font-weight:700
   }
-  .cat>h4 .emoji{font-size:1.1rem}
+  .cat>h4 .emoji{font-size:1.15rem}
   .cat>h4 .count{margin-left:auto;font-size:.72rem;color:#6c8499;font-weight:700}
   .cat>h4 .chev{transition:.2s;color:#9bb3c6}
   .cat.collapsed .chev{transform:rotate(-90deg)}
   .cat.collapsed ul{display:none}
   ul.items{list-style:none;margin:0;padding:4px 0}
   ul.items li{
-    display:flex;align-items:flex-start;gap:11px;padding:10px 14px;
+    display:flex;align-items:flex-start;gap:12px;padding:11px 15px;
     border-bottom:1px solid #eef4f8;cursor:pointer;user-select:none
   }
   ul.items li:last-child{border-bottom:none}
   ul.items li .cb{
-    flex:0 0 auto;width:23px;height:23px;border:2px solid var(--sea);border-radius:6px;
+    flex:0 0 auto;width:24px;height:24px;border:2px solid var(--sea);border-radius:6px;
     display:inline-flex;align-items:center;justify-content:center;margin-top:1px;
-    font-size:15px;color:#fff;transition:.12s;background:#fff
+    font-size:16px;color:#fff;transition:.12s;background:#fff
   }
   ul.items li.done .cb{background:var(--ok);border-color:var(--ok)}
   ul.items li.done .txt{text-decoration:line-through;color:#9aabb8}
   .txt{flex:1}
   .txt .q{font-weight:700}
   .txt .x{font-size:.8rem;color:#6c8499;display:block}
-  footer{text-align:center;font-size:.75rem;color:#7d93a5;padding:18px 14px 8px}
+
   .tip{
-    background:var(--okbg);border:1px solid #bfe4cd;border-radius:12px;padding:11px 14px;
-    font-size:.85rem;margin-bottom:14px;color:#1f6b41
+    background:var(--okbg);border:1px solid #bfe4cd;border-radius:13px;padding:11px 14px;
+    font-size:.86rem;margin-bottom:14px;color:#1f6b41
   }
   .tip b{color:#17643a}
-  .intro{font-size:.88rem;color:#46627a;margin:2px 2px 14px}
+  footer{text-align:center;font-size:.78rem;color:#7d93a5;padding:20px 14px 8px;font-family:'VT323',monospace;letter-spacing:1px}
 </style>
 </head>
 <body>
 <header>
-  <h1>⛵ Segeltörn Italien</h1>
-  <p>7 Tage · 7 Mann · große Portionen · mild & österreichisch · Sommer/leicht</p>
+  <h1>Segeltörn Italien</h1>
+  <div class="sub">Menü &amp; Einkauf an Bord</div>
 </header>
 
 <div class="tabs">
@@ -120,165 +157,232 @@
 </div>
 
 <div class="wrap">
+  <section id="menu" class="active">
+    <p class="intro">Tippe auf ein Gericht, um das Rezept zu öffnen. Jeden Abend ein gekochtes Hauptgericht (alles auf dem Herd, kein Backofen), leichte Mittagessen für unterwegs. <span class="salad">Salat gibt's immer dazu.</span></p>
+    <div class="tip">🥖 Brot &amp; Semmeln täglich frisch vor Ort kaufen. <b>Gegen Ende der Woche</b>, wenn keine Bäckerei in der Nähe ist, selber Pfannenbrot backen — Rezept bei Tag 7. 🐟 Fisch &amp; Fleisch möglichst frisch in der Marina holen.</div>
+    <div id="days"></div>
+  </section>
 
-<!-- ============ MENÜ ============ -->
-<section id="menu" class="active">
-  <p class="intro">7 hungrige Männer = ordentliche Portionen. Jeden Abend ein gekochtes Hauptgericht (1–2 Töpfe / Pfanne, kein Backofen), leichte Sommerküche, alles mild gewürzt. <span class="salad">Salat gibt's IMMER als Beilage dazu</span> — die Zutaten dafür stehen gesammelt auf der Einkaufsliste.</p>
-
-  <div class="tip">🥖 <b>Brot & Semmeln am besten täglich frisch</b> vor Ort kaufen (Italien-Bäckereien). Liste hat nur Notvorrat. 🐟 Fisch & Grillfleisch ebenfalls möglichst frisch in der Marina holen.</div>
-
-  <div class="day">
-    <h3><span class="num">1</span> Anreise / Einschiffung</h3>
-    <div class="meal"><span class="lab">Abend</span><div class="dish">Spaghetti Bolognese</div><div class="note">Klassiker, kommt bei allen an, robuste Zutaten. <span class="salad">+ grüner Salat</span></div></div>
-  </div>
-
-  <div class="day">
-    <h3><span class="num">2</span></h3>
-    <div class="meal"><span class="lab">Mittag</span><div class="dish">Caprese + Baguette</div><div class="note">Tomate–Mozzarella–Basilikum, Olivenöl. Null Kochen, perfekt unterwegs.</div></div>
-    <div class="meal"><span class="lab">Abend</span><div class="dish">Hühnergeschnetzeltes mit Reis & Gemüse</div><div class="note">Hühnerfilet in Streifen, Paprika/Zucchini, milde Rahmsauce, Reis. <span class="salad">+ gemischter Salat</span></div></div>
-  </div>
-
-  <div class="day">
-    <h3><span class="num">3</span></h3>
-    <div class="meal"><span class="lab">Mittag</span><div class="dish">Thunfisch-Nudelsalat</div><div class="note">Am Vorabend mehr Penne kochen → mit Thunfisch, Mais, Tomate, Zwiebel. Kalt aus der Kühlbox.</div></div>
-    <div class="meal"><span class="lab">Abend</span><div class="dish">Grillabend: Ćevapčići & Bratwürste</div><div class="note">Vom Rail-Grill, dazu Kartoffeln/Brot. Mild. (Plan B: in der Pfanne.) <span class="salad">+ großer Salat & Kartoffelsalat</span></div></div>
-  </div>
-
-  <div class="day">
-    <h3><span class="num">4</span></h3>
-    <div class="meal"><span class="lab">Mittag</span><div class="dish">Jausenbrote / Wraps</div><div class="note">Schinken, Käse, Tomate, Gurke. Schnell & ohne Kochen.</div></div>
-    <div class="meal"><span class="lab">Abend</span><div class="dish">Spaghetti all'Amatriciana</div><div class="note">Guanciale/Pancetta, Tomate, Pecorino, Zwiebel. Mild halten (Chili separat für die, die's wollen). <span class="salad">+ grüner Salat</span></div></div>
-  </div>
-
-  <div class="day">
-    <h3><span class="num">5</span></h3>
-    <div class="meal"><span class="lab">Mittag</span><div class="dish">Antipasti-Teller</div><div class="note">Prosciutto, Mozzarella, Tomaten, Oliven, Brot. Apéro-Style an Bord.</div></div>
-    <div class="meal"><span class="lab">Abend</span><div class="dish">Gebratenes Fischfilet mit Zitronen-Kartoffeln</div><div class="note">Dorade/Branzino oder Filets, Zitrone, Olivenöl, Rosmarin. Leicht & sommerlich. <span class="salad">+ großer Salat</span></div></div>
-  </div>
-
-  <div class="day">
-    <h3><span class="num">6</span></h3>
-    <div class="meal"><span class="lab">Mittag</span><div class="dish">Großer griechischer Salat + Brot</div><div class="note">Tomate, Gurke, Zwiebel, Feta, Oliven. Sättigend & frisch.</div></div>
-    <div class="meal"><span class="lab">Abend</span><div class="dish">Pizza-Abend in der Marina 🍕</div><div class="note">Essen gehen = freier Abend, weniger Abwasch. (Plan B an Bord: Frittata mit Gemüse <span class="salad">+ Salat</span>.)</div></div>
-  </div>
-
-  <div class="day">
-    <h3><span class="num">7</span></h3>
-    <div class="meal"><span class="lab">Mittag</span><div class="dish">Panini / Tramezzini</div><div class="note">Belegte Sandwiches mit Resten — Schinken, Käse, Tomate, Salat.</div></div>
-    <div class="meal"><span class="lab">Abend</span><div class="dish">Spaghetti Carbonara</div><div class="note">Speck, Ei, Pecorino/Parmesan, Obers — mild & schnell. <span class="salad">+ großer grüner Salat</span></div></div>
-  </div>
-
-  <div class="day">
-    <h3>☕ Jeden Tag — Frühstück</h3>
-    <div class="meal"><div class="dish">Semmeln/Brot, Butter, Marmelade, Honig, Nutella</div></div>
-    <div class="meal"><div class="dish">Aufschnitt, Käse, Eier (Rührei oder weich)</div></div>
-    <div class="meal"><div class="dish">Joghurt, Müsli/Cornflakes, Obst, Kaffee, Milch, O-Saft, Tee</div></div>
-  </div>
-
-  <div class="day">
-    <h3>🥨 Jause & Snacks (ganztags)</h3>
-    <div class="meal"><div class="dish">Chips, Tortilla+Dip, Salzgebäck, Nüsse, Studentenfutter, Kekse, Schokolade, Müsliriegel, Obst, Karotten/Gurken, Oliven</div></div>
-  </div>
-</section>
-
-<!-- ============ EINKAUF ============ -->
-<section id="shop">
-  <div class="tip">✅ Häkchen werden <b>automatisch auf diesem Gerät gespeichert</b> — Liste zumachen, später weitermachen. Auf den Kategorie-Titel tippen klappt sie zu. <b>Mengen = 7 erwachsene Männer / 7 Tage, große Portionen.</b></div>
-
-  <div class="progress-card">
-    <div class="progress-row"><strong>Fortschritt</strong><span id="pct">0 / 0</span></div>
-    <div class="bar"><div id="barfill"></div></div>
-    <div class="progress-row">
-      <span id="hint" style="color:#6c8499">großzügig kalkuliert</span>
-      <button class="btn-reset" id="reset">↺ Alles zurücksetzen</button>
+  <section id="shop">
+    <div class="tip">✅ Häkchen werden <b>auf diesem Gerät gespeichert</b> — Liste zumachen, später weitermachen. Auf den Kategorie-Titel tippen klappt sie zu. Mengen sind für die ganze Crew über die Woche gerechnet.</div>
+    <div class="progress-card">
+      <div class="progress-row"><strong>Fortschritt</strong><span id="pct">0 / 0</span></div>
+      <div class="bar"><div id="barfill"></div></div>
+      <div class="progress-row">
+        <span style="color:#6c8499">großzügig kalkuliert</span>
+        <button class="btn-reset" id="reset">↺ Zurücksetzen</button>
+      </div>
     </div>
-  </div>
+    <div id="lists"></div>
+  </section>
+</div>
 
-  <div id="lists"></div>
-</section>
-
-</div><!-- /wrap -->
-
-<footer>⛵ erstellt von BloppBOT · Häkchen lokal gespeichert · gute Fahrt!</footer>
+<footer>⛵ erstellt von BloppBOT · gute Fahrt</footer>
 
 <script>
-const DATA = [
+/* ===================== MENÜ + REZEPTE ===================== */
+const MENU = [
+ {title:"Tag 1 · Anreise", meals:[
+   {lab:"Abend", dish:"Spaghetti Bolognese", salad:"grüner Salat",
+    recipe:{serves:"7 Personen", ing:[
+      "1,8 kg Faschiertes (gemischt)","3 Zwiebeln, 3 Knoblauchzehen","2 Karotten",
+      "6 Pkg passierte Tomaten (~2,4 kg)","2 EL Tomatenmark","1,5 kg Spaghetti",
+      "Olivenöl, Salz, Pfeffer, Oregano, 1 Lorbeerblatt, Prise Zucker","Parmesan zum Bestreuen"],
+    steps:[
+      "Zwiebeln, Knoblauch und Karotten fein hacken, in Olivenöl glasig anschwitzen.",
+      "Faschiertes zugeben und krümelig braun anbraten.",
+      "Tomatenmark kurz mitrösten, dann passierte Tomaten + Gewürze + Lorbeer.",
+      "30–40 Min sanft köcheln, mit Salz/Pfeffer/Prise Zucker abschmecken.",
+      "Spaghetti bissfest kochen, mit Sauce + Parmesan servieren."]}},
+ ]},
+ {title:"Tag 2", meals:[
+   {lab:"Mittag", dish:"Caprese + Baguette", note:"Null Kochen, perfekt unterwegs.",
+    recipe:{serves:"7 Personen", ing:[
+      "1,5 kg Tomaten","6–8 Kugeln Mozzarella","2 Töpfe Basilikum","Olivenöl, Balsamico, Salz, Pfeffer","Baguette"],
+    steps:[
+      "Tomaten und Mozzarella in Scheiben schneiden, abwechselnd auflegen.",
+      "Mit Basilikum, Olivenöl, etwas Balsamico, Salz & Pfeffer anrichten.",
+      "Frisches Baguette dazu."]}},
+   {lab:"Abend", dish:"Hühnergeschnetzeltes mit Reis & Gemüse", salad:"gemischter Salat",
+    recipe:{serves:"7 Personen", ing:[
+      "2 kg Hühnerfilet in Streifen","3 Paprika, 2 Zucchini, 2 Zwiebeln",
+      "500 ml Schlagobers/Sahne","1 Brühwürfel","1,2 kg Reis",
+      "Öl, Salz, Pfeffer, Paprikapulver edelsüß, Petersilie"],
+    steps:[
+      "Hühnerstreifen salzen und portionsweise scharf anbraten, herausnehmen.",
+      "Zwiebeln + Paprika + Zucchini in der Pfanne anbraten.",
+      "Fleisch zurück, mit etwas Brühe ablöschen, Obers zugeben.",
+      "Kurz cremig einköcheln, mit Paprikapulver/Salz/Pfeffer abschmecken.",
+      "Reis kochen, Petersilie über das Geschnetzelte."]}},
+ ]},
+ {title:"Tag 3", meals:[
+   {lab:"Mittag", dish:"Thunfisch-Nudelsalat", note:"Vorabend mehr Penne kochen → kalt aus der Kühlbox.",
+    recipe:{serves:"7 Personen", ing:[
+      "1 kg Penne","6 Dosen Thunfisch","2 Dosen Mais","4 Tomaten, 1 rote Zwiebel",
+      "3 EL Mayonnaise + 3 EL Joghurt (oder Olivenöl)","Salz, Pfeffer, Spritzer Zitrone"],
+    steps:[
+      "Penne kochen, kalt abschrecken, abtropfen.",
+      "Thunfisch, Mais, gewürfelte Tomaten und fein geschnittene Zwiebel dazugeben.",
+      "Mit Mayo/Joghurt (oder Öl) anrühren, mit Salz, Pfeffer & Zitrone abschmecken."]}},
+   {lab:"Abend", dish:"Ćevapčići & Bratwürste aus der Pfanne", salad:"großer Salat & Kartoffelsalat",
+    note:"Kein Grill nötig — in der Pfanne anbraten.",
+    recipe:{serves:"7 Personen", ing:[
+      "1,5 kg Ćevapčići","1,5 kg Bratwürste","Brot dazu",
+      "Kartoffelsalat: 2 kg Kartoffeln, 1 Zwiebel, Brühe, Weißweinessig, Senf, Öl, Salz","Ajvar/Senf zum Servieren"],
+    steps:[
+      "Ćevapčići und Würste in heißer Pfanne (etwas Öl) rundum braun und durchbraten.",
+      "Kartoffeln in der Schale weich kochen, schälen, in Scheiben schneiden.",
+      "Lauwarme Marinade aus heißer Brühe + Essig + Senf + Öl + feiner Zwiebel über die Kartoffeln, ziehen lassen.",
+      "Mit Ajvar, Senf, Brot und Salat servieren."]}},
+ ]},
+ {title:"Tag 4", meals:[
+   {lab:"Mittag", dish:"Jausenbrote / Wraps", note:"Schinken, Käse, Tomate, Gurke. Ohne Kochen."},
+   {lab:"Abend", dish:"Spaghetti all'Amatriciana", salad:"grüner Salat",
+    note:"Mild halten — Chiliflocken separat am Tisch.",
+    recipe:{serves:"7 Personen", ing:[
+      "700 g Guanciale oder Pancetta, gewürfelt","2 Zwiebeln","6 Pkg passierte Tomaten (~2,4 kg)",
+      "1,5 kg Spaghetti","Pecorino oder Parmesan","Olivenöl, Pfeffer, Salz","Chiliflocken (separat)"],
+    steps:[
+      "Guanciale/Pancetta in wenig Öl knusprig auslassen, herausnehmen.",
+      "Zwiebeln im Fett glasig anschwitzen.",
+      "Passierte Tomaten zugeben, 15–20 Min köcheln, salzen/pfeffern.",
+      "Speck zurück in die Sauce.",
+      "Spaghetti kochen, mit Sauce mischen, viel Pecorino drüber. Chili nach Wunsch separat."]}},
+ ]},
+ {title:"Tag 5", meals:[
+   {lab:"Mittag", dish:"Antipasti-Teller", note:"Prosciutto, Mozzarella, Tomaten, Oliven, Brot. Apéro-Style."},
+   {lab:"Abend", dish:"Gebratenes Fischfilet mit Zitronen-Kartoffeln", salad:"großer Salat",
+    recipe:{serves:"7 Personen", ing:[
+      "2,5 kg Fisch (Dorade/Branzino oder Filets)","2,5 kg Kartoffeln","4 Zitronen",
+      "3 Knoblauchzehen, Rosmarin","Olivenöl/Butter, Salz, Pfeffer, Petersilie"],
+    steps:[
+      "Kartoffeln in Spalten schneiden, mit Öl, Knoblauch & Rosmarin in der Pfanne goldbraun braten (oder vorkochen + anbraten).",
+      "Fisch trocken tupfen, salzen, in Öl/Butter 3–4 Min pro Seite braten.",
+      "Mit Zitronensaft beträufeln, Petersilie drüber.",
+      "Mit den Kartoffeln und Salat servieren."]}},
+ ]},
+ {title:"Tag 6", meals:[
+   {lab:"Mittag", dish:"Großer griechischer Salat + Brot",
+    recipe:{serves:"7 Personen", ing:[
+      "5–6 Tomaten, 3 Gurken, 2 rote Zwiebeln","500 g Feta","Oliven",
+      "Olivenöl, Oregano, Salz, Pfeffer","Brot"],
+    steps:[
+      "Tomaten, Gurken und Zwiebeln grob schneiden.",
+      "Mit Oliven und Feta-Stücken mischen.",
+      "Mit Olivenöl, Oregano, Salz & Pfeffer anmachen. Brot dazu."]}},
+   {lab:"Abend", dish:"Pizza-Abend in der Marina 🍕", salad:"",
+    note:"Essen gehen = freier Abend. Plan B an Bord: Frittata mit Gemüse + Salat.",
+    recipe:{serves:"Plan B: Frittata für 7", ing:[
+      "16 Eier","2 Zucchini, 2 Paprika, 1 Zwiebel","Parmesan","Öl, Salz, Pfeffer"],
+    steps:[
+      "Gemüse würfeln und in großer Pfanne weich anbraten.",
+      "Eier verquirlen, salzen/pfeffern, über das Gemüse gießen, Parmesan drauf.",
+      "Bei kleiner Hitze mit Deckel stocken lassen, in Stücke schneiden. Salat dazu."]}},
+ ]},
+ {title:"Tag 7", meals:[
+   {lab:"Mittag", dish:"Panini / Tramezzini", note:"Belegte Sandwiches mit Resten."},
+   {lab:"Abend", dish:"Spaghetti Carbonara", salad:"großer grüner Salat",
+    recipe:{serves:"7 Personen", ing:[
+      "1,5 kg Spaghetti","500 g Pancetta/Speck gewürfelt","8 Eier (überwiegend Eigelb)",
+      "200 g Pecorino/Parmesan, gerieben","schwarzer Pfeffer, Salz","etwas Nudelwasser"],
+    steps:[
+      "Speck in der Pfanne knusprig auslassen.",
+      "Spaghetti bissfest kochen, etwas Nudelwasser aufheben.",
+      "Eier mit Käse & viel Pfeffer verrühren.",
+      "Heiße abgetropfte Nudeln mit dem Speck mischen, Pfanne von der Hitze nehmen.",
+      "Ei-Käse-Masse + Schuss Nudelwasser unterrühren bis cremig — NICHT mehr kochen, sonst wird's Rührei."]}},
+   {lab:"Notfall-Brot", dish:"🍞 Pfannenbrot selber backen", note:"Für gegen Ende der Woche, wenn frisches Brot ausgeht — ohne Backofen, direkt in der Pfanne.",
+    recipe:{serves:"~8 Fladen", ing:[
+      "1 kg Mehl","1 Pkg Trockenhefe (oder 2 TL Backpulver für schnell)","2 TL Salz",
+      "4 EL Olivenöl","ca. 500 ml lauwarmes Wasser"],
+    steps:[
+      "Mehl, Hefe und Salz mischen, Öl + Wasser zugeben und zu einem glatten Teig kneten.",
+      "Mit Hefe ~1 Std zugedeckt gehen lassen (mit Backpulver: gleich weiter).",
+      "Teig in ~8 Stücke teilen, dünn rund ausrollen.",
+      "In heißer, leicht geölter Pfanne ohne Deckel je ~2 Min pro Seite backen, bis goldbraune Blasen entstehen.",
+      "Warm servieren — passt zu Antipasti, Grillabend & Salaten."]}},
+ ]},
+ {title:"☕ Jeden Tag", meals:[
+   {lab:"Frühstück", dish:"Semmeln/Brot, Aufschnitt, Käse, Eier", note:"+ Joghurt, Müsli, Obst, Kaffee, O-Saft"},
+   {lab:"Jause", dish:"Snacks ganztags", note:"Chips, Nüsse, Kekse, Schokolade, Obst, Karotten/Gurken, Oliven"},
+ ]},
+];
+
+/* ===================== EINKAUFSLISTE ===================== */
+const SHOP = [
  {cat:"Fleisch, Wurst & Fisch", emoji:"🥩", items:[
    ["Faschiertes (gemischt)","1,8 kg","Bolognese"],
-   ["Hühnerfilet","2,5 kg","Geschnetzeltes + Wraps + Salat-Topping"],
-   ["Ćevapčići","1,5 kg","Grillabend"],
-   ["Bratwürste / Grillwürste","1,5 kg","Grillabend"],
-   ["Guanciale / Pancetta gewürfelt","700 g","Amatriciana + Carbonara + Frittata"],
+   ["Hühnerfilet","2,5 kg","Geschnetzeltes + Wraps"],
+   ["Ćevapčići","1,5 kg","Tag 3 Pfanne"],
+   ["Bratwürste","1,5 kg","Tag 3 Pfanne"],
+   ["Guanciale / Pancetta gewürfelt","1,2 kg","Amatriciana + Carbonara + Frittata"],
    ["Fisch (Dorade/Branzino o. Filets)","2,5 kg","frisch in der Marina holen"],
    ["Schinken & Salami (Aufschnitt)","2 kg","Frühstück + Jausen + Panini"],
    ["Prosciutto crudo","400 g","Antipasti"],
  ]},
  {cat:"Milch, Käse & Eier", emoji:"🧀", items:[
-   ["Eier","40 Stk","Frühstück (7 Mann!), Carbonara, Frittata"],
+   ["Eier","40 Stk","Frühstück, Carbonara, Frittata"],
    ["Butter","750 g",""],
    ["Milch (haltbar/UHT)","10 L","Kaffee, Müsli"],
-   ["Schlagobers / Sahne","1 L","Sauce, Carbonara"],
-   ["Joghurt (Becher)","18 Stk","Frühstück"],
-   ["Parmesan / Pecorino","700 g","Pasta — Amatriciana & Carbonara"],
+   ["Schlagobers / Sahne","1 L","Geschnetzeltes, Carbonara"],
+   ["Joghurt (Becher)","18 Stk","Frühstück + Nudelsalat"],
+   ["Parmesan / Pecorino","700 g","Pasta"],
    ["Mozzarella (Kugeln 125 g)","10 Stk","Caprese + Antipasti"],
    ["Feta","500 g","griechischer Salat"],
    ["Gouda/Emmentaler in Scheiben","1,5 kg","Frühstück + Panini"],
  ]},
- {cat:"Salat & Dressing  🥗 (jeden Abend!)", emoji:"🥗", items:[
-   ["Blattsalat (Eisberg/Romana/Rucola)","8 Köpfe","Salat zu JEDEM Abendessen"],
-   ["Cherry-/Salattomaten extra","3 kg","zusätzlich nur für Salate"],
+ {cat:"Salat & Dressing (jeden Abend!)", emoji:"🥗", items:[
+   ["Blattsalat (Eisberg/Romana/Rucola)","8 Köpfe","Salat zu jedem Abendessen"],
+   ["Cherry-/Salattomaten extra","3 kg","nur für Salate"],
    ["Salatgurken","7 Stk","Salate + Jausen"],
    ["Rote Zwiebeln","1 kg","Salate"],
    ["Mais (Dosen)","3 Stk","Salat-Topping"],
    ["Oliven (Gläser)","3 Stk","griech. Salat + Antipasti"],
    ["Balsamico-Essig","1 Flasche","Dressing"],
-   ["Weißweinessig","1 Flasche","Dressing"],
-   ["Olivenöl extra (fürs Dressing)","1 L",""],
-   ["Senf","1 Glas","Dressing-Basis"],
+   ["Weißweinessig","1 Flasche","Dressing + Kartoffelsalat"],
+   ["Olivenöl extra (Dressing)","1 L",""],
+   ["Senf","1 Glas","Dressing + Kartoffelsalat"],
    ["Croutons / Sonnenblumenkerne","2 Pkg","Topping"],
  ]},
  {cat:"Obst & Gemüse", emoji:"🥬", items:[
    ["Tomaten (zum Kochen)","2 kg","Sauce, Caprese"],
    ["Zwiebeln (gelb)","2,5 kg","alle Saucen & Gerichte"],
    ["Knoblauch","4 Knollen",""],
-   ["Paprika","1,5 kg","Geschnetzeltes, Grillgemüse"],
-   ["Zucchini","1,5 kg","Geschnetzeltes, Frittata, Grill"],
-   ["Melanzani (Auberginen)","2 Stk","Grillgemüse"],
+   ["Paprika","1,5 kg","Geschnetzeltes, Frittata"],
+   ["Zucchini","1,5 kg","Geschnetzeltes, Frittata"],
    ["Karotten","1,5 kg","Jause, Sauce"],
-   ["Kartoffeln","5 kg","Grillbeilage, Fisch, Kartoffelsalat"],
-   ["Zitronen","8 Stk","Fisch! + Drinks"],
+   ["Kartoffeln","5 kg","Kartoffelsalat, Fisch"],
+   ["Zitronen","8 Stk","Fisch + Drinks"],
    ["Basilikum","3 Töpfe","Caprese, Pasta"],
    ["Petersilie","2 Bund","Fisch, Sauce"],
-   ["Rosmarin / Thymian","je 1","Fisch & Kartoffeln"],
-   ["Bananen, Äpfel, Orangen, Trauben","gemischt ~5 kg","Frühstück & Jause"],
+   ["Rosmarin","1","Fisch & Kartoffeln"],
+   ["Bananen, Äpfel, Orangen, Trauben","~5 kg","Frühstück & Jause"],
  ]},
- {cat:"Pasta, Reis & Co.", emoji:"🍝", items:[
+ {cat:"Pasta, Reis & Brot-Backen", emoji:"🍝", items:[
    ["Spaghetti","4 kg","Bolognese + Amatriciana + Carbonara"],
    ["Penne","1 kg","Thunfisch-Nudelsalat"],
-   ["Reis (Langkorn)","1,5 kg","zum Geschnetzelten"],
+   ["Reis (Langkorn)","1,5 kg","Geschnetzeltes"],
+   ["Mehl","2 kg","Pfannenbrot + Frittata"],
+   ["Trockenhefe","1 Pkg","Pfannenbrot"],
+   ["Backpulver","1 Pkg","Pfannenbrot (Schnell-Variante)"],
  ]},
  {cat:"Konserven & Vorrat", emoji:"🥫", items:[
-   ["Passierte Tomaten / Polpa (~400 g)","10 Pkg","Bolo, Amatriciana"],
+   ["Passierte Tomaten / Polpa (~400 g)","12 Pkg","Bolo + Amatriciana"],
    ["Tomatenmark","2 Tuben",""],
-   ["Thunfisch (Dosen)","8 Stk","Nudelsalat"],
-   ["Rinds- & Gemüsebrühe (Würfel)","je 1 Pkg","Sauce, Risotto-Reis"],
-   ["Apfelmus","2 Gläser","Snack/Beilage"],
+   ["Thunfisch (Dosen)","6 Stk","Nudelsalat"],
+   ["Rinds- & Gemüsebrühe (Würfel)","je 1 Pkg","Sauce, Kartoffelsalat"],
+   ["Ajvar","1 Glas","zum Tag-3-Essen"],
  ]},
- {cat:"Öl, Backen & Gewürze", emoji:"🧂", items:[
-   ["Olivenöl (zum Kochen)","2 L",""],
-   ["Speiseöl (neutral, zum Braten)","1 L",""],
-   ["Mehl","1 kg","Frittata, binden"],
-   ["Salz (grob + fein)","Vorrat",""],
-   ["Pfeffer (Mühle)","1",""],
+ {cat:"Öl, Gewürze & Co.", emoji:"🧂", items:[
+   ["Olivenöl (Kochen)","2 L",""],
+   ["Speiseöl (neutral)","1 L","Braten"],
+   ["Salz, Pfeffer (Mühle)","Vorrat",""],
    ["Paprikapulver edelsüß","1 Glas","mild"],
-   ["Oregano","1",""],
-   ["Rosmarin / Thymian getrocknet","je 1","Fisch & Kartoffeln"],
-   ["Majoran, Lorbeer","je 1","Sauce"],
-   ["Muskatnuss","1",""],
-   ["Knoblauchpulver","1",""],
+   ["Oregano, Rosmarin getr.","je 1",""],
+   ["Lorbeer, Muskat, Knoblauchpulver","je 1",""],
    ["Chiliflocken","1 Glas","SEPARAT am Tisch — Essen bleibt mild"],
    ["Suppenwürze (Maggi/Vegeta)","1","abschmecken"],
-   ["Ketchup, Mayonnaise, Senf","je 1","Grill + Kartoffelsalat"],
+   ["Ketchup, Mayonnaise","je 1","Kartoffelsalat + Snack"],
  ]},
  {cat:"Frühstück & Brot", emoji:"🥐", items:[
    ["Marmelade","3 Gläser",""],
@@ -287,7 +391,7 @@ const DATA = [
    ["Müsli / Cornflakes","3 Pkg",""],
    ["Toastbrot","3 Pkg","Notvorrat / Panini"],
    ["Baguette (Aufback)","6 Stk","Notvorrat — sonst frisch"],
-   ["Kaffee + Filter/Kapseln","Vorrat","je nach Maschine"],
+   ["Kaffee + Filter/Kapseln","Vorrat",""],
    ["Tee","1 Pkg",""],
  ]},
  {cat:"Snacks & Jause", emoji:"🥨", items:[
@@ -299,10 +403,9 @@ const DATA = [
    ["Kekse","4 Pkg",""],
    ["Schokolade","8 Tafeln",""],
    ["Müsliriegel","2 Boxen",""],
-   ["Popcorn (Mikrowelle/fertig)","2 Pkg","optional"],
  ]},
  {cat:"Getränke", emoji:"🍹", items:[
-   ["Wasser still","36 L","viel einplanen — 7 Mann + Hitze!"],
+   ["Wasser still","36 L","viel einplanen!"],
    ["Wasser sprudel","18 L",""],
    ["Bier","4–5 Kästen",""],
    ["Weißwein","8 Flaschen",""],
@@ -311,7 +414,6 @@ const DATA = [
    ["Aperol","2 Flaschen",""],
    ["O-Saft","8 L",""],
    ["Limo / Cola / Tonic","18 Stk",""],
-   ["Gin / Spirituose","nach Geschmack","optional"],
  ]},
  {cat:"Bord & Haushalt", emoji:"🧽", items:[
    ["Müllsäcke","2 Rollen",""],
@@ -319,34 +421,72 @@ const DATA = [
    ["Toilettenpapier","Vorrat","bootgeeignet/auflösend"],
    ["Spülmittel + Schwämme","2 + Pack",""],
    ["Alufolie + Frischhaltefolie","je 1",""],
-   ["Gefrierbeutel (Zip)","1 Pkg","Reste/Marinade"],
+   ["Gefrierbeutel (Zip)","1 Pkg",""],
    ["Servietten","3 Pkg",""],
-   ["Grillanzünder / Feuerzeug","1 + 2","für Rail-Grill"],
+   ["Feuerzeug / Streichhölzer","2",""],
    ["Eis / Kühlakkus","nach Bedarf","Kühlbox"],
    ["Geschirrtücher","3",""],
  ]},
 ];
 
-const KEY="segeln-italien-shop-v2";
-let checked = JSON.parse(localStorage.getItem(KEY) || "{}");
-const listsEl = document.getElementById("lists");
-function id(c,i){return c+"::"+i;}
+/* ===================== RENDER MENÜ ===================== */
+const daysEl=document.getElementById("days");
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+MENU.forEach(day=>{
+  const card=document.createElement("div"); card.className="day";
+  const mTag=day.title.match(/^Tag (\d+)(?: · (.+))?$/);
+  const badge=mTag?mTag[1]:"•";
+  const label=mTag?(mTag[2]||""):day.title;
+  let html=`<h3><span class="num">${badge}</span>${label?esc(label):""}</h3>`;
+  day.meals.forEach(m=>{
+    const hasR=!!m.recipe;
+    const noteBits=[];
+    if(m.salad) noteBits.push(`<span class="salad">+ ${esc(m.salad)}</span>`);
+    if(m.note) noteBits.push(esc(m.note));
+    html+=`<div class="meal ${hasR?'has-recipe':''}">
+      <div class="head">
+        <div style="flex:1">
+          <span class="lab">${esc(m.lab)}</span>
+          <div class="dish">${esc(m.dish)}</div>
+          ${noteBits.length?`<div class="note">${noteBits.join(" · ")}</div>`:""}
+        </div>
+        ${hasR?'<span class="chev">▸</span>':''}
+      </div>`;
+    if(hasR){
+      const r=m.recipe;
+      html+=`<div class="recipe">
+        <div class="serves">${esc(r.serves)}</div>
+        <h5>Zutaten</h5><ul>${r.ing.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
+        <h5>Zubereitung</h5><ol>${r.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
+      </div>`;
+    }
+    html+=`</div>`;
+  });
+  card.innerHTML=html;
+  card.querySelectorAll(".meal.has-recipe .head").forEach(h=>{
+    h.addEventListener("click",()=>h.parentElement.classList.toggle("open"));
+  });
+  daysEl.appendChild(card);
+});
 
+/* ===================== RENDER EINKAUF ===================== */
+const KEY="segeln-italien-shop-v3";
+let checked=JSON.parse(localStorage.getItem(KEY)||"{}");
+const listsEl=document.getElementById("lists");
+function id(c,i){return c+"::"+i;}
 function render(){
   listsEl.innerHTML="";
-  DATA.forEach((cat,ci)=>{
+  SHOP.forEach((cat,ci)=>{
     const total=cat.items.length; let done=0;
     const ul=document.createElement("ul"); ul.className="items";
     cat.items.forEach((it,ii)=>{
-      const key=id(ci,ii); const isDone=!!checked[key]; if(isDone) done++;
+      const key=id(ci,ii); const isDone=!!checked[key]; if(isDone)done++;
       const li=document.createElement("li"); li.className=isDone?"done":"";
       li.innerHTML=`<span class="cb">${isDone?"✓":""}</span>
         <span class="txt"><span class="q">${it[0]}</span>
         <span class="x">${it[1]}${it[2]?" · "+it[2]:""}</span></span>`;
-      li.addEventListener("click",()=>{
-        checked[key]=!checked[key];
-        localStorage.setItem(KEY,JSON.stringify(checked)); render();
-      });
+      li.addEventListener("click",()=>{checked[key]=!checked[key];
+        localStorage.setItem(KEY,JSON.stringify(checked)); render();});
       ul.appendChild(li);
     });
     const wrap=document.createElement("div"); wrap.className="cat";
@@ -356,11 +496,8 @@ function render(){
     h.addEventListener("click",()=>wrap.classList.toggle("collapsed"));
     wrap.appendChild(h); wrap.appendChild(ul); listsEl.appendChild(wrap);
   });
-  updateProgress();
-}
-function updateProgress(){
   let total=0,done=0;
-  DATA.forEach((c,ci)=>c.items.forEach((it,ii)=>{total++; if(checked[id(ci,ii)])done++;}));
+  SHOP.forEach((c,ci)=>c.items.forEach((it,ii)=>{total++; if(checked[id(ci,ii)])done++;}));
   document.getElementById("pct").textContent=done+" / "+total;
   document.getElementById("barfill").style.width=(total?Math.round(done/total*100):0)+"%";
 }
