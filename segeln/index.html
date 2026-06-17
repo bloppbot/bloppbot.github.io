@@ -208,6 +208,16 @@
 /* ===================== MENÜ + REZEPTE ===================== */
 const MENU = [
  {title:"Tag 1 · Anreise", meals:[
+   {lab:"Abend", dish:"Auswärts essen in der Marina ⚓", note:"Freier Abend — Lokal vor Ort, weniger Abwasch."},
+ ]},
+ {title:"Tag 2", meals:[
+   {lab:"Mittag", dish:"Caprese + Baguette", note:"Null Kochen, perfekt unterwegs.",
+    recipe:{serves:"7 Personen", ing:[
+      "1,5 kg Tomaten","6–8 Kugeln Mozzarella","2 Töpfe Basilikum","Olivenöl, Balsamico, Salz, Pfeffer","Baguette"],
+    steps:[
+      "Tomaten und Mozzarella in Scheiben schneiden, abwechselnd auflegen.",
+      "Mit Basilikum, Olivenöl, etwas Balsamico, Salz & Pfeffer anrichten.",
+      "Frisches Baguette dazu."]}},
    {lab:"Abend", dish:"Spaghetti Bolognese", salad:"grüner Salat",
     recipe:{serves:"7 Personen", ing:[
       "1,8 kg Faschiertes (gemischt)","3 Zwiebeln, 3 Knoblauchzehen","2 Karotten",
@@ -220,16 +230,6 @@ const MENU = [
       "30–40 Min sanft köcheln, mit Salz/Pfeffer/Prise Zucker abschmecken.",
       "Spaghetti bissfest kochen, mit Sauce + Parmesan servieren."]}},
  ]},
- {title:"Tag 2", meals:[
-   {lab:"Mittag", dish:"Caprese + Baguette", note:"Null Kochen, perfekt unterwegs.",
-    recipe:{serves:"7 Personen", ing:[
-      "1,5 kg Tomaten","6–8 Kugeln Mozzarella","2 Töpfe Basilikum","Olivenöl, Balsamico, Salz, Pfeffer","Baguette"],
-    steps:[
-      "Tomaten und Mozzarella in Scheiben schneiden, abwechselnd auflegen.",
-      "Mit Basilikum, Olivenöl, etwas Balsamico, Salz & Pfeffer anrichten.",
-      "Frisches Baguette dazu."]}},
-   {lab:"Abend", dish:"Auswärts essen in der Marina ⚓", note:"Freier Abend — Lokal vor Ort, weniger Abwasch."},
- ]},
  {title:"Tag 3", meals:[
    {lab:"Mittag", dish:"Thunfisch-Nudelsalat", note:"Vorabend mehr Penne kochen → kalt aus der Kühlbox.",
     recipe:{serves:"7 Personen", ing:[
@@ -239,6 +239,14 @@ const MENU = [
       "Penne kochen, kalt abschrecken, abtropfen.",
       "Thunfisch, Mais, gewürfelte Tomaten und fein geschnittene Zwiebel dazugeben.",
       "Mit Mayo/Joghurt (oder Öl) anrühren, mit Salz, Pfeffer & Zitrone abschmecken."]}},
+   {lab:"Abend", dish:"Auswärts essen in der Marina ⚓", note:"Freier Abend — Lokal vor Ort, weniger Abwasch."},
+ ]},
+ {title:"Tag 4", meals:[
+   {lab:"Mittag", dish:"Jausenbrote / Wraps", note:"Schinken, Käse, Tomate, Gurke. Ohne Kochen."},
+   {lab:"Abend", dish:"Auswärts essen in der Marina ⚓", note:"Freier Abend — Lokal vor Ort, weniger Abwasch."},
+ ]},
+ {title:"Tag 5", meals:[
+   {lab:"Mittag", dish:"Antipasti-Teller", note:"Prosciutto, Mozzarella, Tomaten, Oliven, Brot. Apéro-Style."},
    {lab:"Abend", dish:"Ćevapčići & Bratwürste aus der Pfanne", salad:"großer Salat & Kartoffelsalat",
     note:"In der Pfanne anbraten.",
     recipe:{serves:"7 Personen", ing:[
@@ -249,24 +257,6 @@ const MENU = [
       "Kartoffeln in der Schale weich kochen, schälen, in Scheiben schneiden.",
       "Lauwarme Marinade aus heißer Brühe + Essig + Senf + Öl + feiner Zwiebel über die Kartoffeln, ziehen lassen.",
       "Mit Ajvar, Senf, Brot und Salat servieren."]}},
- ]},
- {title:"Tag 4", meals:[
-   {lab:"Mittag", dish:"Jausenbrote / Wraps", note:"Schinken, Käse, Tomate, Gurke. Ohne Kochen."},
-   {lab:"Abend", dish:"Spaghetti all'Amatriciana", salad:"grüner Salat",
-    note:"Mild halten — Chiliflocken separat am Tisch.",
-    recipe:{serves:"7 Personen", ing:[
-      "700 g Guanciale oder Pancetta, gewürfelt","2 Zwiebeln","6 Pkg passierte Tomaten (~2,4 kg)",
-      "1,5 kg Spaghetti","Pecorino oder Parmesan","Olivenöl, Pfeffer, Salz","Chiliflocken (separat)"],
-    steps:[
-      "Guanciale/Pancetta in wenig Öl knusprig auslassen, herausnehmen.",
-      "Zwiebeln im Fett glasig anschwitzen.",
-      "Passierte Tomaten zugeben, 15–20 Min köcheln, salzen/pfeffern.",
-      "Speck zurück in die Sauce.",
-      "Spaghetti kochen, mit Sauce mischen, viel Pecorino drüber. Chili nach Wunsch separat."]}},
- ]},
- {title:"Tag 5", meals:[
-   {lab:"Mittag", dish:"Antipasti-Teller", note:"Prosciutto, Mozzarella, Tomaten, Oliven, Brot. Apéro-Style."},
-   {lab:"Abend", dish:"Auswärts essen in der Marina ⚓", note:"Freier Abend — Lokal vor Ort, weniger Abwasch."},
  ]},
  {title:"Tag 6", meals:[
    {lab:"Mittag", dish:"Großer griechischer Salat + Brot",
@@ -281,7 +271,17 @@ const MENU = [
  ]},
  {title:"Tag 7", meals:[
    {lab:"Mittag", dish:"Panini / Tramezzini", note:"Belegte Sandwiches mit Resten."},
-   {lab:"Abend", dish:"Auswärts essen in der Marina ⚓", note:"Freier Abend — Lokal vor Ort, weniger Abwasch."},
+   {lab:"Abend", dish:"Spaghetti all'Amatriciana", salad:"grüner Salat",
+    note:"Mild halten — Chiliflocken separat am Tisch.",
+    recipe:{serves:"7 Personen", ing:[
+      "700 g Guanciale oder Pancetta, gewürfelt","2 Zwiebeln","6 Pkg passierte Tomaten (~2,4 kg)",
+      "1,5 kg Spaghetti","Pecorino oder Parmesan","Olivenöl, Pfeffer, Salz","Chiliflocken (separat)"],
+    steps:[
+      "Guanciale/Pancetta in wenig Öl knusprig auslassen, herausnehmen.",
+      "Zwiebeln im Fett glasig anschwitzen.",
+      "Passierte Tomaten zugeben, 15–20 Min köcheln, salzen/pfeffern.",
+      "Speck zurück in die Sauce.",
+      "Spaghetti kochen, mit Sauce mischen, viel Pecorino drüber. Chili nach Wunsch separat."]}},
    {lab:"Extra", dish:"🍞 Brot selber backen (Ofen)", note:"Für gegen Ende der Woche, wenn frisches Brot ausgeht.",
     recipe:{serves:"1 großer Laib", ing:[
       "500 g Mehl","1 Pkg Trockenhefe (7 g)","2 TL Salz","ca. 350 ml lauwarmes Wasser","Backpapier"],
@@ -303,8 +303,8 @@ const SHOP = [
  {cat:"Fleisch, Wurst & Fisch", emoji:"🥩", items:[
    ["Faschiertes (gemischt)","1,8 kg","Bolognese"],
    ["Hühnerfilet","1 kg","Wraps + Salat-Topping"],
-   ["Ćevapčići","1,5 kg","Tag 3 Pfanne"],
-   ["Bratwürste","1,5 kg","Tag 3 Pfanne"],
+   ["Ćevapčići","1,5 kg","Tag 5 Pfanne"],
+   ["Bratwürste","1,5 kg","Tag 5 Pfanne"],
    ["Guanciale / Pancetta gewürfelt","700 g","Amatriciana"],
    ["Schinken & Salami (Aufschnitt)","2 kg","Frühstück + Jausen + Panini"],
    ["Prosciutto crudo","400 g","Antipasti"],
@@ -329,7 +329,7 @@ const SHOP = [
    ["Paprika","1,5 kg","Frittata, Salat"],
    ["Zucchini","1,5 kg","Frittata, Pasta"],
    ["Karotten","1,5 kg","Jause, Sauce"],
-   ["Erdäpfel/Kartoffeln","2,5 kg","Kartoffelsalat (Tag 3)"],
+   ["Erdäpfel/Kartoffeln","2,5 kg","Kartoffelsalat (Tag 5)"],
    ["Zitronen","5 Stk","Drinks + Salate"],
    ["Basilikum","3 Töpfe","Caprese, Pasta"],
    ["Petersilie","1 Bund","Sauce + Kartoffelsalat"],
