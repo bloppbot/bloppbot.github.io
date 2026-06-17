@@ -187,7 +187,7 @@
 <div class="container">
   <section id="menu" class="active">
     <p class="intro">Gericht antippen fürs Rezept.</p>
-    <div class="tip">🥖 Brot &amp; Semmeln täglich frisch vor Ort. <b>Gegen Ende der Woche</b> selber backen — Rezept bei Tag 7. 🐟 Fisch &amp; Fleisch frisch in der Marina.</div>
+    <div class="tip">🥖 Brot &amp; Semmeln täglich frisch vor Ort. <b>Gegen Ende der Woche</b> selber backen — Rezept bei Tag 7. 🥩 Fleisch frisch in der Marina.</div>
     <div id="days"></div>
   </section>
 
@@ -228,18 +228,7 @@ const MENU = [
       "Tomaten und Mozzarella in Scheiben schneiden, abwechselnd auflegen.",
       "Mit Basilikum, Olivenöl, etwas Balsamico, Salz & Pfeffer anrichten.",
       "Frisches Baguette dazu."]}},
-   {lab:"Abend", dish:"Erdäpfelgulasch", salad:"gemischter Salat",
-    recipe:{serves:"7 Personen", ing:[
-      "3 kg Erdäpfel (festkochend)","4 Zwiebeln, 3 Knoblauchzehen",
-      "1 kg Frankfurter/Debreziner Würstel (in Scheiben)","3 EL Tomatenmark",
-      "2 EL Paprikapulver edelsüß","ca. 1,5 l Rindsuppe/Brühe",
-      "Öl, Salz, Pfeffer, Kümmel, Majoran, 2 Lorbeerblätter, Schuss Essig, Petersilie"],
-    steps:[
-      "Zwiebeln in Öl goldgelb anrösten, Knoblauch + Tomatenmark kurz mitrösten.",
-      "Topf von der Hitze ziehen, Paprikapulver einrühren (darf nicht verbrennen), sofort mit Brühe aufgießen.",
-      "Kümmel, Majoran, Lorbeer + geschälte, gewürfelte Erdäpfel zugeben.",
-      "~20–25 Min weich köcheln, ein paar Stücke zerdrücken → bindet die Sauce.",
-      "Würstelscheiben zugeben, 5 Min ziehen lassen. Mit Salz, Pfeffer & Schuss Essig abschmecken, Petersilie drüber."]}},
+   {lab:"Abend", dish:"Auswärts essen in der Marina ⚓", note:"Freier Abend — Lokal vor Ort, weniger Abwasch."},
  ]},
  {title:"Tag 3", meals:[
    {lab:"Mittag", dish:"Thunfisch-Nudelsalat", note:"Vorabend mehr Penne kochen → kalt aus der Kühlbox.",
@@ -277,15 +266,7 @@ const MENU = [
  ]},
  {title:"Tag 5", meals:[
    {lab:"Mittag", dish:"Antipasti-Teller", note:"Prosciutto, Mozzarella, Tomaten, Oliven, Brot. Apéro-Style."},
-   {lab:"Abend", dish:"Gebratenes Fischfilet mit Zitronen-Kartoffeln", salad:"großer Salat",
-    recipe:{serves:"7 Personen", ing:[
-      "2,5 kg Fisch (Dorade/Branzino oder Filets)","2,5 kg Kartoffeln","4 Zitronen",
-      "3 Knoblauchzehen, Rosmarin","Olivenöl/Butter, Salz, Pfeffer, Petersilie"],
-    steps:[
-      "Kartoffeln in Spalten schneiden, mit Öl, Knoblauch & Rosmarin in der Pfanne goldbraun braten (oder vorkochen + anbraten).",
-      "Fisch trocken tupfen, salzen, in Öl/Butter 3–4 Min pro Seite braten.",
-      "Mit Zitronensaft beträufeln, Petersilie drüber.",
-      "Mit den Kartoffeln und Salat servieren."]}},
+   {lab:"Abend", dish:"Auswärts essen in der Marina ⚓", note:"Freier Abend — Lokal vor Ort, weniger Abwasch."},
  ]},
  {title:"Tag 6", meals:[
    {lab:"Mittag", dish:"Großer griechischer Salat + Brot",
@@ -300,16 +281,7 @@ const MENU = [
  ]},
  {title:"Tag 7", meals:[
    {lab:"Mittag", dish:"Panini / Tramezzini", note:"Belegte Sandwiches mit Resten."},
-   {lab:"Abend", dish:"Spaghetti Carbonara", salad:"großer grüner Salat",
-    recipe:{serves:"7 Personen", ing:[
-      "1,5 kg Spaghetti","500 g Pancetta/Speck gewürfelt","8 Eier (überwiegend Eigelb)",
-      "200 g Pecorino/Parmesan, gerieben","schwarzer Pfeffer, Salz","etwas Nudelwasser"],
-    steps:[
-      "Speck in der Pfanne knusprig auslassen.",
-      "Spaghetti bissfest kochen, etwas Nudelwasser aufheben.",
-      "Eier mit Käse & viel Pfeffer verrühren.",
-      "Heiße abgetropfte Nudeln mit dem Speck mischen, Pfanne von der Hitze nehmen.",
-      "Ei-Käse-Masse + Schuss Nudelwasser unterrühren bis cremig — NICHT mehr kochen, sonst wird's Rührei."]}},
+   {lab:"Abend", dish:"Auswärts essen in der Marina ⚓", note:"Freier Abend — Lokal vor Ort, weniger Abwasch."},
    {lab:"Extra", dish:"🍞 Brot selber backen (Ofen)", note:"Für gegen Ende der Woche, wenn frisches Brot ausgeht.",
     recipe:{serves:"1 großer Laib", ing:[
       "500 g Mehl","1 Pkg Trockenhefe (7 g)","2 TL Salz","ca. 350 ml lauwarmes Wasser","Backpapier"],
@@ -331,19 +303,16 @@ const SHOP = [
  {cat:"Fleisch, Wurst & Fisch", emoji:"🥩", items:[
    ["Faschiertes (gemischt)","1,8 kg","Bolognese"],
    ["Hühnerfilet","1 kg","Wraps + Salat-Topping"],
-   ["Frankfurter / Debreziner Würstel","1 kg","Erdäpfelgulasch"],
    ["Ćevapčići","1,5 kg","Tag 3 Pfanne"],
    ["Bratwürste","1,5 kg","Tag 3 Pfanne"],
-   ["Guanciale / Pancetta gewürfelt","1,2 kg","Amatriciana + Carbonara"],
-   ["Fisch (Dorade/Branzino o. Filets)","2,5 kg","frisch in der Marina holen"],
+   ["Guanciale / Pancetta gewürfelt","700 g","Amatriciana"],
    ["Schinken & Salami (Aufschnitt)","2 kg","Frühstück + Jausen + Panini"],
    ["Prosciutto crudo","400 g","Antipasti"],
  ]},
  {cat:"Kühlregal: Milch, Käse & Eier", emoji:"🧀", items:[
-   ["Eier","40 Stk","Frühstück, Carbonara"],
-   ["Butter","750 g",""],
+   ["Eier","32 Stk","Frühstück"],
+   ["Butter","500 g",""],
    ["Milch (haltbar/UHT)","10 L","Kaffee, Müsli"],
-   ["Schlagobers / Sahne","0,5 L","optional cremigere Carbonara"],
    ["Joghurt (Becher)","18 Stk","Frühstück + Nudelsalat"],
    ["Parmesan / Pecorino","700 g","Pasta"],
    ["Mozzarella (Kugeln 125 g)","10 Stk","Caprese + Antipasti"],
@@ -360,15 +329,14 @@ const SHOP = [
    ["Paprika","1,5 kg","Frittata, Salat"],
    ["Zucchini","1,5 kg","Frittata, Pasta"],
    ["Karotten","1,5 kg","Jause, Sauce"],
-   ["Erdäpfel/Kartoffeln","7 kg","Erdäpfelgulasch, Kartoffelsalat, Fisch"],
-   ["Zitronen","8 Stk","Fisch + Drinks"],
+   ["Erdäpfel/Kartoffeln","2,5 kg","Kartoffelsalat (Tag 3)"],
+   ["Zitronen","5 Stk","Drinks + Salate"],
    ["Basilikum","3 Töpfe","Caprese, Pasta"],
-   ["Petersilie","2 Bund","Fisch, Sauce, Gulasch"],
-   ["Rosmarin","1","Fisch & Kartoffeln"],
+   ["Petersilie","1 Bund","Sauce + Kartoffelsalat"],
    ["Bananen, Äpfel, Orangen, Trauben","~5 kg","Frühstück & Jause"],
  ]},
  {cat:"Pasta & Brot-Backen", emoji:"🍝", items:[
-   ["Spaghetti","4 kg","Bolognese + Amatriciana + Carbonara"],
+   ["Spaghetti","3 kg","Bolognese + Amatriciana"],
    ["Penne","1 kg","Thunfisch-Nudelsalat"],
    ["Mehl","2 kg","Brot backen"],
    ["Trockenhefe","2 Pkg","Brot backen"],
@@ -380,7 +348,7 @@ const SHOP = [
    ["Mais (Dosen)","3 Stk","Salat-Topping"],
    ["Oliven (Gläser)","3 Stk","griech. Salat + Antipasti"],
    ["Ajvar","1 Glas","zum Tag-3-Essen"],
-   ["Rinds- & Gemüsebrühe (Würfel)","je 1 Pkg","Sauce, Gulasch, Kartoffelsalat"],
+   ["Rinds- & Gemüsebrühe (Würfel)","je 1 Pkg","Sauce + Kartoffelsalat"],
  ]},
  {cat:"Öl, Essig & Gewürze", emoji:"🧂", items:[
    ["Olivenöl","3 L","Kochen + Dressing"],
@@ -389,7 +357,7 @@ const SHOP = [
    ["Weißweinessig","1 Flasche","Dressing + Kartoffelsalat"],
    ["Senf","1 Glas","Dressing + Kartoffelsalat"],
    ["Salz, Pfeffer (Mühle)","Vorrat",""],
-   ["Paprikapulver edelsüß","1 Glas","mild — auch fürs Gulasch"],
+   ["Paprikapulver edelsüß","1 Glas","mild — zum Nachwürzen"],
    ["Oregano, Rosmarin, Kümmel, Majoran","je 1",""],
    ["Lorbeer, Muskat, Knoblauchpulver","je 1",""],
    ["Chilisaucen (Sriracha, Tabasco, Sambal)","2–3 Flaschen","Grundrezept mild, jeder würzt selbst nach"],
@@ -486,7 +454,7 @@ MENU.forEach(day=>{
 });
 
 /* ===================== RENDER EINKAUF ===================== */
-const KEY="segeln-italien-shop-v4";
+const KEY="segeln-italien-shop-v5";
 let checked=JSON.parse(localStorage.getItem(KEY)||"{}");
 const listsEl=document.getElementById("lists");
 function id(c,i){return c+"::"+i;}
