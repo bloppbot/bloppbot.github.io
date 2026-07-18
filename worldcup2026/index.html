@@ -6,7 +6,7 @@
     <title>AD World Cup 2026</title>
 
     <meta property="og:title" content="AD World Cup 2026">
-    <meta property="og:description" content="The Ability Draft World Cup returns. 8 teams, double-elim, July 25-26, 2026. Signups open.">
+    <meta property="og:description" content="The Ability Draft World Cup returns. The 8 nations are locked — double-elim, July 25-26, 2026.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://bloppbot.github.io/worldcup2026/assets/og.jpg">
     <meta name="twitter:image" content="https://bloppbot.github.io/worldcup2026/assets/og.jpg">
@@ -530,7 +530,86 @@
         .signup-sub { max-width: 720px; margin: 0 auto; font-size: 1.2rem; line-height: 1.45; }
         .signup-meta { margin-top: 14px; color: var(--text-dim); font-size: 1.05rem; }
 
-        /* === NATIONS === */
+        /* === THE 8 NATIONS (qualified — variant A hero banner cards) === */
+        .teams-grid-a {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+            gap: 16px;
+        }
+        .team-card-a {
+            background: var(--bg-stone);
+            border: 3px solid var(--glass-border-dim);
+            box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.6);
+            overflow: hidden;
+            transition: transform .1s steps(2), border-color .15s, box-shadow .15s;
+        }
+        .team-card-a:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            box-shadow: calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6), 0 0 22px rgba(255,180,70,0.25);
+        }
+        .team-banner {
+            position: relative;
+            height: 150px;
+            background: var(--bg-deeper);
+            overflow: hidden;
+        }
+        .team-banner video, .team-banner img.art {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+        }
+        .team-banner::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(rgba(5,13,16,0.05) 30%, rgba(13,34,40,0.96) 96%);
+            pointer-events: none;
+        }
+        .team-banner .team-seed {
+            position: absolute; top: 6px; left: 6px; z-index: 2;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            color: var(--accent-teal);
+            background: rgba(5,13,16,0.75);
+            border: 2px solid var(--accent-teal-dim);
+            padding: 4px 5px;
+        }
+        .team-banner .team-name {
+            position: absolute;
+            left: 0; right: 0; bottom: 8px;
+            z-index: 2;
+            display: flex; align-items: center; justify-content: center; gap: 9px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.66rem;
+            color: var(--accent-gold);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.85);
+            letter-spacing: 1px;
+        }
+        .team-cpt-row {
+            display: flex; align-items: center; justify-content: center; gap: 9px;
+            padding: 10px 10px 12px;
+            background: rgba(5,13,16,0.45);
+            border-top: 3px solid rgba(255,217,122,0.18);
+        }
+        .cpt-badge {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.44rem;
+            color: #1b1206;
+            background: var(--accent-gold);
+            border: 2px solid var(--accent-gold-deep);
+            padding: 3px 5px;
+        }
+        .cpt-name {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.62rem;
+            color: var(--accent-cream);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.7);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .teams-note { margin-top: 16px; color: var(--text-dim); font-size: 1rem; text-align: center; }
+
+        /* === NATIONS (legacy gallery styles, kept for archive pages) === */
         .v4-gallery {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -741,8 +820,7 @@
         <nav class="nav-bar">
             <a href="#about" class="nav-btn">FORMAT</a>
             <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
-            <a href="#signup" class="nav-btn primary">SIGN UP</a>
-            <a href="#nations" class="nav-btn">NATIONS</a>
+            <a href="#nations" class="nav-btn primary">THE 8 NATIONS</a>
             <a href="#past" class="nav-btn">LAST CUP</a>
             <a href="#bracket" class="nav-btn">BRACKET</a>
             <a href="https://discord.gg/sQFwGxFYFB" target="_blank" class="nav-btn discord">DISCORD</a>
@@ -835,49 +913,13 @@
             </div>
         </section>
 
-        <section id="signup" class="section-wrapper">
-            <h2 class="section-title">SIGN UP</h2>
-            <div class="px-card signup-card">
-                <div class="px-card-pad">
-                    <div class="signup-heading">JOIN THE CUP</div>
-                    <div class="signup-deadline">⚠ LAST DAY TO SIGN UP: JULY 18, 2026 ⚠</div>
-                    <p class="signup-sub">Sign up as an individual &mdash; tell us <strong>who you are</strong> and <strong>which country you represent</strong>. Once signups close, the <strong>8 strongest countries</strong> advance. From each of those, the strongest player is nominated as captain and drafts four teammates from the remaining signups in their country.</p>
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdVZTce_QlkPhLz8d85MhDWji1mqLd1o9kJWtUlmIFM5FmeoQ/viewform?usp=header" target="_blank" rel="noopener" class="signup-btn">
-                        OPEN SIGNUP FORM
-                    </a>
-                    <div class="signup-meta">Questions? Hit us up on Discord.</div>
-                </div>
-            </div>
-        </section>
-
         <section id="nations" class="section-wrapper">
-            <h2 class="section-title">NATIONS REPRESENTED</h2>
-            <p class="title-sub">8 spots up for grabs — the final lineup locks when signups close</p>
-            <div class="v4-gallery" id="v4-gallery"></div>
-            <p class="v4-note">— nation cards from the archive, not the roster · hover to bring one to life —</p>
-            <div class="px-card nations-card">
+            <h2 class="section-title">THE 8 NATIONS</h2>
+            <p class="title-sub">Signups closed — these countries made the cut. Captains draft their squads from their countrymen.</p>
+            <div class="px-card">
                 <div class="px-card-pad">
-                    <p class="nations-preamble">Current confirmed signups by country. 8 strongest nations will advance once signups close.</p>
-                    <table class="nations-table">
-                        <thead>
-                            <tr>
-                                <th>COUNTRY</th>
-                                <th>PLAYERS</th>
-                            </tr>
-                        </thead>
-                        <tbody id="nations-tbody">
-                            <tr><td><span class="flag"><img src="https://flagcdn.com/us.svg" alt="US" loading="lazy"></span>USA</td><td>5</td></tr>
-                            <tr><td><span class="flag"><img src="https://flagcdn.com/gb.svg" alt="GB" loading="lazy"></span>United Kingdom</td><td>3</td></tr>
-                            <tr><td><span class="flag"><img src="https://flagcdn.com/ru.svg" alt="RU" loading="lazy"></span>Russia</td><td>2</td></tr>
-                            <tr><td><span class="flag"><img src="https://flagcdn.com/dk.svg" alt="DK" loading="lazy"></span>Denmark</td><td>2</td></tr>
-                            <tr><td><span class="flag"><img src="https://flagcdn.com/de.svg" alt="DE" loading="lazy"></span>Germany</td><td>1</td></tr>
-                            <tr><td><span class="flag"><img src="https://flagcdn.com/my.svg" alt="MY" loading="lazy"></span>Malaysia</td><td>1</td></tr>
-                        </tbody>
-                        <tfoot>
-                            <tr><td>Total</td><td id="nations-total">14</td></tr>
-                        </tfoot>
-                    </table>
-                    <p class="nations-note">Live count — updates automatically as new signups are confirmed.</p>
+                    <div class="teams-grid-a" id="teams-grid"></div>
+                    <p class="teams-note">Hover a card to bring it to life · full rosters appear once the captains have drafted</p>
                 </div>
             </div>
         </section>
@@ -906,7 +948,7 @@
 
         <section id="bracket" class="section-wrapper">
             <h2 class="section-title">BRACKET</h2>
-            <p class="bracket-preamble">Eight teams, double-elimination. Day 1 is all Bo1 with two games running in parallel; everything from UB Finals onward is Bo3. Teams are TBD until signups close.</p>
+            <p class="bracket-preamble">Eight teams, double-elimination. Day 1 is all Bo1 with two games running in parallel; everything from UB Finals onward is Bo3. The bracket fills once the captains have drafted their squads.</p>
             <div class="px-card">
                 <div class="px-card-pad bracket-wrap">
                 <!-- DAY 1 -->
@@ -1153,25 +1195,37 @@
             mouseTimeout = setTimeout(() => mouseGlow.classList.remove('active'), 1000);
         });
 
-        // === V4 NATION GALLERY (hover to play the loop) ===
-        (function buildGallery() {
-            const NATIONS = ['germany','usa','uk','russia','ukraine','brazil','kazakhstan','algeria'];
-            const wrap = document.getElementById('v4-gallery');
-            wrap.innerHTML = `
-                <div class="v4-tile mystery" title="Who claims a spot? Sign up!">
-                    <video autoplay muted loop playsinline poster="sprites/v4_mystery.png" aria-label="Unknown contender">
-                        <source src="sprites/loop_mystery.mp4" type="video/mp4">
-                    </video>
-                </div>` + NATIONS.map(n => `
-                <div class="v4-tile" data-nation="${n}">
-                    <video muted loop playsinline preload="none" poster="sprites/v4_${n}.png">
-                        <source src="sprites/loop_${n}.mp4" type="video/mp4">
-                    </video>
+        // === THE 8 NATIONS — qualified teams, hover plays the idle loop ===
+        (function buildTeams() {
+            const TEAMS = [
+                { nation: 'RUSSIA',     cc: 'ru', poster: 'v5_russia.png',  loop: 'loop_russia.mp4',     cpt: 'lost~',     seed: 1 },
+                { nation: 'USA',        cc: 'us', poster: 'v4_usa.png',     loop: 'loop_usa.mp4',        cpt: 'DJ Dingus', seed: 2 },
+                { nation: 'KAZAKHSTAN', cc: 'kz', poster: 'v4_kazakhstan.png', loop: 'loop_kazakhstan.mp4', cpt: 'Ptenchik', seed: 3 },
+                { nation: 'FINLAND',    cc: 'fi', poster: 'v5_finland.png', loop: 'loop_finland.mp4',    cpt: 'noertti',   seed: 4 },
+                { nation: 'GERMANY',    cc: 'de', poster: 'v4_germany.png', loop: 'loop_germany.mp4',    cpt: 'Mahaximus', seed: 5 },
+                { nation: 'UKRAINE',    cc: 'ua', poster: 'v4_ukraine.png', loop: 'loop_ukraine.mp4',    cpt: 'et si',     seed: 6 },
+                { nation: 'ALGERIA',    cc: 'dz', poster: 'v4_algeria.png', loop: 'loop_algeria.mp4',    cpt: 'Shushu',    seed: 7 },
+                { nation: 'UK',         cc: 'gb', poster: 'v4_uk.png',      loop: 'loop_uk.mp4',         cpt: 'K-1',       seed: 8 },
+            ];
+            const wrap = document.getElementById('teams-grid');
+            wrap.innerHTML = TEAMS.map(t => `
+                <div class="team-card-a">
+                    <div class="team-banner">
+                        <video muted loop playsinline preload="none" poster="sprites/${t.poster}">
+                            <source src="sprites/${t.loop}" type="video/mp4">
+                        </video>
+                        <div class="team-seed">#${t.seed}</div>
+                        <div class="team-name"><span class="flag"><img src="https://flagcdn.com/${t.cc}.svg" alt="${t.cc.toUpperCase()}" loading="lazy"></span>${t.nation}</div>
+                    </div>
+                    <div class="team-cpt-row">
+                        <span class="cpt-badge">CPT</span>
+                        <span class="cpt-name">${t.cpt}</span>
+                    </div>
                 </div>`).join('');
-            wrap.querySelectorAll('.v4-tile').forEach(tile => {
-                const v = tile.querySelector('video');
-                tile.addEventListener('mouseenter', () => { v.play().catch(()=>{}); });
-                tile.addEventListener('mouseleave', () => { v.pause(); });
+            wrap.querySelectorAll('.team-card-a').forEach(card => {
+                const v = card.querySelector('video');
+                card.addEventListener('mouseenter', () => { v.play().catch(()=>{}); });
+                card.addEventListener('mouseleave', () => { v.pause(); });
             });
         })();
 
@@ -1329,166 +1383,6 @@
         }
         loadDonations();
 
-        // === SIGNUPS / NATIONS ===
-        const SIGNUP_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRdN3LB7Mqkw-MvWhUkhUqkV0B9bpm1KpGNG_5wwTWaKmctRbjJc1tak2xdoxohB1fkK9o04TiZq-ge/pub?output=csv';
-
-        const COUNTRY_ALIASES = [
-            { re: /\b(usa|america|united\s*states|u\.s\.a?\.?)\b/, iso: 'US', name: 'USA' },
-            { re: /\b(uk|u\.k\.|united\s*kingdom|england|britain|scotland|wales)\b/, iso: 'GB', name: 'United Kingdom' },
-            { re: /\brussia\b/, iso: 'RU', name: 'Russia' },
-            { re: /\b(germany|deutschland|gro(ß|ss)deutsch(land)?)\b/, iso: 'DE', name: 'Germany' },
-            { re: /\bdenmark\b/, iso: 'DK', name: 'Denmark' },
-            { re: /\bmalaysia\b/, iso: 'MY', name: 'Malaysia' },
-            { re: /\bsweden\b/, iso: 'SE', name: 'Sweden' },
-            { re: /\bnorway\b/, iso: 'NO', name: 'Norway' },
-            { re: /\bfinland\b/, iso: 'FI', name: 'Finland' },
-            { re: /\bfrance\b/, iso: 'FR', name: 'France' },
-            { re: /\bspain\b/, iso: 'ES', name: 'Spain' },
-            { re: /\bitaly\b/, iso: 'IT', name: 'Italy' },
-            { re: /\b(netherlands|holland|dutch)\b/, iso: 'NL', name: 'Netherlands' },
-            { re: /\bbelgium\b/, iso: 'BE', name: 'Belgium' },
-            { re: /\bpoland\b/, iso: 'PL', name: 'Poland' },
-            { re: /\bukraine\b/, iso: 'UA', name: 'Ukraine' },
-            { re: /\baustria\b/, iso: 'AT', name: 'Austria' },
-            { re: /\b(switzerland|swiss)\b/, iso: 'CH', name: 'Switzerland' },
-            { re: /\bportugal\b/, iso: 'PT', name: 'Portugal' },
-            { re: /\bireland\b/, iso: 'IE', name: 'Ireland' },
-            { re: /\bgreece\b/, iso: 'GR', name: 'Greece' },
-            { re: /\bromania\b/, iso: 'RO', name: 'Romania' },
-            { re: /\bczech\b/, iso: 'CZ', name: 'Czechia' },
-            { re: /\bhungary\b/, iso: 'HU', name: 'Hungary' },
-            { re: /\bbulgaria\b/, iso: 'BG', name: 'Bulgaria' },
-            { re: /\bserbia\b/, iso: 'RS', name: 'Serbia' },
-            { re: /\bcroatia\b/, iso: 'HR', name: 'Croatia' },
-            { re: /\bslovakia\b/, iso: 'SK', name: 'Slovakia' },
-            { re: /\bslovenia\b/, iso: 'SI', name: 'Slovenia' },
-            { re: /\b(turkey|türkiye)\b/, iso: 'TR', name: 'Turkey' },
-            { re: /\bestonia\b/, iso: 'EE', name: 'Estonia' },
-            { re: /\blatvia\b/, iso: 'LV', name: 'Latvia' },
-            { re: /\blithuania\b/, iso: 'LT', name: 'Lithuania' },
-            { re: /\biceland\b/, iso: 'IS', name: 'Iceland' },
-            { re: /\bbelarus\b/, iso: 'BY', name: 'Belarus' },
-            { re: /\bkazakhstan\b/, iso: 'KZ', name: 'Kazakhstan' },
-            { re: /\bcanada\b/, iso: 'CA', name: 'Canada' },
-            { re: /\bmexico\b/, iso: 'MX', name: 'Mexico' },
-            { re: /\bbrazil\b/, iso: 'BR', name: 'Brazil' },
-            { re: /\bargentina\b/, iso: 'AR', name: 'Argentina' },
-            { re: /\bchile\b/, iso: 'CL', name: 'Chile' },
-            { re: /\bperu\b/, iso: 'PE', name: 'Peru' },
-            { re: /\bcolombia\b/, iso: 'CO', name: 'Colombia' },
-            { re: /\baustralia\b/, iso: 'AU', name: 'Australia' },
-            { re: /\bnew\s*zealand\b/, iso: 'NZ', name: 'New Zealand' },
-            { re: /\bchina\b/, iso: 'CN', name: 'China' },
-            { re: /\bjapan\b/, iso: 'JP', name: 'Japan' },
-            { re: /\bkorea\b/, iso: 'KR', name: 'South Korea' },
-            { re: /\bindia\b/, iso: 'IN', name: 'India' },
-            { re: /\bsingapore\b/, iso: 'SG', name: 'Singapore' },
-            { re: /\bthailand\b/, iso: 'TH', name: 'Thailand' },
-            { re: /\bvietnam\b/, iso: 'VN', name: 'Vietnam' },
-            { re: /\bindonesia\b/, iso: 'ID', name: 'Indonesia' },
-            { re: /\bphilippines\b/, iso: 'PH', name: 'Philippines' },
-            { re: /\bisrael\b/, iso: 'IL', name: 'Israel' },
-            { re: /\bsouth\s*africa\b/, iso: 'ZA', name: 'South Africa' },
-            { re: /\begypt\b/, iso: 'EG', name: 'Egypt' },
-            { re: /\balgeria\b/, iso: 'DZ', name: 'Algeria' },
-            { re: /\bmorocco\b/, iso: 'MA', name: 'Morocco' },
-            { re: /\btunisia\b/, iso: 'TN', name: 'Tunisia' },
-            { re: /\bnigeria\b/, iso: 'NG', name: 'Nigeria' },
-            { re: /\bkenya\b/, iso: 'KE', name: 'Kenya' },
-            { re: /\bsaudi\b/, iso: 'SA', name: 'Saudi Arabia' },
-            { re: /\b(uae|united\s*arab\s*emirates|emirates)\b/, iso: 'AE', name: 'UAE' },
-            { re: /\blebanon\b/, iso: 'LB', name: 'Lebanon' },
-            { re: /\bjordan\b/, iso: 'JO', name: 'Jordan' },
-            { re: /\biraq\b/, iso: 'IQ', name: 'Iraq' },
-            { re: /\biran\b/, iso: 'IR', name: 'Iran' },
-            { re: /\bqatar\b/, iso: 'QA', name: 'Qatar' },
-            { re: /\bkuwait\b/, iso: 'KW', name: 'Kuwait' },
-            { re: /\bpakistan\b/, iso: 'PK', name: 'Pakistan' },
-            { re: /\bbangladesh\b/, iso: 'BD', name: 'Bangladesh' },
-            { re: /\bsri\s*lanka\b/, iso: 'LK', name: 'Sri Lanka' },
-            { re: /\bnepal\b/, iso: 'NP', name: 'Nepal' },
-            { re: /\bvenezuela\b/, iso: 'VE', name: 'Venezuela' },
-            { re: /\becuador\b/, iso: 'EC', name: 'Ecuador' },
-            { re: /\buruguay\b/, iso: 'UY', name: 'Uruguay' },
-            { re: /\bparaguay\b/, iso: 'PY', name: 'Paraguay' },
-            { re: /\bbolivia\b/, iso: 'BO', name: 'Bolivia' },
-            { re: /\bcyprus\b/, iso: 'CY', name: 'Cyprus' },
-            { re: /\bmalta\b/, iso: 'MT', name: 'Malta' },
-            { re: /\bluxembourg\b/, iso: 'LU', name: 'Luxembourg' },
-            { re: /\bmoldova\b/, iso: 'MD', name: 'Moldova' },
-            { re: /\bgeorgia\b/, iso: 'GE', name: 'Georgia' },
-            { re: /\barmenia\b/, iso: 'AM', name: 'Armenia' },
-            { re: /\bazerbaijan\b/, iso: 'AZ', name: 'Azerbaijan' },
-            { re: /\b(north\s*macedonia|macedonia)\b/, iso: 'MK', name: 'North Macedonia' },
-            { re: /\b(bosnia|herzegovina)\b/, iso: 'BA', name: 'Bosnia and Herzegovina' },
-            { re: /\bmontenegro\b/, iso: 'ME', name: 'Montenegro' },
-            { re: /\balbania\b/, iso: 'AL', name: 'Albania' },
-            { re: /\bkosovo\b/, iso: 'XK', name: 'Kosovo' },
-            { re: /\btaiwan\b/, iso: 'TW', name: 'Taiwan' },
-            { re: /\bhong\s*kong\b/, iso: 'HK', name: 'Hong Kong' },
-            { re: /\bmongolia\b/, iso: 'MN', name: 'Mongolia' },
-            { re: /\bcambodia\b/, iso: 'KH', name: 'Cambodia' },
-            { re: /\blaos\b/, iso: 'LA', name: 'Laos' },
-            { re: /\bmyanmar\b/, iso: 'MM', name: 'Myanmar' },
-        ];
-
-        function isoToFlag(iso) {
-            if (!iso || iso.length !== 2 || iso === '??') {
-                return '<span class="flag-fallback">🏳️</span>';
-            }
-            const code = iso.toLowerCase();
-            return `<img src="https://flagcdn.com/${code}.svg" alt="${iso}" loading="lazy">`;
-        }
-
-        function normalizeCountry(raw) {
-            const s = (raw || '').toLowerCase().trim();
-            if (!s) return { iso: '??', name: 'Unknown', flag: isoToFlag('??') };
-            for (const a of COUNTRY_ALIASES) {
-                if (a.re.test(s)) return { iso: a.iso, name: a.name, flag: isoToFlag(a.iso) };
-            }
-            const fallback = raw.trim().replace(/\b\w/g, c => c.toUpperCase());
-            return { iso: '??', name: fallback, flag: isoToFlag('??') };
-        }
-
-        async function loadSignups() {
-            try {
-                const res = await fetch(SIGNUP_CSV, { cache: 'no-store' });
-                if (!res.ok) return;
-                const rows = parseCSV(await res.text());
-                if (rows.length < 2) return;
-
-                const header = rows[0].map(h => (h || '').toLowerCase());
-                const countryIdx = header.findIndex(h => h.includes('country'));
-                const confirmIdx = header.findIndex(h => h.includes('confirmed in disco'));
-                if (countryIdx === -1 || confirmIdx === -1) return;
-
-                const counts = new Map();
-                for (const row of rows.slice(1)) {
-                    if ((row[confirmIdx] || '').trim().toLowerCase() !== 'y') continue;
-                    const c = normalizeCountry(row[countryIdx]);
-                    const key = c.iso + '|' + c.name;
-                    if (!counts.has(key)) counts.set(key, { ...c, count: 0 });
-                    counts.get(key).count++;
-                }
-
-                const sorted = [...counts.values()].sort((a, b) =>
-                    b.count - a.count || a.name.localeCompare(b.name)
-                );
-                const total = sorted.reduce((s, c) => s + c.count, 0);
-
-                const tbody = document.getElementById('nations-tbody');
-                if (tbody && sorted.length > 0) {
-                    tbody.innerHTML = sorted.map(c =>
-                        `<tr><td><span class="flag">${c.flag}</span>${esc(c.name)}</td><td>${c.count}</td></tr>`
-                    ).join('');
-                }
-                const totalEl = document.getElementById('nations-total');
-                if (totalEl) totalEl.textContent = total;
-            } catch (e) {
-                console.error('Signup load failed', e);
-            }
-        }
-        loadSignups();
     </script>
 </body>
 </html>
