@@ -607,7 +607,17 @@
             text-shadow: 2px 2px 0 rgba(0,0,0,0.7);
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        .teams-note { margin-top: 16px; color: var(--text-dim); font-size: 1rem; text-align: center; }
+        .teams-note { margin-top: 10px; color: var(--text-dim); font-size: 1rem; text-align: center; }
+        .teams-reveal {
+            margin-top: 18px;
+            text-align: center;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.68rem;
+            color: var(--accent-gold);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+            letter-spacing: 1px;
+            animation: subPulse 2.2s ease-in-out infinite;
+        }
 
         /* === NATIONS (legacy gallery styles, kept for archive pages) === */
         .v4-gallery {
@@ -731,6 +741,18 @@
         .match-slot { display: flex; justify-content: space-between; padding: 3px 0; font-size: 1.1rem; }
         .slot-team.tbd { color: var(--text-dim); }
         .slot-score { color: var(--accent-teal); }
+        .match-fate {
+            display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 10px;
+            border-top: 2px dashed rgba(141,245,234,0.12);
+            margin-top: 6px; padding-top: 6px;
+            font-size: 0.92rem; line-height: 1.3;
+        }
+        .fate-w { color: var(--accent-gold); }
+        .fate-l { color: var(--accent-teal); }
+        .fate-l.out { color: #e2574c; }
+        .round-block.rb-ub { border-top: 4px solid var(--accent-gold-deep); }
+        .round-block.rb-elim { border-top: 4px solid #a03c34; }
+        .round-block.rb-gf { border-top: 4px solid #e2574c; box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.55), 0 0 18px rgba(226,87,76,0.18); }
         .bracket-legend {
             display: flex; flex-wrap: wrap; gap: 18px;
             justify-content: center;
@@ -821,8 +843,8 @@
             <a href="#about" class="nav-btn">FORMAT</a>
             <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
             <a href="#nations" class="nav-btn primary">THE 8 NATIONS</a>
-            <a href="#past" class="nav-btn">LAST CUP</a>
             <a href="#bracket" class="nav-btn">BRACKET</a>
+            <a href="#past" class="nav-btn">LAST CUP</a>
             <a href="https://discord.gg/sQFwGxFYFB" target="_blank" class="nav-btn discord">DISCORD</a>
         </nav>
 
@@ -919,7 +941,162 @@
             <div class="px-card">
                 <div class="px-card-pad">
                     <div class="teams-grid-a" id="teams-grid"></div>
-                    <p class="teams-note">Hover a card to bring it to life · full rosters appear once the captains have drafted</p>
+                    <p class="teams-reveal">★ FULL TEAMS WILL BE REVEALED ON THURSDAY ★</p>
+                    <p class="teams-note">Hover a card to bring it to life</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="scene-divider" aria-hidden="true"><video autoplay muted loop playsinline poster="assets/scene_03_arena.jpg"><source src="assets/div_03_arena.mp4" type="video/mp4"></video></div>
+
+        <section id="bracket" class="section-wrapper">
+            <h2 class="section-title">BRACKET</h2>
+            <p class="bracket-preamble">Eight teams, double-elimination. Day 1 is all Bo1 with two games running in parallel; everything from UB Finals onward is Bo3. The bracket fills once the captains have drafted their squads.</p>
+            <div class="px-card">
+                <div class="px-card-pad bracket-wrap">
+                <!-- DAY 1 -->
+                <div class="bracket-day">
+                    <div class="day-header">
+                        <span class="day-label">DAY 1</span>
+                        <span class="day-date">Saturday, July 25, 2026</span>
+                    </div>
+                    <div class="rounds-row">
+                        <div class="round-block rb-ub">
+                            <div class="round-title">SEEDING R1 <span class="bo-pill">BO1</span></div>
+                            <div class="round-desc">All 8 teams play &mdash; winners go up, losers drop</div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">SR1 #1</span><span class="match-time">17:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → SR2 #1</span><span class="fate-l">▼ L → SL #1</span></div>
+                            </div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">SR1 #2</span><span class="match-time">17:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → SR2 #1</span><span class="fate-l">▼ L → SL #1</span></div>
+                            </div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">SR1 #3</span><span class="match-time">18:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → SR2 #2</span><span class="fate-l">▼ L → SL #2</span></div>
+                            </div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">SR1 #4</span><span class="match-time">18:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → SR2 #2</span><span class="fate-l">▼ L → SL #2</span></div>
+                            </div>
+                        </div>
+                        <div class="round-block rb-ub">
+                            <div class="round-title">SEEDING R2 <span class="bo-pill">BO1</span></div>
+                            <div class="round-desc">SR1 winners &mdash; winner advances to UB Finals</div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">SR2 #1</span><span class="match-time">19:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W SR1 #1</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W SR1 #2</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → UB FINALS</span><span class="fate-l">▼ L → LB R1 #2</span></div>
+                            </div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">SR2 #2</span><span class="match-time">19:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W SR1 #3</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W SR1 #4</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → UB FINALS</span><span class="fate-l">▼ L → LB R1 #1</span></div>
+                            </div>
+                        </div>
+                        <div class="round-block rb-elim">
+                            <div class="round-title">SR1 LOSERS <span class="bo-pill">BO1</span></div>
+                            <div class="round-desc">SR1 losers &mdash; win or go home</div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">SL #1</span><span class="match-time">20:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">L SR1 #1</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">L SR1 #2</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → LB R1 #1</span><span class="fate-l out">☠ L OUT · 7th-8th</span></div>
+                            </div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">SL #2</span><span class="match-time">20:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">L SR1 #3</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">L SR1 #4</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → LB R1 #2</span><span class="fate-l out">☠ L OUT · 7th-8th</span></div>
+                            </div>
+                        </div>
+                        <div class="round-block rb-elim">
+                            <div class="round-title">LOWER BRACKET R1 <span class="bo-pill">BO1</span></div>
+                            <div class="round-desc">SR2 losers meet SL winners, cross-paired</div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">LB R1 #1</span><span class="match-time">21:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">L SR2 #2</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W SL #1</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → LB SF</span><span class="fate-l out">☠ L OUT · 5th-6th</span></div>
+                            </div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">LB R1 #2</span><span class="match-time">21:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">L SR2 #1</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W SL #2</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → LB SF</span><span class="fate-l out">☠ L OUT · 5th-6th</span></div>
+                            </div>
+                        </div>
+                        <div class="round-block rb-ub">
+                            <div class="round-title">UPPER BRACKET FINALS <span class="bo-pill">BO3</span></div>
+                            <div class="round-desc">SR2 winners decide who goes straight to the Grand Final</div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">UB F</span><span class="match-time">22:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W SR2 #1</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W SR2 #2</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → GRAND FINAL</span><span class="fate-l">▼ L → LB FINAL</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DAY 2 -->
+                <div class="bracket-day">
+                    <div class="day-header">
+                        <span class="day-label">DAY 2</span>
+                        <span class="day-date">Sunday, July 26, 2026</span>
+                    </div>
+                    <div class="rounds-row">
+                        <div class="round-block rb-elim">
+                            <div class="round-title">LOWER BRACKET SF <span class="bo-pill">BO3</span></div>
+                            <div class="round-desc">The two LB R1 winners fight for the LB Final slot</div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">LB SF</span><span class="match-time">17:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W LB R1 #1</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W LB R1 #2</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → LB FINAL</span><span class="fate-l out">☠ L OUT · 4th</span></div>
+                            </div>
+                        </div>
+                        <div class="round-block rb-elim">
+                            <div class="round-title">LOWER BRACKET FINAL <span class="bo-pill">BO3</span></div>
+                            <div class="round-desc">LB SF winner vs UB Finals loser &mdash; last chance to reach the Grand Final</div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">LB F</span><span class="match-time">19:30 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">L UB Finals</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W LB SF</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">▲ W → GRAND FINAL</span><span class="fate-l out">☠ L OUT · 3rd</span></div>
+                            </div>
+                        </div>
+                        <div class="round-block rb-gf">
+                            <div class="round-title">GRAND FINAL <span class="bo-pill">BO3</span></div>
+                            <div class="round-desc">One final match. Winner takes the cup.</div>
+                            <div class="match-box">
+                                <div class="match-meta"><span class="match-id">GF</span><span class="match-time">22:00 CEST</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W UB Finals</span><span class="slot-score">—</span></div>
+                                <div class="match-slot"><span class="slot-team tbd">W LB Final</span><span class="slot-score">—</span></div>
+                            <div class="match-fate"><span class="fate-w">🏆 W → CHAMPION</span><span class="fate-l">▼ L → RUNNER-UP</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bracket-legend">
+                    <div class="leg-item"><span class="leg-dot ub"></span>Winners path</div>
+                    <div class="leg-item"><span style="color: var(--accent-gold);">▲ W →</span>&nbsp;where the winner advances</div>
+                    <div class="leg-item"><span style="color: var(--accent-teal);">▼ L →</span>&nbsp;where the loser drops</div>
+                    <div class="leg-item"><span style="color:#e2574c;">☠ OUT</span>&nbsp;eliminated (final placement)</div>
+                    <div class="leg-item">All times CEST &bull; Schedule subject to change</div>
+                </div>
                 </div>
             </div>
         </section>
@@ -944,144 +1121,7 @@
             </div>
         </section>
 
-        <div class="scene-divider" aria-hidden="true"><video autoplay muted loop playsinline poster="assets/scene_03_arena.jpg"><source src="assets/div_03_arena.mp4" type="video/mp4"></video></div>
-
-        <section id="bracket" class="section-wrapper">
-            <h2 class="section-title">BRACKET</h2>
-            <p class="bracket-preamble">Eight teams, double-elimination. Day 1 is all Bo1 with two games running in parallel; everything from UB Finals onward is Bo3. The bracket fills once the captains have drafted their squads.</p>
-            <div class="px-card">
-                <div class="px-card-pad bracket-wrap">
-                <!-- DAY 1 -->
-                <div class="bracket-day">
-                    <div class="day-header">
-                        <span class="day-label">DAY 1</span>
-                        <span class="day-date">Saturday, July 25, 2026</span>
-                    </div>
-                    <div class="rounds-row">
-                        <div class="round-block">
-                            <div class="round-title">SEEDING R1 <span class="bo-pill">BO1</span></div>
-                            <div class="round-desc">All 8 teams play &mdash; winners go up, losers drop</div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">SR1 #1</span><span class="match-time">17:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
-                            </div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">SR1 #2</span><span class="match-time">17:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
-                            </div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">SR1 #3</span><span class="match-time">18:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
-                            </div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">SR1 #4</span><span class="match-time">18:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">TBD</span><span class="slot-score">—</span></div>
-                            </div>
-                        </div>
-                        <div class="round-block">
-                            <div class="round-title">SEEDING R2 <span class="bo-pill">BO1</span></div>
-                            <div class="round-desc">SR1 winners &mdash; winner advances to UB Finals</div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">SR2 #1</span><span class="match-time">19:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W SR1 #1</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W SR1 #2</span><span class="slot-score">—</span></div>
-                            </div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">SR2 #2</span><span class="match-time">19:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W SR1 #3</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W SR1 #4</span><span class="slot-score">—</span></div>
-                            </div>
-                        </div>
-                        <div class="round-block">
-                            <div class="round-title">SR1 LOSERS <span class="bo-pill">BO1</span></div>
-                            <div class="round-desc">SR1 losers &mdash; win or go home</div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">SL #1</span><span class="match-time">20:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">L SR1 #1</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">L SR1 #2</span><span class="slot-score">—</span></div>
-                            </div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">SL #2</span><span class="match-time">20:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">L SR1 #3</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">L SR1 #4</span><span class="slot-score">—</span></div>
-                            </div>
-                        </div>
-                        <div class="round-block">
-                            <div class="round-title">LOWER BRACKET R1 <span class="bo-pill">BO1</span></div>
-                            <div class="round-desc">SR2 losers meet SL winners, cross-paired</div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">LB R1 #1</span><span class="match-time">21:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">L SR2 #2</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W SL #1</span><span class="slot-score">—</span></div>
-                            </div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">LB R1 #2</span><span class="match-time">21:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">L SR2 #1</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W SL #2</span><span class="slot-score">—</span></div>
-                            </div>
-                        </div>
-                        <div class="round-block">
-                            <div class="round-title">UPPER BRACKET FINALS <span class="bo-pill">BO3</span></div>
-                            <div class="round-desc">SR2 winners decide who goes straight to the Grand Final</div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">UB F</span><span class="match-time">22:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W SR2 #1</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W SR2 #2</span><span class="slot-score">—</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- DAY 2 -->
-                <div class="bracket-day">
-                    <div class="day-header">
-                        <span class="day-label">DAY 2</span>
-                        <span class="day-date">Sunday, July 26, 2026</span>
-                    </div>
-                    <div class="rounds-row">
-                        <div class="round-block">
-                            <div class="round-title">LOWER BRACKET SF <span class="bo-pill">BO3</span></div>
-                            <div class="round-desc">The two LB R1 winners fight for the LB Final slot</div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">LB SF</span><span class="match-time">17:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W LB R1 #1</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W LB R1 #2</span><span class="slot-score">—</span></div>
-                            </div>
-                        </div>
-                        <div class="round-block">
-                            <div class="round-title">LOWER BRACKET FINAL <span class="bo-pill">BO3</span></div>
-                            <div class="round-desc">LB SF winner vs UB Finals loser &mdash; last chance to reach the Grand Final</div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">LB F</span><span class="match-time">19:30 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">L UB Finals</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W LB SF</span><span class="slot-score">—</span></div>
-                            </div>
-                        </div>
-                        <div class="round-block">
-                            <div class="round-title">GRAND FINAL <span class="bo-pill">BO3</span></div>
-                            <div class="round-desc">One final match. Winner takes the cup.</div>
-                            <div class="match-box">
-                                <div class="match-meta"><span class="match-id">GF</span><span class="match-time">22:00 CEST</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W UB Finals</span><span class="slot-score">—</span></div>
-                                <div class="match-slot"><span class="slot-team tbd">W LB Final</span><span class="slot-score">—</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bracket-legend">
-                    <div class="leg-item"><span class="leg-dot ub"></span>Upper Bracket</div>
-                    <div class="leg-item"><span class="leg-dot lb"></span>Lower Bracket</div>
-                    <div class="leg-item"><span class="leg-dot gf"></span>Grand Final</div>
-                    <div class="leg-item">All times CEST &bull; Schedule subject to change</div>
-                </div>
-                </div>
-            </div>
-        </section>
+        
 
         <div class="scene-divider" aria-hidden="true"><video autoplay muted loop playsinline poster="assets/scene_02_gate.jpg"><source src="assets/div_02_gate.mp4" type="video/mp4"></video></div>
 
