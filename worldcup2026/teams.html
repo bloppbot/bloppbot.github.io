@@ -262,7 +262,7 @@ img, video { image-rendering: pixelated; }
 
 <div class="wrap">
     <h1 class="page-title">THE TEAMS</h1>
-    <div class="page-sub" id="pageSub">8 TEAMS · 40 PLAYERS · ROSTERS REVEALED AFTER SIGNUPS CLOSE</div>
+    <div class="page-sub" id="pageSub">8 NATIONS · 6 ROSTERS LOCKED · USA + GERMANY PICKS PENDING</div>
     <div class="teams-grid" id="grid"></div>
     <div class="legend">
         <div class="item"><img src="assets/ranking-medals/seasonal-rank-immortal.png" alt="" style="width:24px;height:auto;image-rendering:auto;"> DOTA2 RANK</div>
@@ -279,7 +279,39 @@ img, video { image-rendering: pixelated; }
 //   rankPill = leaderboard rank shown under the medal, e.g. '#3147' (or 'PVT')
 // place: e.g. '1ST','2ND','3RD','4TH','5-6TH','7-8TH' or null before results.
 // extra: optional second badge e.g. '4X CHAMPIONS'. champ: gold border. crown: 👑 highest AD MMR.
-const TEAMS = [];           // <- real 2026 data goes here
+// crown = captain (top-rated per country). Algeria mmrs are estimate-based -> shown as '—' (like last cup).
+const TEAMS = [
+    { name: 'RUSSIA', players: [
+        ['lost~','ru','immortal','#890',4107,true],['hedgehog','ru','immortal',null,3670],
+        ['Sandstorm','ru','immortal','#3815',3442],['FoXy','ru','divine-3',null,3432],
+        ['shadle','ru','immortal','#680',3424]]},
+    { name: 'USA', place: 'TBD', players: [
+        [null,null,null,null,null],[null,null,null,null,null],[null,null,null,null,null],
+        [null,null,null,null,null],[null,null,null,null,null]]},
+    { name: 'KAZAKHSTAN', players: [
+        ['Ptenchik','kz','immortal','#2568',3666,true],['Eurodance','kz','immortal','#2553',3471],
+        ['Aniki','kz','immortal','#870',3334],['FantikJr','kz','legend-3',null,3196],
+        ['Alexandr','kz','immortal','#1956',1642]]},
+    { name: 'FINLAND', players: [
+        ['noertti','fi','immortal','#2428',3666,true],['Ipelius','fi','immortal','#4974',3522],
+        ['Spooner','fi','immortal','#3534',3308],['sifla','fi','immortal','#3136',3199],
+        ['Kenny','fi','divine-5',null,3130]]},
+    { name: 'GERMANY', place: 'TBD', players: [
+        [null,null,null,null,null],[null,null,null,null,null],[null,null,null,null,null],
+        [null,null,null,null,null],[null,null,null,null,null]]},
+    { name: 'UKRAINE', players: [
+        ['et si','ua','immortal','#4482',3975,true],['Silent Killer','ua','immortal',null,3446],
+        ['John Cena','ua','immortal',null,3371],['slightly','ua','immortal','#3013',3295],
+        ['ElnubresHomosyaches','ua','immortal',null,2438]]},
+    { name: 'ALGERIA', players: [
+        ['Shushu','dz','immortal','#236',null,true],['noobisho','dz','immortal','#456',null],
+        ['HunTeR-','dz','immortal','#863',null],['paradox','dz','immortal','#817',null],
+        ['Dashe_','dz','divine-5',null,2913]]},
+    { name: 'UK', players: [
+        ['K-1','gb','immortal',null,3261,true],['Rob Lobb','gb','immortal',null,3166],
+        ['Lionheart','gb','immortal',null,2925],['bred','gb','immortal',null,2816],
+        ['Grasswalker','gb','legend-1',null,2463]]},
+];
 
 // last year's results (extracted 1:1 from bloppppppp.github.io/rumbleV), ?demo=1 preview
 const DEMO_TEAMS = [
