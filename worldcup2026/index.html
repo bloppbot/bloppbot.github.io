@@ -607,6 +607,29 @@
             text-shadow: 2px 2px 0 rgba(0,0,0,0.7);
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
+        .team-roster { list-style: none; padding: 2px 0 6px; background: rgba(5,13,16,0.45); border-top: 3px solid rgba(255,217,122,0.18); }
+        .tr-player { display: flex; align-items: center; gap: 8px; padding: 4px 12px; }
+        .tr-player + .tr-player { border-top: 2px solid rgba(141,245,234,0.07); }
+        .tr-medal { position: relative; width: 30px; flex: 0 0 30px; display: flex; flex-direction: column; align-items: center; }
+        .tr-medal img { width: 28px; height: auto; image-rendering: auto; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.6)); }
+        .tr-medal .rank-pill {
+            margin-top: -7px; z-index: 1;
+            font-family: 'VT323', monospace; font-size: 12px; line-height: 1;
+            padding: 0 3px 1px;
+            background: rgba(5,13,16,0.92);
+            border: 1px solid var(--accent-gold-deep);
+            color: var(--accent-gold);
+            white-space: nowrap;
+        }
+        .tr-name { flex: 1; font-size: 1.05rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tr-name .cpt-badge { font-size: 0.4rem; margin-right: 4px; vertical-align: 2px; }
+        .tr-mmr { font-weight: bold; font-size: 1.05rem; color: var(--accent-gold); text-shadow: 1px 1px 0 rgba(0,0,0,0.75); }
+        .tr-mmr.na { color: var(--text-dim); }
+        .tr-pending {
+            padding: 9px 12px; text-align: center;
+            font-family: 'Press Start 2P', monospace; font-size: 0.48rem;
+            color: var(--text-dim); letter-spacing: 1px;
+        }
         .teams-note { margin-top: 10px; color: var(--text-dim); font-size: 1rem; text-align: center; }
         .teams-reveal {
             margin-top: 18px;
@@ -943,7 +966,6 @@
             <a href="#about" class="nav-btn">FORMAT</a>
             <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
             <a href="#nations" class="nav-btn primary">THE 8 NATIONS</a>
-            <a href="teams.html" class="nav-btn">ROSTERS</a>
             <a href="#bracket" class="nav-btn">BRACKET</a>
             <a href="#past" class="nav-btn">LAST CUP</a>
             <a href="https://discord.gg/sQFwGxFYFB" target="_blank" class="nav-btn discord">DISCORD</a>
@@ -1038,12 +1060,11 @@
 
         <section id="nations" class="section-wrapper">
             <h2 class="section-title">THE 8 NATIONS</h2>
-            <p class="title-sub">Signups closed — these countries made the cut. Captains draft their squads from their countrymen.</p>
+            <p class="title-sub">Signups closed — these countries made the cut, and the captains have drafted their squads.</p>
             <div class="px-card">
                 <div class="px-card-pad">
                     <div class="teams-grid-a" id="teams-grid"></div>
-                    <p class="teams-reveal">★ FULL TEAMS WILL BE REVEALED ON THURSDAY ★</p>
-                    <p class="teams-note">Hover a card to bring it to life</p>
+                    <p class="teams-note">Hover a card to bring it to life &bull; MMR = AD MMR &bull; USA + Germany picks coming soon</p>
                 </div>
             </div>
         </section>
@@ -1327,17 +1348,39 @@
             mouseTimeout = setTimeout(() => mouseGlow.classList.remove('active'), 1000);
         });
 
-        // === THE 8 NATIONS — qualified teams, hover plays the idle loop ===
+        // === THE 8 NATIONS — cards w/ rosters, hover plays the idle loop ===
         (function buildTeams() {
+            // roster: [name, medal, leaderboardPill, adMmr] — first entry = captain.
+            // pending: captain locked, 4 picks outstanding. mmr null = estimated rating (shown as '—').
             const TEAMS = [
-                { nation: 'RUSSIA',     cc: 'ru', poster: 'v5_russia.png',  loop: 'loop_russia.mp4',     cpt: 'lost~',     seed: 1 },
-                { nation: 'USA',        cc: 'us', poster: 'v4_usa.png',     loop: 'loop_usa.mp4',        cpt: 'DJ Dingus', seed: 2 },
-                { nation: 'KAZAKHSTAN', cc: 'kz', poster: 'v4_kazakhstan.png', loop: 'loop_kazakhstan.mp4', cpt: 'Ptenchik', seed: 3 },
-                { nation: 'FINLAND',    cc: 'fi', poster: 'v5_finland.png', loop: 'loop_finland.mp4',    cpt: 'noertti',   seed: 4 },
-                { nation: 'GERMANY',    cc: 'de', poster: 'v4_germany.png', loop: 'loop_germany.mp4',    cpt: 'Mahaximus', seed: 5 },
-                { nation: 'UKRAINE',    cc: 'ua', poster: 'v4_ukraine.png', loop: 'loop_ukraine.mp4',    cpt: 'et si',     seed: 6 },
-                { nation: 'ALGERIA',    cc: 'dz', poster: 'v4_algeria.png', loop: 'loop_algeria.mp4',    cpt: 'Shushu',    seed: 7 },
-                { nation: 'UK',         cc: 'gb', poster: 'v4_uk.png',      loop: 'loop_uk.mp4',         cpt: 'K-1',       seed: 8 },
+                { nation: 'RUSSIA', cc: 'ru', poster: 'v5_russia.png', loop: 'loop_russia.mp4', seed: 1, roster: [
+                    ['lost~','immortal','#890',4107],['hedgehog','immortal',null,3670],
+                    ['Sandstorm','immortal','#3815',3442],['FoXy','divine-3',null,3432],
+                    ['shadle','immortal','#680',3424]]},
+                { nation: 'USA', cc: 'us', poster: 'v4_usa.png', loop: 'loop_usa.mp4', seed: 2, pending: true, roster: [
+                    ['DJ Dingus','immortal','#2064',3759]]},
+                { nation: 'KAZAKHSTAN', cc: 'kz', poster: 'v4_kazakhstan.png', loop: 'loop_kazakhstan.mp4', seed: 3, roster: [
+                    ['Ptenchik','immortal','#2568',3666],['Eurodance','immortal','#2553',3471],
+                    ['Aniki','immortal','#870',3334],['FantikJr','legend-3',null,3196],
+                    ['Alexandr','immortal','#1956',1642]]},
+                { nation: 'FINLAND', cc: 'fi', poster: 'v5_finland.png', loop: 'loop_finland.mp4', seed: 4, roster: [
+                    ['noertti','immortal','#2428',3666],['Ipelius','immortal','#4974',3522],
+                    ['Spooner','immortal','#3534',3308],['sifla','immortal','#3136',3199],
+                    ['Kenny','divine-5',null,3130]]},
+                { nation: 'GERMANY', cc: 'de', poster: 'v4_germany.png', loop: 'loop_germany.mp4', seed: 5, pending: true, roster: [
+                    ['Mahaximus','immortal','#618',3886]]},
+                { nation: 'UKRAINE', cc: 'ua', poster: 'v4_ukraine.png', loop: 'loop_ukraine.mp4', seed: 6, roster: [
+                    ['et si','immortal','#4482',3975],['Silent Killer','immortal',null,3446],
+                    ['John Cena','immortal',null,3371],['slightly','immortal','#3013',3295],
+                    ['ElnubresHomosyaches','immortal',null,2438]]},
+                { nation: 'ALGERIA', cc: 'dz', poster: 'v4_algeria.png', loop: 'loop_algeria.mp4', seed: 7, roster: [
+                    ['Shushu','immortal','#236',null],['noobisho','immortal','#456',null],
+                    ['HunTeR-','immortal','#863',null],['paradox','immortal','#817',null],
+                    ['Dashe_','divine-5',null,2913]]},
+                { nation: 'UK', cc: 'gb', poster: 'v4_uk.png', loop: 'loop_uk.mp4', seed: 8, roster: [
+                    ['K-1','immortal',null,3261],['Rob Lobb','immortal',null,3166],
+                    ['Lionheart','immortal',null,2925],['bred','immortal',null,2816],
+                    ['Grasswalker','legend-1',null,2463]]},
             ];
             const wrap = document.getElementById('teams-grid');
             wrap.innerHTML = TEAMS.map(t => `
@@ -1349,10 +1392,18 @@
                         <div class="team-seed">#${t.seed}</div>
                         <div class="team-name"><span class="flag"><img src="https://flagcdn.com/${t.cc}.svg" alt="${t.cc.toUpperCase()}" loading="lazy"></span>${t.nation}</div>
                     </div>
-                    <div class="team-cpt-row">
-                        <span class="cpt-badge">CPT</span>
-                        <span class="cpt-name">${t.cpt}</span>
-                    </div>
+                    <ul class="team-roster">
+                        ${t.roster.map(([name, medal, pill, mmr], i) => `
+                        <li class="tr-player">
+                            <div class="tr-medal">
+                                <img src="assets/ranking-medals/seasonal-rank-${medal ?? 'uncalibrated'}.png" alt="">
+                                ${pill ? `<span class="rank-pill">${pill}</span>` : ''}
+                            </div>
+                            <div class="tr-name">${i === 0 ? '<span class="cpt-badge">CPT</span>' : ''}${name}</div>
+                            <div class="tr-mmr${mmr == null ? ' na' : ''}">${mmr ?? '&mdash;'}</div>
+                        </li>`).join('')}
+                        ${t.pending ? '<li class="tr-pending">&#9203; 4 PICKS PENDING</li>' : ''}
+                    </ul>
                 </div>`).join('');
             wrap.querySelectorAll('.team-card-a').forEach(card => {
                 const v = card.querySelector('video');
