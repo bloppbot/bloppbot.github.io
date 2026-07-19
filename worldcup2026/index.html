@@ -611,7 +611,7 @@
         .tr-player { display: flex; align-items: center; gap: 8px; padding: 4px 12px; }
         .tr-player + .tr-player { border-top: 2px solid rgba(141,245,234,0.07); }
         .tr-medal { position: relative; width: 38px; flex: 0 0 38px; display: flex; flex-direction: column; align-items: center; }
-        .tr-medal img { width: 36px; height: auto; image-rendering: auto; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.6)); }
+        .tr-medal img { width: 36px; height: 36px; object-fit: contain; image-rendering: auto; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.6)); }
         .tr-medal .rank-pill {
             margin-top: -9px; z-index: 1;
             font-family: 'VT323', monospace; font-size: 17px; line-height: 1;
@@ -622,6 +622,7 @@
             text-shadow: 1px 1px 0 rgba(0,0,0,0.9);
             white-space: nowrap;
         }
+        .tr-medal .rank-pill.ghost { visibility: hidden; }
         .tr-name { flex: 1; font-size: 1.2rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .tr-name .cpt-badge { font-size: 0.4rem; margin-right: 4px; vertical-align: 2px; }
         .tr-mmr { font-weight: bold; font-size: 1.3rem; color: var(--accent-gold); text-shadow: 2px 2px 0 rgba(0,0,0,0.85); }
@@ -1402,7 +1403,7 @@
                         <li class="tr-player">
                             <div class="tr-medal">
                                 <img src="assets/ranking-medals/seasonal-rank-${medal ?? 'uncalibrated'}.png" alt="">
-                                ${pill ? `<span class="rank-pill">${pill}</span>` : ''}
+                                <span class="rank-pill${pill ? '' : ' ghost'}">${pill ?? '#0000'}</span>
                             </div>
                             <div class="tr-name">${i === 0 ? '<span class="cpt-badge">CPT</span>' : ''}${name}</div>
                             <div class="tr-mmr${mmr == null ? ' na' : ''}">${mmr ?? '&mdash;'}</div>
