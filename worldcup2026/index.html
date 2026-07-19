@@ -813,6 +813,25 @@
             box-shadow: 0 0 22px rgba(255, 180, 70, 0.3), var(--px) var(--px) 0 rgba(0,0,0,0.6);
             background: rgba(20, 16, 5, 0.92);
         }
+        .stream-tag {
+            position: absolute;
+            top: -12px; right: -8px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.45rem;
+            padding: 4px 6px;
+            text-decoration: none;
+            border: 2px solid;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.6);
+            letter-spacing: 1px;
+            z-index: 2;
+        }
+        .stream-tag.st-blopp { background: var(--accent-gold-deep); color: #1b1206; border-color: var(--accent-gold); }
+        .stream-tag.st-blopp:hover { background: var(--accent-gold); }
+        .stream-tag.st-tiarin { background: #0e3a42; color: var(--accent-teal); border-color: var(--accent-teal-dim); }
+        .stream-tag.st-tiarin:hover { color: #d9fffa; border-color: var(--accent-teal); }
+        .stream-tag.inline { position: static; display: inline-block; }
+        .watch-link { color: var(--accent-gold); text-decoration: underline; }
+        .watch-link:hover { color: var(--accent-cream); }
         .bracket-legend {
             display: flex; flex-wrap: wrap; gap: 18px;
             justify-content: center;
@@ -1011,7 +1030,8 @@
 
         <section id="bracket" class="section-wrapper">
             <h2 class="section-title">BRACKET</h2>
-            <p class="bracket-preamble">Eight teams, double-elimination. Day 1 is all Bo1 with two games running in parallel; everything from UB Finals onward is Bo3. The bracket fills once the captains have drafted their squads.</p>
+            <p class="bracket-preamble">Eight teams, double-elimination. Day 1 is all Bo1 with two games running in parallel; everything from UB Finals onward is Bo3.<br>
+            Two streams cover it all: <a class="watch-link" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener">BLOPP</a> (also on <a class="watch-link" href="https://www.youtube.com/@bloppdota2" target="_blank" rel="noopener">YouTube</a>) casts one side of each parallel pair plus every Bo3 from UB Finals on &mdash; <a class="watch-link" href="https://www.twitch.tv/tiarinhino" target="_blank" rel="noopener">TIARIN</a> covers the other side. The tag on each match shows where to watch.</p>
             <div class="px-card">
                 <div class="px-card-pad bracket-wrap">
                 <!-- DAY 1 -->
@@ -1038,84 +1058,98 @@
                     <div class="bf-zone-label ub-label" style="left:0; top:-34px;">&#11014; UPPER BRACKET &middot; winners path</div>
                     <div class="bf-zone-label lb-label" style="left:215px; top:524px;">&#11015; LOWER BRACKET &middot; lose here and you are out</div>
                     <div class="match-box bf" style="left:0px; top:0px;">
+                        <a class="stream-tag st-blopp" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener" title="Watch on twitch.tv/bloppdota2">&#9654; BLOPP</a>
                         <div class="match-meta"><span class="match-id">SR1 #1</span><span class="match-time">SAT 17:00</span></div>
                         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/fi.svg" alt="FI" loading="lazy"></span>Finland</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/de.svg" alt="DE" loading="lazy"></span>Germany</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; SR2 #1</span><span class="fate-l">&#9660; SL #1</span></div>
                     </div>
                     <div class="match-box bf" style="left:0px; top:128px;">
+                        <a class="stream-tag st-tiarin" href="https://www.twitch.tv/tiarinhino" target="_blank" rel="noopener" title="Watch on twitch.tv/tiarinhino">&#9654; TIARIN</a>
                         <div class="match-meta"><span class="match-id">SR1 #2</span><span class="match-time">SAT 17:00</span></div>
                         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/ru.svg" alt="RU" loading="lazy"></span>Russia</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/dz.svg" alt="DZ" loading="lazy"></span>Algeria</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; SR2 #1</span><span class="fate-l">&#9660; SL #1</span></div>
                     </div>
                     <div class="match-box bf" style="left:0px; top:256px;">
+                        <a class="stream-tag st-tiarin" href="https://www.twitch.tv/tiarinhino" target="_blank" rel="noopener" title="Watch on twitch.tv/tiarinhino">&#9654; TIARIN</a>
                         <div class="match-meta"><span class="match-id">SR1 #3</span><span class="match-time">SAT 18:00</span></div>
                         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/kz.svg" alt="KZ" loading="lazy"></span>Kazakhstan</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/gb.svg" alt="GB" loading="lazy"></span>UK</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; SR2 #2</span><span class="fate-l">&#9660; SL #2</span></div>
                     </div>
                     <div class="match-box bf" style="left:0px; top:384px;">
+                        <a class="stream-tag st-blopp" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener" title="Watch on twitch.tv/bloppdota2">&#9654; BLOPP</a>
                         <div class="match-meta"><span class="match-id">SR1 #4</span><span class="match-time">SAT 18:00</span></div>
                         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/us.svg" alt="US" loading="lazy"></span>USA</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/ua.svg" alt="UA" loading="lazy"></span>Ukraine</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; SR2 #2</span><span class="fate-l">&#9660; SL #2</span></div>
                     </div>
                     <div class="match-box bf" style="left:215px; top:64px;">
+                        <a class="stream-tag st-blopp" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener" title="Watch on twitch.tv/bloppdota2">&#9654; BLOPP</a>
                         <div class="match-meta"><span class="match-id">SR2 #1</span><span class="match-time">SAT 19:00</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W SR1 #1</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W SR1 #2</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; UB FINAL</span><span class="fate-l">&#9660; LB R1 #2</span></div>
                     </div>
                     <div class="match-box bf" style="left:215px; top:320px;">
+                        <a class="stream-tag st-tiarin" href="https://www.twitch.tv/tiarinhino" target="_blank" rel="noopener" title="Watch on twitch.tv/tiarinhino">&#9654; TIARIN</a>
                         <div class="match-meta"><span class="match-id">SR2 #2</span><span class="match-time">SAT 19:00</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W SR1 #3</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W SR1 #4</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; UB FINAL</span><span class="fate-l">&#9660; LB R1 #1</span></div>
                     </div>
                     <div class="match-box bf" style="left:430px; top:192px;">
+                        <a class="stream-tag st-blopp" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener" title="Watch on twitch.tv/bloppdota2">&#9654; BLOPP</a>
                         <div class="match-meta"><span class="match-id">UB FINAL &middot; BO3</span><span class="match-time">SAT 22:00</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W SR2 #1</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W SR2 #2</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; GRAND FINAL</span><span class="fate-l">&#9660; LB FINAL</span></div>
                     </div>
                     <div class="match-box bf elim" style="left:215px; top:560px;">
+                        <a class="stream-tag st-blopp" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener" title="Watch on twitch.tv/bloppdota2">&#9654; BLOPP</a>
                         <div class="match-meta"><span class="match-id">SL #1</span><span class="match-time">SAT 20:00</span></div>
                         <div class="match-slot"><span class="slot-team tbd">L SR1 #1</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team tbd">L SR1 #2</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; LB R1 #1</span><span class="fate-l out">&#9760; 7th-8th</span></div>
                     </div>
                     <div class="match-box bf elim" style="left:215px; top:688px;">
+                        <a class="stream-tag st-tiarin" href="https://www.twitch.tv/tiarinhino" target="_blank" rel="noopener" title="Watch on twitch.tv/tiarinhino">&#9654; TIARIN</a>
                         <div class="match-meta"><span class="match-id">SL #2</span><span class="match-time">SAT 20:00</span></div>
                         <div class="match-slot"><span class="slot-team tbd">L SR1 #3</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team tbd">L SR1 #4</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; LB R1 #2</span><span class="fate-l out">&#9760; 7th-8th</span></div>
                     </div>
                     <div class="match-box bf elim" style="left:430px; top:560px;">
+                        <a class="stream-tag st-blopp" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener" title="Watch on twitch.tv/bloppdota2">&#9654; BLOPP</a>
                         <div class="match-meta"><span class="match-id">LB R1 #1</span><span class="match-time">SAT 21:00</span></div>
                         <div class="match-slot"><span class="slot-team tbd">L SR2 #2</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W SL #1</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; LB SF</span><span class="fate-l out">&#9760; 5th-6th</span></div>
                     </div>
                     <div class="match-box bf elim" style="left:430px; top:688px;">
+                        <a class="stream-tag st-tiarin" href="https://www.twitch.tv/tiarinhino" target="_blank" rel="noopener" title="Watch on twitch.tv/tiarinhino">&#9654; TIARIN</a>
                         <div class="match-meta"><span class="match-id">LB R1 #2</span><span class="match-time">SAT 21:00</span></div>
                         <div class="match-slot"><span class="slot-team tbd">L SR2 #1</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W SL #2</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; LB SF</span><span class="fate-l out">&#9760; 5th-6th</span></div>
                     </div>
                     <div class="match-box bf elim" style="left:645px; top:624px;">
+                        <a class="stream-tag st-blopp" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener" title="Watch on twitch.tv/bloppdota2">&#9654; BLOPP</a>
                         <div class="match-meta"><span class="match-id">LB SF &middot; BO3</span><span class="match-time">SUN 17:00</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W LB R1 #1</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W LB R1 #2</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; LB FINAL</span><span class="fate-l out">&#9760; 4th</span></div>
                     </div>
                     <div class="match-box bf elim" style="left:860px; top:624px;">
+                        <a class="stream-tag st-blopp" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener" title="Watch on twitch.tv/bloppdota2">&#9654; BLOPP</a>
                         <div class="match-meta"><span class="match-id">LB FINAL &middot; BO3</span><span class="match-time">SUN 19:30</span></div>
                         <div class="match-slot"><span class="slot-team tbd">L UB FINAL</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W LB SF</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-fate"><span class="fate-w">&#9650; GRAND FINAL</span><span class="fate-l out">&#9760; 3rd</span></div>
                     </div>
                     <div class="match-box bf gf" style="left:1075px; top:400px;">
+                        <a class="stream-tag st-blopp" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener" title="Watch on twitch.tv/bloppdota2">&#9654; BLOPP</a>
                         <div class="match-meta"><span class="match-id">GRAND FINAL &middot; BO3</span><span class="match-time">SUN 22:00</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W UB FINAL</span><span class="slot-score">&mdash;</span></div>
                         <div class="match-slot"><span class="slot-team tbd">W LB FINAL</span><span class="slot-score">&mdash;</span></div>
@@ -1129,6 +1163,8 @@
                     <div class="leg-item"><span style="color: var(--accent-gold);">▲ W →</span>&nbsp;where the winner advances</div>
                     <div class="leg-item"><span style="color: var(--accent-teal);">▼ L →</span>&nbsp;where the loser drops</div>
                     <div class="leg-item"><span style="color:#e2574c;">☠ OUT</span>&nbsp;eliminated (final placement)</div>
+                    <div class="leg-item"><a class="stream-tag st-blopp inline" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener">&#9654; BLOPP</a>&nbsp;twitch.tv/bloppdota2 &bull; <a class="watch-link" href="https://www.youtube.com/@bloppdota2" target="_blank" rel="noopener">YouTube</a></div>
+                    <div class="leg-item"><a class="stream-tag st-tiarin inline" href="https://www.twitch.tv/tiarinhino" target="_blank" rel="noopener">&#9654; TIARIN</a>&nbsp;twitch.tv/tiarinhino</div>
                     <div class="leg-item">All times CEST &bull; Schedule subject to change</div>
                 </div>
                 </div>
