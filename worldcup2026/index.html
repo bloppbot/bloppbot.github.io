@@ -1557,7 +1557,7 @@
                 breakdown.hidden = false;
 
                 const listEl = document.getElementById('donor-list');
-                listEl.innerHTML = donors.slice().reverse().map(d =>
+                listEl.innerHTML = donors.slice().sort((a, b) => b.amount - a.amount).map(d =>
                     `<div class="donor-row"><span class="donor-name">${esc(d.name)}</span><span class="donor-amount">${fmtAmount(d.amount)}</span></div>`
                 ).join('');
 
