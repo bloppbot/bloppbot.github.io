@@ -116,11 +116,9 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
 .roster.right{right:46px;animation:rosterR .9s cubic-bezier(.2,.85,.25,1) 1.35s forwards;}
 @keyframes rosterL{0%{opacity:0;transform:translateX(-46px)}100%{opacity:1;transform:translateX(0)}}
 @keyframes rosterR{0%{opacity:0;transform:translateX(46px)}100%{opacity:1;transform:translateX(0)}}
-.roster .rhead{display:flex;justify-content:space-between;align-items:center;padding:0 2px 9px;
+.roster .rhead{padding:0 2px 9px;
   font-family:'Press Start 2P',monospace;font-size:14px;letter-spacing:2px;color:var(--cream);
   text-shadow:2px 2px 0 rgba(0,0,0,.85);}
-.roster .rhead .rseed{font-size:11px;color:var(--teal);background:rgba(5,13,16,.75);
-  border:2px solid var(--teal-dim);padding:4px 6px;letter-spacing:1px;text-shadow:none;}
 .roster .rbox{background:rgba(10,28,34,.88);border:3px solid var(--gold-deep);
   box-shadow:inset 0 0 0 2px rgba(0,0,0,.45), var(--px) var(--px) 0 rgba(0,0,0,.7);}
 .rp{display:flex;align-items:center;gap:10px;padding:7px 12px;}
@@ -134,9 +132,9 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
   text-shadow:1px 1px 0 rgba(0,0,0,.9);white-space:nowrap;}
 .rp .rname{flex:1;min-width:0;font-family:'VT323',monospace;font-size:27px;color:var(--ink);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:2px 2px 0 rgba(0,0,0,.7);}
-.rp .rcpt{font-family:'Press Start 2P',monospace;font-size:9px;color:#1b1206;
-  background:var(--gold-hi);border:2px solid var(--gold-deep);padding:2px 4px;
-  margin-right:7px;vertical-align:4px;}
+.rp .rcpt{font-family:'VT323',monospace;font-size:22px;line-height:1;color:#1b1206;
+  background:var(--gold-hi);padding:1px 6px 3px;box-shadow:2px 2px 0 rgba(0,0,0,.6);
+  margin-right:8px;vertical-align:3px;}
 .rp .rmmr{font-family:'VT323',monospace;font-weight:bold;font-size:29px;color:var(--gold-hi);
   text-shadow:2px 2px 0 rgba(0,0,0,.85);}
 .rp .rmmr.na{color:var(--dim);}
@@ -265,7 +263,7 @@ let roundTxt=params.get('round')||'';
 const scoreTxt=params.get('score'),clean=params.get('clean')==='1',showRoster=params.get('roster')!=='0';
 function rosterHTML(key){
   const n=NATIONS[key];
-  return '<div class="rhead"><span>ROSTER</span><span class="rseed">SEED #'+n.seed+'</span></div><div class="rbox">'
+  return '<div class="rhead">ROSTER</div><div class="rbox">'
     +n.roster.map(([name,medal,pill,mmr],i)=>
       '<div class="rp"><div class="rmedal"><img src="assets/ranking-medals/seasonal-rank-'+(medal||'uncalibrated')+'.png" alt="">'
       +(pill?'<span class="rpill">'+pill+'</span>':'')+'</div>'
