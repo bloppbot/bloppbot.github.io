@@ -169,10 +169,16 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
 </div>
 
 <script>
-const NATIONS={USA:{name:'USA'},Germany:{name:'Germany'},Russia:{name:'Russia'},
-  Ukraine:{name:'Ukraine'},Kazakhstan:{name:'Kazakhstan'},UK:{name:'United Kingdom'},
-  Brazil:{name:'Brazil'},Algeria:{name:'Algeria'}};
-const ALIASES={'united kingdom':'UK','great britain':'UK','britain':'UK','england':'UK','gb':'UK','usa':'USA','america':'USA','united states':'USA','deutschland':'Germany','kazakstan':'Kazakhstan'};
+const NATIONS={
+  Russia:{name:'Russia',poster:'v5_russia.png',loop:'loop_russia.mp4'},
+  USA:{name:'USA',poster:'v4_usa.png',loop:'loop_usa.mp4'},
+  Kazakhstan:{name:'Kazakhstan',poster:'v4_kazakhstan.png',loop:'loop_kazakhstan.mp4'},
+  Finland:{name:'Finland',poster:'v5_finland.png',loop:'loop_finland.mp4'},
+  Germany:{name:'Germany',poster:'v4_germany.png',loop:'loop_germany.mp4'},
+  Ukraine:{name:'Ukraine',poster:'v4_ukraine.png',loop:'loop_ukraine.mp4'},
+  Algeria:{name:'Algeria',poster:'v4_algeria.png',loop:'loop_algeria.mp4'},
+  UK:{name:'United Kingdom',poster:'v4_uk.png',loop:'loop_uk.mp4'}};
+const ALIASES={'united kingdom':'UK','great britain':'UK','britain':'UK','england':'UK','gb':'UK','usa':'USA','america':'USA','united states':'USA','deutschland':'Germany','kazakstan':'Kazakhstan','suomi':'Finland','fi':'Finland'};
 function resolveNation(k,fb){if(!k)return fb;const r=String(k).trim();if(NATIONS[r])return r;const l=r.toLowerCase();if(ALIASES[l])return ALIASES[l];return Object.keys(NATIONS).find(x=>x.toLowerCase()===l)||fb;}
 
 // loop videos are 1280x720; scaled to 1140 tall -> ~2027 wide.
@@ -188,8 +194,8 @@ function placeVid(vid,side){
 function buildSide(side,natKey){
   const vid=document.getElementById(side==='left'?'imgLeft':'imgRight');
   placeVid(vid,side);
-  vid.poster='sprites/v4_'+natKey.toLowerCase()+'.png';
-  vid.src='sprites/loop_'+natKey.toLowerCase()+'.mp4';
+  vid.poster='sprites/'+NATIONS[natKey].poster;
+  vid.src='sprites/'+NATIONS[natKey].loop;
 }
 
 const params=new URLSearchParams(location.search);
