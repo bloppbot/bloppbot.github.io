@@ -132,9 +132,6 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
   text-shadow:1px 1px 0 rgba(0,0,0,.9);white-space:nowrap;}
 .rp .rname{flex:1;min-width:0;font-family:'VT323',monospace;font-size:27px;color:var(--ink);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:2px 2px 0 rgba(0,0,0,.7);}
-.rp .rcpt{font-family:'VT323',monospace;font-size:22px;line-height:1;color:#1b1206;
-  background:var(--gold-hi);padding:1px 6px 3px;box-shadow:2px 2px 0 rgba(0,0,0,.6);
-  margin-right:8px;vertical-align:3px;}
 .rp .rmmr{font-family:'VT323',monospace;font-weight:bold;font-size:29px;color:var(--gold-hi);
   text-shadow:2px 2px 0 rgba(0,0,0,.85);}
 .rp .rmmr.na{color:var(--dim);}
@@ -267,7 +264,7 @@ function rosterHTML(key){
     +n.roster.map(([name,medal,pill,mmr],i)=>
       '<div class="rp"><div class="rmedal"><img src="assets/ranking-medals/seasonal-rank-'+(medal||'uncalibrated')+'.png" alt="">'
       +(pill?'<span class="rpill">'+pill+'</span>':'')+'</div>'
-      +'<div class="rname">'+(i===0?'<span class="rcpt">CPT</span>':'')+name+'</div>'
+      +'<div class="rname">'+name+'</div>'
       +'<div class="rmmr'+(mmr==null?' na':'')+'">'+(mmr==null?'—':mmr)+'</div></div>').join('')
     +'</div>';
 }
