@@ -112,6 +112,37 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
 .grain{position:absolute;inset:0;z-index:51;pointer-events:none;opacity:.07;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 
+/* ================= ROSTER PANELS ================= */
+.roster{position:absolute;top:150px;width:352px;z-index:32;opacity:0;}
+.roster.left{left:46px;animation:rosterL .9s cubic-bezier(.2,.85,.25,1) 1.35s forwards;}
+.roster.right{right:46px;animation:rosterR .9s cubic-bezier(.2,.85,.25,1) 1.35s forwards;}
+@keyframes rosterL{0%{opacity:0;transform:translateX(-46px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes rosterR{0%{opacity:0;transform:translateX(46px)}100%{opacity:1;transform:translateX(0)}}
+.roster .rhead{display:flex;justify-content:space-between;align-items:baseline;padding:0 4px 8px;
+  font-family:'Cinzel',serif;font-weight:700;font-size:19px;letter-spacing:5px;color:#cfe3ea;
+  text-shadow:0 0 12px rgba(95,214,230,.3),0 2px 5px rgba(0,0,0,.9);}
+.roster .rhead .rseed{font-family:'Share Tech Mono',monospace;font-size:17px;letter-spacing:2px;color:var(--gold);
+  text-shadow:0 0 10px rgba(232,179,90,.4),0 2px 5px rgba(0,0,0,.9);}
+.roster .rbox{background:linear-gradient(180deg,rgba(4,8,13,.84),rgba(4,8,13,.68));
+  border:1px solid rgba(232,179,90,.38);border-top:2px solid rgba(232,179,90,.55);
+  box-shadow:0 8px 30px rgba(0,0,0,.55), inset 0 0 40px rgba(232,179,90,.05);}
+.rp{display:flex;align-items:center;gap:11px;padding:8px 14px;}
+.rp+.rp{border-top:1px solid rgba(95,214,230,.10);}
+.rp .rmedal{position:relative;flex:0 0 46px;width:46px;height:44px;}
+.rp .rmedal img{width:44px;height:44px;object-fit:contain;display:block;margin:0 auto;
+  filter:drop-shadow(1px 1px 2px rgba(0,0,0,.7));}
+.rp .rmedal .rpill{position:absolute;top:28px;left:50%;transform:translateX(-50%);z-index:1;
+  font-family:'Share Tech Mono',monospace;font-size:13px;line-height:1;padding:1px 4px;
+  background:rgba(4,8,13,.95);border:1px solid var(--gold-deep);color:var(--gold);white-space:nowrap;}
+.rp .rname{flex:1;min-width:0;font-family:'Cinzel',serif;font-weight:700;font-size:23px;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 2px 6px rgba(0,0,0,.9);}
+.rp .rcpt{font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;color:#1a1206;
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold));padding:1px 5px;border-radius:2px;
+  margin-right:7px;vertical-align:3px;}
+.rp .rmmr{font-family:'Share Tech Mono',monospace;font-size:24px;color:var(--gold);
+  text-shadow:0 0 10px rgba(232,179,90,.4),0 2px 5px rgba(0,0,0,.9);}
+.rp .rmmr.na{color:#6f8597;}
+
 /* picker */
 #picker{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:999;display:flex;gap:10px;align-items:center;
   background:rgba(8,10,14,.94);border:1px solid rgba(232,179,90,.5);border-radius:6px;padding:9px 13px;
@@ -158,26 +189,57 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
     <div class="score-line" id="scoreLine"></div>
   </div>
 
+  <!-- roster panels -->
+  <div class="roster left" id="rosterL"></div>
+  <div class="roster right" id="rosterR"></div>
+
   <div class="vignette"></div><div class="grain"></div>
 </div>
 
 <button id="pickerToggle" title="Country selection">⚑</button>
 <div id="picker" class="hidden">
   <select id="selL"></select><span class="vs-mini">VS</span><select id="selR"></select>
+  <select id="selRound"></select>
   <button id="swapBtn">⇄</button>
-  <span class="hint">?left=USA&amp;right=Germany&amp;round=Grand%20Final&amp;score=1-0&amp;clean=1</span>
+  <span class="hint">?left=USA&amp;right=Germany&amp;round=Grand%20Final&amp;score=1-0&amp;roster=0&amp;clean=1</span>
 </div>
 
 <script>
+// roster: [name, medal, leaderboardPill, adMmr] — first entry = captain (same data as index.html)
 const NATIONS={
-  Russia:{name:'Russia',poster:'v5_russia.png',loop:'loop_russia.mp4'},
-  USA:{name:'USA',poster:'v4_usa.png',loop:'loop_usa.mp4'},
-  Kazakhstan:{name:'Kazakhstan',poster:'v4_kazakhstan.png',loop:'loop_kazakhstan.mp4'},
-  Finland:{name:'Finland',poster:'v5_finland.png',loop:'loop_finland.mp4'},
-  Germany:{name:'Germany',poster:'v4_germany.png',loop:'loop_germany.mp4'},
-  Ukraine:{name:'Ukraine',poster:'v4_ukraine.png',loop:'loop_ukraine.mp4'},
-  Algeria:{name:'Algeria',poster:'v4_algeria.png',loop:'loop_algeria.mp4'},
-  UK:{name:'United Kingdom',poster:'v4_uk.png',loop:'loop_uk.mp4'}};
+  Russia:{name:'Russia',poster:'v5_russia.png',loop:'loop_russia.mp4',seed:1,roster:[
+    ['lost~','immortal','#890',4107],['hedgehog','immortal',null,3670],
+    ['Sandstorm','immortal','#3815',3442],['FoXy','divine-3',null,3432],
+    ['shadle','immortal','#680',3424]]},
+  USA:{name:'USA',poster:'v4_usa.png',loop:'loop_usa.mp4',seed:2,roster:[
+    ['DJ Dingus','immortal','#2064',3759],['Poof','immortal','#2875',3725],
+    ['FriscyDriscy','immortal',null,3601],['Jynx','immortal','#1701',3483],
+    ['erik','immortal','#933',3424]]},
+  Kazakhstan:{name:'Kazakhstan',poster:'v4_kazakhstan.png',loop:'loop_kazakhstan.mp4',seed:3,roster:[
+    ['Ptenchik','immortal','#2568',3666],['Eurodance','immortal','#2553',3471],
+    ['Aniki','immortal','#870',3334],['FantikJr','legend-3',null,3196],
+    ['Alexandr','immortal','#1956',1642]]},
+  Finland:{name:'Finland',poster:'v5_finland.png',loop:'loop_finland.mp4',seed:4,roster:[
+    ['noertti','immortal','#2428',3666],['Ipelius','immortal','#4974',3522],
+    ['Spooner','immortal','#3534',3308],['sifla','immortal','#3136',3199],
+    ['Kenny','divine-5',null,3130]]},
+  Germany:{name:'Germany',poster:'v4_germany.png',loop:'loop_germany.mp4',seed:5,roster:[
+    ['Mahaximus','immortal','#618',3886],['fish','immortal','#3610',3381],
+    ['Drea','immortal',null,3375],['rob','immortal',null,3276],
+    ['Mangology','immortal',null,3127]]},
+  Ukraine:{name:'Ukraine',poster:'v4_ukraine.png',loop:'loop_ukraine.mp4',seed:6,roster:[
+    ['et si','immortal','#4482',3975],['Silent Killer','immortal',null,3446],
+    ['John Cena','immortal',null,3371],['slightly','immortal','#3013',3295],
+    ['Elnubres','immortal',null,2438]]},
+  Algeria:{name:'Algeria',poster:'v4_algeria.png',loop:'loop_algeria.mp4',seed:7,roster:[
+    ['Shushu','immortal','#236',null],['noobisho','immortal','#456',null],
+    ['HunTeR-','immortal','#863',null],['paradox','immortal','#817',null],
+    ['Dashe_','divine-5',null,2913]]},
+  UK:{name:'United Kingdom',poster:'v4_uk.png',loop:'loop_uk.mp4',seed:8,roster:[
+    ['K-1','immortal',null,3261],['Rob Lobb','immortal',null,3166],
+    ['Lionheart','immortal',null,2925],['bred','immortal',null,2816],
+    ['Grasswalker','legend-1',null,2463]]}};
+const ROUNDS=['Seeding Round','Upper Bracket Final','Lower Bracket Round 1','Lower Bracket Round 2','Lower Bracket Final','Grand Final'];
 const ALIASES={'united kingdom':'UK','great britain':'UK','britain':'UK','england':'UK','gb':'UK','usa':'USA','america':'USA','united states':'USA','deutschland':'Germany','kazakstan':'Kazakhstan','suomi':'Finland','fi':'Finland'};
 function resolveNation(k,fb){if(!k)return fb;const r=String(k).trim();if(NATIONS[r])return r;const l=r.toLowerCase();if(ALIASES[l])return ALIASES[l];return Object.keys(NATIONS).find(x=>x.toLowerCase()===l)||fb;}
 
@@ -201,11 +263,24 @@ function buildSide(side,natKey){
 const params=new URLSearchParams(location.search);
 let leftKey=resolveNation(params.get('left'),'USA');
 let rightKey=resolveNation(params.get('right'),'Germany');
-const roundTxt=params.get('round'),scoreTxt=params.get('score'),clean=params.get('clean')==='1';
+let roundTxt=params.get('round')||'';
+const scoreTxt=params.get('score'),clean=params.get('clean')==='1',showRoster=params.get('roster')!=='0';
+function rosterHTML(key){
+  const n=NATIONS[key];
+  return '<div class="rhead"><span>ROSTER</span><span class="rseed">SEED #'+n.seed+'</span></div><div class="rbox">'
+    +n.roster.map(([name,medal,pill,mmr],i)=>
+      '<div class="rp"><div class="rmedal"><img src="assets/ranking-medals/seasonal-rank-'+(medal||'uncalibrated')+'.png" alt="">'
+      +(pill?'<span class="rpill">'+pill+'</span>':'')+'</div>'
+      +'<div class="rname">'+(i===0?'<span class="rcpt">CPT</span>':'')+name+'</div>'
+      +'<div class="rmmr'+(mmr==null?' na':'')+'">'+(mmr==null?'—':mmr)+'</div></div>').join('')
+    +'</div>';
+}
 function render(){
   buildSide('left',leftKey); buildSide('right',rightKey);
-  document.getElementById('kicker').textContent='AD WORLD CUP 2026 · '+(roundTxt||'Group Stage').toUpperCase();
+  document.getElementById('kicker').textContent='AD WORLD CUP 2026'+(roundTxt?' · '+roundTxt.toUpperCase():'');
   if(scoreTxt){const sl=document.getElementById('scoreLine');sl.style.display='block';sl.textContent=scoreTxt.replace(/-/g,' — ');}
+  document.getElementById('rosterL').innerHTML=showRoster?rosterHTML(leftKey):'';
+  document.getElementById('rosterR').innerHTML=showRoster?rosterHTML(rightKey):'';
   // one name per side, shrink each until it fits its half
   [['cnameL',leftKey],['cnameR',rightKey]].forEach(([id,key])=>{
     const el=document.getElementById(id);
@@ -213,12 +288,15 @@ function render(){
     let fs=84;el.style.fontSize=fs+'px';
     while(el.scrollWidth>800&&fs>44){fs-=4;el.style.fontSize=fs+'px';}
   });
-  selL.value=leftKey; selR.value=rightKey;
+  selL.value=leftKey; selR.value=rightKey; selRound.value=roundTxt;
 }
-const picker=document.getElementById('picker'),selL=document.getElementById('selL'),selR=document.getElementById('selR');
+const picker=document.getElementById('picker'),selL=document.getElementById('selL'),selR=document.getElementById('selR'),selRound=document.getElementById('selRound');
 Object.keys(NATIONS).forEach(k=>{selL.add(new Option(NATIONS[k].name,k));selR.add(new Option(NATIONS[k].name,k));});
+selRound.add(new Option('(no round)',''));
+ROUNDS.forEach(r=>selRound.add(new Option(r,r)));
 selL.onchange=()=>{leftKey=selL.value;render();};
 selR.onchange=()=>{rightKey=selR.value;render();};
+selRound.onchange=()=>{roundTxt=selRound.value;render();};
 document.getElementById('swapBtn').onclick=()=>{[leftKey,rightKey]=[rightKey,leftKey];render();};
 // explicit on/off toggle instead of mousemove auto-show
 const toggle=document.getElementById('pickerToggle');
