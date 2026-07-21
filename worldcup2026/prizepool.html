@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AD World Cup 2026 — Prize Pool (Stream)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-dark:#081519; --bg-deeper:#050d10; --bg-panel:rgba(10,28,34,0.88); --bg-stone:#14323a;
+  --accent-gold:#ffd97a; --accent-gold-soft:#e8a33d; --accent-gold-deep:#b97c20;
+  --accent-teal:#8df5ea; --accent-teal-dim:#2a6a66; --accent-cream:#f4e4bc;
+  --glass-border-dim:rgba(255,217,122,0.15);
+  --text-main:#dceae6; --text-dim:#8fb0aa; --px:3px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'VT323',monospace;color:var(--text-main);}
+#stage{position:absolute;top:50%;left:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);overflow:hidden;
+  background:linear-gradient(rgba(8,21,25,0.80),rgba(5,13,16,0.93)),url('assets/scene_04_trophy.jpg') center/cover no-repeat;
+  image-rendering:pixelated;display:flex;flex-direction:column;}
+img,video{image-rendering:pixelated;}
+.vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,transparent 25%,rgba(2,8,10,0.75) 100%);pointer-events:none;z-index:1;}
+.scanlines{position:absolute;inset:0;pointer-events:none;z-index:50;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0.16) 0 1px,transparent 1px 4px);mix-blend-mode:multiply;}
+.ember{position:absolute;width:4px;height:4px;background:var(--accent-gold);box-shadow:0 0 6px rgba(255,180,70,0.8);
+  opacity:0;z-index:2;pointer-events:none;animation:emberRise linear infinite;}
+.ember:nth-child(odd){background:var(--accent-gold-soft);width:3px;height:3px;}
+@keyframes emberRise{0%{transform:translateY(0) translateX(0);opacity:0}8%{opacity:.9}70%{opacity:.5}100%{transform:translateY(-55vh) translateX(4vw);opacity:0}}
+
+.page-title{position:relative;z-index:3;text-align:center;margin-top:34px;
+  font-family:'Press Start 2P',monospace;font-size:2.2rem;color:var(--accent-gold);letter-spacing:2px;
+  text-shadow:var(--px) var(--px) 0 #3a2406,calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6),0 0 30px rgba(255,170,60,0.4);}
+.page-title::before,.page-title::after{content:' ◆ ';color:var(--accent-teal-dim);font-size:0.8em;}
+
+.content{position:relative;z-index:3;width:1560px;margin:0 auto;flex:1;
+  display:flex;flex-direction:column;justify-content:center;padding-bottom:26px;}
+.px-card{position:relative;border:42px solid transparent;border-image:url('assets/frame.png') 150 round;
+  background:var(--bg-panel);background-clip:padding-box;}
+.px-card-pad{position:relative;z-index:1;}
+.card-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.28;pointer-events:none;z-index:0;}
+
+.prize-row{display:flex;align-items:center;justify-content:center;gap:56px;}
+.crest-img{width:270px;display:block;filter:drop-shadow(0 0 22px rgba(255,170,60,0.35));animation:crestFloat 5s ease-in-out infinite;}
+@keyframes crestFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.prize-main{text-align:center;}
+.base-pool-label{font-family:'Press Start 2P',monospace;font-size:1rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;}
+.total-prize{font-family:'Press Start 2P',monospace;font-size:5.6rem;color:var(--accent-gold);margin:20px 0 14px;
+  text-shadow:var(--px) var(--px) 0 #3a2406,calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6),0 0 34px rgba(255,170,60,0.5);}
+.pool-breakdown{color:var(--text-dim);font-size:1.7rem;}
+.pool-breakdown strong{color:var(--accent-gold);font-weight:normal;}
+.prize-historic{margin-top:10px;color:var(--accent-teal);font-size:1.6rem;}
+.prize-historic .star{color:var(--accent-gold-soft);}
+
+.distribution-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:38px;}
+.dist-item{background:var(--bg-stone);border:3px solid var(--glass-border-dim);
+  box-shadow:var(--px) var(--px) 0 rgba(0,0,0,0.55);padding:22px 12px;display:flex;flex-direction:column;gap:12px;text-align:center;}
+.dist-item.rank-1{border-color:var(--accent-gold);}
+.dist-item.rank-2{border-color:#c8ccd2;}
+.dist-item.rank-3{border-color:#b9763a;}
+.dist-item .place{font-family:'Press Start 2P',monospace;font-size:1.1rem;color:var(--accent-cream);}
+.dist-item.rank-1 .place{color:var(--accent-gold);}
+.dist-item .percent{font-family:'Press Start 2P',monospace;font-size:1.7rem;color:var(--accent-teal);}
+.dist-item .dist-amount{font-family:'Press Start 2P',monospace;font-size:0.95rem;color:var(--accent-gold-soft);}
+
+.donors-card{margin-top:26px;text-align:center;}
+.donors-heading{font-family:'Press Start 2P',monospace;font-size:1.2rem;color:var(--accent-gold);text-shadow:2px 2px 0 rgba(0,0,0,0.7);}
+.donors-subheading{color:var(--text-dim);font-size:1.35rem;margin:8px 0 14px;}
+.donor-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 16px;max-width:1360px;margin:0 auto;}
+.donor-chip{background:rgba(5,13,16,0.65);border:2px solid rgba(255,217,122,0.22);padding:7px 16px;font-size:1.5rem;
+  box-shadow:2px 2px 0 rgba(0,0,0,0.55);white-space:nowrap;}
+.donor-chip .dn{color:var(--accent-cream);}
+.donor-chip .da{color:var(--accent-teal);margin-left:10px;}
+.donors-footer{margin-top:14px;color:var(--text-dim);font-size:1.4rem;}
+.donors-footer strong{color:var(--accent-gold);font-weight:normal;}
+.heart{color:#e2574c;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="vignette"></div>
+  <div class="scanlines"></div>
+
+  <h1 class="page-title">PRIZE POOL</h1>
+
+  <div class="content">
+    <div class="px-card">
+      <video class="card-bg-video" autoplay muted loop playsinline poster="assets/scene_04_trophy.jpg" aria-hidden="true">
+        <source src="assets/div_04_trophy.mp4" type="video/mp4">
+      </video>
+      <div class="px-card-pad">
+        <div class="prize-row">
+          <img src="assets/crest_trophy.png" alt="Trophy crest" class="crest-img">
+          <div class="prize-main">
+            <div class="base-pool-label" id="pool-label">Base Pool (Host)</div>
+            <div class="total-prize" id="total-prize-amount">250&euro;</div>
+            <div class="pool-breakdown" id="pool-breakdown" hidden></div>
+            <div class="prize-historic"><span class="star">★</span> Historically &#x2248; 1000&euro;+ with community additions <span class="star">★</span></div>
+          </div>
+        </div>
+        <div class="distribution-grid">
+          <div class="dist-item rank-1"><span class="place">1ST</span><span class="percent">50%</span><span class="dist-amount" data-share="0.50"></span></div>
+          <div class="dist-item rank-2"><span class="place">2ND</span><span class="percent">25%</span><span class="dist-amount" data-share="0.25"></span></div>
+          <div class="dist-item rank-3"><span class="place">3RD</span><span class="percent">15%</span><span class="dist-amount" data-share="0.15"></span></div>
+          <div class="dist-item rank-4"><span class="place">4TH</span><span class="percent">10%</span><span class="dist-amount" data-share="0.10"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-card donors-card" id="donors-card" hidden>
+      <div class="px-card-pad">
+        <div class="donors-heading">HALL OF HEROES</div>
+        <p class="donors-subheading">Honoring the prize pool for the community</p>
+        <div class="donor-chips" id="donor-list"></div>
+        <div class="donors-footer" id="donors-footer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// scale 1920x1080 stage to viewport
+const stage=document.getElementById('stage');
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(-50%,-50%) scale(${s})`;}
+addEventListener('resize',fit);fit();
+
+// embers
+for(let i=0;i<26;i++){
+  const e=document.createElement('div');e.className='ember';
+  e.style.left=Math.random()*100+'%';e.style.top=(40+Math.random()*60)+'%';
+  e.style.animationDelay=(Math.random()*18)+'s';e.style.animationDuration=(Math.random()*12+12)+'s';
+  stage.appendChild(e);
+}
+
+const DONO_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vTcwKLHNGLdUvDJxa9kEFGVk6J9B2caeyWIUKmTvT_dGAJHwJs2F70xU3enZ3YCUamrqET_xhBnwOEf/pub?output=csv';
+const BASE_POOL=250;
+
+function parseCSV(text){
+  const rows=[];let row=[],field='',inQ=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(inQ){
+      if(c==='"'&&text[i+1]==='"'){field+='"';i++;}
+      else if(c==='"')inQ=false;
+      else field+=c;
+    }else if(c==='"')inQ=true;
+    else if(c===','){row.push(field);field='';}
+    else if(c==='\n'||c==='\r'){
+      if(field!==''||row.length){row.push(field);rows.push(row);row=[];field='';}
+      if(c==='\r'&&text[i+1]==='\n')i++;
+    }else field+=c;
+  }
+  if(field!==''||row.length){row.push(field);rows.push(row);}
+  return rows;
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function fmtAmount(n){return (Number.isInteger(n)?n.toString():n.toFixed(2))+'€';}
+
+function setDistAmounts(total){
+  document.querySelectorAll('.dist-amount').forEach(el=>{
+    const v=total*parseFloat(el.dataset.share);
+    el.textContent='≈ '+Math.round(v)+'€';
+  });
+}
+setDistAmounts(BASE_POOL);
+
+async function loadDonations(){
+  try{
+    const res=await fetch(DONO_CSV+'&cb='+Date.now(),{cache:'no-store'});
+    if(!res.ok)return;
+    const rows=parseCSV(await res.text());
+    if(rows.length<2)return;
+    const donors=rows.slice(1).map(r=>{
+      const name=(r[0]||'').trim()||'Anonymous';
+      const raw=(r[1]||'').replace(/\s/g,'').replace(',','.');
+      const m=raw.match(/(\d+(?:\.\d+)?)/);
+      return{name,amount:m?parseFloat(m[1]):0};
+    }).filter(d=>d.amount>0);
+    if(donors.length===0)return;
+
+    const totalDonated=donors.reduce((s,d)=>s+d.amount,0);
+    const combined=BASE_POOL+totalDonated;
+    document.getElementById('total-prize-amount').textContent=fmtAmount(combined);
+    document.getElementById('pool-label').textContent='Total Prize Pool';
+    const breakdown=document.getElementById('pool-breakdown');
+    breakdown.innerHTML=`Base Pool: ${BASE_POOL}€ (host) + <strong>${fmtAmount(totalDonated)}</strong> community`;
+    breakdown.hidden=false;
+    setDistAmounts(combined);
+
+    const sorted=donors.slice().sort((a,b)=>b.amount-a.amount);
+    const shown=sorted.slice(0,14);
+    document.getElementById('donor-list').innerHTML=shown.map(d=>
+      `<span class="donor-chip"><span class="dn">${esc(d.name)}</span><span class="da">${fmtAmount(d.amount)}</span></span>`
+    ).join('')+(sorted.length>shown.length?`<span class="donor-chip"><span class="dn">+${sorted.length-shown.length} more</span></span>`:'');
+    document.getElementById('donors-footer').innerHTML=
+      `<strong>${donors.length}</strong> contributor${donors.length===1?'':'s'} <span class="heart">♥</span>`;
+    document.getElementById('donors-card').hidden=false;
+  }catch(e){console.error('Donation load failed',e);}
+}
+loadDonations();
+setInterval(loadDonations,60000);
+</script>
+</body>
+</html>

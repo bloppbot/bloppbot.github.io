@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AD World Cup 2026 — The 8 Nations (Stream)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-dark:#081519; --bg-deeper:#050d10; --bg-panel:rgba(10,28,34,0.88); --bg-stone:#14323a;
+  --accent-gold:#ffd97a; --accent-gold-soft:#e8a33d; --accent-gold-deep:#b97c20;
+  --accent-teal:#8df5ea; --accent-teal-dim:#2a6a66; --accent-cream:#f4e4bc;
+  --glass-border-dim:rgba(255,217,122,0.15);
+  --text-main:#dceae6; --text-dim:#8fb0aa; --px:3px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'VT323',monospace;color:var(--text-main);}
+#stage{position:absolute;top:50%;left:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);overflow:hidden;
+  background:linear-gradient(rgba(8,21,25,0.82),rgba(5,13,16,0.94)),url('assets/scene_02_gate.jpg') center/cover no-repeat;
+  image-rendering:pixelated;}
+img,video{image-rendering:pixelated;}
+.vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,transparent 25%,rgba(2,8,10,0.75) 100%);pointer-events:none;z-index:1;}
+.scanlines{position:absolute;inset:0;pointer-events:none;z-index:50;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0.16) 0 1px,transparent 1px 4px);mix-blend-mode:multiply;}
+.ember{position:absolute;width:4px;height:4px;background:var(--accent-gold);box-shadow:0 0 6px rgba(255,180,70,0.8);
+  opacity:0;z-index:2;pointer-events:none;animation:emberRise linear infinite;}
+.ember:nth-child(odd){background:var(--accent-gold-soft);width:3px;height:3px;}
+@keyframes emberRise{0%{transform:translateY(0) translateX(0);opacity:0}8%{opacity:.9}70%{opacity:.5}100%{transform:translateY(-55vh) translateX(4vw);opacity:0}}
+
+.page-title{position:relative;z-index:3;text-align:center;margin-top:28px;
+  font-family:'Press Start 2P',monospace;font-size:2.1rem;color:var(--accent-gold);letter-spacing:2px;
+  text-shadow:var(--px) var(--px) 0 #3a2406,calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6),0 0 30px rgba(255,170,60,0.4);}
+.page-title::before,.page-title::after{content:' ◆ ';color:var(--accent-teal-dim);font-size:0.8em;}
+
+.teams-grid{position:relative;z-index:3;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
+  width:1848px;margin:22px auto 0;}
+.team-card{background:var(--bg-stone);border:3px solid var(--glass-border-dim);
+  box-shadow:var(--px) var(--px) 0 rgba(0,0,0,0.6);overflow:hidden;}
+.team-banner{position:relative;height:150px;background:var(--bg-deeper);overflow:hidden;}
+.team-banner video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;}
+.team-banner::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(rgba(5,13,16,0.05) 30%,rgba(13,34,40,0.96) 96%);pointer-events:none;}
+.team-name{position:absolute;left:0;right:0;bottom:9px;z-index:2;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:'Press Start 2P',monospace;font-size:0.82rem;color:var(--accent-gold);
+  text-shadow:2px 2px 0 rgba(0,0,0,0.85);letter-spacing:1px;}
+.flag{display:inline-block;width:30px;}
+.flag img{width:100%;display:block;border:1px solid rgba(0,0,0,0.6);image-rendering:auto;}
+.team-roster{list-style:none;background:rgba(5,13,16,0.45);border-top:3px solid rgba(255,217,122,0.18);padding:3px 0 6px;}
+.tr-player{display:flex;align-items:center;gap:10px;padding:4px 14px;min-height:55px;}
+.tr-player + .tr-player{border-top:2px solid rgba(141,245,234,0.07);}
+.tr-medal{position:relative;width:40px;flex:0 0 40px;height:38px;}
+.tr-medal img{display:block;margin:0 auto;width:38px;height:38px;object-fit:contain;image-rendering:auto;filter:drop-shadow(1px 1px 1px rgba(0,0,0,0.6));}
+.tr-medal .rank-pill{position:absolute;top:24px;left:50%;transform:translateX(-50%);z-index:1;
+  font-family:'VT323',monospace;font-size:17px;line-height:1;padding:1px 4px 2px;
+  background:rgba(5,13,16,0.95);border:1px solid var(--accent-gold-deep);color:var(--accent-gold);
+  text-shadow:1px 1px 0 rgba(0,0,0,0.9);white-space:nowrap;}
+.tr-name{flex:1;font-size:1.45rem;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tr-mmr{font-size:1.55rem;color:var(--accent-gold);text-shadow:2px 2px 0 rgba(0,0,0,0.85);}
+.tr-mmr.na{color:var(--text-dim);}
+.grid-note{position:relative;z-index:3;text-align:center;color:var(--text-dim);font-size:1.3rem;margin-top:14px;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="vignette"></div>
+  <div class="scanlines"></div>
+  <h1 class="page-title">THE 8 NATIONS</h1>
+  <div class="teams-grid" id="teams-grid"></div>
+  <div class="grid-note">MMR = AD MMR &bull; rosters locked</div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(-50%,-50%) scale(${s})`;}
+addEventListener('resize',fit);fit();
+
+for(let i=0;i<26;i++){
+  const e=document.createElement('div');e.className='ember';
+  e.style.left=Math.random()*100+'%';e.style.top=(40+Math.random()*60)+'%';
+  e.style.animationDelay=(Math.random()*18)+'s';e.style.animationDuration=(Math.random()*12+12)+'s';
+  stage.appendChild(e);
+}
+
+// roster: [name, medal, leaderboardPill, adMmr] — same data as index.html
+const TEAMS=[
+  {nation:'RUSSIA',cc:'ru',poster:'v5_russia.png',loop:'loop_russia.mp4',roster:[
+    ['lost~','immortal','#890',4107],['hedgehog','immortal',null,3670],
+    ['Sandstorm','immortal','#3815',3442],['FoXy','divine-3',null,3432],
+    ['shadle','immortal','#680',3424]]},
+  {nation:'USA',cc:'us',poster:'v4_usa.png',loop:'loop_usa.mp4',roster:[
+    ['DJ Dingus','immortal','#2064',3759],['Poof','immortal','#2875',3725],
+    ['FriscyDriscy','immortal',null,3601],['Jynx','immortal','#1701',3483],
+    ['erik','immortal','#933',3424]]},
+  {nation:'KAZAKHSTAN',cc:'kz',poster:'v4_kazakhstan.png',loop:'loop_kazakhstan.mp4',roster:[
+    ['Ptenchik','immortal','#2568',3666],['Eurodance','immortal','#2553',3471],
+    ['Aniki','immortal','#870',3334],['FantikJr','legend-3',null,3196],
+    ['Alexandr','immortal','#1956',1642]]},
+  {nation:'FINLAND',cc:'fi',poster:'v5_finland.png',loop:'loop_finland.mp4',roster:[
+    ['noertti','immortal','#2428',3666],['Ipelius','immortal','#4974',3522],
+    ['Spooner','immortal','#3534',3308],['sifla','immortal','#3136',3199],
+    ['Kenny','divine-5',null,3130]]},
+  {nation:'GERMANY',cc:'de',poster:'v4_germany.png',loop:'loop_germany.mp4',roster:[
+    ['Mahaximus','immortal','#618',3886],['fish','immortal','#3610',3381],
+    ['Drea','immortal',null,3375],['rob','immortal',null,3276],
+    ['Mangology','immortal',null,3127]]},
+  {nation:'UKRAINE',cc:'ua',poster:'v4_ukraine.png',loop:'loop_ukraine.mp4',roster:[
+    ['et si','immortal','#4482',3975],['Silent Killer','immortal',null,3446],
+    ['John Cena','immortal',null,3371],['slightly','immortal','#3013',3295],
+    ['Elnubres','immortal',null,2438]]},
+  {nation:'ALGERIA',cc:'dz',poster:'v4_algeria.png',loop:'loop_algeria.mp4',roster:[
+    ['Shushu','immortal','#236',null],['noobisho','immortal','#456',null],
+    ['HunTeR-','immortal','#863',null],['paradox','immortal','#817',null],
+    ['Dashe_','divine-5',null,2913]]},
+  {nation:'UK',cc:'gb',poster:'v4_uk.png',loop:'loop_uk.mp4',roster:[
+    ['K-1','immortal',null,3261],['Rob Lobb','immortal',null,3166],
+    ['Lionheart','immortal',null,2925],['bred','immortal',null,2816],
+    ['Grasswalker','legend-1',null,2463]]},
+];
+
+document.getElementById('teams-grid').innerHTML=TEAMS.map(t=>`
+  <div class="team-card">
+    <div class="team-banner">
+      <video muted loop playsinline autoplay preload="auto" poster="sprites/${t.poster}">
+        <source src="sprites/${t.loop}" type="video/mp4">
+      </video>
+      <div class="team-name"><span class="flag"><img src="https://flagcdn.com/${t.cc}.svg" alt="${t.cc.toUpperCase()}"></span>${t.nation}</div>
+    </div>
+    <ul class="team-roster">
+      ${t.roster.map(([name,medal,pill,mmr])=>`
+      <li class="tr-player">
+        <div class="tr-medal">
+          <img src="assets/ranking-medals/seasonal-rank-${medal??'uncalibrated'}.png" alt="">
+          ${pill?`<span class="rank-pill">${pill}</span>`:''}
+        </div>
+        <div class="tr-name">${name}</div>
+        <div class="tr-mmr${mmr==null?' na':''}">${mmr??'&mdash;'}</div>
+      </li>`).join('')}
+    </ul>
+  </div>`).join('');
+
+// make sure every loop actually plays (OBS/CEF sometimes needs a nudge)
+document.querySelectorAll('.team-banner video').forEach(v=>{v.play().catch(()=>{});});
+</script>
+</body>
+</html>
