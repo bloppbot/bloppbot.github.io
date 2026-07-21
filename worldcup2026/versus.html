@@ -228,7 +228,7 @@ const NATIONS={
     ['Shushu','immortal','#236',null],['noobisho','immortal','#456',null],
     ['HunTeR-','immortal','#863',null],['paradox','immortal','#817',null],
     ['Dashe_','divine-5',null,2913]]},
-  UK:{name:'United Kingdom',poster:'v4_uk.png',loop:'loop_uk.mp4',seed:8,roster:[
+  UK:{name:'United Kingdom',poster:'v4_uk.png',loop:'loop_uk.mp4',seed:8,vh:1300,dy:-175,roster:[
     ['K-1','immortal',null,3261],['Rob Lobb','immortal',null,3166],
     ['Lionheart','immortal',null,2925],['bred','immortal',null,2816],
     ['Grasswalker','legend-1',null,2463]]}};
@@ -236,11 +236,15 @@ const ROUNDS=['Seeding Round','Upper Bracket Final','Lower Bracket Round 1','Low
 const ALIASES={'united kingdom':'UK','great britain':'UK','britain':'UK','england':'UK','gb':'UK','usa':'USA','america':'USA','united states':'USA','deutschland':'Germany','kazakstan':'Kazakhstan','suomi':'Finland','fi':'Finland'};
 function resolveNation(k,fb){if(!k)return fb;const r=String(k).trim();if(NATIONS[r])return r;const l=r.toLowerCase();if(ALIASES[l])return ALIASES[l];return Object.keys(NATIONS).find(x=>x.toLowerCase()===l)||fb;}
 
-// loop videos are 1280x720; scaled to 1140 tall -> ~2027 wide.
+// loop videos are 1280x720; scaled to `vh` tall (default 1140) -> ~2027 wide.
 // place the (centered) fighter at 1/4 and 3/4 of the 1920 stage.
-function placeVid(vid,side){
+// per-nation vh/dy compensate source framing (e.g. UK fighter stands low -> shift up + zoom so no gap opens)
+function placeVid(vid,side,nat){
+  const vh=nat.vh||1140, dy=nat.dy||0;
+  vid.style.height=vh+'px';
+  vid.style.top='calc(50% + '+dy+'px)';
   vid.onloadedmetadata=()=>{
-    const w=vid.videoWidth*(1140/vid.videoHeight);
+    const w=vid.videoWidth*(vh/vid.videoHeight);
     const cx= side==='left' ? 1920*0.25 : 1920*0.75;
     vid.style.left=(cx-w/2)+'px';
     vid.play().catch(()=>{});
@@ -248,7 +252,7 @@ function placeVid(vid,side){
 }
 function buildSide(side,natKey){
   const vid=document.getElementById(side==='left'?'imgLeft':'imgRight');
-  placeVid(vid,side);
+  placeVid(vid,side,NATIONS[natKey]);
   vid.poster='sprites/'+NATIONS[natKey].poster;
   vid.src='sprites/'+NATIONS[natKey].loop;
 }
