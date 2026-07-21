@@ -114,7 +114,7 @@ const TEAMS=[
     ['Shushu','immortal','#236',null],['noobisho','immortal','#456',null],
     ['HunTeR-','immortal','#863',null],['paradox','immortal','#817',null],
     ['Dashe_','divine-5',null,2913]]},
-  {nation:'UK',cc:'gb',poster:'v4_uk.png',loop:'loop_uk.mp4',roster:[
+  {nation:'UK',cc:'gb',poster:'v4_uk.png',loop:'loop_uk.mp4',pos:'center 65%',roster:[
     ['K-1','immortal',null,3261],['Rob Lobb','immortal',null,3166],
     ['Lionheart','immortal',null,2925],['bred','immortal',null,2816],
     ['Grasswalker','legend-1',null,2463]]},
@@ -123,7 +123,7 @@ const TEAMS=[
 document.getElementById('teams-grid').innerHTML=TEAMS.map(t=>`
   <div class="team-card">
     <div class="team-banner">
-      <video muted loop playsinline autoplay preload="auto" poster="sprites/${t.poster}">
+      <video muted loop playsinline autoplay preload="auto" poster="sprites/${t.poster}"${t.pos?` style="object-position:${t.pos}"`:''}>
         <source src="sprites/${t.loop}" type="video/mp4">
       </video>
       <div class="team-name"><span class="flag"><img src="https://flagcdn.com/${t.cc}.svg" alt="${t.cc.toUpperCase()}"></span>${t.nation}</div>

@@ -18,7 +18,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'VT323',monospace;color:var(--text-main);}
 #stage{position:absolute;top:50%;left:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);overflow:hidden;
-  background:linear-gradient(rgba(8,21,25,0.80),rgba(5,13,16,0.93)),url('assets/scene_04_trophy.jpg') center/cover no-repeat;
+  background:linear-gradient(rgba(8,21,25,0.80),rgba(5,13,16,0.93)),url('assets/scene_01_stadium.jpg') center/cover no-repeat;
   image-rendering:pixelated;display:flex;flex-direction:column;}
 img,video{image-rendering:pixelated;}
 .vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,transparent 25%,rgba(2,8,10,0.75) 100%);pointer-events:none;z-index:1;}
@@ -38,8 +38,7 @@ img,video{image-rendering:pixelated;}
   display:flex;flex-direction:column;justify-content:center;padding-bottom:26px;}
 .px-card{position:relative;border:42px solid transparent;border-image:url('assets/frame.png') 150 round;
   background:var(--bg-panel);background-clip:padding-box;}
-.px-card-pad{position:relative;z-index:1;}
-.card-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.28;pointer-events:none;z-index:0;}
+.px-card-pad{position:relative;z-index:1;padding:8px 22px 18px;}
 
 .prize-row{display:flex;align-items:center;justify-content:center;gap:56px;}
 .crest-img{width:270px;display:block;filter:drop-shadow(0 0 22px rgba(255,170,60,0.35));animation:crestFloat 5s ease-in-out infinite;}
@@ -86,9 +85,6 @@ img,video{image-rendering:pixelated;}
 
   <div class="content">
     <div class="px-card">
-      <video class="card-bg-video" autoplay muted loop playsinline poster="assets/scene_04_trophy.jpg" aria-hidden="true">
-        <source src="assets/div_04_trophy.mp4" type="video/mp4">
-      </video>
       <div class="px-card-pad">
         <div class="prize-row">
           <img src="assets/crest_trophy.png" alt="Trophy crest" class="crest-img">
