@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AD World Cup 2026 — Patch 7.41d Meta (Stream)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-dark:#081519; --bg-deeper:#050d10; --bg-panel:rgba(10,28,34,0.88); --bg-stone:#14323a;
+  --accent-gold:#ffd97a; --accent-gold-soft:#e8a33d; --accent-gold-deep:#b97c20;
+  --accent-teal:#8df5ea; --accent-teal-dim:#2a6a66; --accent-cream:#f4e4bc;
+  --glass-border-dim:rgba(255,217,122,0.15);
+  --text-main:#dceae6; --text-dim:#8fb0aa; --px:3px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'VT323',monospace;color:var(--text-main);}
+#stage{position:absolute;top:50%;left:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);overflow:hidden;
+  background:linear-gradient(rgba(8,21,25,0.82),rgba(5,13,16,0.94)),url('assets/scene_03_arena.jpg') center/cover no-repeat;
+  image-rendering:pixelated;display:flex;flex-direction:column;}
+img{image-rendering:pixelated;}
+.vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,transparent 25%,rgba(2,8,10,0.75) 100%);pointer-events:none;z-index:1;}
+.scanlines{position:absolute;inset:0;pointer-events:none;z-index:50;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0.16) 0 1px,transparent 1px 4px);mix-blend-mode:multiply;}
+.ember{position:absolute;width:4px;height:4px;background:var(--accent-gold);box-shadow:0 0 6px rgba(255,180,70,0.8);
+  opacity:0;z-index:2;pointer-events:none;animation:emberRise linear infinite;}
+.ember:nth-child(odd){background:var(--accent-gold-soft);width:3px;height:3px;}
+@keyframes emberRise{0%{transform:translateY(0) translateX(0);opacity:0}8%{opacity:.9}70%{opacity:.5}100%{transform:translateY(-55vh) translateX(4vw);opacity:0}}
+
+.page-title{position:relative;z-index:3;text-align:center;margin-top:26px;
+  font-family:'Press Start 2P',monospace;font-size:2rem;color:var(--accent-gold);letter-spacing:2px;
+  text-shadow:var(--px) var(--px) 0 #3a2406,calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6),0 0 30px rgba(255,170,60,0.4);}
+.page-title::before,.page-title::after{content:' ◆ ';color:var(--accent-teal-dim);font-size:0.8em;}
+.page-sub{position:relative;z-index:3;text-align:center;color:var(--text-dim);font-size:1.5rem;margin-top:10px;letter-spacing:1px;}
+.page-sub strong{color:var(--accent-teal);font-weight:normal;}
+
+.content{position:relative;z-index:3;width:1840px;margin:0 auto;flex:1;display:flex;gap:26px;
+  justify-content:center;align-items:stretch;padding:16px 0 22px;}
+.px-card{position:relative;border:42px solid transparent;border-image:url('assets/frame.png') 150 round;
+  background:var(--bg-panel);background-clip:padding-box;flex:1;}
+.px-card-pad{position:relative;z-index:1;padding:2px 10px 10px;height:100%;display:flex;flex-direction:column;}
+
+.panel-heading{font-family:'Press Start 2P',monospace;font-size:1.05rem;color:var(--accent-gold);
+  text-align:center;letter-spacing:1px;text-shadow:2px 2px 0 rgba(0,0,0,0.7);margin-bottom:10px;}
+.panel-heading .hsub{display:block;font-family:'VT323',monospace;font-size:1.15rem;color:var(--text-dim);
+  letter-spacing:1px;margin-top:6px;text-shadow:none;}
+.meta-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(10,1fr);
+  grid-auto-flow:column;column-gap:18px;row-gap:6px;}
+.meta-row{display:grid;grid-template-columns:44px 48px 1fr 86px;align-items:center;gap:10px;
+  background:rgba(5,13,16,0.55);border:2px solid rgba(255,217,122,0.14);padding:3px 12px 3px 6px;position:relative;
+  box-shadow:2px 2px 0 rgba(0,0,0,0.5);}
+.meta-row.top3{border-color:var(--accent-gold-deep);background:rgba(20,40,34,0.6);}
+.rk{font-family:'Press Start 2P',monospace;font-size:0.85rem;color:var(--text-dim);text-align:center;}
+.top3 .rk{color:var(--accent-gold);}
+.meta-row img{display:block;filter:drop-shadow(1px 1px 0 rgba(0,0,0,0.6));}
+img.abil-ico{width:40px;height:40px;}
+img.hero-ico{width:48px;height:27px;}
+.nm{font-size:1.6rem;color:var(--accent-cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1;}
+.top3 .nm{color:var(--accent-gold);}
+.wrv{font-family:'Press Start 2P',monospace;font-size:0.85rem;color:var(--accent-teal);text-align:right;}
+.top3 .wrv{color:var(--accent-gold);}
+.bar{position:absolute;left:6px;right:6px;bottom:1px;height:3px;background:rgba(42,106,102,0.35);}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--accent-teal-dim),var(--accent-teal));}
+.top3 .bar span{background:linear-gradient(90deg,var(--accent-gold-deep),var(--accent-gold));}
+
+.footnote{position:relative;z-index:3;text-align:center;color:var(--text-dim);font-size:1.25rem;
+  padding-bottom:14px;letter-spacing:1px;}
+.footnote strong{color:var(--accent-gold-soft);font-weight:normal;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="vignette"></div>
+  <div class="scanlines"></div>
+
+  <h1 class="page-title">PATCH 7.41d META</h1>
+  <div class="page-sub">The numbers your captain will ignore &mdash; <strong>windrun.io</strong> winrates, all skill brackets</div>
+
+  <div class="content">
+    <div class="px-card">
+      <div class="px-card-pad">
+        <div class="panel-heading">TOP 20 ABILITIES<span class="hsub">by win rate &middot; min 2% pick rate</span></div>
+        <div class="meta-grid">
+<div class="meta-row top3">
+      <span class="rk">1</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/invoker_forge_spirit_ad.png" alt="" loading="lazy">
+      <span class="nm">Forge Spirit</span>
+      <span class="wrv">63.0%</span>
+      <span class="bar"><span style="width:100%"></span></span>
+    </div>
+<div class="meta-row top3">
+      <span class="rk">2</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/earthshaker_aftershock.png" alt="" loading="lazy">
+      <span class="nm">Aftershock</span>
+      <span class="wrv">58.8%</span>
+      <span class="bar"><span style="width:68%"></span></span>
+    </div>
+<div class="meta-row top3">
+      <span class="rk">3</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/winter_wyvern_arctic_burn.png" alt="" loading="lazy">
+      <span class="nm">Arctic Burn</span>
+      <span class="wrv">57.3%</span>
+      <span class="bar"><span style="width:56%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">4</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/abaddon_borrowed_time.png" alt="" loading="lazy">
+      <span class="nm">Borrowed Time</span>
+      <span class="wrv">57.3%</span>
+      <span class="bar"><span style="width:56%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">5</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/skeleton_king_reincarnation.png" alt="" loading="lazy">
+      <span class="nm">Reincarnation</span>
+      <span class="wrv">57.0%</span>
+      <span class="bar"><span style="width:54%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">6</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/weaver_shukuchi.png" alt="" loading="lazy">
+      <span class="nm">Shukuchi</span>
+      <span class="wrv">56.9%</span>
+      <span class="bar"><span style="width:53%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">7</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/spectre_dispersion.png" alt="" loading="lazy">
+      <span class="nm">Dispersion</span>
+      <span class="wrv">56.8%</span>
+      <span class="bar"><span style="width:53%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">8</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/lion_impale.png" alt="" loading="lazy">
+      <span class="nm">Earth Spike</span>
+      <span class="wrv">56.2%</span>
+      <span class="bar"><span style="width:48%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">9</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/life_stealer_feast.png" alt="" loading="lazy">
+      <span class="nm">Feast</span>
+      <span class="wrv">55.9%</span>
+      <span class="bar"><span style="width:45%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">10</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/slark_shadow_dance.png" alt="" loading="lazy">
+      <span class="nm">Shadow Dance</span>
+      <span class="wrv">55.6%</span>
+      <span class="bar"><span style="width:43%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">11</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/tiny_avalanche.png" alt="" loading="lazy">
+      <span class="nm">Avalanche</span>
+      <span class="wrv">55.6%</span>
+      <span class="bar"><span style="width:43%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">12</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/ancient_apparition_ice_blast.png" alt="" loading="lazy">
+      <span class="nm">Ice Blast</span>
+      <span class="wrv">55.4%</span>
+      <span class="bar"><span style="width:42%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">13</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/tidehunter_kraken_shell.png" alt="" loading="lazy">
+      <span class="nm">Kraken Shell</span>
+      <span class="wrv">55.4%</span>
+      <span class="bar"><span style="width:41%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">14</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/viper_corrosive_skin.png" alt="" loading="lazy">
+      <span class="nm">Corrosive Skin</span>
+      <span class="wrv">55.2%</span>
+      <span class="bar"><span style="width:40%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">15</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/abyssal_underlord_firestorm.png" alt="" loading="lazy">
+      <span class="nm">Firestorm</span>
+      <span class="wrv">55.0%</span>
+      <span class="bar"><span style="width:38%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">16</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/bloodseeker_thirst.png" alt="" loading="lazy">
+      <span class="nm">Thirst</span>
+      <span class="wrv">54.9%</span>
+      <span class="bar"><span style="width:37%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">17</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/magnataur_empower.png" alt="" loading="lazy">
+      <span class="nm">Empower</span>
+      <span class="wrv">54.8%</span>
+      <span class="bar"><span style="width:37%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">18</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/luna_moon_glaive.png" alt="" loading="lazy">
+      <span class="nm">Moon Glaives</span>
+      <span class="wrv">54.7%</span>
+      <span class="bar"><span style="width:36%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">19</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/queenofpain_blink.png" alt="" loading="lazy">
+      <span class="nm">Blink</span>
+      <span class="wrv">54.7%</span>
+      <span class="bar"><span style="width:36%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">20</span>
+      <img class="abil-ico" src="https://cdn.datdota.com/images/ability/void_spirit_astral_step.png" alt="" loading="lazy">
+      <span class="nm">Astral Step</span>
+      <span class="wrv">54.6%</span>
+      <span class="bar"><span style="width:35%"></span></span>
+    </div>
+        </div>
+      </div>
+    </div>
+    <div class="px-card">
+      <div class="px-card-pad">
+        <div class="panel-heading">TOP 20 HEROES<span class="hsub">by win rate &middot; the body you fight over</span></div>
+        <div class="meta-grid">
+<div class="meta-row top3">
+      <span class="rk">1</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/nevermore_full.png" alt="" loading="lazy">
+      <span class="nm">Shadow Fiend</span>
+      <span class="wrv">57.2%</span>
+      <span class="bar"><span style="width:100%"></span></span>
+    </div>
+<div class="meta-row top3">
+      <span class="rk">2</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/night_stalker_full.png" alt="" loading="lazy">
+      <span class="nm">Night Stalker</span>
+      <span class="wrv">57.0%</span>
+      <span class="bar"><span style="width:97%"></span></span>
+    </div>
+<div class="meta-row top3">
+      <span class="rk">3</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/lina_full.png" alt="" loading="lazy">
+      <span class="nm">Lina</span>
+      <span class="wrv">56.8%</span>
+      <span class="bar"><span style="width:95%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">4</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/luna_full.png" alt="" loading="lazy">
+      <span class="nm">Luna</span>
+      <span class="wrv">56.6%</span>
+      <span class="bar"><span style="width:92%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">5</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/medusa_full.png" alt="" loading="lazy">
+      <span class="nm">Medusa</span>
+      <span class="wrv">56.6%</span>
+      <span class="bar"><span style="width:91%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">6</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/drow_ranger_full.png" alt="" loading="lazy">
+      <span class="nm">Drow Ranger</span>
+      <span class="wrv">56.4%</span>
+      <span class="bar"><span style="width:89%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">7</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/morphling_full.png" alt="" loading="lazy">
+      <span class="nm">Morphling</span>
+      <span class="wrv">55.5%</span>
+      <span class="bar"><span style="width:77%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">8</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/primal_beast_full.png" alt="" loading="lazy">
+      <span class="nm">Primal Beast</span>
+      <span class="wrv">55.2%</span>
+      <span class="bar"><span style="width:72%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">9</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/leshrac_full.png" alt="" loading="lazy">
+      <span class="nm">Leshrac</span>
+      <span class="wrv">55.1%</span>
+      <span class="bar"><span style="width:71%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">10</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/razor_full.png" alt="" loading="lazy">
+      <span class="nm">Razor</span>
+      <span class="wrv">54.9%</span>
+      <span class="bar"><span style="width:69%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">11</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/death_prophet_full.png" alt="" loading="lazy">
+      <span class="nm">Death Prophet</span>
+      <span class="wrv">54.9%</span>
+      <span class="bar"><span style="width:68%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">12</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/tusk_full.png" alt="" loading="lazy">
+      <span class="nm">Tusk</span>
+      <span class="wrv">54.5%</span>
+      <span class="bar"><span style="width:62%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">13</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/dragon_knight_full.png" alt="" loading="lazy">
+      <span class="nm">Dragon Knight</span>
+      <span class="wrv">54.0%</span>
+      <span class="bar"><span style="width:56%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">14</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/gyrocopter_full.png" alt="" loading="lazy">
+      <span class="nm">Gyrocopter</span>
+      <span class="wrv">53.7%</span>
+      <span class="bar"><span style="width:51%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">15</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/wisp_full.png" alt="" loading="lazy">
+      <span class="nm">Io</span>
+      <span class="wrv">53.5%</span>
+      <span class="bar"><span style="width:48%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">16</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/earth_spirit_full.png" alt="" loading="lazy">
+      <span class="nm">Earth Spirit</span>
+      <span class="wrv">53.3%</span>
+      <span class="bar"><span style="width:46%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">17</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/snapfire_full.png" alt="" loading="lazy">
+      <span class="nm">Snapfire</span>
+      <span class="wrv">53.2%</span>
+      <span class="bar"><span style="width:44%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">18</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/rubick_full.png" alt="" loading="lazy">
+      <span class="nm">Rubick</span>
+      <span class="wrv">52.9%</span>
+      <span class="bar"><span style="width:41%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">19</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/sven_full.png" alt="" loading="lazy">
+      <span class="nm">Sven</span>
+      <span class="wrv">52.8%</span>
+      <span class="bar"><span style="width:39%"></span></span>
+    </div>
+<div class="meta-row">
+      <span class="rk">20</span>
+      <img class="hero-ico" src="https://cdn.datdota.com/images/heroes/largo_full.png" alt="" loading="lazy">
+      <span class="nm">Largo</span>
+      <span class="wrv">52.8%</span>
+      <span class="bar"><span style="width:38%"></span></span>
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footnote">AD WORLD CUP 2026 &middot; JULY 25&ndash;26 &middot; data: <strong>windrun.io</strong> &middot; patch <strong>7.41d</strong> &middot; fetched 2026-07-22</div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(-50%,-50%) scale(${s})`;}
+addEventListener('resize',fit);fit();
+for(let i=0;i<26;i++){
+  const e=document.createElement('div');e.className='ember';
+  e.style.left=Math.random()*100+'%';e.style.top=(40+Math.random()*60)+'%';
+  e.style.animationDelay=(Math.random()*18)+'s';e.style.animationDuration=(Math.random()*12+12)+'s';
+  stage.appendChild(e);
+}
+</script>
+</body>
+</html>
