@@ -623,7 +623,6 @@
             white-space: nowrap;
         }
         .tr-name { flex: 1; font-size: 1.2rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .tr-name .cpt-badge { font-size: 0.4rem; margin-right: 4px; vertical-align: 2px; }
         .tr-name a { color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(141,245,234,0.4); }
         .tr-name a:hover { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
         .tr-mmr { font-weight: bold; font-size: 1.3rem; color: var(--accent-gold); text-shadow: 2px 2px 0 rgba(0,0,0,0.85); }
@@ -1407,7 +1406,7 @@
                                 <img src="assets/ranking-medals/seasonal-rank-${medal ?? 'uncalibrated'}.png" alt="">
                                 ${pill ? `<span class="rank-pill">${pill}</span>` : ''}
                             </div>
-                            <div class="tr-name">${i === 0 ? '<span class="cpt-badge">CPT</span>' : ''}${steam32 ? `<a href="https://windrun.io/players/${steam32}" target="_blank" rel="noopener" title="windrun profile">${name}</a>` : name}</div>
+                            <div class="tr-name">${steam32 ? `<a href="https://windrun.io/players/${steam32}" target="_blank" rel="noopener" title="windrun profile">${name}</a>` : name}</div>
                             <div class="tr-mmr${mmr == null ? ' na' : ''}">${mmr ?? '&mdash;'}</div>
                         </li>`).join('')}
                         ${t.pending ? '<li class="tr-pending">&#9203; 4 PICKS PENDING</li>' : ''}
