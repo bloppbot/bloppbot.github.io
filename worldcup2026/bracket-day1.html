@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AD World Cup 2026 &mdash; Day 1 Seeding (Stream)</title>
+<title>AD World Cup 2026 &mdash; Day 1 (Stream)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
@@ -29,60 +29,52 @@ img,video{image-rendering:pixelated;}
 .ember:nth-child(odd){background:var(--accent-gold-soft);width:3px;height:3px;}
 @keyframes emberRise{0%{transform:translateY(0) translateX(0);opacity:0}8%{opacity:.9}70%{opacity:.5}100%{transform:translateY(-55vh) translateX(4vw);opacity:0}}
 
-.page-title{position:relative;z-index:3;text-align:center;margin-top:24px;
-  font-family:'Press Start 2P',monospace;font-size:1.9rem;color:var(--accent-gold);letter-spacing:2px;
+.page-title{position:relative;z-index:3;text-align:center;margin-top:20px;
+  font-family:'Press Start 2P',monospace;font-size:1.7rem;color:var(--accent-gold);letter-spacing:2px;
   text-shadow:var(--px) var(--px) 0 #3a2406,calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6),0 0 30px rgba(255,170,60,0.4);}
 .page-title::before,.page-title::after{content:' \25C6 ';color:var(--accent-teal-dim);font-size:0.8em;}
-.page-sub{position:relative;z-index:3;text-align:center;color:var(--text-dim);font-size:1.25rem;letter-spacing:1px;margin-top:8px;}
+.page-sub{position:relative;z-index:3;text-align:center;color:var(--text-dim);font-size:1.2rem;letter-spacing:1px;margin-top:6px;}
 .page-sub .sep{color:var(--accent-teal-dim);}
 
-.flow-holder{position:absolute;left:50%;top:210px;z-index:3;
-  transform:translateX(-50%) scale(1.09);transform-origin:top center;}
-.bracket-flow{position:relative;width:1720px;height:540px;margin-top:30px;}
+.flow-holder{position:absolute;left:50%;top:118px;z-index:3;transform:translateX(-50%);}
+.bracket-flow{position:relative;width:1060px;height:920px;}
+.bf-lines{position:absolute;inset:0;pointer-events:none;}
+.bf-lines path{fill:none;shape-rendering:crispEdges;}
+.bf-lines path.w{stroke:var(--accent-gold-deep);stroke-width:3;filter:drop-shadow(0 0 4px rgba(255,180,70,0.35));}
+.bf-lines path.l{stroke:var(--accent-teal-dim);stroke-width:2;stroke-dasharray:6 5;}
+.bf-zone-label{position:absolute;font-family:'Press Start 2P',monospace;font-size:0.62rem;letter-spacing:1px;
+  text-shadow:2px 2px 0 rgba(0,0,0,0.8);white-space:nowrap;}
+.bf-zone-label.ub-label{color:var(--accent-gold);}
+.bf-zone-label.lb-label{color:var(--accent-teal);}
 
-.col-head{position:absolute;width:270px;text-align:center;top:0;}
-.col-hour{font-family:'Press Start 2P',monospace;font-size:1rem;color:var(--accent-gold);letter-spacing:1px;
-  text-shadow:2px 2px 0 rgba(0,0,0,0.85),0 0 16px rgba(255,170,60,0.35);}
-.col-round{font-size:1.15rem;color:var(--accent-teal);letter-spacing:1px;margin-top:5px;}
-.col-round.elim{color:#e2574c;}
-
-.match-box{background:rgba(8,24,29,0.92);border:2px solid rgba(255,217,122,0.18);padding:8px;}
-.match-box.bf{position:absolute;width:270px;}
+.match-box{background:rgba(8,24,29,0.92);border:2px solid rgba(255,217,122,0.18);padding:7px;}
+.match-box.bf{position:absolute;width:300px;}
 .match-meta{display:flex;justify-content:space-between;font-size:1rem;color:var(--text-dim);
   border-bottom:2px dashed rgba(141,245,234,0.12);padding-bottom:4px;margin-bottom:5px;}
 .match-id{color:var(--accent-gold-soft);font-family:'Press Start 2P',monospace;font-size:0.62rem;}
-.match-slot{display:flex;justify-content:space-between;padding:2px 0;font-size:1.25rem;}
+.match-slot{display:flex;justify-content:space-between;padding:2px 0;font-size:1.3rem;}
 .slot-team{color:var(--accent-cream);white-space:nowrap;}
 .slot-team.tbd{color:var(--text-dim);}
 .slot-team.won{color:var(--accent-gold);}
 .slot-score{color:var(--accent-teal);}
-.match-fate{border-top:2px dashed rgba(141,245,234,0.12);margin-top:5px;padding-top:5px;
-  font-size:1.02rem;line-height:1.45;}
-.fate-row{display:block;white-space:nowrap;color:var(--text-main);}
-.fate-row .fate-w{color:var(--accent-gold);}
-.fate-row .fate-l{color:var(--accent-teal);}
-.fate-row .fate-l.out{color:#e2574c;}
-.fate-row .fate-dest{color:var(--text-dim);}
+.match-fate{display:flex;justify-content:space-between;flex-wrap:wrap;gap:2px 8px;
+  border-top:2px dashed rgba(141,245,234,0.12);margin-top:5px;padding-top:5px;font-size:1rem;line-height:1.35;}
+.fate-w{color:var(--accent-gold);}
+.fate-l{color:var(--accent-teal);}
+.fate-l.out{color:#e2574c;}
 .match-box.bf.elim{border-color:rgba(160,60,52,0.55);}
 .match-box.bf.gf{border:3px solid var(--accent-gold);
   box-shadow:0 0 22px rgba(255,180,70,0.3),var(--px) var(--px) 0 rgba(0,0,0,0.6);
   background:rgba(20,16,5,0.92);}
-.flag{display:inline-block;width:24px;margin-right:7px;vertical-align:-2px;}
+.flag{display:inline-block;width:26px;margin-right:8px;vertical-align:-2px;}
 .flag img{width:100%;border:1px solid rgba(0,0,0,0.6);image-rendering:auto;}
 .stream-strip{display:block;font-family:'Press Start 2P',monospace;font-size:0.55rem;letter-spacing:1px;
-  text-decoration:none;padding:5px 8px;margin:-8px -8px 6px;}
+  text-decoration:none;padding:5px 7px;margin:-7px -7px 6px;}
 .stream-strip.st-blopp{background:var(--accent-gold-deep);color:#1b1206;border-bottom:2px solid var(--accent-gold);}
 .stream-strip.st-tiarin{background:#0e3a42;color:var(--accent-teal);border-bottom:2px solid var(--accent-teal-dim);}
 .live-chip{float:right;background:#c2352b;color:#fff;padding:0 4px;animation:livePulse 1.1s steps(2,start) infinite;}
 @keyframes livePulse{50%{opacity:0.35}}
 .match-box.bf.is-live{border-color:#e2574c;box-shadow:0 0 14px rgba(226,87,76,0.4);}
-
-.legend{position:absolute;left:50%;transform:translateX(-50%);bottom:36px;z-index:3;
-  color:var(--text-dim);font-size:1.3rem;letter-spacing:1px;text-align:center;}
-.legend .lg-w{color:var(--accent-gold);}
-.legend .lg-l{color:var(--accent-teal);}
-.legend .lg-x{color:#e2574c;}
-.legend .sep{color:var(--accent-teal-dim);margin:0 10px;}
 </style>
 </head>
 <body>
@@ -90,140 +82,107 @@ img,video{image-rendering:pixelated;}
   <div class="vignette"></div>
   <div class="scanlines"></div>
 
-  <h1 class="page-title">DAY 1 &mdash; SEEDING ROUNDS</h1>
-  <div class="page-sub">SATURDAY <span class="sep">&#9670;</span> ONE ROUND PER HOUR, LEFT TO RIGHT <span class="sep">&#9670;</span> EVERY BOX SHOWS WHERE WIN / LOSS SENDS YOU <span class="sep">&#9670;</span> ALL TIMES CEST</div>
+  <h1 class="page-title">BRACKET &mdash; DAY 1</h1>
+  <div class="page-sub">SATURDAY <span class="sep">&#9670;</span> ALL Bo1 &mdash; UB FINAL Bo3 <span class="sep">&#9670;</span> WINNERS GO RIGHT, LOSERS DROP DOWN <span class="sep">&#9670;</span> ALL TIMES CEST</div>
 
   <div class="flow-holder">
   <div class="bracket-flow">
+    <svg class="bf-lines" width="1060" height="920" aria-hidden="true">
+        <path class="w" d="M300 75 H340 V157 H380"/>
+        <path class="w" d="M300 239 H340 V157 H380"/>
+        <path class="w" d="M300 403 H340 V485 H380"/>
+        <path class="w" d="M300 567 H340 V485 H380"/>
+        <path class="w" d="M680 157 H720 V321 H760"/>
+        <path class="w" d="M680 485 H720 V321 H760"/>
+        <path class="w" d="M680 675 H760"/>
+        <path class="w" d="M680 839 H760"/>
+        <path class="l" d="M150 642 V675 H380"/>
+    </svg>
+    <div class="bf-zone-label ub-label" style="left:0; top:-34px;">&#11014; SEEDING ROUNDS &middot; winners path</div>
+    <div class="bf-zone-label lb-label" style="left:380px; top:572px;">&#11015; SEEDING LOSERS &middot; lose here and you are out</div>
 
-    <div class="col-head" style="left:0;"><div class="col-hour">17:00</div><div class="col-round">SEEDING ROUND 1</div></div>
-    <div class="col-head" style="left:290px;"><div class="col-hour">18:00</div><div class="col-round">SEEDING ROUND 1</div></div>
-    <div class="col-head" style="left:580px;"><div class="col-hour">19:00</div><div class="col-round">SEEDING ROUND 2 &middot; winners</div></div>
-    <div class="col-head" style="left:870px;"><div class="col-hour">20:00</div><div class="col-round elim">SEEDING LOSERS &middot; &#9760; elim</div></div>
-    <div class="col-head" style="left:1160px;"><div class="col-hour">21:00</div><div class="col-round elim">LOSERS ROUND &middot; &#9760; elim</div></div>
-    <div class="col-head" style="left:1450px;"><div class="col-hour">22:00</div><div class="col-round">UB FINAL &middot; Bo3</div></div>
-
-    <div class="match-box bf" style="left:0px; top:70px;">
-        <span class="stream-strip st-blopp">&#9654; BLOPP</span>
+    <div class="match-box bf" style="left:0px; top:0px;">
+        <span class="stream-strip st-blopp">&#9654; BLOPP &middot; SAT 17:00</span>
         <div class="match-meta"><span class="match-id">SR1 #1</span><span class="match-time">Bo1</span></div>
         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/fi.svg" alt="FI"></span>Finland</span><span class="slot-score">&mdash;</span></div>
         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/de.svg" alt="DE"></span>Germany</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-fate">
-          <span class="fate-row"><span class="fate-w">WIN &#9654;</span> <span class="fate-dest">19:00 &middot; SR2 #1</span></span>
-          <span class="fate-row"><span class="fate-l">LOSE &#9654;</span> <span class="fate-dest">20:00 &middot; SL #1</span></span>
-        </div>
+        <div class="match-fate"><span class="fate-w">&#9650; SR2 #1 &middot; 19:00</span><span class="fate-l">&#9660; SL #1 &middot; 20:00</span></div>
     </div>
-    <div class="match-box bf" style="left:0px; top:330px;">
-        <span class="stream-strip st-tiarin">&#9654; TIARIN</span>
+    <div class="match-box bf" style="left:0px; top:164px;">
+        <span class="stream-strip st-tiarin">&#9654; TIARIN &middot; SAT 17:00</span>
         <div class="match-meta"><span class="match-id">SR1 #2</span><span class="match-time">Bo1</span></div>
         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/ru.svg" alt="RU"></span>Russia</span><span class="slot-score">&mdash;</span></div>
         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/dz.svg" alt="DZ"></span>Algeria</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-fate">
-          <span class="fate-row"><span class="fate-w">WIN &#9654;</span> <span class="fate-dest">19:00 &middot; SR2 #1</span></span>
-          <span class="fate-row"><span class="fate-l">LOSE &#9654;</span> <span class="fate-dest">20:00 &middot; SL #1</span></span>
-        </div>
+        <div class="match-fate"><span class="fate-w">&#9650; SR2 #1 &middot; 19:00</span><span class="fate-l">&#9660; SL #1 &middot; 20:00</span></div>
     </div>
-
-    <div class="match-box bf" style="left:290px; top:70px;">
-        <span class="stream-strip st-blopp">&#9654; BLOPP</span>
-        <div class="match-meta"><span class="match-id">SR1 #4</span><span class="match-time">Bo1</span></div>
-        <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/us.svg" alt="US"></span>USA</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/ua.svg" alt="UA"></span>Ukraine</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-fate">
-          <span class="fate-row"><span class="fate-w">WIN &#9654;</span> <span class="fate-dest">19:00 &middot; SR2 #2</span></span>
-          <span class="fate-row"><span class="fate-l">LOSE &#9654;</span> <span class="fate-dest">20:00 &middot; SL #2</span></span>
-        </div>
-    </div>
-    <div class="match-box bf" style="left:290px; top:330px;">
-        <span class="stream-strip st-tiarin">&#9654; TIARIN</span>
+    <div class="match-box bf" style="left:0px; top:328px;">
+        <span class="stream-strip st-tiarin">&#9654; TIARIN &middot; SAT 18:00</span>
         <div class="match-meta"><span class="match-id">SR1 #3</span><span class="match-time">Bo1</span></div>
         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/kz.svg" alt="KZ"></span>Kazakhstan</span><span class="slot-score">&mdash;</span></div>
         <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/gb.svg" alt="GB"></span>UK</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-fate">
-          <span class="fate-row"><span class="fate-w">WIN &#9654;</span> <span class="fate-dest">19:00 &middot; SR2 #2</span></span>
-          <span class="fate-row"><span class="fate-l">LOSE &#9654;</span> <span class="fate-dest">20:00 &middot; SL #2</span></span>
-        </div>
+        <div class="match-fate"><span class="fate-w">&#9650; SR2 #2 &middot; 19:00</span><span class="fate-l">&#9660; SL #2 &middot; 20:00</span></div>
+    </div>
+    <div class="match-box bf" style="left:0px; top:492px;">
+        <span class="stream-strip st-blopp">&#9654; BLOPP &middot; SAT 18:00</span>
+        <div class="match-meta"><span class="match-id">SR1 #4</span><span class="match-time">Bo1</span></div>
+        <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/us.svg" alt="US"></span>USA</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/ua.svg" alt="UA"></span>Ukraine</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-fate"><span class="fate-w">&#9650; SR2 #2 &middot; 19:00</span><span class="fate-l">&#9660; SL #2 &middot; 20:00</span></div>
     </div>
 
-    <div class="match-box bf" style="left:580px; top:70px;">
-        <span class="stream-strip st-blopp">&#9654; BLOPP</span>
+    <div class="match-box bf" style="left:380px; top:82px;">
+        <span class="stream-strip st-blopp">&#9654; BLOPP &middot; SAT 19:00</span>
         <div class="match-meta"><span class="match-id">SR2 #1</span><span class="match-time">Bo1</span></div>
-        <div class="match-slot"><span class="slot-team tbd">17:00 winner (blopp)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-slot"><span class="slot-team tbd">17:00 winner (tiarin)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-fate">
-          <span class="fate-row"><span class="fate-w">WIN &#9654;</span> <span class="fate-dest">22:00 &middot; UB FINAL</span></span>
-          <span class="fate-row"><span class="fate-l">LOSE &#9654;</span> <span class="fate-dest">21:00 &middot; LB R1 #2</span></span>
-        </div>
+        <div class="match-slot"><span class="slot-team tbd">W SR1 #1</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-slot"><span class="slot-team tbd">W SR1 #2</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-fate"><span class="fate-w">&#9650; UB FINAL &middot; 22:00</span><span class="fate-l">&#9660; LB R1 #2</span></div>
     </div>
-    <div class="match-box bf" style="left:580px; top:330px;">
-        <span class="stream-strip st-tiarin">&#9654; TIARIN</span>
+    <div class="match-box bf" style="left:380px; top:410px;">
+        <span class="stream-strip st-tiarin">&#9654; TIARIN &middot; SAT 19:00</span>
         <div class="match-meta"><span class="match-id">SR2 #2</span><span class="match-time">Bo1</span></div>
-        <div class="match-slot"><span class="slot-team tbd">18:00 winner (blopp)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-slot"><span class="slot-team tbd">18:00 winner (tiarin)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-fate">
-          <span class="fate-row"><span class="fate-w">WIN &#9654;</span> <span class="fate-dest">22:00 &middot; UB FINAL</span></span>
-          <span class="fate-row"><span class="fate-l">LOSE &#9654;</span> <span class="fate-dest">21:00 &middot; LB R1 #1</span></span>
-        </div>
+        <div class="match-slot"><span class="slot-team tbd">W SR1 #3</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-slot"><span class="slot-team tbd">W SR1 #4</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-fate"><span class="fate-w">&#9650; UB FINAL &middot; 22:00</span><span class="fate-l">&#9660; LB R1 #1</span></div>
     </div>
 
-    <div class="match-box bf elim" style="left:870px; top:70px;">
-        <span class="stream-strip st-blopp">&#9654; BLOPP</span>
-        <div class="match-meta"><span class="match-id">SL #1</span><span class="match-time">Bo1</span></div>
-        <div class="match-slot"><span class="slot-team tbd">17:00 loser (blopp)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-slot"><span class="slot-team tbd">17:00 loser (tiarin)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-fate">
-          <span class="fate-row"><span class="fate-w">WIN &#9654;</span> <span class="fate-dest">21:00 &middot; LB R1 #1</span></span>
-          <span class="fate-row"><span class="fate-l out">LOSE &#9760;</span> <span class="fate-dest">OUT &middot; 7th&ndash;8th place</span></span>
-        </div>
-    </div>
-    <div class="match-box bf elim" style="left:870px; top:330px;">
-        <span class="stream-strip st-tiarin">&#9654; TIARIN</span>
-        <div class="match-meta"><span class="match-id">SL #2</span><span class="match-time">Bo1</span></div>
-        <div class="match-slot"><span class="slot-team tbd">18:00 loser (blopp)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-slot"><span class="slot-team tbd">18:00 loser (tiarin)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-fate">
-          <span class="fate-row"><span class="fate-w">WIN &#9654;</span> <span class="fate-dest">21:00 &middot; LB R1 #2</span></span>
-          <span class="fate-row"><span class="fate-l out">LOSE &#9760;</span> <span class="fate-dest">OUT &middot; 7th&ndash;8th place</span></span>
-        </div>
-    </div>
-
-    <div class="match-box bf elim" style="left:1160px; top:70px;">
-        <span class="stream-strip st-blopp">&#9654; BLOPP</span>
-        <div class="match-meta"><span class="match-id">LB R1 #1</span><span class="match-time">Bo1</span></div>
-        <div class="match-slot"><span class="slot-team tbd">19:00 loser (tiarin)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-slot"><span class="slot-team tbd">20:00 winner (blopp)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-fate">
-          <span class="fate-row"><span class="fate-w">WIN &#9654;</span> <span class="fate-dest">SUN 17:00 &middot; LB SF</span></span>
-          <span class="fate-row"><span class="fate-l out">LOSE &#9760;</span> <span class="fate-dest">OUT &middot; 5th&ndash;6th place</span></span>
-        </div>
-    </div>
-    <div class="match-box bf elim" style="left:1160px; top:330px;">
-        <span class="stream-strip st-tiarin">&#9654; TIARIN</span>
-        <div class="match-meta"><span class="match-id">LB R1 #2</span><span class="match-time">Bo1</span></div>
-        <div class="match-slot"><span class="slot-team tbd">19:00 loser (blopp)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-slot"><span class="slot-team tbd">20:00 winner (tiarin)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-fate">
-          <span class="fate-row"><span class="fate-w">WIN &#9654;</span> <span class="fate-dest">SUN 17:00 &middot; LB SF</span></span>
-          <span class="fate-row"><span class="fate-l out">LOSE &#9760;</span> <span class="fate-dest">OUT &middot; 5th&ndash;6th place</span></span>
-        </div>
-    </div>
-
-    <div class="match-box bf gf" style="left:1450px; top:200px;">
-        <span class="stream-strip st-blopp">&#9654; BLOPP</span>
+    <div class="match-box bf gf" style="left:760px; top:246px;">
+        <span class="stream-strip st-blopp">&#9654; BLOPP &middot; SAT 22:00</span>
         <div class="match-meta"><span class="match-id">UB FINAL</span><span class="match-time">Bo3</span></div>
-        <div class="match-slot"><span class="slot-team tbd">19:00 winner (blopp)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-slot"><span class="slot-team tbd">19:00 winner (tiarin)</span><span class="slot-score">&mdash;</span></div>
-        <div class="match-fate">
-          <span class="fate-row"><span class="fate-w">WIN &#9654;</span> <span class="fate-dest">SUN 22:00 &middot; GRAND FINAL</span></span>
-          <span class="fate-row"><span class="fate-l">LOSE &#9654;</span> <span class="fate-dest">SUN 19:30 &middot; LB FINAL</span></span>
-        </div>
+        <div class="match-slot"><span class="slot-team tbd">W SR2 #1</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-slot"><span class="slot-team tbd">W SR2 #2</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-fate"><span class="fate-w">&#9650; GRAND FINAL &middot; SUN</span><span class="fate-l">&#9660; LB FINAL &middot; SUN</span></div>
     </div>
 
-  </div>
-  </div>
+    <div class="match-box bf elim" style="left:380px; top:600px;">
+        <span class="stream-strip st-blopp">&#9654; BLOPP &middot; SAT 20:00</span>
+        <div class="match-meta"><span class="match-id">SL #1</span><span class="match-time">Bo1</span></div>
+        <div class="match-slot"><span class="slot-team tbd">L SR1 #1</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-slot"><span class="slot-team tbd">L SR1 #2</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-fate"><span class="fate-w">&#9650; LB R1 #1 &middot; 21:00</span><span class="fate-l out">&#9760; 7th-8th</span></div>
+    </div>
+    <div class="match-box bf elim" style="left:380px; top:764px;">
+        <span class="stream-strip st-tiarin">&#9654; TIARIN &middot; SAT 20:00</span>
+        <div class="match-meta"><span class="match-id">SL #2</span><span class="match-time">Bo1</span></div>
+        <div class="match-slot"><span class="slot-team tbd">L SR1 #3</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-slot"><span class="slot-team tbd">L SR1 #4</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-fate"><span class="fate-w">&#9650; LB R1 #2 &middot; 21:00</span><span class="fate-l out">&#9760; 7th-8th</span></div>
+    </div>
 
-  <div class="legend">
-    TOP ROW = <span class="lg-w">BLOPP'S STREAM</span> <span class="sep">&#9670;</span> BOTTOM ROW = <span class="lg-l">TIARIN'S STREAM</span> <span class="sep">&#9670;</span> <span class="lg-x">RED BORDER = LOSS ELIMINATES YOU</span> <span class="sep">&#9670;</span> NOBODY IS OUT BEFORE 20:00
+    <div class="match-box bf elim" style="left:760px; top:600px;">
+        <span class="stream-strip st-blopp">&#9654; BLOPP &middot; SAT 21:00</span>
+        <div class="match-meta"><span class="match-id">LB R1 #1</span><span class="match-time">Bo1</span></div>
+        <div class="match-slot"><span class="slot-team tbd">L SR2 #2</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-slot"><span class="slot-team tbd">W SL #1</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-fate"><span class="fate-w">&#9650; LB SF &middot; SUN</span><span class="fate-l out">&#9760; 5th-6th</span></div>
+    </div>
+    <div class="match-box bf elim" style="left:760px; top:764px;">
+        <span class="stream-strip st-tiarin">&#9654; TIARIN &middot; SAT 21:00</span>
+        <div class="match-meta"><span class="match-id">LB R1 #2</span><span class="match-time">Bo1</span></div>
+        <div class="match-slot"><span class="slot-team tbd">L SR2 #1</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-slot"><span class="slot-team tbd">W SL #2</span><span class="slot-score">&mdash;</span></div>
+        <div class="match-fate"><span class="fate-w">&#9650; LB SF &middot; SUN</span><span class="fate-l out">&#9760; 5th-6th</span></div>
+    </div>
+  </div>
   </div>
 </div>
 
