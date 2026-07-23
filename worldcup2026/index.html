@@ -624,6 +624,8 @@
         }
         .tr-name { flex: 1; font-size: 1.2rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .tr-name .cpt-badge { font-size: 0.4rem; margin-right: 4px; vertical-align: 2px; }
+        .tr-name a { color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(141,245,234,0.4); }
+        .tr-name a:hover { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
         .tr-mmr { font-weight: bold; font-size: 1.3rem; color: var(--accent-gold); text-shadow: 2px 2px 0 rgba(0,0,0,0.85); }
         .tr-mmr.na { color: var(--text-dim); }
         .tr-pending {
@@ -1351,41 +1353,42 @@
 
         // === THE 8 NATIONS — cards w/ rosters, hover plays the idle loop ===
         (function buildTeams() {
-            // roster: [name, medal, leaderboardPill, adMmr] — first entry = captain.
+            // roster: [name, medal, leaderboardPill, adMmr, steam32] — first entry = captain.
+            // steam32 → windrun.io/players/<id> profile link.
             // pending: captain locked, 4 picks outstanding. mmr null = estimated rating (shown as '—').
             const TEAMS = [
                 { nation: 'RUSSIA', cc: 'ru', poster: 'v5_russia.png', loop: 'loop_russia.mp4', seed: 1, roster: [
-                    ['lost~','immortal','#890',4107],['hedgehog','immortal',null,3670],
-                    ['Sandstorm','immortal','#3815',3442],['FoXy','divine-3',null,3432],
-                    ['shadle','immortal','#680',3424]]},
+                    ['lost~','immortal','#890',4107,265369004],['hedgehog','immortal',null,3670,134290277],
+                    ['Sandstorm','immortal','#3815',3442,155594323],['FoXy','divine-3',null,3432,225442653],
+                    ['shadle','immortal','#680',3424,374665899]]},
                 { nation: 'USA', cc: 'us', poster: 'v4_usa.png', loop: 'loop_usa.mp4', seed: 2, roster: [
-                    ['DJ Dingus','immortal','#2064',3759],['Poof','immortal','#2875',3725],
-                    ['FriscyDriscy','immortal',null,3601],['Jynx','immortal','#1701',3483],
-                    ['erik','immortal','#933',3424]]},
+                    ['DJ Dingus','immortal','#2064',3759,379941199],['Poof','immortal','#2875',3725,320587966],
+                    ['FriscyDriscy','immortal',null,3601,192412922],['Jynx','immortal','#1701',3483,372541122],
+                    ['erik','immortal','#933',3424,106473979]]},
                 { nation: 'KAZAKHSTAN', cc: 'kz', poster: 'v4_kazakhstan.png', loop: 'loop_kazakhstan.mp4', seed: 3, roster: [
-                    ['Ptenchik','immortal','#2568',3666],['Eurodance','immortal','#2553',3471],
-                    ['Aniki','immortal','#870',3334],['FantikJr','legend-3',null,3196],
-                    ['Alexandr','immortal','#1956',1642]]},
+                    ['Ptenchik','immortal','#2568',3666,901021922],['Eurodance','immortal','#2553',3471,149621691],
+                    ['Aniki','immortal','#870',3334,292867484],['FantikJr','legend-3',null,3196,1011109589],
+                    ['Alexandr','immortal','#1956',1642,189046705]]},
                 { nation: 'FINLAND', cc: 'fi', poster: 'v5_finland.png', loop: 'loop_finland.mp4', seed: 4, roster: [
-                    ['noertti','immortal','#2428',3666],['Ipelius','immortal','#4974',3522],
-                    ['Spooner','immortal','#3534',3308],['sifla','immortal','#3136',3199],
-                    ['Kenny','divine-5',null,3130]]},
+                    ['noertti','immortal','#2428',3666,54662003],['Ipelius','immortal','#4974',3522,160108436],
+                    ['Spooner','immortal','#3534',3308,112321831],['sifla','immortal','#3136',3199,3292479],
+                    ['Kenny','divine-5',null,3130,12033153]]},
                 { nation: 'GERMANY', cc: 'de', poster: 'v4_germany.png', loop: 'loop_germany.mp4', seed: 5, roster: [
-                    ['Mahaximus','immortal','#618',3886],['fish','immortal','#3610',3381],
-                    ['Drea','immortal',null,3375],['rob','immortal',null,3276],
-                    ['Mangology','immortal',null,3127]]},
+                    ['Mahaximus','immortal','#618',3886,94301365],['fish','immortal','#3610',3381,20641880],
+                    ['Drea','immortal',null,3375,12853293],['rob','immortal',null,3276,106968649],
+                    ['Mangology','immortal',null,3127,167275877]]},
                 { nation: 'UKRAINE', cc: 'ua', poster: 'v4_ukraine.png', loop: 'loop_ukraine.mp4', seed: 6, roster: [
-                    ['et si','immortal','#4482',3975],['Silent Killer','immortal',null,3446],
-                    ['John Cena','immortal',null,3371],['slightly','immortal','#3013',3295],
-                    ['Elnubres','immortal',null,2438]]},
+                    ['et si','immortal','#4482',3975,211202443],['Silent Killer','immortal',null,3446,190032690],
+                    ['John Cena','immortal',null,3371,302659781],['slightly','immortal','#3013',3295,358734230],
+                    ['Elnubres','immortal',null,2438,363111392]]},
                 { nation: 'ALGERIA', cc: 'dz', poster: 'v4_algeria.png', loop: 'loop_algeria.mp4', seed: 7, roster: [
-                    ['Shushu','immortal','#236',null],['noobisho','immortal','#456',null],
-                    ['HunTeR-','immortal','#863',null],['paradox','immortal','#817',null],
-                    ['Dashe_','divine-5',null,2913]]},
+                    ['Shushu','immortal','#236',null,210167497],['noobisho','immortal','#456',null,81268033],
+                    ['HunTeR-','immortal','#863',null,184786408],['paradox','immortal','#817',null,111211042],
+                    ['Dashe_','divine-5',null,2913,43838681]]},
                 { nation: 'UK', cc: 'gb', poster: 'v4_uk.png', loop: 'loop_uk.mp4', seed: 8, roster: [
-                    ['K-1','immortal',null,3261],['Rob Lobb','immortal',null,3166],
-                    ['Lionheart','immortal',null,2925],['bred','immortal',null,2816],
-                    ['Grasswalker','legend-1',null,2463]]},
+                    ['K-1','immortal',null,3261,446253958],['Rob Lobb','immortal',null,3166,82286911],
+                    ['Lionheart','immortal',null,2925,81574887],['bred','immortal',null,2816,133024804],
+                    ['Grasswalker','legend-1',null,2463,140384819]]},
             ];
             const wrap = document.getElementById('teams-grid');
             wrap.innerHTML = TEAMS.map(t => `
@@ -1398,13 +1401,13 @@
                         <div class="team-name"><span class="flag"><img src="https://flagcdn.com/${t.cc}.svg" alt="${t.cc.toUpperCase()}" loading="lazy"></span>${t.nation}</div>
                     </div>
                     <ul class="team-roster">
-                        ${t.roster.map(([name, medal, pill, mmr], i) => `
+                        ${t.roster.map(([name, medal, pill, mmr, steam32], i) => `
                         <li class="tr-player">
                             <div class="tr-medal">
                                 <img src="assets/ranking-medals/seasonal-rank-${medal ?? 'uncalibrated'}.png" alt="">
                                 ${pill ? `<span class="rank-pill">${pill}</span>` : ''}
                             </div>
-                            <div class="tr-name">${i === 0 ? '<span class="cpt-badge">CPT</span>' : ''}${name}</div>
+                            <div class="tr-name">${i === 0 ? '<span class="cpt-badge">CPT</span>' : ''}${steam32 ? `<a href="https://windrun.io/players/${steam32}" target="_blank" rel="noopener" title="windrun profile">${name}</a>` : name}</div>
                             <div class="tr-mmr${mmr == null ? ' na' : ''}">${mmr ?? '&mdash;'}</div>
                         </li>`).join('')}
                         ${t.pending ? '<li class="tr-pending">&#9203; 4 PICKS PENDING</li>' : ''}
