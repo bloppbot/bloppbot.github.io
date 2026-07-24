@@ -898,13 +898,12 @@
             filter: drop-shadow(0 10px 18px rgba(0,0,0,0.5));
         }
         .casters-names {
-            display: flex; justify-content: center; gap: clamp(30px, 12vw, 150px);
-            margin-top: 6px; flex-wrap: wrap;
+            display: grid; grid-template-columns: 1fr 1fr;
+            width: min(560px, 86%);
+            margin: 6px auto 0;
         }
-        .casters-names-guests {
-            gap: clamp(24px, 8vw, 110px);
-            margin-top: 26px;
-        }
+        .casters-names > div { text-align: center; }
+        .casters-names-guests { margin-top: 26px; }
         .caster-name {
             font-family: 'Press Start 2P', monospace; font-size: 0.72rem;
             color: var(--accent-gold);
@@ -941,6 +940,7 @@
             .cd-box { min-width: 72px; }
             .cd-num { font-size: 1.2rem; }
             .nav-btn { font-size: 0.52rem; padding: 10px 10px; }
+            .caster-name { font-size: 0.5rem; }
         }
     </style>
 </head>
