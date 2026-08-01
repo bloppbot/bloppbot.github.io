@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AD World Cup 2026 · VOD Vault</title>
+
+    <meta property="og:title" content="AD World Cup 2026 · VOD Vault">
+    <meta property="og:description" content="Every VOD of the AD World Cup 2026, spoiler free. The bracket stays frozen until you say otherwise.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://bloppbot.github.io/worldcup2026/assets/og.jpg">
+    <meta name="twitter:image" content="https://bloppbot.github.io/worldcup2026/assets/og.jpg">
+    <meta name="theme-color" content="#0d2228">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23ffd97a'>🎬</text></svg>">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #081519;
+            --bg-deeper: #050d10;
+            --bg-panel: rgba(10, 28, 34, 0.88);
+            --bg-panel-solid: #0d2228;
+            --bg-stone: #14323a;
+            --accent-gold: #ffd97a;
+            --accent-gold-soft: #e8a33d;
+            --accent-gold-deep: #b97c20;
+            --accent-teal: #8df5ea;
+            --accent-teal-dim: #2a6a66;
+            --accent-cream: #f4e4bc;
+            --accent-discord: #5865F2;
+            --glass-border: rgba(255, 217, 122, 0.35);
+            --glass-border-dim: rgba(255, 217, 122, 0.15);
+            --text-main: #dceae6;
+            --text-dim: #8fb0aa;
+            --px: 3px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body { cursor: url('assets/cursor.png') 1 1, auto; }
+        a, button, .nav-btn, .ics-link, .donate-btn, .playlist-link, .vod-btn {
+            cursor: url('assets/cursor_hand.png') 7 2, pointer;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+            background-color: var(--bg-dark);
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'VT323', monospace;
+            font-size: 21px;
+            color: var(--text-main);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        img, video { image-rendering: pixelated; }
+
+        .bg-base {
+            position: fixed; inset: 0; z-index: 0;
+            background:
+                linear-gradient(rgba(8,21,25,0.82), rgba(5,13,16,0.94)),
+                url('assets/scene_02_gate.jpg') center / cover no-repeat;
+            image-rendering: pixelated;
+        }
+        .bg-vignette {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(circle at 50% 40%, transparent 25%, rgba(2,8,10,0.75) 100%);
+            pointer-events: none;
+        }
+
+        .ember {
+            position: fixed;
+            width: 4px; height: 4px;
+            background: var(--accent-gold);
+            box-shadow: 0 0 6px rgba(255,180,70,0.8);
+            opacity: 0;
+            z-index: 1;
+            pointer-events: none;
+            animation: emberRise linear infinite;
+        }
+        .ember:nth-child(odd) { background: var(--accent-gold-soft); width: 3px; height: 3px; }
+        @keyframes emberRise {
+            0%   { transform: translateY(0) translateX(0); opacity: 0; }
+            8%   { opacity: 0.9; }
+            70%  { opacity: 0.5; }
+            100% { transform: translateY(-55vh) translateX(4vw); opacity: 0; }
+        }
+
+        .scanlines {
+            position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.16) 0 1px, transparent 1px 4px);
+            mix-blend-mode: multiply;
+        }
+
+        .mouse-glow {
+            position: fixed; width: 240px; height: 240px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(255,217,122,0.07) 0%, transparent 65%);
+            border-radius: 50%;
+            pointer-events: none; z-index: 2;
+            opacity: 0; transition: opacity .6s;
+        }
+        .mouse-glow.active { opacity: 1; }
+
+        .container {
+            position: relative; z-index: 3;
+            width: min(1180px, 94vw);
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        .px-card {
+            position: relative;
+            border: 42px solid transparent;
+            border-image: url('assets/frame.png') 150 round;
+            background: var(--bg-panel);
+            background-clip: padding-box;
+        }
+        .px-card-pad { position: relative; z-index: 1; padding: 18px 34px 30px; }
+        @media (max-width: 640px) { .px-card-pad { padding: 12px 16px 20px; } }
+
+        .card-bg-video {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.33;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body.js .reveal { opacity: 0; }
+        body.js .reveal.revealed {
+            animation: pixelIn 0.45s steps(5) forwards;
+        }
+        @keyframes pixelIn {
+            0%   { opacity: 0; transform: translateY(16px); filter: contrast(1.8) brightness(1.7) saturate(0.4); }
+            100% { opacity: 1; transform: none; filter: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            body.js .reveal { opacity: 1; animation: none; }
+        }
+
+        .crt-boot {
+            position: fixed; inset: 0;
+            background: #000;
+            z-index: 10001;
+            display: flex; align-items: center; justify-content: center;
+            animation: bootFade 0.35s ease 1.05s forwards;
+        }
+        .crt-boot .boot-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(1rem, 3.4vw, 2rem);
+            color: var(--accent-gold);
+            text-shadow: 0 0 24px rgba(255,170,60,0.8);
+            animation: tubeOn 0.55s steps(4) both, bootFlicker 0.3s steps(2) 0.55s 2;
+        }
+        @keyframes tubeOn {
+            0% { transform: scaleY(0.02) scaleX(1.4); filter: brightness(6); }
+            60% { transform: scaleY(1.06) scaleX(1); }
+            100% { transform: none; filter: none; }
+        }
+        @keyframes bootFlicker { 50% { opacity: 0.4; } }
+        @keyframes bootFade { to { opacity: 0; visibility: hidden; } }
+
+        .robot-walker {
+            position: fixed;
+            bottom: 0;
+            left: 100vw;
+            height: 110px;
+            z-index: 80;
+            pointer-events: none;
+            image-rendering: pixelated;
+        }
+        .robot-walker.walking { animation: robotCross 26s linear forwards; }
+        @keyframes robotCross { from { transform: translateX(0); } to { transform: translateX(calc(-100vw - 160px)); } }
+
+        /* === HERO === */
+        .hero { margin-top: 26px; position: relative; }
+        .hero-screen {
+            position: relative;
+            border: 42px solid transparent;
+            border-image: url('assets/frame.png') 150 round;
+            background: #000;
+            background-clip: padding-box;
+            overflow: hidden;
+        }
+        .hero-video {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            max-height: 40vh;
+            object-fit: cover;
+        }
+        .hero-overlay {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end;
+            padding-bottom: 5.5%;
+            background: linear-gradient(rgba(5,13,16,0.05) 40%, rgba(5,13,16,0.78) 92%);
+            text-align: center;
+        }
+        .h-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(1.4rem, 4.6vw, 3.2rem);
+            color: var(--accent-gold);
+            text-shadow:
+                var(--px) var(--px) 0 #3a2406,
+                calc(var(--px) * 2) calc(var(--px) * 2) 0 rgba(0,0,0,0.65),
+                0 0 26px rgba(255,170,60,0.55);
+            letter-spacing: 2px;
+            line-height: 1.25;
+        }
+        .h-sub {
+            margin-top: 14px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.6rem, 1.6vw, 1rem);
+            color: var(--accent-teal);
+            text-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.8), 0 0 16px rgba(60,230,215,0.6);
+            animation: subPulse 2.6s ease-in-out infinite;
+        }
+        @keyframes subPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+        .h-divider {
+            display: flex; align-items: center; gap: 12px;
+            margin: 14px auto 0; width: min(420px, 70%);
+        }
+        .h-divider .line { flex: 1; height: 3px; background: linear-gradient(90deg, transparent, var(--accent-gold-deep)); }
+        .h-divider .line:last-child { background: linear-gradient(90deg, var(--accent-gold-deep), transparent); }
+        .h-divider .ornament { color: var(--accent-gold); font-size: 1rem; text-shadow: 2px 2px 0 rgba(0,0,0,0.7); }
+
+        /* === NAV === */
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 10px;
+            margin: 26px calc(50% - 50vw) 8px;
+            width: 100vw;
+            padding: 12px 10px;
+            background: rgba(5, 13, 16, 0.92);
+            border-bottom: 3px solid rgba(255, 217, 122, 0.25);
+            backdrop-filter: blur(2px);
+        }
+        .nav-btn {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.62rem;
+            text-decoration: none;
+            color: var(--accent-cream);
+            background: var(--bg-stone);
+            padding: 12px 16px;
+            border: 3px solid var(--accent-gold-deep);
+            box-shadow:
+                inset 0 0 0 2px rgba(0,0,0,0.45),
+                var(--px) var(--px) 0 rgba(0,0,0,0.7);
+            transition: transform .08s steps(2), background .15s;
+        }
+        .nav-btn:hover {
+            background: #1c4750;
+            color: var(--accent-gold);
+            transform: translate(-2px, -2px);
+            box-shadow:
+                inset 0 0 0 2px rgba(0,0,0,0.45),
+                calc(var(--px) * 2) calc(var(--px) * 2) 0 rgba(0,0,0,0.7);
+        }
+        .nav-btn:active {
+            transform: translate(2px, 2px) !important;
+            box-shadow: inset 0 0 0 2px rgba(0,0,0,0.45), 1px 1px 0 rgba(0,0,0,0.7) !important;
+        }
+        .nav-btn.primary {
+            background: var(--accent-gold-deep);
+            color: #1b1206;
+            border-color: var(--accent-gold);
+        }
+        .nav-btn.primary:hover { background: var(--accent-gold-soft); color: #140d04; }
+        .nav-btn.spoiler-btn { border-color: #a03c34; background: #2a1512; color: #f0b5ae; }
+        .nav-btn.spoiler-btn:hover { background: #47201b; color: #ffd6d0; }
+        .nav-btn.spoiler-btn.on { background: #7c2a22; border-color: #e2574c; color: #fff; }
+
+        ::-webkit-scrollbar { width: 14px; background: var(--bg-deeper); }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold-deep);
+            border: 3px solid var(--bg-deeper);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-gold-soft); }
+
+        /* === SPOILER SHIELD BOX === */
+        .shield-container { text-align: center; margin: 30px 0 10px; }
+        .shield-box {
+            display: inline-block;
+            min-width: min(640px, 88vw);
+            max-width: 92vw;
+            background: var(--bg-stone);
+            border: 3px solid var(--accent-teal-dim);
+            box-shadow: inset 0 0 0 2px rgba(0,0,0,0.5), var(--px) var(--px) 0 rgba(0,0,0,0.7);
+            padding: 18px 24px;
+            text-align: center;
+        }
+        .shield-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.72rem;
+            color: var(--accent-teal);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+            margin-bottom: 10px;
+        }
+        .shield-title .ok { color: #7de08a; }
+        .shield-title .bad { color: #e2574c; }
+        .shield-text { color: var(--text-main); font-size: 1.15rem; line-height: 1.45; max-width: 620px; margin: 0 auto; }
+        .shield-text strong { color: var(--accent-gold); font-weight: normal; }
+
+        /* === SECTIONS === */
+        .section-wrapper { margin: 56px 0; }
+        .section-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.95rem, 2.4vw, 1.5rem);
+            color: var(--accent-gold);
+            text-align: center;
+            text-shadow: var(--px) var(--px) 0 #3a2406, calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6);
+            margin-bottom: 8px;
+        }
+        .section-title::before, .section-title::after { content: ' ◆ '; color: var(--accent-teal-dim); font-size: 0.8em; }
+        .title-sub {
+            text-align: center;
+            color: var(--text-dim);
+            margin-bottom: 22px;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+        }
+        strong { color: var(--accent-gold); font-weight: normal; }
+        .date-highlight { color: var(--accent-teal); }
+
+        .about-card p { font-size: 1.25rem; line-height: 1.45; }
+        .info-grid {
+            display: flex; flex-wrap: wrap; gap: 12px;
+            margin-top: 22px;
+        }
+        .info-chip {
+            flex: 1 1 120px;
+            background: var(--bg-stone);
+            border: 3px solid var(--glass-border-dim);
+            box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.55);
+            padding: 10px 12px;
+            text-align: center;
+        }
+        .info-chip .label { display: block; font-size: 0.95rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; }
+        .info-chip .value { display: block; font-family: 'Press Start 2P', monospace; font-size: 0.72rem; color: var(--accent-teal); margin-top: 8px; }
+
+        /* === SCENE DIVIDER === */
+        .scene-divider {
+            position: relative;
+            width: 100vw;
+            margin: 50px calc(50% - 50vw) 0;
+            height: 32vh;
+            min-height: 220px;
+            overflow: hidden;
+            border-top: 4px solid var(--accent-gold-deep);
+            border-bottom: 4px solid var(--accent-gold-deep);
+            box-shadow: inset 0 0 36px rgba(2,8,10,0.55);
+            background: var(--bg-deeper);
+        }
+        .scene-divider video {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+            image-rendering: pixelated;
+        }
+        .scene-divider::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(rgba(5,13,16,0.18), transparent 40%, rgba(5,13,16,0.22));
+        }
+        @media (max-width: 900px) { .scene-divider { height: 24vh; } }
+
+        /* === WATCH ORDER === */
+        .wo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 26px;
+        }
+        @media (max-width: 860px) { .wo-grid { grid-template-columns: 1fr; } }
+        .wo-day {
+            background: var(--bg-stone);
+            border: 3px solid var(--glass-border-dim);
+            box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.55);
+            padding: 14px;
+        }
+        .wo-day-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.72rem;
+            color: var(--accent-gold);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.7);
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--accent-gold-deep);
+            margin-bottom: 4px;
+        }
+        .wo-day-title small { color: var(--text-dim); font-family: 'VT323', monospace; font-size: 1rem; margin-left: 8px; letter-spacing: 1px; }
+        .wo-row {
+            display: flex; align-items: center; gap: 12px;
+            padding: 9px 4px;
+            border-bottom: 2px dashed rgba(141,245,234,0.12);
+        }
+        .wo-row:last-child { border-bottom: none; }
+        .wo-id {
+            flex: 0 0 96px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            color: var(--accent-gold-soft);
+            line-height: 1.5;
+        }
+        .wo-id small { display: block; color: var(--text-dim); font-family: 'VT323', monospace; font-size: 0.9rem; }
+        .wo-teams { flex: 1; font-size: 1.08rem; line-height: 1.25; min-width: 0; }
+        .wo-teams .tbd { color: var(--text-dim); }
+        .wo-btns { flex: 0 0 auto; display: flex; gap: 5px; }
+        .wo-note { margin-top: 12px; color: var(--text-dim); font-size: 1rem; text-align: center; }
+
+        /* === VOD BUTTONS === */
+        .vod-btn {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.44rem;
+            padding: 6px 7px;
+            background: var(--accent-gold-deep);
+            color: #1b1206;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.6);
+            letter-spacing: 1px;
+            transition: transform .08s steps(2), background .15s;
+            white-space: nowrap;
+        }
+        .vod-btn:hover { background: var(--accent-gold-soft); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 rgba(0,0,0,0.6); }
+        .vod-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 rgba(0,0,0,0.6); }
+        .vod-btn.shotty { background: #0e3a42; color: var(--accent-teal); border-color: var(--accent-teal-dim); }
+        .vod-btn.shotty:hover { background: #14545f; color: #d9fffa; }
+        .vod-btn.dead {
+            background: rgba(5,13,16,0.5);
+            color: var(--text-dim);
+            border-color: rgba(255,255,255,0.14);
+            box-shadow: none;
+            cursor: url('assets/cursor.png') 1 1, default;
+        }
+        .vod-btn.dead:hover { transform: none; background: rgba(5,13,16,0.5); box-shadow: none; }
+
+        /* === BRACKET === */
+        .bracket-preamble { text-align: center; color: var(--text-dim); font-size: 1.15rem; margin-bottom: 22px; }
+        #bracket {
+            width: min(1440px, 97vw);
+            margin-left: calc((100% - min(1440px, 97vw)) / 2);
+        }
+        .bracket-flow-wrap {
+            overflow-x: auto;
+            padding: 44px 8px 16px;
+            margin-bottom: 18px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .bracket-flow {
+            position: relative;
+            width: 1300px;
+            height: 1100px;
+            margin: 0 auto;
+        }
+        .bf-lines { position: absolute; inset: 0; pointer-events: none; }
+        .bf-lines path { fill: none; shape-rendering: crispEdges; }
+        .bf-lines path.w {
+            stroke: var(--accent-gold-deep);
+            stroke-width: 3;
+            filter: drop-shadow(0 0 4px rgba(255, 180, 70, 0.35));
+        }
+        .bf-lines path.l {
+            stroke: var(--accent-teal-dim);
+            stroke-width: 2;
+            stroke-dasharray: 6 5;
+        }
+        .bf-zone-label {
+            position: absolute;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.56rem;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+            white-space: nowrap;
+        }
+        .bf-zone-label.ub-label { color: var(--accent-gold); }
+        .bf-zone-label.lb-label { color: var(--accent-teal); }
+        .match-box {
+            background: rgba(5,13,16,0.65);
+            border: 2px solid rgba(255,217,122,0.18);
+            padding: 8px;
+        }
+        .match-meta {
+            display: flex; justify-content: space-between;
+            font-size: 0.85rem; color: var(--text-dim);
+            border-bottom: 2px dashed rgba(141,245,234,0.12);
+            padding-bottom: 4px; margin-bottom: 5px;
+        }
+        .match-id { color: var(--accent-gold-soft); font-family: 'Press Start 2P', monospace; font-size: 0.5rem; }
+        .match-slot { display: flex; justify-content: space-between; padding: 2px 0; font-size: 1rem; }
+        .slot-team { color: var(--accent-cream); white-space: nowrap; }
+        .slot-team.tbd { color: var(--text-dim); }
+        .slot-team.won { color: var(--accent-gold); }
+        .slot-score { color: var(--accent-teal); }
+        .match-fate {
+            display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 6px;
+            border-top: 2px dashed rgba(141,245,234,0.12);
+            margin-top: 5px; padding-top: 5px;
+            font-size: 0.8rem; line-height: 1.3;
+        }
+        .fate-w { color: var(--accent-gold); }
+        .fate-l { color: var(--accent-teal); }
+        .fate-l.out { color: #e2574c; }
+
+        .match-box.bf {
+            position: absolute;
+            width: 190px;
+            margin: 0;
+            background: rgba(8, 24, 29, 0.92);
+            padding: 6px;
+        }
+        .match-box.bf .flag { width: 20px; vertical-align: -2px; margin-right: 6px; }
+        .match-box.bf.elim { border-color: rgba(160, 60, 52, 0.55); }
+        .match-box.bf.gf {
+            border: 3px solid var(--accent-gold);
+            box-shadow: 0 0 22px rgba(255, 180, 70, 0.3), var(--px) var(--px) 0 rgba(0,0,0,0.6);
+            background: rgba(20, 16, 5, 0.92);
+        }
+        .vod-row {
+            display: flex; gap: 4px;
+            border-top: 2px dashed rgba(141,245,234,0.12);
+            margin-top: 5px; padding-top: 6px;
+        }
+        .vod-row .vod-btn { flex: 1; padding: 6px 2px; text-align: center; }
+
+        .bracket-legend {
+            display: flex; flex-wrap: wrap; gap: 18px;
+            justify-content: center;
+            color: var(--text-dim); font-size: 1rem;
+        }
+        .leg-item { display: flex; align-items: center; gap: 7px; }
+        .leg-dot { width: 10px; height: 10px; display: inline-block; }
+        .leg-dot.ub { background: var(--accent-gold); }
+        .leg-dot.lb { background: var(--accent-teal); }
+        .watch-link { color: var(--accent-gold); text-decoration: underline; }
+        .watch-link:hover { color: var(--accent-cream); }
+
+        .flag { display: inline-block; width: 30px; margin-right: 10px; vertical-align: -3px; }
+        .flag img { width: 100%; border: 1px solid rgba(0,0,0,0.6); image-rendering: auto; }
+
+        /* === RESULTS (spoiler mode only) === */
+        .results-card { text-align: center; }
+        .results-standings {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px; margin: 18px 0 8px;
+        }
+        .dist-item {
+            background: var(--bg-stone);
+            border: 3px solid var(--glass-border-dim);
+            box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.55);
+            padding: 12px 8px;
+            display: flex; flex-direction: column; gap: 6px;
+        }
+        .dist-item.rank-1 { border-color: var(--accent-gold); }
+        .dist-item.rank-2 { border-color: #c8ccd2; }
+        .dist-item.rank-3 { border-color: #b9763a; }
+        .dist-item .place { font-family: 'Press Start 2P', monospace; font-size: 0.7rem; color: var(--accent-cream); }
+        .dist-item.rank-1 .place { color: var(--accent-gold); }
+        .dist-item .percent { font-family: 'Press Start 2P', monospace; font-size: 1rem; color: var(--accent-teal); }
+        .dist-item .dist-team { font-size: 1.15rem; color: var(--accent-cream); }
+        .results-pool { margin: 14px 0 4px; color: var(--accent-teal); font-size: 1.15rem; }
+        .results-pool strong { font-family: 'Press Start 2P', monospace; font-size: 0.9rem; }
+
+        /* === THE 8 NATIONS === */
+        .teams-grid-a {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+            gap: 16px;
+        }
+        .team-card-a {
+            background: var(--bg-stone);
+            border: 3px solid var(--glass-border-dim);
+            box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.6);
+            overflow: hidden;
+            transition: transform .1s steps(2), border-color .15s, box-shadow .15s;
+        }
+        .team-card-a:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            box-shadow: calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6), 0 0 22px rgba(255,180,70,0.25);
+        }
+        .team-banner {
+            position: relative;
+            height: 150px;
+            background: var(--bg-deeper);
+            overflow: hidden;
+        }
+        .team-banner video, .team-banner img.art {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+        }
+        .team-banner::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(rgba(5,13,16,0.05) 30%, rgba(13,34,40,0.96) 96%);
+            pointer-events: none;
+        }
+        .team-banner .team-seed {
+            position: absolute; top: 6px; left: 6px; z-index: 2;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            color: var(--accent-teal);
+            background: rgba(5,13,16,0.75);
+            border: 2px solid var(--accent-teal-dim);
+            padding: 4px 5px;
+        }
+        .team-banner .team-name {
+            position: absolute;
+            left: 0; right: 0; bottom: 8px;
+            z-index: 2;
+            display: flex; align-items: center; justify-content: center; gap: 9px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.66rem;
+            color: var(--accent-gold);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.85);
+            letter-spacing: 1px;
+        }
+        .team-roster { list-style: none; padding: 2px 0 6px; background: rgba(5,13,16,0.45); border-top: 3px solid rgba(255,217,122,0.18); }
+        .tr-player { display: flex; align-items: center; gap: 8px; padding: 4px 12px; min-height: 54px; }
+        .tr-player + .tr-player { border-top: 2px solid rgba(141,245,234,0.07); }
+        .tr-medal { position: relative; width: 38px; flex: 0 0 38px; height: 36px; }
+        .tr-medal img { display: block; margin: 0 auto; width: 36px; height: 36px; object-fit: contain; image-rendering: auto; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.6)); }
+        .tr-medal .rank-pill {
+            position: absolute; top: 22px; left: 50%; transform: translateX(-50%); z-index: 1;
+            font-family: 'VT323', monospace; font-size: 17px; line-height: 1;
+            padding: 1px 4px 2px;
+            background: rgba(5,13,16,0.95);
+            border: 1px solid var(--accent-gold-deep);
+            color: var(--accent-gold);
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.9);
+            white-space: nowrap;
+        }
+        .tr-name { flex: 1; font-size: 1.2rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tr-name a { color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(141,245,234,0.4); }
+        .tr-name a:hover { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
+        .tr-mmr { font-weight: bold; font-size: 1.3rem; color: var(--accent-gold); text-shadow: 2px 2px 0 rgba(0,0,0,0.85); }
+        .tr-mmr.na { color: var(--text-dim); }
+        .teams-note { margin-top: 10px; color: var(--text-dim); font-size: 1rem; text-align: center; }
+
+        /* === PRIZE === */
+        .prize-card { text-align: center; }
+        .crest-img {
+            width: min(220px, 50vw);
+            margin: 4px auto 6px;
+            display: block;
+            filter: drop-shadow(0 0 22px rgba(255,170,60,0.35));
+            animation: crestFloat 5s ease-in-out infinite;
+        }
+        @keyframes crestFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .base-pool-label {
+            font-family: 'Press Start 2P', monospace; font-size: 0.6rem;
+            color: var(--text-dim); text-transform: uppercase;
+        }
+        .total-prize {
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            color: var(--accent-gold);
+            margin: 12px 0 6px;
+            text-shadow: var(--px) var(--px) 0 #3a2406, calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6), 0 0 30px rgba(255,170,60,0.45);
+        }
+        .pool-breakdown { color: var(--text-dim); font-size: 1.1rem; }
+        .pool-note { color: var(--text-dim); font-size: 1.05rem; margin-top: 10px; }
+        .pool-note .heart, .donors-footer .heart { color: #e2574c; }
+        .donors-card { margin-top: 26px; text-align: center; }
+        .donors-heading {
+            font-family: 'Press Start 2P', monospace; font-size: 0.85rem;
+            color: var(--accent-gold);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.7);
+        }
+        .donors-subheading { color: var(--text-dim); margin: 8px 0 14px; }
+        .donors-list { max-width: 460px; margin: 0 auto; }
+        .donor-row {
+            display: flex; justify-content: space-between;
+            padding: 7px 12px;
+            border-bottom: 2px dashed rgba(255,217,122,0.15);
+            font-size: 1.15rem;
+        }
+        .donor-name { color: var(--accent-cream); }
+        .donor-amount { color: var(--accent-teal); }
+        .donors-footer { margin-top: 12px; color: var(--text-dim); }
+
+        .playlist-link, .donate-btn {
+            display: inline-block;
+            margin-top: 18px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            text-decoration: none;
+            color: #1b1206;
+            background: var(--accent-gold-deep);
+            border: 3px solid var(--accent-gold);
+            padding: 14px 22px;
+            box-shadow: inset 0 0 0 2px rgba(0,0,0,0.25), var(--px) var(--px) 0 rgba(0,0,0,0.7);
+            transition: transform .08s steps(2), background .15s;
+        }
+        .playlist-link:hover, .donate-btn:hover {
+            background: var(--accent-gold-soft);
+            transform: translate(-2px, -2px);
+            box-shadow: inset 0 0 0 2px rgba(0,0,0,0.25), calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.7);
+        }
+
+        /* === MODAL === */
+        .wc-modal {
+            position: fixed; inset: 0; z-index: 10005;
+            display: none;
+            align-items: center; justify-content: center;
+            background: rgba(2, 8, 10, 0.9);
+            padding: 20px;
+        }
+        .wc-modal.open { display: flex; }
+        .wc-modal-box {
+            background: var(--bg-panel-solid);
+            border: 3px solid var(--accent-gold-deep);
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.6), 0 0 40px rgba(255,180,70,0.2);
+            width: min(920px, 96vw);
+            max-height: 92vh;
+            overflow-y: auto;
+            padding: 18px;
+        }
+        .wc-modal-box.narrow { width: min(560px, 94vw); }
+        .wc-modal-head {
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .wc-modal-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.72rem;
+            color: var(--accent-gold);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.7);
+            line-height: 1.6;
+        }
+        .wc-modal-close {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+            background: var(--bg-stone);
+            color: var(--accent-cream);
+            border: 3px solid var(--accent-gold-deep);
+            padding: 9px 11px;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.6);
+        }
+        .wc-modal-close:hover { color: var(--accent-gold); background: #1c4750; }
+        .wc-player {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border: 3px solid var(--accent-gold-deep);
+        }
+        .wc-player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+        .wc-modal-foot { margin-top: 12px; text-align: center; color: var(--text-dim); font-size: 1rem; }
+        .wc-modal-foot a { color: var(--accent-teal); }
+        .wc-modal-foot a:hover { color: var(--accent-gold); }
+        .wc-modal-body { font-size: 1.2rem; line-height: 1.5; color: var(--text-main); }
+        .wc-modal-body p + p { margin-top: 10px; }
+        .wc-modal-btns { display: flex; gap: 12px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+        .wc-modal-btns .vod-btn { font-size: 0.55rem; padding: 11px 14px; }
+        .wc-modal-btns .vod-btn.danger { background: #7c2a22; border-color: #e2574c; color: #fff; }
+        .wc-modal-btns .vod-btn.danger:hover { background: #9c352b; }
+
+        /* === FOOTER === */
+        .footer {
+            position: relative; z-index: 3;
+            text-align: center;
+            padding: 26px 10px 30px;
+            color: var(--text-dim);
+            font-size: 1.05rem;
+            border-top: 3px solid rgba(255,217,122,0.15);
+            margin-top: 30px;
+            background: rgba(5,13,16,0.8);
+        }
+        .footer a { color: var(--accent-teal); text-decoration: none; }
+        .footer a:hover { color: var(--accent-gold); }
+
+        @media (max-width: 640px) {
+            body { font-size: 19px; }
+            .px-card, .hero-screen { border-width: 28px; border-image-slice: 150; }
+            .nav-btn { font-size: 0.52rem; padding: 10px 10px; }
+            .wo-id { flex-basis: 78px; }
+            .wo-teams { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-base"></div>
+    <div class="bg-vignette"></div>
+    <div class="scanlines"></div>
+    <div class="mouse-glow" id="mouseGlow"></div>
+
+    <div class="container">
+        <header class="hero">
+            <div class="hero-screen">
+                <video class="hero-video" autoplay muted loop playsinline poster="assets/scene_01_stadium.jpg">
+                    <source src="assets/loop_01_stadium.mp4" type="video/mp4">
+                </video>
+                <div class="hero-overlay">
+                    <h1 class="h-title">THE VOD VAULT</h1>
+                    <div class="h-divider">
+                        <span class="line"></span>
+                        <span class="ornament">◆</span>
+                        <span class="line"></span>
+                    </div>
+                    <div class="h-sub">AD WORLD CUP 2026 ★ SPOILER FREE</div>
+                </div>
+            </div>
+        </header>
+
+        <nav class="nav-bar">
+            <a href="#watchorder" class="nav-btn primary">WATCH ORDER</a>
+            <a href="#bracket" class="nav-btn">BRACKET</a>
+            <a href="#nations" class="nav-btn">THE 8 NATIONS</a>
+            <a href="#about" class="nav-btn">FORMAT</a>
+            <a href="index.html" class="nav-btn">MAIN PAGE</a>
+            <button id="spoiler-btn" class="nav-btn spoiler-btn">SPOILERS: OFF</button>
+        </nav>
+
+        <div class="shield-container">
+            <div class="shield-box" id="shield-box">
+                <div class="shield-title" id="shield-title">🛡 SPOILER SHIELD: <span class="ok">ACTIVE</span></div>
+                <p class="shield-text" id="shield-text">
+                    The bracket below is frozen in its day-one state and every best-of-three lists
+                    <strong>three games</strong>, no matter how the series actually went.
+                    If a VOD does not exist, the shield will not tell you why.
+                    Watch in order and nothing gets ruined. When you are done, hit
+                    <strong>SPOILERS</strong> up top to reveal every result.
+                </p>
+            </div>
+        </div>
+
+        <section id="watchorder" class="section-wrapper">
+            <h2 class="section-title">WATCH ORDER</h2>
+            <p class="title-sub">Top to bottom is chronological. That is the whole trick. Start at SR1 #1 and keep going.</p>
+            <div class="px-card">
+                <div class="px-card-pad">
+                    <div class="wo-grid" id="wo-grid"></div>
+                    <p class="wo-note">⚠ YouTube titles name the two teams playing. That is unavoidable, so open a game only when you have reached it.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="bracket" class="section-wrapper">
+            <h2 class="section-title">BRACKET</h2>
+            <p class="bracket-preamble">Eight teams, double-elimination, two days. Same map as the live weekend, minus the outcomes.<br>
+            Follow the gold lines for the winners path, the dashed teal lines for where losers drop.</p>
+            <div class="px-card">
+                <div class="px-card-pad">
+                <div class="bracket-flow-wrap">
+                <div class="bracket-flow">
+                    <svg class="bf-lines" width="1300" height="1100" aria-hidden="true">
+                        <path class="w" d="M190 79 H202 V168 H215"/>
+                        <path class="w" d="M190 257 H202 V168 H215"/>
+                        <path class="w" d="M190 435 H202 V524 H215"/>
+                        <path class="w" d="M190 613 H202 V524 H215"/>
+                        <path class="w" d="M405 168 H417 V346 H430"/>
+                        <path class="w" d="M405 524 H417 V346 H430"/>
+                        <path class="w" d="M620 346 H1000 V627 H1075"/>
+                        <path class="w" d="M405 819 H430"/>
+                        <path class="w" d="M405 997 H430"/>
+                        <path class="w" d="M620 819 H632 V908 H645"/>
+                        <path class="w" d="M620 997 H632 V908 H645"/>
+                        <path class="w" d="M835 908 H860"/>
+                        <path class="w" d="M1050 908 H1062 V627 H1075"/>
+                        <path class="l" d="M95 692 V819 H215"/>
+                        <path class="l" d="M310 603 V680 H525 V740"/>
+                        <path class="l" d="M525 425 V660 H955 V829"/>
+                    </svg>
+                    <div class="bf-zone-label ub-label" style="left:0; top:-34px;">&#11014; UPPER BRACKET &middot; winners path</div>
+                    <div class="bf-zone-label lb-label" style="left:215px; top:700px;">&#11015; LOWER BRACKET &middot; lose here and you are out</div>
+                    <div class="match-box bf" style="left:0px; top:0px;" data-match="SR1 #1">
+                        <div class="match-meta"><span class="match-id">SR1 #1</span><span class="match-time">Bo1 &middot; SAT 17:00</span></div>
+                        <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/fi.svg" alt="FI" loading="lazy"></span>Finland</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/de.svg" alt="DE" loading="lazy"></span>Germany</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; SR2 #1</span><span class="fate-l">&#9660; SL #1</span></div>
+                    </div>
+                    <div class="match-box bf" style="left:0px; top:178px;" data-match="SR1 #2">
+                        <div class="match-meta"><span class="match-id">SR1 #2</span><span class="match-time">Bo1 &middot; SAT 17:00</span></div>
+                        <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/ru.svg" alt="RU" loading="lazy"></span>Russia</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/dz.svg" alt="DZ" loading="lazy"></span>Algeria</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; SR2 #1</span><span class="fate-l">&#9660; SL #1</span></div>
+                    </div>
+                    <div class="match-box bf" style="left:0px; top:356px;" data-match="SR1 #3">
+                        <div class="match-meta"><span class="match-id">SR1 #3</span><span class="match-time">Bo1 &middot; SAT 18:00</span></div>
+                        <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/kz.svg" alt="KZ" loading="lazy"></span>Kazakhstan</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/gb.svg" alt="GB" loading="lazy"></span>UK</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; SR2 #2</span><span class="fate-l">&#9660; SL #2</span></div>
+                    </div>
+                    <div class="match-box bf" style="left:0px; top:534px;" data-match="SR1 #4">
+                        <div class="match-meta"><span class="match-id">SR1 #4</span><span class="match-time">Bo1 &middot; SAT 18:00</span></div>
+                        <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/us.svg" alt="US" loading="lazy"></span>USA</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team"><span class="flag"><img src="https://flagcdn.com/ua.svg" alt="UA" loading="lazy"></span>Ukraine</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; SR2 #2</span><span class="fate-l">&#9660; SL #2</span></div>
+                    </div>
+                    <div class="match-box bf" style="left:215px; top:89px;" data-match="SR2 #1">
+                        <div class="match-meta"><span class="match-id">SR2 #1</span><span class="match-time">Bo1 &middot; SAT 19:00</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W SR1 #1</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W SR1 #2</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; UB FINAL</span><span class="fate-l">&#9660; LB R1 #2</span></div>
+                    </div>
+                    <div class="match-box bf" style="left:215px; top:445px;" data-match="SR2 #2">
+                        <div class="match-meta"><span class="match-id">SR2 #2</span><span class="match-time">Bo1 &middot; SAT 19:00</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W SR1 #3</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W SR1 #4</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; UB FINAL</span><span class="fate-l">&#9660; LB R1 #1</span></div>
+                    </div>
+                    <div class="match-box bf" style="left:430px; top:267px;" data-match="UB FINAL">
+                        <div class="match-meta"><span class="match-id">UB FINAL</span><span class="match-time">Bo3 &middot; SAT 22:00</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W SR2 #1</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W SR2 #2</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; GRAND FINAL</span><span class="fate-l">&#9660; LB FINAL</span></div>
+                    </div>
+                    <div class="match-box bf elim" style="left:215px; top:740px;" data-match="SL #1">
+                        <div class="match-meta"><span class="match-id">SL #1</span><span class="match-time">Bo1 &middot; SAT 20:00</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">L SR1 #1</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">L SR1 #2</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; LB R1 #1</span><span class="fate-l out">&#9760; 7th-8th</span></div>
+                    </div>
+                    <div class="match-box bf elim" style="left:215px; top:918px;" data-match="SL #2">
+                        <div class="match-meta"><span class="match-id">SL #2</span><span class="match-time">Bo1 &middot; SAT 20:00</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">L SR1 #3</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">L SR1 #4</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; LB R1 #2</span><span class="fate-l out">&#9760; 7th-8th</span></div>
+                    </div>
+                    <div class="match-box bf elim" style="left:430px; top:740px;" data-match="LB R1 #1">
+                        <div class="match-meta"><span class="match-id">LB R1 #1</span><span class="match-time">Bo1 &middot; SAT 21:00</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">L SR2 #2</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W SL #1</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; LB SF</span><span class="fate-l out">&#9760; 5th-6th</span></div>
+                    </div>
+                    <div class="match-box bf elim" style="left:430px; top:918px;" data-match="LB R1 #2">
+                        <div class="match-meta"><span class="match-id">LB R1 #2</span><span class="match-time">Bo1 &middot; SAT 21:00</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">L SR2 #1</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W SL #2</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; LB SF</span><span class="fate-l out">&#9760; 5th-6th</span></div>
+                    </div>
+                    <div class="match-box bf elim" style="left:645px; top:829px;" data-match="LB SF">
+                        <div class="match-meta"><span class="match-id">LB SF</span><span class="match-time">Bo3 &middot; SUN 17:00</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W LB R1 #1</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W LB R1 #2</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; LB FINAL</span><span class="fate-l out">&#9760; 4th</span></div>
+                    </div>
+                    <div class="match-box bf elim" style="left:860px; top:829px;" data-match="LB FINAL">
+                        <div class="match-meta"><span class="match-id">LB FINAL</span><span class="match-time">Bo3 &middot; SUN 19:30</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">L UB FINAL</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W LB SF</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#9650; GRAND FINAL</span><span class="fate-l out">&#9760; 3rd</span></div>
+                    </div>
+                    <div class="match-box bf gf" style="left:1075px; top:548px;" data-match="GRAND FINAL">
+                        <div class="match-meta"><span class="match-id">GRAND FINAL</span><span class="match-time">Bo3 &middot; SUN 22:00</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W UB FINAL</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-slot"><span class="slot-team tbd">W LB FINAL</span><span class="slot-score">&mdash;</span></div>
+                        <div class="match-fate"><span class="fate-w">&#127942; CHAMPION</span><span class="fate-l">&#9660; RUNNER-UP</span></div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="bracket-legend">
+                    <div class="leg-item"><span class="leg-dot ub"></span>Winners path</div>
+                    <div class="leg-item"><span style="color: var(--accent-gold);">▲ W →</span>&nbsp;where the winner advances</div>
+                    <div class="leg-item"><span style="color: var(--accent-teal);">▼ L →</span>&nbsp;where the loser drops</div>
+                    <div class="leg-item"><span style="color:#e2574c;">☠ OUT</span>&nbsp;eliminated (final placement)</div>
+                    <div class="leg-item"><button class="vod-btn" style="pointer-events:none;">▶ GAME</button>&nbsp;opens the VOD right here</div>
+                    <div class="leg-item"><button class="vod-btn shotty" style="pointer-events:none;">▶ GAME</button>&nbsp;VOD from <a class="watch-link" href="https://www.youtube.com/@GodWithAShotgun" target="_blank" rel="noopener">Shotty's channel</a></div>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="results" class="section-wrapper" hidden>
+            <h2 class="section-title">FINAL STANDINGS</h2>
+            <div class="px-card results-card">
+                <video class="card-bg-video" autoplay muted loop playsinline poster="assets/scene_04_trophy.jpg" aria-hidden="true">
+                    <source src="assets/div_04_trophy.mp4" type="video/mp4">
+                </video>
+                <div class="px-card-pad">
+                    <img src="assets/crest_trophy.png" alt="Trophy crest" class="crest-img">
+                    <div class="results-standings">
+                        <div class="dist-item rank-1">
+                            <span class="place">🏆 1ST</span>
+                            <span class="dist-team"><span class="flag"><img src="https://flagcdn.com/ru.svg" alt="RU" loading="lazy"></span>RUSSIA</span>
+                            <span class="percent">50%</span>
+                        </div>
+                        <div class="dist-item rank-2">
+                            <span class="place">2ND</span>
+                            <span class="dist-team"><span class="flag"><img src="https://flagcdn.com/us.svg" alt="US" loading="lazy"></span>USA</span>
+                            <span class="percent">25%</span>
+                        </div>
+                        <div class="dist-item rank-3">
+                            <span class="place">3RD</span>
+                            <span class="dist-team"><span class="flag"><img src="https://flagcdn.com/fi.svg" alt="FI" loading="lazy"></span>FINLAND</span>
+                            <span class="percent">15%</span>
+                        </div>
+                        <div class="dist-item">
+                            <span class="place">4TH</span>
+                            <span class="dist-team"><span class="flag"><img src="https://flagcdn.com/de.svg" alt="DE" loading="lazy"></span>GERMANY</span>
+                            <span class="percent">10%</span>
+                        </div>
+                    </div>
+                    <p class="results-pool">Final prize pool: <strong>1001.50€</strong> &bull; 23 community donors pushed it past 1000€ live during the grand final.</p>
+                    <p class="pool-note">Russia dropped exactly one game all weekend. The full stat breakdown lives in the tournament report.</p>
+                    <a class="playlist-link" href="report.html">📊 READ THE TOURNAMENT REPORT</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="nations" class="section-wrapper">
+            <h2 class="section-title">THE 8 NATIONS</h2>
+            <p class="title-sub">The squads exactly as they were locked before day one. MMR = AD MMR.</p>
+            <div class="px-card">
+                <div class="px-card-pad">
+                    <div class="teams-grid-a" id="teams-grid"></div>
+                    <p class="teams-note">Hover a card to bring it to life &bull; seeds are pre-tournament ratings, not results</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="scene-divider" aria-hidden="true"><video autoplay muted loop playsinline poster="assets/scene_03_arena.jpg"><source src="assets/div_03_arena.mp4" type="video/mp4"></video></div>
+
+        <section id="about" class="section-wrapper">
+            <h2 class="section-title">FORMAT</h2>
+            <div class="px-card about-card">
+                <div class="px-card-pad">
+                    <p>The Ability Draft <strong>World Cup 2026</strong>: <strong>8 national teams</strong>, <strong>double-elimination</strong>, played across two days on <span class="date-highlight">July 25 and 26, 2026</span>.</p>
+                    <p style="margin-top: 12px;">Day one was a seeding gauntlet of best-of-ones that sorted teams into the upper and lower brackets, capped by the Bo3 upper bracket final. Day two ran the lower bracket semifinal, the lower bracket final and the grand final, all best-of-three.</p>
+                    <div class="info-grid">
+                        <div class="info-chip"><span class="label">Teams</span><span class="value">8</span></div>
+                        <div class="info-chip"><span class="label">Format</span><span class="value">DOUBLE ELIM</span></div>
+                        <div class="info-chip"><span class="label">Days</span><span class="value">2</span></div>
+                        <div class="info-chip"><span class="label">Games played</span><span class="value">18</span></div>
+                        <div class="info-chip"><span class="label">Server</span><span class="value">EU WEST</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="prizepool" class="section-wrapper">
+            <h2 class="section-title">PRIZE POOL</h2>
+            <div class="px-card prize-card">
+                <div class="px-card-pad">
+                    <div class="base-pool-label" id="pool-label">Base Pool (Host)</div>
+                    <div class="total-prize" id="total-prize-amount">250&euro;</div>
+                    <div class="pool-breakdown" id="pool-breakdown" hidden></div>
+                    <p class="pool-note" style="margin-top:14px;">
+                        <span class="heart">♥</span> Split 50 / 25 / 15 / 10 between the top four. Who took which cut hides behind the spoiler switch.
+                    </p>
+                </div>
+            </div>
+            <div class="px-card donors-card" id="donors-card" hidden>
+                <div class="px-card-pad">
+                    <div class="donors-heading">HALL OF HEROES</div>
+                    <p class="donors-subheading">Honoring the prize pool for the community</p>
+                    <div class="donors-list" id="donor-list"></div>
+                    <div class="donors-footer" id="donors-footer"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="wc-modal" id="wc-modal" role="dialog" aria-modal="true">
+        <div class="wc-modal-box" id="wc-modal-box"></div>
+    </div>
+
+    <footer class="footer">
+        <p>AD World Cup 2026 &bull; <a href="index.html">Main page</a> &bull; <a href="https://www.youtube.com/@bloppdota2" target="_blank" rel="noopener">@bloppdota2 on YouTube</a> &bull; Vault curated by <a href="https://github.com/bloppbot">BloppBOT</a></p>
+    </footer>
+
+    <script>
+        document.body.classList.add('js');
+
+        // === CRT BOOT (first visit per session) ===
+        if (!sessionStorage.getItem('wc_booted_vods')) {
+            sessionStorage.setItem('wc_booted_vods', '1');
+            const boot = document.createElement('div');
+            boot.className = 'crt-boot';
+            boot.innerHTML = '<div class="boot-title">THE VOD VAULT</div>';
+            document.body.appendChild(boot);
+            setTimeout(() => boot.remove(), 1600);
+        }
+
+        // === SCENE VIDEO MANAGER ===
+        (function videoManager() {
+            const vids = document.querySelectorAll('.scene-divider video, .card-bg-video');
+            const io = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    const v = e.target;
+                    if (e.isIntersecting) v.play().catch(()=>{});
+                    else v.pause();
+                });
+            }, { rootMargin: '120px 0px' });
+            vids.forEach(v => io.observe(v));
+        })();
+
+        // === PIXEL-DISSOLVE SCROLL REVEALS ===
+        (function reveals() {
+            const targets = document.querySelectorAll('.section-wrapper, .scene-divider');
+            targets.forEach(t => t.classList.add('reveal'));
+            const io = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+                });
+            }, { rootMargin: '0px 0px -8% 0px' });
+            targets.forEach(t => io.observe(t));
+        })();
+
+        // === FOOTER ROBOT ===
+        (function robotWalker() {
+            function walk() {
+                const v = document.createElement('video');
+                v.className = 'robot-walker';
+                v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
+                v.src = 'assets/robot_walk.webm';
+                v.addEventListener('error', () => v.remove());
+                document.body.appendChild(v);
+                requestAnimationFrame(() => v.classList.add('walking'));
+                setTimeout(() => v.remove(), 27000);
+            }
+            setTimeout(walk, 45000);
+            setInterval(walk, 200000 + Math.random() * 90000);
+        })();
+
+        // === PIXEL EMBERS ===
+        (function createEmbers() {
+            for (let i = 0; i < 26; i++) {
+                const e = document.createElement('div');
+                e.className = 'ember';
+                e.style.left = Math.random() * 100 + '%';
+                e.style.top = (40 + Math.random() * 60) + '%';
+                e.style.animationDelay = (Math.random() * 18) + 's';
+                e.style.animationDuration = (Math.random() * 12 + 12) + 's';
+                document.body.appendChild(e);
+            }
+        })();
+
+        // === MOUSE GLOW ===
+        const mouseGlow = document.getElementById('mouseGlow');
+        let mouseTimeout;
+        document.addEventListener('mousemove', (e) => {
+            mouseGlow.style.left = e.clientX + 'px';
+            mouseGlow.style.top = e.clientY + 'px';
+            mouseGlow.classList.add('active');
+            clearTimeout(mouseTimeout);
+            mouseTimeout = setTimeout(() => mouseGlow.classList.remove('active'), 1000);
+        });
+
+        function esc(s) {
+            return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        }
+
+        /* ============================================================
+           THE VAULT: match data.
+           games[]: {v: youtubeId, src?: 'shotty'} for real VODs,
+                    {r: 'wo'|'unplayed'|'norec'} for holes in the tape.
+           Bo3 always lists 3 entries. That is the spoiler shield.
+           ============================================================ */
+        const TEAM_FLAGS = { finland: 'fi', germany: 'de', russia: 'ru', algeria: 'dz', kazakhstan: 'kz', uk: 'gb', usa: 'us', ukraine: 'ua' };
+        const MATCHES = [
+            { id: 'SR1 #1',      bo: 1, day: 1, time: 'SAT 17:00', ph: ['Finland', 'Germany'],       slots: ['Finland', 'Germany'],  score: [1, 0], games: [{ v: 'vA3RbBOOIpk' }] },
+            { id: 'SR1 #2',      bo: 1, day: 1, time: 'SAT 17:00', ph: ['Russia', 'Algeria'],        slots: ['Russia', 'Algeria'],   score: [1, 0], games: [{ r: 'wo' }] },
+            { id: 'SR1 #3',      bo: 1, day: 1, time: 'SAT 18:00', ph: ['Kazakhstan', 'UK'],         slots: ['Kazakhstan', 'UK'],    score: [1, 0], games: [{ v: 'fmByM1aGt20', src: 'shotty' }] },
+            { id: 'SR1 #4',      bo: 1, day: 1, time: 'SAT 18:00', ph: ['USA', 'Ukraine'],           slots: ['USA', 'Ukraine'],      score: [1, 0], games: [{ v: 'a5NYvwLOu-w' }] },
+            { id: 'SR2 #1',      bo: 1, day: 1, time: 'SAT 19:00', ph: ['W SR1 #1', 'W SR1 #2'],     slots: ['Finland', 'Russia'],   score: [0, 1], games: [{ v: '4IjfH24ISXo' }] },
+            { id: 'SR2 #2',      bo: 1, day: 1, time: 'SAT 19:00', ph: ['W SR1 #3', 'W SR1 #4'],     slots: ['Kazakhstan', 'USA'],   score: [0, 1], games: [{ r: 'norec' }] },
+            { id: 'SL #1',       bo: 1, day: 1, time: 'SAT 20:00', ph: ['L SR1 #1', 'L SR1 #2'],     slots: ['Germany', 'Algeria'],  score: [1, 0], games: [{ r: 'wo' }] },
+            { id: 'SL #2',       bo: 1, day: 1, time: 'SAT 20:00', ph: ['L SR1 #3', 'L SR1 #4'],     slots: ['UK', 'Ukraine'],       score: [0, 1], games: [{ r: 'wo' }] },
+            { id: 'LB R1 #1',    bo: 1, day: 1, time: 'SAT 21:00', ph: ['L SR2 #2', 'W SL #1'],      slots: ['Kazakhstan', 'Germany'], score: [0, 1], games: [{ v: 'glGgP9MsAtk' }] },
+            { id: 'LB R1 #2',    bo: 1, day: 1, time: 'SAT 21:00', ph: ['L SR2 #1', 'W SL #2'],      slots: ['Finland', 'Ukraine'],  score: [1, 0], games: [{ v: 'Z4kKTDYGM3I' }] },
+            { id: 'UB FINAL',    bo: 3, day: 1, time: 'SAT 22:00', ph: ['W SR2 #1', 'W SR2 #2'],     slots: ['Russia', 'USA'],       score: [2, 0], games: [{ v: 'Cr9271FrIsE' }, { v: 'X_pXRosif_E' }, { r: 'unplayed' }] },
+            { id: 'LB SF',       bo: 3, day: 2, time: 'SUN 17:00', ph: ['W LB R1 #1', 'W LB R1 #2'], slots: ['Germany', 'Finland'],  score: [1, 2], games: [{ v: 'zYhsiI4bWqE' }, { v: 'D1Bw0nJhVic' }, { v: 'cyI6TvjNTHw' }] },
+            { id: 'LB FINAL',    bo: 3, day: 2, time: 'SUN 19:30', ph: ['L UB FINAL', 'W LB SF'],    slots: ['USA', 'Finland'],      score: [2, 1], games: [{ v: '7b7jhtvxs-Q' }, { v: 'tK9P9_M-6n8' }, { v: 'VI1ISyGGJak' }] },
+            { id: 'GRAND FINAL', bo: 3, day: 2, time: 'SUN 22:00', ph: ['W UB FINAL', 'W LB FINAL'], slots: ['Russia', 'USA'],       score: [2, 1], games: [{ v: 'k2j0RpIdDqc' }, { v: '-55j5hz46C0' }, { v: 'gEeUe4vnNKU' }] },
+        ];
+
+        let spoilers = sessionStorage.getItem('wc_spoilers') === '1';
+
+        /* === MODAL === */
+        const modal = document.getElementById('wc-modal');
+        const modalBox = document.getElementById('wc-modal-box');
+        function openModal(html, narrow) {
+            modalBox.className = 'wc-modal-box' + (narrow ? ' narrow' : '');
+            modalBox.innerHTML = html;
+            modal.classList.add('open');
+        }
+        function closeModal() {
+            modal.classList.remove('open');
+            modalBox.innerHTML = '';
+        }
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+        function openPlayer(m, i) {
+            const g = m.games[i];
+            const gameTag = m.bo === 3 ? ' &middot; GAME ' + (i + 1) : '';
+            const title = spoilers
+                ? esc(m.slots[0]) + ' vs ' + esc(m.slots[1]) + ' &middot; ' + esc(m.id) + gameTag
+                : esc(m.id) + gameTag;
+            openModal(
+                '<div class="wc-modal-head">' +
+                    '<div class="wc-modal-title">▶ ' + title + '</div>' +
+                    '<button class="wc-modal-close" onclick="closeModal()">✕ CLOSE</button>' +
+                '</div>' +
+                '<div class="wc-player"><iframe src="https://www.youtube-nocookie.com/embed/' + g.v + '?autoplay=1&rel=0" ' +
+                    'title="VOD player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>' +
+                '<div class="wc-modal-foot">Playback trouble? <a href="https://www.youtube.com/watch?v=' + g.v + '" target="_blank" rel="noopener">Open on YouTube ↗</a>' +
+                (spoilers ? '' : ' &middot; the YouTube title names both teams') + '</div>'
+            );
+        }
+
+        function openNoVod() {
+            openModal(
+                '<div class="wc-modal-head">' +
+                    '<div class="wc-modal-title">🛡 NO VOD IN THE VAULT</div>' +
+                    '<button class="wc-modal-close" onclick="closeModal()">✕ CLOSE</button>' +
+                '</div>' +
+                '<div class="wc-modal-body">' +
+                    '<p>There is no recording behind this button. Maybe the game was never needed. Maybe it was a walkover. Maybe it simply was not recorded.</p>' +
+                    '<p>The Spoiler Shield will not say which, because that would tell you how a series ended. Move along, nothing leaked. bleep bloop.</p>' +
+                '</div>' +
+                '<div class="wc-modal-btns"><button class="vod-btn" onclick="closeModal()">CARRY ON SPOILER FREE</button></div>',
+                true
+            );
+        }
+
+        function confirmSpoilers() {
+            openModal(
+                '<div class="wc-modal-head">' +
+                    '<div class="wc-modal-title">⚠ DROP THE SPOILER SHIELD?</div>' +
+                    '<button class="wc-modal-close" onclick="closeModal()">✕ CLOSE</button>' +
+                '</div>' +
+                '<div class="wc-modal-body">' +
+                    '<p>This reveals every team, every score, the full lower bracket run and the champion. All of it, instantly, no take-backs until you close the tab.</p>' +
+                    '<p>If you still have VODs to watch, do not do this to yourself.</p>' +
+                '</div>' +
+                '<div class="wc-modal-btns">' +
+                    '<button class="vod-btn" onclick="closeModal()">KEEP ME PROTECTED</button>' +
+                    '<button class="vod-btn danger" onclick="enableSpoilers()">SHOW ME EVERYTHING</button>' +
+                '</div>',
+                true
+            );
+        }
+
+        function enableSpoilers() {
+            sessionStorage.setItem('wc_spoilers', '1');
+            spoilers = true;
+            closeModal();
+            applySpoilers();
+        }
+
+        document.getElementById('spoiler-btn').addEventListener('click', () => {
+            if (spoilers) {
+                sessionStorage.removeItem('wc_spoilers');
+                location.reload();
+            } else {
+                confirmSpoilers();
+            }
+        });
+
+        /* === VOD BUTTON RENDERING === */
+        const DEAD_LABEL = { wo: 'W.O.', unplayed: 'SKIPPED', norec: 'NO REC' };
+        function makeGameBtn(m, i) {
+            const g = m.games[i];
+            const b = document.createElement('button');
+            b.className = 'vod-btn' + (g.src === 'shotty' ? ' shotty' : '');
+            b.textContent = m.bo === 3 ? '▶ G' + (i + 1) : '▶ WATCH';
+            if (spoilers && !g.v) {
+                b.classList.add('dead');
+                b.textContent = DEAD_LABEL[g.r] || 'NO VOD';
+                b.disabled = true;
+            } else {
+                b.addEventListener('click', () => g.v ? openPlayer(m, i) : openNoVod());
+            }
+            return b;
+        }
+        function makeVodRow(m) {
+            const row = document.createElement('div');
+            row.className = 'vod-row';
+            m.games.forEach((g, i) => row.appendChild(makeGameBtn(m, i)));
+            return row;
+        }
+
+        /* === BRACKET: attach VOD rows === */
+        function buildBracketRows() {
+            document.querySelectorAll('.match-box.bf').forEach(box => {
+                const m = MATCHES.find(x => x.id === box.dataset.match);
+                if (!m) return;
+                const old = box.querySelector('.vod-row');
+                if (old) old.remove();
+                box.appendChild(makeVodRow(m));
+            });
+        }
+
+        /* === WATCH ORDER === */
+        function flagHTML(name) {
+            const code = TEAM_FLAGS[name.trim().toLowerCase()];
+            return code ? '<span class="flag"><img src="https://flagcdn.com/' + code + '.svg" alt="" loading="lazy"></span>' : '';
+        }
+        function matchupHTML(m) {
+            if (spoilers) {
+                const w = m.score[0] > m.score[1] ? 0 : 1;
+                return [0, 1].map(i =>
+                    '<span' + (i === w ? ' style="color:var(--accent-gold)"' : '') + '>' + flagHTML(m.slots[i]) + esc(m.slots[i]) + '</span>'
+                ).join(' vs ') + ' <span class="slot-score">&nbsp;' + m.score[0] + ':' + m.score[1] + '</span>';
+            }
+            const known = i => TEAM_FLAGS[m.ph[i].trim().toLowerCase()];
+            return [0, 1].map(i => known(i)
+                ? '<span>' + flagHTML(m.ph[i]) + esc(m.ph[i]) + '</span>'
+                : '<span class="tbd">' + esc(m.ph[i]) + '</span>'
+            ).join(' vs ');
+        }
+        function buildWatchOrder() {
+            const grid = document.getElementById('wo-grid');
+            grid.innerHTML = '';
+            [1, 2].forEach(day => {
+                const col = document.createElement('div');
+                col.className = 'wo-day';
+                col.innerHTML = '<div class="wo-day-title">DAY ' + day + '<small>' + (day === 1 ? 'SAT JULY 25 · seeding + lower bracket + UB final' : 'SUN JULY 26 · all Bo3, all elimination') + '</small></div>';
+                MATCHES.filter(m => m.day === day).forEach(m => {
+                    const row = document.createElement('div');
+                    row.className = 'wo-row';
+                    row.innerHTML =
+                        '<div class="wo-id">' + esc(m.id) + '<small>Bo' + m.bo + ' · ' + esc(m.time) + '</small></div>' +
+                        '<div class="wo-teams">' + matchupHTML(m) + '</div>';
+                    const btns = document.createElement('div');
+                    btns.className = 'wo-btns';
+                    m.games.forEach((g, i) => btns.appendChild(makeGameBtn(m, i)));
+                    row.appendChild(btns);
+                    col.appendChild(row);
+                });
+                if (day === 2) {
+                    const note = document.createElement('p');
+                    note.className = 'wo-note';
+                    note.style.marginTop = '18px';
+                    note.innerHTML = 'Day two is three straight Bo3 series for the trophy.<br>Clear day one first. Then buckle up.';
+                    col.appendChild(note);
+                }
+                grid.appendChild(col);
+            });
+        }
+
+        /* === SPOILER MODE === */
+        function slotTeamHTML(name) {
+            return flagHTML(name) + esc(name.trim());
+        }
+        function applySpoilers() {
+            const btn = document.getElementById('spoiler-btn');
+            btn.textContent = 'SPOILERS: ON';
+            btn.classList.add('on');
+            document.getElementById('shield-title').innerHTML = '🛡 SPOILER SHIELD: <span class="bad">DROPPED</span>';
+            document.getElementById('shield-text').innerHTML =
+                'Everything below shows real teams, real scores and the real champion. ' +
+                'Grayed-out buttons are games that never made it to tape: <strong>W.O.</strong> walkover, ' +
+                '<strong>SKIPPED</strong> series ended early, <strong>NO REC</strong> played but not recorded. ' +
+                'Hit <strong>SPOILERS</strong> again to re-arm the shield.';
+            document.getElementById('results').hidden = false;
+
+            document.querySelectorAll('.match-box.bf').forEach(box => {
+                const m = MATCHES.find(x => x.id === box.dataset.match);
+                if (!m) return;
+                const slots = box.querySelectorAll('.match-slot');
+                const w = m.score[0] > m.score[1] ? 0 : 1;
+                slots.forEach((slot, i) => {
+                    const teamEl = slot.querySelector('.slot-team');
+                    teamEl.innerHTML = slotTeamHTML(m.slots[i]);
+                    teamEl.classList.remove('tbd');
+                    teamEl.classList.toggle('won', i === w);
+                    slot.querySelector('.slot-score').textContent = m.score[i];
+                });
+            });
+
+            buildBracketRows();
+            buildWatchOrder();
+        }
+
+        /* === THE 8 NATIONS (identical to the main page, pre-tournament state) === */
+        (function buildTeams() {
+            const TEAMS = [
+                { nation: 'RUSSIA', cc: 'ru', poster: 'v5_russia.png', loop: 'loop_russia.mp4', seed: 1, roster: [
+                    ['lost~','immortal','#890',4107,265369004],['hedgehog','immortal',null,3670,134290277],
+                    ['Sandstorm','immortal','#3815',3442,155594323],['FoXy','divine-3',null,3432,225442653],
+                    ['shadle','immortal','#680',3424,374665899]]},
+                { nation: 'USA', cc: 'us', poster: 'v4_usa.png', loop: 'loop_usa.mp4', seed: 2, roster: [
+                    ['DJ Dingus','immortal','#2064',3759,379941199],['Poof','immortal','#2875',3725,320587966],
+                    ['FriscyDriscy','immortal',null,3601,192412922],['Jynx','immortal','#1701',3483,372541122],
+                    ['erik','immortal','#933',3424,106473979]]},
+                { nation: 'KAZAKHSTAN', cc: 'kz', poster: 'v4_kazakhstan.png', loop: 'loop_kazakhstan.mp4', seed: 3, roster: [
+                    ['Ptenchik','immortal','#2568',3666,901021922],['Eurodance','immortal','#2553',3471,149621691],
+                    ['Aniki','immortal','#870',3334,292867484],['FantikJr','legend-3',null,3196,1011109589],
+                    ['Alexandr','immortal','#1956',1642,189046705]]},
+                { nation: 'FINLAND', cc: 'fi', poster: 'v5_finland.png', loop: 'loop_finland.mp4', seed: 4, roster: [
+                    ['noertti','immortal','#2428',3666,54662003],['Ipelius','immortal','#4974',3522,160108436],
+                    ['Spooner','immortal','#3534',3308,112321831],['sifla','immortal','#3136',3199,3292479],
+                    ['Kenny','divine-5',null,3130,12033153]]},
+                { nation: 'GERMANY', cc: 'de', poster: 'v4_germany.png', loop: 'loop_germany.mp4', seed: 5, roster: [
+                    ['Mahaximus','immortal','#618',3886,94301365],['fish','immortal','#3610',3381,20641880],
+                    ['Drea','immortal',null,3375,12853293],['rob','immortal',null,3276,106968649],
+                    ['Mangology','immortal',null,3127,167275877]]},
+                { nation: 'UKRAINE', cc: 'ua', poster: 'v4_ukraine.png', loop: 'loop_ukraine.mp4', seed: 6, roster: [
+                    ['et si','immortal','#4482',3975,211202443],['Silent Killer','immortal',null,3446,190032690],
+                    ['John Cena','immortal',null,3371,302659781],['slightly','immortal','#3013',3295,358734230],
+                    ['Elnubres','immortal',null,2438,363111392]]},
+                { nation: 'ALGERIA', cc: 'dz', poster: 'v4_algeria.png', loop: 'loop_algeria.mp4', seed: 7, roster: [
+                    ['Shushu','immortal','#236',null,210167497],['noobisho','immortal','#456',null,81268033],
+                    ['HunTeR-','immortal','#863',null,184786408],['paradox','immortal','#817',null,111211042],
+                    ['Dashe_','divine-5',null,2913,43838681]]},
+                { nation: 'UK', cc: 'gb', poster: 'v4_uk.png', loop: 'loop_uk.mp4', seed: 8, roster: [
+                    ['K-1','immortal',null,3261,446253958],['Rob Lobb','immortal',null,3166,82286911],
+                    ['Lionheart','immortal',null,2925,81574887],['bred','immortal',null,2816,133024804],
+                    ['Grasswalker','legend-1',null,2463,140384819]]},
+            ];
+            const wrap = document.getElementById('teams-grid');
+            wrap.innerHTML = TEAMS.map(t => `
+                <div class="team-card-a">
+                    <div class="team-banner">
+                        <video muted loop playsinline preload="none" poster="sprites/${t.poster}">
+                            <source src="sprites/${t.loop}" type="video/mp4">
+                        </video>
+                        <div class="team-seed">#${t.seed}</div>
+                        <div class="team-name"><span class="flag"><img src="https://flagcdn.com/${t.cc}.svg" alt="${t.cc.toUpperCase()}" loading="lazy"></span>${t.nation}</div>
+                    </div>
+                    <ul class="team-roster">
+                        ${t.roster.map(([name, medal, pill, mmr, steam32], i) => `
+                        <li class="tr-player">
+                            <div class="tr-medal">
+                                <img src="assets/ranking-medals/seasonal-rank-${medal ?? 'uncalibrated'}.png" alt="">
+                                ${pill ? `<span class="rank-pill">${pill}</span>` : ''}
+                            </div>
+                            <div class="tr-name">${steam32 ? `<a href="https://windrun.io/players/${steam32}" target="_blank" rel="noopener" title="windrun profile">${name}</a>` : name}</div>
+                            <div class="tr-mmr${mmr == null ? ' na' : ''}">${mmr ?? '&mdash;'}</div>
+                        </li>`).join('')}
+                    </ul>
+                </div>`).join('');
+            wrap.querySelectorAll('.team-card-a').forEach(card => {
+                const v = card.querySelector('video');
+                card.addEventListener('mouseenter', () => { v.play().catch(()=>{}); });
+                card.addEventListener('mouseleave', () => { v.pause(); });
+            });
+        })();
+
+        /* === DONATIONS (final pool, spoiler free) === */
+        const DONO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcwKLHNGLdUvDJxa9kEFGVk6J9B2caeyWIUKmTvT_dGAJHwJs2F70xU3enZ3YCUamrqET_xhBnwOEf/pub?output=csv';
+        const BASE_POOL = 250;
+
+        function parseCSV(text) {
+            const rows = [];
+            let row = [], field = '', inQuote = false;
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i];
+                if (inQuote) {
+                    if (c === '"' && text[i+1] === '"') { field += '"'; i++; }
+                    else if (c === '"') inQuote = false;
+                    else field += c;
+                } else if (c === '"') inQuote = true;
+                else if (c === ',') { row.push(field); field = ''; }
+                else if (c === '\n' || c === '\r') {
+                    if (field !== '' || row.length) { row.push(field); rows.push(row); row = []; field = ''; }
+                    if (c === '\r' && text[i+1] === '\n') i++;
+                } else field += c;
+            }
+            if (field !== '' || row.length) { row.push(field); rows.push(row); }
+            return rows;
+        }
+
+        function fmtAmount(n) {
+            return (Number.isInteger(n) ? n.toString() : n.toFixed(2)) + '€';
+        }
+
+        async function loadDonations() {
+            try {
+                const res = await fetch(DONO_CSV, { cache: 'no-store' });
+                if (!res.ok) return;
+                const rows = parseCSV(await res.text());
+                if (rows.length < 2) return;
+
+                const donors = rows.slice(1)
+                    .map(r => {
+                        const name = (r[0] || '').trim() || 'Anonymous';
+                        const raw = (r[1] || '').replace(/\s/g, '').replace(',', '.');
+                        const m = raw.match(/(\d+(?:\.\d+)?)/);
+                        return { name, amount: m ? parseFloat(m[1]) : 0 };
+                    })
+                    .filter(d => d.amount > 0);
+
+                if (donors.length === 0) return;
+
+                const totalDonated = donors.reduce((s, d) => s + d.amount, 0);
+                const combined = BASE_POOL + totalDonated;
+
+                document.getElementById('total-prize-amount').textContent = fmtAmount(combined);
+                document.getElementById('pool-label').textContent = 'Final Prize Pool';
+
+                const breakdown = document.getElementById('pool-breakdown');
+                breakdown.innerHTML = `Base Pool: ${BASE_POOL}€ (host) + <strong>${fmtAmount(totalDonated)}</strong> community`;
+                breakdown.hidden = false;
+
+                const listEl = document.getElementById('donor-list');
+                listEl.innerHTML = donors.slice().sort((a, b) => b.amount - a.amount).map(d =>
+                    `<div class="donor-row"><span class="donor-name">${esc(d.name)}</span><span class="donor-amount">${fmtAmount(d.amount)}</span></div>`
+                ).join('');
+
+                const footer = document.getElementById('donors-footer');
+                footer.innerHTML = `<strong>${donors.length}</strong> contributor${donors.length === 1 ? '' : 's'} <span class="heart">♥</span>`;
+
+                document.getElementById('donors-card').hidden = false;
+            } catch (e) {
+                console.error('Donation load failed', e);
+            }
+        }
+        loadDonations();
+
+        /* === BOOT === */
+        buildBracketRows();
+        buildWatchOrder();
+        if (spoilers) applySpoilers();
+    </script>
+</body>
+</html>
