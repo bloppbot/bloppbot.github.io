@@ -448,6 +448,16 @@
             cursor: url('assets/cursor.png') 1 1, default;
         }
         .vod-btn.dead:hover { transform: none; background: rgba(5,13,16,0.5); box-shadow: none; }
+        .eye-btn {
+            flex: 0 0 auto !important;
+            background: var(--bg-stone);
+            color: var(--accent-teal);
+            border-color: var(--accent-teal-dim);
+            font-size: 0.62rem;
+            padding: 4px 6px;
+        }
+        .eye-btn:hover { background: #1c4750; color: var(--accent-teal); }
+        .eye-btn.on { background: var(--accent-gold-deep); color: #1b1206; border-color: var(--accent-gold); }
 
         /* === BRACKET === */
         .bracket-preamble { text-align: center; color: var(--text-dim); font-size: 1.15rem; margin-bottom: 22px; }
@@ -835,8 +845,9 @@
                     The bracket below is frozen in its day-one state and every best-of-three lists
                     <strong>three games</strong>, no matter how the series actually went.
                     If a VOD does not exist, the shield will not tell you why.
-                    Watch in order and nothing gets ruined. When you are done, hit
-                    <strong>SPOILERS</strong> up top to reveal every result.
+                    Watch in order and nothing gets ruined. Caught up on one series? The
+                    <strong>&#128065;</strong> button on any match reveals just that result.
+                    When you are done with everything, hit <strong>SPOILERS</strong> up top to reveal it all.
                 </p>
             </div>
         </div>
@@ -1184,6 +1195,21 @@
         ];
 
         let spoilers = sessionStorage.getItem('wc_spoilers') === '1';
+        let revealed = new Set(JSON.parse(sessionStorage.getItem('wc_revealed') || '[]'));
+        function isRev(m) { return spoilers || revealed.has(m.id); }
+        function toggleReveal(m) {
+            if (revealed.has(m.id)) revealed.delete(m.id); else revealed.add(m.id);
+            sessionStorage.setItem('wc_revealed', JSON.stringify([...revealed]));
+            refreshAll();
+        }
+        function makeEyeBtn(m) {
+            const b = document.createElement('button');
+            b.className = 'vod-btn eye-btn' + (revealed.has(m.id) ? ' on' : '');
+            b.textContent = '\ud83d\udc41';
+            b.title = revealed.has(m.id) ? 'Hide this result again' : 'Reveal only this series';
+            b.addEventListener('click', () => toggleReveal(m));
+            return b;
+        }
 
         /* === MODAL === */
         const modal = document.getElementById('wc-modal');
@@ -1274,7 +1300,7 @@
             const b = document.createElement('button');
             b.className = 'vod-btn' + (g.src === 'shotty' ? ' shotty' : '');
             b.textContent = m.bo === 3 ? '▶ G' + (i + 1) : '▶ WATCH';
-            if (spoilers && !g.v) {
+            if (isRev(m) && !g.v) {
                 b.classList.add('dead');
                 b.textContent = DEAD_LABEL[g.r] || 'NO VOD';
                 b.disabled = true;
@@ -1290,16 +1316,45 @@
             return row;
         }
 
-        /* === BRACKET: attach VOD rows === */
-        function buildBracketRows() {
+        /* === BRACKET: slots + VOD rows, honoring per-series reveal === */
+        function setBoxSlots(box, m) {
+            const rev = isRev(m);
+            const slots = box.querySelectorAll('.match-slot');
+            const w = m.score[0] > m.score[1] ? 0 : 1;
+            slots.forEach((slot, i) => {
+                const teamEl = slot.querySelector('.slot-team');
+                const scoreEl = slot.querySelector('.slot-score');
+                if (rev) {
+                    teamEl.innerHTML = slotTeamHTML(m.slots[i]);
+                    teamEl.classList.remove('tbd');
+                    teamEl.classList.toggle('won', i === w);
+                    scoreEl.textContent = m.score[i];
+                } else {
+                    teamEl.classList.remove('won');
+                    if (TEAM_FLAGS[m.ph[i].trim().toLowerCase()]) {
+                        teamEl.innerHTML = slotTeamHTML(m.ph[i]);
+                        teamEl.classList.remove('tbd');
+                    } else {
+                        teamEl.textContent = m.ph[i];
+                        teamEl.classList.add('tbd');
+                    }
+                    scoreEl.innerHTML = '&mdash;';
+                }
+            });
+        }
+        function refreshBracket() {
             document.querySelectorAll('.match-box.bf').forEach(box => {
                 const m = MATCHES.find(x => x.id === box.dataset.match);
                 if (!m) return;
+                setBoxSlots(box, m);
                 const old = box.querySelector('.vod-row');
                 if (old) old.remove();
-                box.appendChild(makeVodRow(m));
+                const row = makeVodRow(m);
+                if (!spoilers) row.appendChild(makeEyeBtn(m));
+                box.appendChild(row);
             });
         }
+        function refreshAll() { refreshBracket(); buildWatchOrder(); }
 
         /* === WATCH ORDER === */
         function flagHTML(name) {
@@ -1307,7 +1362,7 @@
             return code ? '<span class="flag"><img src="https://flagcdn.com/' + code + '.svg" alt="" loading="lazy"></span>' : '';
         }
         function matchupHTML(m) {
-            if (spoilers) {
+            if (isRev(m)) {
                 const w = m.score[0] > m.score[1] ? 0 : 1;
                 return [0, 1].map(i =>
                     '<span' + (i === w ? ' style="color:var(--accent-gold)"' : '') + '>' + flagHTML(m.slots[i]) + esc(m.slots[i]) + '</span>'
@@ -1335,6 +1390,7 @@
                     const btns = document.createElement('div');
                     btns.className = 'wo-btns';
                     m.games.forEach((g, i) => btns.appendChild(makeGameBtn(m, i)));
+                    if (!spoilers) btns.appendChild(makeEyeBtn(m));
                     row.appendChild(btns);
                     col.appendChild(row);
                 });
@@ -1364,23 +1420,7 @@
                 '<strong>SKIPPED</strong> series ended early, <strong>NO REC</strong> played but not recorded. ' +
                 'Hit <strong>SPOILERS</strong> again to re-arm the shield.';
             document.getElementById('results').hidden = false;
-
-            document.querySelectorAll('.match-box.bf').forEach(box => {
-                const m = MATCHES.find(x => x.id === box.dataset.match);
-                if (!m) return;
-                const slots = box.querySelectorAll('.match-slot');
-                const w = m.score[0] > m.score[1] ? 0 : 1;
-                slots.forEach((slot, i) => {
-                    const teamEl = slot.querySelector('.slot-team');
-                    teamEl.innerHTML = slotTeamHTML(m.slots[i]);
-                    teamEl.classList.remove('tbd');
-                    teamEl.classList.toggle('won', i === w);
-                    slot.querySelector('.slot-score').textContent = m.score[i];
-                });
-            });
-
-            buildBracketRows();
-            buildWatchOrder();
+            refreshAll();
         }
 
         /* === THE 8 NATIONS (identical to the main page, pre-tournament state) === */
@@ -1520,9 +1560,7 @@
         loadDonations();
 
         /* === BOOT === */
-        buildBracketRows();
-        buildWatchOrder();
-        if (spoilers) applySpoilers();
+        if (spoilers) applySpoilers(); else refreshAll();
     </script>
 </body>
 </html>
