@@ -458,6 +458,17 @@
         }
         .eye-btn:hover { background: #1c4750; color: var(--accent-teal); }
         .eye-btn.on { background: var(--accent-gold-deep); color: #1b1206; border-color: var(--accent-gold); }
+        .score-q {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            padding: 3px 6px;
+            background: var(--bg-stone);
+            color: var(--accent-gold);
+            border: 2px solid var(--accent-gold-deep);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.6);
+            cursor: url('assets/cursor_hand.png') 7 2, pointer;
+        }
+        .score-q:hover { background: var(--accent-gold-deep); color: #1b1206; }
 
         /* === BRACKET === */
         .bracket-preamble { text-align: center; color: var(--text-dim); font-size: 1.15rem; margin-bottom: 22px; }
@@ -845,8 +856,9 @@
                     The bracket below is frozen in its day-one state and every best-of-three lists
                     <strong>three games</strong>, no matter how the series actually went.
                     If a VOD does not exist, the shield will not tell you why.
-                    Watch in order and nothing gets ruined. Caught up on one series? The
-                    <strong>&#128065;</strong> button on any match reveals just that result.
+                    Watch in order and nothing gets ruined. Curious about one series? The
+                    <strong>&#128065;</strong> button on any match shows just who played, score still hidden.
+                    The <strong>?</strong> that appears then reveals the score, and only for that series.
                     When you are done with everything, hit <strong>SPOILERS</strong> up top to reveal it all.
                 </p>
             </div>
@@ -1195,21 +1207,30 @@
         ];
 
         let spoilers = sessionStorage.getItem('wc_spoilers') === '1';
-        let revealed = new Set(JSON.parse(sessionStorage.getItem('wc_revealed') || '[]'));
-        function isRev(m) { return spoilers || revealed.has(m.id); }
-        function toggleReveal(m) {
-            if (revealed.has(m.id)) revealed.delete(m.id); else revealed.add(m.id);
-            sessionStorage.setItem('wc_revealed', JSON.stringify([...revealed]));
+        // per-series reveal level: 0 hidden, 1 teams only, 2 teams + score
+        let revealed = new Map(Object.entries(JSON.parse(sessionStorage.getItem('wc_revealed2') || '{}')));
+        function rlevel(m) { return spoilers ? 2 : (revealed.get(m.id) || 0); }
+        function setLevel(id, lv) {
+            if (lv > 0) revealed.set(id, lv); else revealed.delete(id);
+            sessionStorage.setItem('wc_revealed2', JSON.stringify(Object.fromEntries(revealed)));
             refreshAll();
         }
         function makeEyeBtn(m) {
+            const lv = revealed.get(m.id) || 0;
             const b = document.createElement('button');
-            b.className = 'vod-btn eye-btn' + (revealed.has(m.id) ? ' on' : '');
+            b.className = 'vod-btn eye-btn' + (lv > 0 ? ' on' : '');
             b.textContent = '\ud83d\udc41';
-            b.title = revealed.has(m.id) ? 'Hide this result again' : 'Reveal only this series';
-            b.addEventListener('click', () => toggleReveal(m));
+            b.title = lv > 0 ? 'Hide this series again' : 'Show who played (score stays hidden)';
+            b.addEventListener('click', () => setLevel(m.id, lv > 0 ? 0 : 1));
             return b;
         }
+        function scoreQHTML(m) {
+            return '<button class="score-q" data-match="' + esc(m.id) + '" title="Reveal the score of this series">?</button>';
+        }
+        document.addEventListener('click', (e) => {
+            const q = e.target.closest('.score-q');
+            if (q) setLevel(q.dataset.match, 2);
+        });
 
         /* === MODAL === */
         const modal = document.getElementById('wc-modal');
@@ -1300,7 +1321,7 @@
             const b = document.createElement('button');
             b.className = 'vod-btn' + (g.src === 'shotty' ? ' shotty' : '');
             b.textContent = m.bo === 3 ? '▶ G' + (i + 1) : '▶ WATCH';
-            if (isRev(m) && !g.v) {
+            if (rlevel(m) === 2 && !g.v) {
                 b.classList.add('dead');
                 b.textContent = DEAD_LABEL[g.r] || 'NO VOD';
                 b.disabled = true;
@@ -1318,17 +1339,18 @@
 
         /* === BRACKET: slots + VOD rows, honoring per-series reveal === */
         function setBoxSlots(box, m) {
-            const rev = isRev(m);
+            const lv = rlevel(m);
             const slots = box.querySelectorAll('.match-slot');
             const w = m.score[0] > m.score[1] ? 0 : 1;
             slots.forEach((slot, i) => {
                 const teamEl = slot.querySelector('.slot-team');
                 const scoreEl = slot.querySelector('.slot-score');
-                if (rev) {
+                if (lv >= 1) {
                     teamEl.innerHTML = slotTeamHTML(m.slots[i]);
                     teamEl.classList.remove('tbd');
-                    teamEl.classList.toggle('won', i === w);
-                    scoreEl.textContent = m.score[i];
+                    teamEl.classList.toggle('won', lv === 2 && i === w);
+                    if (lv === 2) scoreEl.textContent = m.score[i];
+                    else scoreEl.innerHTML = i === 0 ? scoreQHTML(m) : '';
                 } else {
                     teamEl.classList.remove('won');
                     if (TEAM_FLAGS[m.ph[i].trim().toLowerCase()]) {
@@ -1362,11 +1384,16 @@
             return code ? '<span class="flag"><img src="https://flagcdn.com/' + code + '.svg" alt="" loading="lazy"></span>' : '';
         }
         function matchupHTML(m) {
-            if (isRev(m)) {
+            const lv = rlevel(m);
+            if (lv === 2) {
                 const w = m.score[0] > m.score[1] ? 0 : 1;
                 return [0, 1].map(i =>
                     '<span' + (i === w ? ' style="color:var(--accent-gold)"' : '') + '>' + flagHTML(m.slots[i]) + esc(m.slots[i]) + '</span>'
                 ).join(' vs ') + ' <span class="slot-score">&nbsp;' + m.score[0] + ':' + m.score[1] + '</span>';
+            }
+            if (lv === 1) {
+                return [0, 1].map(i => '<span>' + flagHTML(m.slots[i]) + esc(m.slots[i]) + '</span>').join(' vs ') +
+                    ' &nbsp;' + scoreQHTML(m);
             }
             const known = i => TEAM_FLAGS[m.ph[i].trim().toLowerCase()];
             return [0, 1].map(i => known(i)
