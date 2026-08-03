@@ -215,8 +215,8 @@
     /* info chips */
     .chips {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
         margin-top: 26px;
     }
     .chip {
@@ -241,45 +241,52 @@
     }
     .chip .value .accent { color: var(--red-bright); }
 
-    /* prize pool */
-    .pool-row {
-        display: flex; align-items: stretch; gap: 18px;
-        flex-wrap: wrap;
-        margin-top: 26px;
-    }
-    .pool-card {
-        background: var(--panel);
-        border: 3px solid var(--line);
-        box-shadow: 6px 6px 0 rgba(0,0,0,0.45);
-        padding: 22px 28px;
-        text-align: center;
-        flex: 1 1 220px;
-    }
-    .pool-card.grow { border-color: var(--green-deep); }
-    .pool-label {
+    /* merged about card */
+    .about-card { margin-top: 26px; }
+    .about-inner { background: var(--panel-2); padding: 26px 24px; position: relative; z-index: 1; }
+    .date-highlight {
         font-family: 'Press Start 2P', monospace;
-        font-size: 0.5rem;
-        color: var(--green);
-        display: block;
-    }
-    .pool-num {
-        font-family: 'Press Start 2P', monospace;
-        font-size: clamp(1.3rem, 4vw, 2.1rem);
-        color: var(--cream);
-        display: block;
-        margin: 16px 0 10px;
-        text-shadow: 3px 3px 0 rgba(0,0,0,0.75), 0 0 20px rgba(240,230,210,0.25);
-    }
-    .pool-num.green { color: var(--green-bright); text-shadow: 3px 3px 0 rgba(0,0,0,0.75), 0 0 22px var(--green-glow); }
-    .pool-note { color: var(--cream-dim); font-size: 19px; }
-    .pool-arrow {
-        align-self: center;
-        font-family: 'Press Start 2P', monospace;
-        font-size: 1.1rem;
-        color: var(--red-bright);
+        font-size: 0.7rem;
+        color: var(--green-bright);
         text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
     }
-    @media (max-width: 640px) { .pool-arrow { display: none; } }
+
+    /* prize pool (WC layout) */
+    .prize-card { margin-top: 26px; }
+    .base-pool-label {
+        font-family: 'Press Start 2P', monospace; font-size: 0.6rem;
+        color: var(--cream-dim); text-transform: uppercase;
+    }
+    .total-prize {
+        font-family: 'Press Start 2P', monospace;
+        font-size: clamp(1.8rem, 5vw, 3rem);
+        color: var(--green-bright);
+        margin: 12px 0 6px;
+        text-shadow: var(--px) var(--px) 0 #0b2410, calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6), 0 0 30px var(--green-glow);
+    }
+    .prize-historic { margin: 14px 0; color: var(--cream); font-size: 1.15rem; }
+    .prize-historic .star { color: var(--red-bright); }
+    .distribution-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 12px; margin: 18px 0 8px;
+    }
+    .dist-item {
+        background: var(--panel);
+        border: 3px solid var(--line);
+        box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.55);
+        padding: 12px 8px;
+        display: flex; flex-direction: column; gap: 6px;
+        text-align: center;
+    }
+    .dist-item.rank-1 { border-color: #ffd97a; }
+    .dist-item.rank-2 { border-color: #c8ccd2; }
+    .dist-item.rank-3 { border-color: #b9763a; }
+    .dist-item .place { font-family: 'Press Start 2P', monospace; font-size: 0.7rem; color: var(--cream); }
+    .dist-item.rank-1 .place { color: #ffd97a; }
+    .dist-item .percent { font-family: 'Press Start 2P', monospace; font-size: 1rem; color: var(--green-bright); }
+    .dist-item .dist-team { font-size: 1rem; color: var(--cream-dim); }
+    .pool-note-text { color: var(--cream-dim); font-size: 1.05rem; margin-top: 10px; }
+    .pool-note-text .heart { color: #e2574c; }
 
     /* divider strips */
     .strip {
@@ -400,7 +407,6 @@
 
 <nav class="nav-bar">
     <a href="#info" class="nav-btn">THE RUMBLE</a>
-    <a href="#format" class="nav-btn">FORMAT</a>
     <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
     <a href="#signup" class="nav-btn signup">SIGN UP</a>
     <a href="#lastrumble" class="nav-btn">LAST RUMBLE</a>
@@ -411,55 +417,28 @@
     <section id="info" class="section-wrapper">
         <h2 class="section-title">THE RUMBLE</h2>
         <div class="title-rule"></div>
-        <p class="lead">
-            <b>The most competitive Ability Draft tournament there is.</b><br>
-            The TI of Ability Draft. Five editions of history, and this October
-            the sixth: two weekends, full 5-stacks, everything live.
-        </p>
-        <div class="chips">
-            <div class="chip">
-                <span class="label">WHEN</span>
-                <span class="value">OCT 17—18<br>&amp; 24—25<br>2026</span>
-            </div>
-            <div class="chip">
-                <span class="label">MODE</span>
-                <span class="value">DOTA 2<br>ABILITY DRAFT<br>5V5 TEAMS</span>
-            </div>
-            <div class="chip">
-                <span class="label">WHERE</span>
-                <span class="value">ONLINE<br>SERVER: <span class="accent">EU WEST</span><br>LIVE ON STREAM</span>
-            </div>
-            <div class="chip">
-                <span class="label">ENTRY</span>
-                <span class="value">FREE<br><span class="accent">FULL TEAMS ONLY</span></span>
-            </div>
-        </div>
-    </section>
-</div>
-
-<div class="container">
-    <section id="format" class="section-wrapper">
-        <h2 class="section-title">FORMAT</h2>
-        <div class="title-rule"></div>
-        <p class="lead">
-            <b>8 teams.</b> Same battle plan as last edition:
-        </p>
-        <div class="chips">
-            <div class="chip">
-                <span class="label">DAY 1 · OCT 17</span>
-                <span class="value">GROUP STAGE<br>2 GROUPS<br>BO1</span>
-            </div>
-            <div class="chip">
-                <span class="label">DAY 2 · OCT 18</span>
-                <span class="value">PLAYOFFS<br>DOUBLE ELIM<br>BO3</span>
-            </div>
-            <div class="chip">
-                <span class="label">DAY 3 · OCT 24</span>
-                <span class="value">UB &amp; LB<br>FINALS<br>BO3</span>
-            </div>
-            <div class="chip">
-                <span class="label">DAY 4 · OCT 25</span>
-                <span class="value">GRAND<br>FINAL<br><span class="accent">BO5</span></span>
+        <div class="about-card px-frame">
+            <div class="about-inner">
+                <p>
+                    <b>The most competitive Ability Draft tournament there is.</b><br>
+                    The TI of Ability Draft. Five editions of history, and this October the sixth.
+                </p>
+                <p style="margin-top: 12px;">
+                    <b>8 teams</b>, two weekends. Day one opens with the group stage — two groups,
+                    best-of-ones — seeding everyone into a <b>double-elimination</b> bracket.
+                    Day two runs the playoffs in best-of-threes. The final weekend settles it:
+                    upper and lower bracket finals, then a <b>best-of-five grand final</b>.
+                </p>
+                <p style="margin-top: 12px;">
+                    Save the dates: <span class="date-highlight">OCT 17 — 18 &amp; 24 — 25, 2026</span>
+                </p>
+                <div class="chips">
+                    <div class="chip"><span class="label">TEAMS</span><span class="value">8</span></div>
+                    <div class="chip"><span class="label">MODE</span><span class="value">ABILITY DRAFT</span></div>
+                    <div class="chip"><span class="label">FORMAT</span><span class="value">DOUBLE ELIM</span></div>
+                    <div class="chip"><span class="label">SERVER</span><span class="value">EU WEST</span></div>
+                    <div class="chip"><span class="label">ENTRY</span><span class="value">FREE</span></div>
+                </div>
             </div>
         </div>
     </section>
@@ -469,25 +448,27 @@
     <section id="prizepool" class="section-wrapper">
         <h2 class="section-title">PRIZE POOL</h2>
         <div class="title-rule"></div>
-        <div class="pool-row">
-            <div class="pool-card">
-                <span class="pool-label">BASE POOL</span>
-                <span class="pool-num">€300</span>
-                <span class="pool-note">seeded by blopp</span>
+        <div class="prize-card px-frame">
+            <div class="about-inner" style="text-align:center">
+                <div class="base-pool-label">BASE POOL (HOST)</div>
+                <div class="total-prize">€300</div>
+                <div class="prize-historic">
+                    <span class="star">★</span>
+                    Historically ≈ €1000+ with community additions
+                    <span class="star">★</span>
+                </div>
+                <div class="distribution-grid">
+                    <div class="dist-item rank-1"><span class="place">1ST</span><span class="percent">50%</span><span class="dist-team">TBD</span></div>
+                    <div class="dist-item rank-2"><span class="place">2ND</span><span class="percent">25%</span><span class="dist-team">TBD</span></div>
+                    <div class="dist-item rank-3"><span class="place">3RD</span><span class="percent">15%</span><span class="dist-team">TBD</span></div>
+                    <div class="dist-item rank-4"><span class="place">4TH</span><span class="percent">10%</span><span class="dist-team">TBD</span></div>
+                </div>
+                <p class="pool-note-text">
+                    <span class="heart">♥</span> Community donations push the pool past the base every
+                    edition — the split above is how placements share the total.
+                </p>
+                <a href="https://www.paypal.com/donate/?hosted_button_id=567SNPMT5BLL6" target="_blank" rel="noopener" class="big-btn donate" style="margin-top:18px">DONATE TO THE POOL</a>
             </div>
-            <div class="pool-arrow">►</div>
-            <div class="pool-card grow">
-                <span class="pool-label">USUAL FINAL POOL</span>
-                <span class="pool-num green">~€1000</span>
-                <span class="pool-note">with community contributions</span>
-            </div>
-        </div>
-        <p class="lead" style="margin-top:18px">
-            The pot starts at <b>€300</b>. Every edition the community throws in on top,
-            and we usually land around <b>€1000</b> by finals day. Want to fatten the pot?
-        </p>
-        <div class="btn-row">
-            <a href="https://www.paypal.com/donate/?hosted_button_id=567SNPMT5BLL6" target="_blank" rel="noopener" class="big-btn donate">DONATE TO THE PRIZE POOL</a>
         </div>
     </section>
 </div>
