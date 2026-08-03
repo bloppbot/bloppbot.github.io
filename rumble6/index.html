@@ -190,9 +190,11 @@
         font-family: 'Press Start 2P', monospace;
         font-size: clamp(0.42rem, 1.1vw, 0.58rem);
         color: var(--green-bright);
+        text-decoration: none;
         text-shadow: 2px 2px 0 rgba(0,0,0,0.85);
         animation: pulse 2.6s ease-in-out infinite;
     }
+    .h-tag:hover { animation: none; color: #fff; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
 
     /* === NAV === */
@@ -280,6 +282,16 @@
         color: var(--green-bright);
         text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
     }
+    .ics-link {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.48rem;
+        color: var(--cream-dim);
+        text-decoration: none;
+        border-bottom: 2px dotted var(--line);
+        padding-bottom: 2px;
+        white-space: nowrap;
+    }
+    .ics-link:hover { color: var(--green-bright); border-color: var(--green-deep); }
 
     /* prize pool (WC layout) */
     .prize-card { margin-top: 26px; }
@@ -411,6 +423,15 @@
         color: var(--green);
         margin-bottom: 10px;
     }
+    footer .f-links { margin-top: 14px; }
+    footer .f-links a {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.5rem;
+        color: var(--cream-dim);
+        text-decoration: none;
+    }
+    footer .f-links a:hover { color: var(--green-bright); }
+    footer .f-links span { color: var(--line); margin: 0 8px; }
 
     @media (max-width: 560px) {
         .strip { height: 140px; }
@@ -436,7 +457,7 @@
                 <h1 class="h-title">RUMBLE IN THE JUNGLE VI</h1>
                 <div class="h-bar"></div>
                 <div class="h-sub">OCT 17 — 18 &amp; 24 — 25 ★ 2026</div>
-                <div class="h-tag">SIGN-UPS OPEN · TEAMS OF 5</div>
+                <a href="#signup" class="h-tag">SIGN-UPS OPEN · TEAMS OF 5</a>
             </div>
         </div>
     </header>
@@ -468,6 +489,7 @@
                 </p>
                 <p style="margin-top: 12px;">
                     Save the dates: <span class="date-highlight">OCT 17 — 18 &amp; 24 — 25, 2026</span>
+                    &nbsp; <a href="#" id="ics-btn" class="ics-link">+ ADD TO CALENDAR</a>
                 </p>
                 <div class="chips">
                     <div class="chip"><span class="label">TEAMS</span><span class="value">8</span></div>
@@ -542,9 +564,8 @@
         <h2 class="section-title">LAST RUMBLE</h2>
         <div class="title-rule"></div>
         <p class="lead">
-            Need proof this is worth clearing two weekends for? Day 4 of
-            <b>Rumble in the Jungle V</b> — lower bracket finals, Space Marines vs Seppo13,
-            eight hours of Ability Draft madness.
+            Watch the final day of <b>Rumble in the Jungle V</b>: lower bracket finals,
+            Space Marines vs Seppo13.
         </p>
         <div class="video-outer px-frame">
             <div class="video-frame">
@@ -564,6 +585,13 @@
 <footer>
     <div class="f-title">RUMBLE IN THE JUNGLE VI</div>
     OCT 17 — 18 &amp; 24 — 25 · 2026 · see you in the jungle
+    <div class="f-links">
+        <a href="https://www.youtube.com/@BLOPPDOTA2" target="_blank" rel="noopener">YOUTUBE</a>
+        <span>·</span>
+        <a href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener">TWITCH</a>
+        <span>·</span>
+        <a href="https://discord.gg/sQFwGxFYFB" target="_blank" rel="noopener">DISCORD</a>
+    </div>
 </footer>
 
 <script>
@@ -580,6 +608,35 @@
             document.body.appendChild(e);
         }
     })();
+
+    // add to calendar (.ics, both weekends)
+    document.getElementById('ics-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        const ics = [
+            'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Rumble in the Jungle//EN',
+            'BEGIN:VEVENT',
+            'UID:rumble6-weekend1@bloppbot.github.io',
+            'DTSTART:20261017T150000Z',
+            'DTEND:20261018T210000Z',
+            'SUMMARY:Rumble in the Jungle VI - Groups + Playoffs',
+            'DESCRIPTION:Dota 2 Ability Draft tournament\\, weekend 1. https://bloppbot.github.io/rumble6/',
+            'URL:https://bloppbot.github.io/rumble6/',
+            'END:VEVENT',
+            'BEGIN:VEVENT',
+            'UID:rumble6-weekend2@bloppbot.github.io',
+            'DTSTART:20261024T150000Z',
+            'DTEND:20261025T210000Z',
+            'SUMMARY:Rumble in the Jungle VI - Finals',
+            'DESCRIPTION:Dota 2 Ability Draft tournament\\, finals weekend. https://bloppbot.github.io/rumble6/',
+            'URL:https://bloppbot.github.io/rumble6/',
+            'END:VEVENT','END:VCALENDAR'
+        ].join('\r\n');
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+        a.download = 'rumble-vi-2026.ics';
+        a.click();
+        URL.revokeObjectURL(a.href);
+    });
 
     // mouse glow
     const mouseGlow = document.getElementById('mouseGlow');
