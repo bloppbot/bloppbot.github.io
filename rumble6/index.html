@@ -185,6 +185,14 @@
         color: var(--cream);
         text-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.8), 0 0 16px rgba(240,255,250,0.4);
     }
+    .h-countdown {
+        margin-top: 14px;
+        font-family: 'Press Start 2P', monospace;
+        font-size: clamp(0.5rem, 1.3vw, 0.75rem);
+        color: #8df5ea;
+        text-shadow: 2px 2px 0 rgba(0,0,0,0.85), 0 0 14px rgba(60,230,215,0.5);
+        letter-spacing: 1px;
+    }
     .h-tag {
         margin-top: 14px;
         font-family: 'Press Start 2P', monospace;
@@ -330,6 +338,64 @@
     .pool-note-text { color: var(--cream-dim); font-size: 1.05rem; margin-top: 10px; }
     .pool-note-text .heart { color: #e2574c; }
 
+    /* teams */
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 14px;
+        margin-top: 22px;
+    }
+    .team-card {
+        background: var(--panel);
+        border: 3px solid var(--line);
+        box-shadow: 6px 6px 0 rgba(0,0,0,0.45);
+        padding: 20px 16px;
+        text-align: center;
+        min-height: 92px;
+        display: flex; flex-direction: column; justify-content: center; gap: 8px;
+    }
+    .team-card.locked { border-color: var(--green-deep); }
+    .team-card .t-name {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.62rem;
+        color: var(--cream);
+        line-height: 1.6;
+    }
+    .team-card.locked .t-name { color: var(--green-bright); text-shadow: 2px 2px 0 rgba(0,0,0,0.8); }
+    .team-card.open .t-name { color: var(--cream-dim); animation: pulse 2.6s ease-in-out infinite; }
+    .team-card .t-sub {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.42rem;
+        color: var(--cream-dim);
+    }
+
+    /* casters */
+    .caster-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 14px;
+        margin-top: 22px;
+    }
+    .caster-card {
+        background: var(--panel);
+        border: 3px solid var(--line);
+        box-shadow: 6px 6px 0 rgba(0,0,0,0.45);
+        padding: 24px 16px;
+        text-align: center;
+    }
+    .caster-card .caster-name {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.72rem;
+        color: var(--green-bright);
+        text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+    }
+    .caster-card .caster-role {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.45rem;
+        color: var(--cream-dim);
+        margin-top: 12px;
+    }
+
     /* divider strips */
     .strip {
         height: 230px;
@@ -457,6 +523,7 @@
                 <h1 class="h-title">RUMBLE IN THE JUNGLE VI</h1>
                 <div class="h-bar"></div>
                 <div class="h-sub">OCT 17 — 18 &amp; 24 — 25 ★ 2026</div>
+                <div class="h-countdown" id="countdown"></div>
                 <a href="#signup" class="h-tag">SIGN-UPS OPEN · TEAMS OF 5</a>
             </div>
         </div>
@@ -465,8 +532,10 @@
 
 <nav class="nav-bar">
     <a href="#info" class="nav-btn">THE RUMBLE</a>
+    <a href="#teams" class="nav-btn">TEAMS</a>
     <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
     <a href="#signup" class="nav-btn signup">SIGN UP</a>
+    <a href="#casters" class="nav-btn">CASTERS</a>
     <a href="#lastrumble" class="nav-btn">LAST RUMBLE</a>
     <a href="https://discord.gg/sQFwGxFYFB" target="_blank" rel="noopener" class="nav-btn discord">DISCORD</a>
 </nav>
@@ -504,6 +573,15 @@
 </div>
 
 <div class="container">
+    <section id="teams" class="section-wrapper">
+        <h2 class="section-title">THE 8 TEAMS</h2>
+        <div class="title-rule"></div>
+        <p class="lead"><span id="teams-counter" class="date-highlight">0/8 TEAMS LOCKED</span></p>
+        <div class="team-grid" id="team-grid"></div>
+    </section>
+</div>
+
+<div class="container">
     <section id="prizepool" class="section-wrapper">
         <h2 class="section-title">PRIZE POOL</h2>
         <div class="title-rule"></div>
@@ -532,7 +610,7 @@
     </section>
 </div>
 
-<div class="strip" aria-hidden="true"><video autoplay muted loop playsinline poster="assets/scene_monkeywalk_1536.jpg"><source src="assets/loop_strip_monkeys.mp4" type="video/mp4"></video></div>
+<div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/scene_monkeywalk_1536.jpg" data-lazy><source src="assets/loop_strip_monkeys.mp4" type="video/mp4"></video></div>
 
 <div class="container">
     <section id="signup" class="section-wrapper">
@@ -557,7 +635,28 @@
     </section>
 </div>
 
-<div class="strip" aria-hidden="true"><video autoplay muted loop playsinline poster="assets/scene_arenafloor_1536.jpg"><source src="assets/loop_strip_arena.mp4" type="video/mp4"></video></div>
+<div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/scene_arenafloor_1536.jpg" data-lazy><source src="assets/loop_strip_arena.mp4" type="video/mp4"></video></div>
+
+<div class="container">
+    <section id="casters" class="section-wrapper">
+        <h2 class="section-title">YOUR CASTERS</h2>
+        <div class="title-rule"></div>
+        <div class="caster-grid">
+            <div class="caster-card">
+                <div class="caster-name">BLOPP</div>
+                <div class="caster-role">HOST &amp; CASTER</div>
+            </div>
+            <div class="caster-card">
+                <div class="caster-name">YOUNG ELODIN</div>
+                <div class="caster-role">CASTER</div>
+            </div>
+            <div class="caster-card">
+                <div class="caster-name">TIARIN HINO</div>
+                <div class="caster-role">CASTER</div>
+            </div>
+        </div>
+    </section>
+</div>
 
 <div class="container">
     <section id="lastrumble" class="section-wrapper">
@@ -607,6 +706,53 @@
             e.style.animationDuration = (Math.random() * 12 + 12) + 's';
             document.body.appendChild(e);
         }
+    })();
+
+    // === TEAMS (add signed-up teams here as they PM blopp) ===
+    const TEAMS = [
+        // 'Team Name',
+    ];
+    (function () {
+        const grid = document.getElementById('team-grid');
+        for (let i = 0; i < 8; i++) {
+            const t = TEAMS[i];
+            const card = document.createElement('div');
+            card.className = 'team-card ' + (t ? 'locked' : 'open');
+            card.innerHTML = t
+                ? '<div class="t-name">' + t + '</div><div class="t-sub">LOCKED IN</div>'
+                : '<div class="t-name">SLOT OPEN</div><div class="t-sub">COULD BE YOU</div>';
+            grid.appendChild(card);
+        }
+        document.getElementById('teams-counter').textContent = TEAMS.length + '/8 TEAMS LOCKED';
+    })();
+
+    // === COUNTDOWN (to Oct 17 2026, 17:00 CEST) ===
+    (function () {
+        const el = document.getElementById('countdown');
+        const start = new Date('2026-10-17T15:00:00Z').getTime();
+        function tick() {
+            const d = start - Date.now();
+            if (d <= 0) { el.textContent = 'THE RUMBLE IS LIVE'; return; }
+            const days = Math.floor(d / 86400000);
+            const hrs = Math.floor(d % 86400000 / 3600000);
+            const min = Math.floor(d % 3600000 / 60000);
+            el.textContent = 'STARTS IN ' + days + 'D ' + hrs + 'H ' + min + 'M';
+            setTimeout(tick, 30000);
+        }
+        tick();
+    })();
+
+    // === LAZY STRIP VIDEOS (saves ~10MB on initial load) ===
+    (function () {
+        const vids = document.querySelectorAll('video[data-lazy]');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(en => {
+                const v = en.target;
+                if (en.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); }
+                else v.pause();
+            });
+        }, { rootMargin: '200px' });
+        vids.forEach(v => io.observe(v));
     })();
 
     // add to calendar (.ics, both weekends)
