@@ -3,12 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RUMBLE IN THE JUNGLE VI — Ability Draft Tournament</title>
-<meta name="description" content="Rumble in the Jungle VI — the Dota 2 Ability Draft team tournament. October 17—18 & 24—25, 2026. Full teams of 5 only. Sign up on Discord.">
+<title>RUMBLE IN THE JUNGLE VI — Dota 2 Ability Draft Tournament</title>
+<meta name="description" content="Rumble in the Jungle VI — the most competitive Dota 2 Ability Draft team tournament. October 17—18 & 24—25, 2026. 8 teams, EU West, €300+ prize pool. Full teams of 5 only. Sign up on Discord.">
+<meta name="keywords" content="Dota 2, Ability Draft, tournament, Rumble in the Jungle, AD tournament, Dota 2 community tournament, esports, EU West, 2026">
+<link rel="canonical" href="https://bloppbot.github.io/rumble6/">
+<meta name="theme-color" content="#030805">
 <meta property="og:title" content="RUMBLE IN THE JUNGLE VI">
-<meta property="og:description" content="The Dota 2 Ability Draft team tournament returns. OCT 17—18 & 24—25, 2026. Assemble your 5 and sign up on Discord.">
+<meta property="og:description" content="The most competitive Dota 2 Ability Draft tournament there is. OCT 17—18 & 24—25, 2026. 8 teams. Assemble your 5 and sign up on Discord.">
 <meta property="og:image" content="https://bloppbot.github.io/rumble6/assets/og.jpg">
+<meta property="og:image:width" content="1536">
+<meta property="og:image:height" content="864">
+<meta property="og:url" content="https://bloppbot.github.io/rumble6/">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Rumble in the Jungle">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RUMBLE IN THE JUNGLE VI">
+<meta name="twitter:description" content="The most competitive Dota 2 Ability Draft tournament there is. OCT 17—18 & 24—25, 2026. Full teams of 5, sign up on Discord.">
+<meta name="twitter:image" content="https://bloppbot.github.io/rumble6/assets/og.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SportsEvent",
+  "name": "Rumble in the Jungle VI",
+  "description": "Dota 2 Ability Draft team tournament. 8 teams, double elimination, EU West server.",
+  "startDate": "2026-10-17",
+  "endDate": "2026-10-25",
+  "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "location": { "@type": "VirtualLocation", "url": "https://bloppbot.github.io/rumble6/" },
+  "image": "https://bloppbot.github.io/rumble6/assets/og.jpg",
+  "organizer": { "@type": "Person", "name": "blopp" },
+  "sport": "Dota 2 Ability Draft"
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
@@ -291,18 +321,23 @@
     /* divider strips */
     .strip {
         height: 230px;
-        background-position: center;
-        background-size: cover;
-        image-rendering: pixelated;
+        overflow: hidden;
         border-top: 3px solid var(--line);
         border-bottom: 3px solid var(--line);
         margin: 40px 0 0;
         position: relative;
     }
+    .strip video {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        display: block;
+        image-rendering: pixelated;
+    }
     .strip::after {
         content: '';
         position: absolute; inset: 0;
         background: linear-gradient(rgba(3,8,5,0.45), rgba(3,8,5,0.15) 40%, rgba(3,8,5,0.45));
+        pointer-events: none;
     }
 
     /* signup */
@@ -394,7 +429,9 @@
 <div class="container">
     <header class="hero">
         <div class="hero-screen px-frame">
-            <img class="hero-img" src="assets/scene_behindfall_1536.jpg" alt="Rumble in the Jungle VI">
+            <video class="hero-img" autoplay muted loop playsinline poster="assets/scene_behindfall_1536.jpg" aria-label="Rumble in the Jungle VI">
+                <source src="assets/loop_hero_falls.mp4" type="video/mp4">
+            </video>
             <div class="hero-overlay">
                 <h1 class="h-title">RUMBLE IN THE JUNGLE VI</h1>
                 <div class="h-bar"></div>
@@ -473,7 +510,7 @@
     </section>
 </div>
 
-<div class="strip" style="background-image:url('assets/scene_monkeywalk_1536.jpg')"></div>
+<div class="strip" aria-hidden="true"><video autoplay muted loop playsinline poster="assets/scene_monkeywalk_1536.jpg"><source src="assets/loop_strip_monkeys.mp4" type="video/mp4"></video></div>
 
 <div class="container">
     <section id="signup" class="section-wrapper">
@@ -498,7 +535,7 @@
     </section>
 </div>
 
-<div class="strip" style="background-image:url('assets/scene_arenafloor_1536.jpg')"></div>
+<div class="strip" aria-hidden="true"><video autoplay muted loop playsinline poster="assets/scene_arenafloor_1536.jpg"><source src="assets/loop_strip_arena.mp4" type="video/mp4"></video></div>
 
 <div class="container">
     <section id="lastrumble" class="section-wrapper">
