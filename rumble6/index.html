@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RUMBLE IN THE JUNGLE VI — Ability Draft Tournament</title>
+<meta name="description" content="Rumble in the Jungle VI — the Dota 2 Ability Draft team tournament. October 17—18 & 24—25, 2026. Full teams of 5 only. Sign up on Discord.">
+<meta property="og:title" content="RUMBLE IN THE JUNGLE VI">
+<meta property="og:description" content="The Dota 2 Ability Draft team tournament returns. OCT 17—18 & 24—25, 2026. Assemble your 5 and sign up on Discord.">
+<meta property="og:image" content="https://bloppbot.github.io/rumble6/assets/og.jpg">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #030805;
+        --bg-deep: #020503;
+        --panel: #081209;
+        --panel-2: #0b1a0e;
+        --line: #1b3521;
+        --green: #4caf50;
+        --green-bright: #6fe07a;
+        --green-deep: #2e6e3a;
+        --green-glow: rgba(90, 220, 110, 0.5);
+        --red: #a81616;
+        --red-bright: #d42a2a;
+        --cream: #f0e6d2;
+        --cream-dim: #b8ad96;
+        --discord: #5865F2;
+        --px: 3px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        background: var(--bg);
+        color: var(--cream);
+        font-family: 'VT323', monospace;
+        font-size: 21px;
+        line-height: 1.45;
+        image-rendering: pixelated;
+        overflow-x: hidden;
+    }
+    ::selection { background: var(--green-deep); color: var(--cream); }
+
+    /* === HERO === */
+    .hero {
+        position: relative;
+        height: min(92vh, 820px);
+        min-height: 480px;
+        overflow: hidden;
+        border-bottom: 3px solid var(--line);
+    }
+    .hero-bg {
+        position: absolute; inset: 0;
+        background: url('assets/scene_behindfall_1536.jpg') center/cover;
+        image-rendering: pixelated;
+    }
+    .hero-overlay {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: flex-start;
+        padding-top: clamp(30px, 7vh, 70px);
+        text-align: center;
+        background: linear-gradient(rgba(3,8,5,0.62) 0%, rgba(3,8,5,0.18) 30%, rgba(3,8,5,0.0) 55%, rgba(3,8,5,0.85) 100%);
+    }
+    .h-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: clamp(1.15rem, 4.2vw, 2.9rem);
+        color: var(--red);
+        text-shadow:
+            var(--px) var(--px) 0 #1f0202,
+            calc(var(--px) * 2) calc(var(--px) * 2) 0 rgba(0,0,0,0.65),
+            0 0 26px rgba(190,40,40,0.45);
+        letter-spacing: 2px;
+        line-height: 1.45;
+    }
+    .h-bar {
+        width: 170px; height: 3px;
+        background: var(--red);
+        box-shadow: 2px 2px 0 rgba(0,0,0,0.6);
+        margin: 22px auto;
+    }
+    .h-sub {
+        font-family: 'Press Start 2P', monospace;
+        font-size: clamp(0.55rem, 1.8vw, 1.05rem);
+        color: var(--cream);
+        text-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.8), 0 0 16px rgba(240,255,250,0.4);
+    }
+    .h-tag {
+        margin-top: 18px;
+        font-family: 'Press Start 2P', monospace;
+        font-size: clamp(0.42rem, 1.2vw, 0.62rem);
+        color: var(--green-bright);
+        text-shadow: 2px 2px 0 rgba(0,0,0,0.85);
+        animation: pulse 2.6s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    /* === NAV === */
+    .nav-bar {
+        position: sticky; top: 0; z-index: 50;
+        display: flex; flex-wrap: wrap; justify-content: center;
+        gap: 10px;
+        padding: 12px 10px;
+        background: rgba(2, 5, 3, 0.94);
+        border-bottom: 3px solid var(--line);
+        backdrop-filter: blur(2px);
+    }
+    .nav-btn {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.6rem;
+        text-decoration: none;
+        color: var(--cream);
+        background: var(--panel);
+        padding: 12px 16px;
+        border: 3px solid var(--green-deep);
+        box-shadow: inset 0 0 0 2px rgba(0,0,0,0.45), 4px 4px 0 rgba(0,0,0,0.5);
+        transition: transform 0.06s, background 0.12s;
+    }
+    .nav-btn:hover { background: var(--green-deep); color: #fff; transform: translate(1px, 1px); box-shadow: inset 0 0 0 2px rgba(0,0,0,0.45), 2px 2px 0 rgba(0,0,0,0.5); }
+    .nav-btn.signup { border-color: var(--red); }
+    .nav-btn.signup:hover { background: var(--red); }
+    .nav-btn.discord { border-color: var(--discord); }
+    .nav-btn.discord:hover { background: #3c46b8; }
+
+    /* === SECTIONS === */
+    .section-wrapper {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 56px 20px 30px;
+    }
+    .section-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: clamp(0.85rem, 2.6vw, 1.35rem);
+        color: var(--green-bright);
+        text-shadow: 3px 3px 0 rgba(0,0,0,0.8), 0 0 18px var(--green-glow);
+        margin-bottom: 8px;
+    }
+    .title-rule {
+        width: 120px; height: 3px;
+        background: var(--red);
+        box-shadow: 2px 2px 0 rgba(0,0,0,0.6);
+        margin: 14px 0 26px;
+    }
+    .lead { color: var(--cream-dim); max-width: 720px; }
+
+    /* info chips */
+    .chips {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 14px;
+        margin-top: 26px;
+    }
+    .chip {
+        background: var(--panel);
+        border: 3px solid var(--line);
+        box-shadow: 6px 6px 0 rgba(0,0,0,0.45);
+        padding: 18px 16px 16px;
+    }
+    .chip .label {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.5rem;
+        color: var(--green);
+        display: block;
+    }
+    .chip .value {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.68rem;
+        color: var(--cream);
+        display: block;
+        margin-top: 12px;
+        line-height: 1.7;
+    }
+    .chip .value .accent { color: var(--red-bright); }
+
+    /* divider strips */
+    .strip {
+        height: 240px;
+        background-position: center;
+        background-size: cover;
+        image-rendering: pixelated;
+        border-top: 3px solid var(--line);
+        border-bottom: 3px solid var(--line);
+        margin: 40px 0 0;
+        position: relative;
+    }
+    .strip::after {
+        content: '';
+        position: absolute; inset: 0;
+        background: linear-gradient(rgba(3,8,5,0.45), rgba(3,8,5,0.15) 40%, rgba(3,8,5,0.45));
+    }
+
+    /* signup */
+    .signup-box {
+        background: var(--panel-2);
+        border: 3px solid var(--green-deep);
+        box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
+        padding: 30px 26px;
+        margin-top: 26px;
+    }
+    .steps { list-style: none; counter-reset: step; }
+    .steps li {
+        counter-increment: step;
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        padding: 12px 0;
+        border-bottom: 2px dashed var(--line);
+        font-size: 23px;
+    }
+    .steps li:last-child { border-bottom: none; }
+    .steps li::before {
+        content: counter(step);
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.85rem;
+        color: var(--green-bright);
+        text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+        flex-shrink: 0;
+    }
+    .steps a { color: var(--green-bright); }
+    .rule-box {
+        margin-top: 24px;
+        border: 3px solid var(--red);
+        background: rgba(168, 22, 22, 0.08);
+        padding: 16px 18px;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.62rem;
+        line-height: 2;
+        color: var(--cream);
+    }
+    .rule-box .no { color: var(--red-bright); }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 26px; }
+    .big-btn {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.7rem;
+        text-decoration: none;
+        color: #fff;
+        padding: 16px 22px;
+        border: 3px solid;
+        box-shadow: 5px 5px 0 rgba(0,0,0,0.55);
+        transition: transform 0.06s;
+        display: inline-block;
+    }
+    .big-btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 rgba(0,0,0,0.55); }
+    .big-btn.discord { background: var(--discord); border-color: #7a86ff; }
+    .big-btn.ghost { background: var(--panel); border-color: var(--green-deep); color: var(--cream); }
+
+    /* video */
+    .video-frame {
+        margin-top: 26px;
+        border: 3px solid var(--line);
+        box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
+        background: #000;
+        aspect-ratio: 16 / 9;
+    }
+    .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .video-caption { margin-top: 12px; color: var(--cream-dim); font-size: 19px; }
+    .video-caption a { color: var(--green-bright); }
+
+    /* footer */
+    footer {
+        margin-top: 70px;
+        padding: 30px 20px 40px;
+        border-top: 3px solid var(--line);
+        text-align: center;
+        color: var(--cream-dim);
+        font-size: 18px;
+    }
+    footer .f-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.55rem;
+        color: var(--green);
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 560px) {
+        .strip { height: 150px; }
+        .steps li { font-size: 20px; }
+        body { font-size: 19px; }
+    }
+</style>
+</head>
+<body>
+
+<header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay">
+        <h1 class="h-title">RUMBLE IN THE<br>JUNGLE VI</h1>
+        <div class="h-bar"></div>
+        <div class="h-sub">OCT 17 — 18 &amp; 24 — 25 ★ 2026</div>
+        <div class="h-tag">SIGN-UPS OPEN · TEAMS OF 5</div>
+    </div>
+</header>
+
+<nav class="nav-bar">
+    <a href="#info" class="nav-btn">THE RUMBLE</a>
+    <a href="#signup" class="nav-btn signup">SIGN UP</a>
+    <a href="#lastrumble" class="nav-btn">LAST RUMBLE</a>
+    <a href="https://discord.gg/sQFwGxFYFB" target="_blank" rel="noopener" class="nav-btn discord">DISCORD</a>
+</nav>
+
+<section id="info" class="section-wrapper">
+    <h2 class="section-title">THE RUMBLE</h2>
+    <div class="title-rule"></div>
+    <p class="lead">
+        The jungle opens its gates again. Rumble in the Jungle is the community's
+        Dota 2 <b>Ability Draft</b> team tournament — five editions of chaos, clown
+        picks and occasional 500 IQ drafts, and now the sixth. Two weekends,
+        full 5-stacks, everything streamed live.
+    </p>
+    <div class="chips">
+        <div class="chip">
+            <span class="label">WHEN</span>
+            <span class="value">OCT 17—18<br>&amp; 24—25<br>2026</span>
+        </div>
+        <div class="chip">
+            <span class="label">MODE</span>
+            <span class="value">DOTA 2<br>ABILITY DRAFT<br>5V5 TEAMS</span>
+        </div>
+        <div class="chip">
+            <span class="label">WHERE</span>
+            <span class="value">ONLINE<br>LIVE ON <span class="accent">STREAM</span></span>
+        </div>
+        <div class="chip">
+            <span class="label">ENTRY</span>
+            <span class="value">FREE<br><span class="accent">FULL TEAMS ONLY</span></span>
+        </div>
+    </div>
+</section>
+
+<div class="strip" style="background-image:url('assets/scene_monkeywalk_1536.jpg')"></div>
+
+<section id="signup" class="section-wrapper">
+    <h2 class="section-title">SIGN UP</h2>
+    <div class="title-rule"></div>
+    <div class="signup-box">
+        <ol class="steps">
+            <li>Join the Discord: <a href="https://discord.gg/sQFwGxFYFB" target="_blank" rel="noopener">discord.gg/sQFwGxFYFB</a></li>
+            <li>Assemble your squad — exactly <b>5 players</b>, pick a team name you won't regret on stream.</li>
+            <li>PM <b>blopp</b> on Discord with your team name and all 5 players. Done.</li>
+        </ol>
+        <div class="rule-box">
+            ONLY FULL TEAMS OF 5 ARE ACCEPTED.<br>
+            <span class="no">NO SOLO SIGN-UPS.</span> NO 4-STACKS "LOOKING FOR A FIFTH".
+        </div>
+        <div class="btn-row">
+            <a href="https://discord.gg/sQFwGxFYFB" target="_blank" rel="noopener" class="big-btn discord">JOIN THE DISCORD</a>
+        </div>
+    </div>
+</section>
+
+<div class="strip" style="background-image:url('assets/scene_arenafloor_1536.jpg')"></div>
+
+<section id="lastrumble" class="section-wrapper">
+    <h2 class="section-title">LAST RUMBLE</h2>
+    <div class="title-rule"></div>
+    <p class="lead">
+        Need proof this is worth clearing two weekends for? Day 4 of
+        <b>Rumble in the Jungle V</b> — lower bracket finals, Space Marines vs Seppo13,
+        eight hours of Ability Draft madness.
+    </p>
+    <div class="video-frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/v-EdnuPYb84"
+                title="Rumble in the Jungle V — Day 4 — LB Finals"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen loading="lazy"></iframe>
+    </div>
+    <p class="video-caption">
+        Player doesn't load? Watch on YouTube:
+        <a href="https://www.youtube.com/watch?v=v-EdnuPYb84" target="_blank" rel="noopener">Rumble V · Day 4 · LB Finals</a>
+    </p>
+</section>
+
+<footer>
+    <div class="f-title">RUMBLE IN THE JUNGLE VI</div>
+    OCT 17 — 18 &amp; 24 — 25 · 2026 · see you in the jungle
+</footer>
+
+</body>
+</html>
