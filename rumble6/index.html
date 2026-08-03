@@ -31,11 +31,10 @@
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    html, body { cursor: url('assets/cursor.png') 1 1, auto; }
+    a, button, .nav-btn, .big-btn { cursor: url('assets/cursor_hand.png') 1 1, pointer; }
     body {
-        background: var(--bg) url('data:image/png;base64,') ;
-        background:
-            radial-gradient(ellipse 80% 50% at 50% -10%, rgba(46,110,58,0.14), transparent),
-            var(--bg);
+        background: var(--bg);
         color: var(--cream);
         font-family: 'VT323', monospace;
         font-size: 21px;
@@ -44,6 +43,53 @@
         overflow-x: hidden;
     }
     ::selection { background: var(--green-deep); color: var(--cream); }
+    ::-webkit-scrollbar { width: 14px; background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb { background: var(--green-deep); border: 3px solid var(--bg-deep); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--green); }
+
+    /* === BACKGROUND LAYERS (WC recipe, jungle flavor) === */
+    .bg-base {
+        position: fixed; inset: 0; z-index: 0;
+        background:
+            linear-gradient(rgba(4,12,7,0.86), rgba(3,8,5,0.95)),
+            url('assets/scene_waterfall_1536.jpg') center / cover no-repeat;
+        image-rendering: pixelated;
+    }
+    .bg-vignette {
+        position: fixed; inset: 0; z-index: 0;
+        background: radial-gradient(circle at 50% 40%, transparent 25%, rgba(2,5,3,0.78) 100%);
+        pointer-events: none;
+    }
+
+    /* green pixel fireflies (filled by JS) */
+    .firefly {
+        position: fixed;
+        width: 4px; height: 4px;
+        background: var(--green-bright);
+        box-shadow: 0 0 6px rgba(110,224,122,0.8);
+        opacity: 0;
+        z-index: 1;
+        pointer-events: none;
+        animation: fireflyRise linear infinite;
+    }
+    .firefly:nth-child(odd) { background: #e8a33d; box-shadow: 0 0 6px rgba(255,180,70,0.7); width: 3px; height: 3px; }
+    @keyframes fireflyRise {
+        0%   { transform: translateY(0) translateX(0); opacity: 0; }
+        8%   { opacity: 0.9; }
+        45%  { transform: translateY(-28vh) translateX(-2vw); }
+        70%  { opacity: 0.5; }
+        100% { transform: translateY(-55vh) translateX(3vw); opacity: 0; }
+    }
+
+    .mouse-glow {
+        position: fixed; width: 240px; height: 240px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, rgba(110,224,122,0.06) 0%, transparent 65%);
+        border-radius: 50%;
+        pointer-events: none; z-index: 2;
+        opacity: 0; transition: opacity .6s;
+    }
+    .mouse-glow.active { opacity: 1; }
 
     .scanlines {
         position: fixed; inset: 0; pointer-events: none; z-index: 9999;
@@ -60,12 +106,12 @@
     /* === PIXEL FRAME (9-slice jungle stone) === */
     .px-frame {
         position: relative;
-        border: 40px solid transparent;
-        border-image: url('assets/frame.png') 145 round;
+        border: 34px solid transparent;
+        border-image: url('assets/frame2.png') 140 round;
         background: #000;
         background-clip: padding-box;
     }
-    @media (max-width: 640px) { .px-frame { border-width: 26px; } }
+    @media (max-width: 640px) { .px-frame { border-width: 24px; } }
 
     /* === HERO === */
     .hero { margin-top: 28px; position: relative; }
@@ -292,7 +338,10 @@
 </style>
 </head>
 <body>
+<div class="bg-base"></div>
+<div class="bg-vignette"></div>
 <div class="scanlines"></div>
+<div class="mouse-glow" id="mouseGlow"></div>
 
 <div class="container">
     <header class="hero">
@@ -320,10 +369,9 @@
         <h2 class="section-title">THE RUMBLE</h2>
         <div class="title-rule"></div>
         <p class="lead">
-            The jungle opens its gates again. Rumble in the Jungle is the community's
-            Dota 2 <b>Ability Draft</b> team tournament — five editions of chaos, clown
-            picks and occasional 500 IQ drafts, and now the sixth. Two weekends,
-            full 5-stacks, everything streamed live.
+            <b>The most competitive Ability Draft tournament there is.</b>
+            The TI of Ability Draft. Five editions of history, and this October
+            the sixth: two weekends, full 5-stacks, everything live.
         </p>
         <div class="chips">
             <div class="chip">
@@ -402,5 +450,31 @@
     OCT 17 — 18 &amp; 24 — 25 · 2026 · see you in the jungle
 </footer>
 
+<script>
+    // fireflies (WC ember system, jungle flavor)
+    (function () {
+        const n = window.innerWidth < 640 ? 14 : 28;
+        for (let i = 0; i < n; i++) {
+            const e = document.createElement('div');
+            e.className = 'firefly';
+            e.style.left = Math.random() * 100 + '%';
+            e.style.top = (40 + Math.random() * 60) + '%';
+            e.style.animationDelay = (Math.random() * 18) + 's';
+            e.style.animationDuration = (Math.random() * 12 + 12) + 's';
+            document.body.appendChild(e);
+        }
+    })();
+
+    // mouse glow
+    const mouseGlow = document.getElementById('mouseGlow');
+    let mouseTimeout;
+    document.addEventListener('mousemove', (e) => {
+        mouseGlow.style.left = e.clientX + 'px';
+        mouseGlow.style.top = e.clientY + 'px';
+        mouseGlow.classList.add('active');
+        clearTimeout(mouseTimeout);
+        mouseTimeout = setTimeout(() => mouseGlow.classList.remove('active'), 1200);
+    });
+</script>
 </body>
 </html>
