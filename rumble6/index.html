@@ -241,6 +241,46 @@
     }
     .chip .value .accent { color: var(--red-bright); }
 
+    /* prize pool */
+    .pool-row {
+        display: flex; align-items: stretch; gap: 18px;
+        flex-wrap: wrap;
+        margin-top: 26px;
+    }
+    .pool-card {
+        background: var(--panel);
+        border: 3px solid var(--line);
+        box-shadow: 6px 6px 0 rgba(0,0,0,0.45);
+        padding: 22px 28px;
+        text-align: center;
+        flex: 1 1 220px;
+    }
+    .pool-card.grow { border-color: var(--green-deep); }
+    .pool-label {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.5rem;
+        color: var(--green);
+        display: block;
+    }
+    .pool-num {
+        font-family: 'Press Start 2P', monospace;
+        font-size: clamp(1.3rem, 4vw, 2.1rem);
+        color: var(--cream);
+        display: block;
+        margin: 16px 0 10px;
+        text-shadow: 3px 3px 0 rgba(0,0,0,0.75), 0 0 20px rgba(240,230,210,0.25);
+    }
+    .pool-num.green { color: var(--green-bright); text-shadow: 3px 3px 0 rgba(0,0,0,0.75), 0 0 22px var(--green-glow); }
+    .pool-note { color: var(--cream-dim); font-size: 19px; }
+    .pool-arrow {
+        align-self: center;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 1.1rem;
+        color: var(--red-bright);
+        text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+    }
+    @media (max-width: 640px) { .pool-arrow { display: none; } }
+
     /* divider strips */
     .strip {
         height: 230px;
@@ -305,6 +345,7 @@
     }
     .big-btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 rgba(0,0,0,0.55); }
     .big-btn.discord { background: var(--discord); border-color: #7a86ff; }
+    .big-btn.donate { background: var(--green-deep); border-color: var(--green-bright); }
 
     /* video */
     .video-outer { margin-top: 26px; }
@@ -359,6 +400,8 @@
 
 <nav class="nav-bar">
     <a href="#info" class="nav-btn">THE RUMBLE</a>
+    <a href="#format" class="nav-btn">FORMAT</a>
+    <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
     <a href="#signup" class="nav-btn signup">SIGN UP</a>
     <a href="#lastrumble" class="nav-btn">LAST RUMBLE</a>
     <a href="https://discord.gg/sQFwGxFYFB" target="_blank" rel="noopener" class="nav-btn discord">DISCORD</a>
@@ -369,7 +412,7 @@
         <h2 class="section-title">THE RUMBLE</h2>
         <div class="title-rule"></div>
         <p class="lead">
-            <b>The most competitive Ability Draft tournament there is.</b>
+            <b>The most competitive Ability Draft tournament there is.</b><br>
             The TI of Ability Draft. Five editions of history, and this October
             the sixth: two weekends, full 5-stacks, everything live.
         </p>
@@ -384,12 +427,67 @@
             </div>
             <div class="chip">
                 <span class="label">WHERE</span>
-                <span class="value">ONLINE<br>LIVE ON <span class="accent">STREAM</span></span>
+                <span class="value">ONLINE<br>SERVER: <span class="accent">EU WEST</span><br>LIVE ON STREAM</span>
             </div>
             <div class="chip">
                 <span class="label">ENTRY</span>
                 <span class="value">FREE<br><span class="accent">FULL TEAMS ONLY</span></span>
             </div>
+        </div>
+    </section>
+</div>
+
+<div class="container">
+    <section id="format" class="section-wrapper">
+        <h2 class="section-title">FORMAT</h2>
+        <div class="title-rule"></div>
+        <p class="lead">
+            <b>8 teams.</b> Same battle plan as last edition:
+        </p>
+        <div class="chips">
+            <div class="chip">
+                <span class="label">DAY 1 · OCT 17</span>
+                <span class="value">GROUP STAGE<br>2 GROUPS<br>BO1</span>
+            </div>
+            <div class="chip">
+                <span class="label">DAY 2 · OCT 18</span>
+                <span class="value">PLAYOFFS<br>DOUBLE ELIM<br>BO3</span>
+            </div>
+            <div class="chip">
+                <span class="label">DAY 3 · OCT 24</span>
+                <span class="value">UB &amp; LB<br>FINALS<br>BO3</span>
+            </div>
+            <div class="chip">
+                <span class="label">DAY 4 · OCT 25</span>
+                <span class="value">GRAND<br>FINAL<br><span class="accent">BO5</span></span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="container">
+    <section id="prizepool" class="section-wrapper">
+        <h2 class="section-title">PRIZE POOL</h2>
+        <div class="title-rule"></div>
+        <div class="pool-row">
+            <div class="pool-card">
+                <span class="pool-label">BASE POOL</span>
+                <span class="pool-num">€300</span>
+                <span class="pool-note">seeded by blopp</span>
+            </div>
+            <div class="pool-arrow">►</div>
+            <div class="pool-card grow">
+                <span class="pool-label">USUAL FINAL POOL</span>
+                <span class="pool-num green">~€1000</span>
+                <span class="pool-note">with community contributions</span>
+            </div>
+        </div>
+        <p class="lead" style="margin-top:18px">
+            The pot starts at <b>€300</b>. Every edition the community throws in on top,
+            and we usually land around <b>€1000</b> by finals day. Want to fatten the pot?
+        </p>
+        <div class="btn-row">
+            <a href="https://www.paypal.com/donate/?hosted_button_id=567SNPMT5BLL6" target="_blank" rel="noopener" class="big-btn donate">DONATE TO THE PRIZE POOL</a>
         </div>
     </section>
 </div>
@@ -409,7 +507,7 @@
                 </ol>
                 <div class="rule-box">
                     ONLY FULL TEAMS OF 5 ARE ACCEPTED.<br>
-                    <span class="no">NO SOLO SIGN-UPS.</span> NO 4-STACKS "LOOKING FOR A FIFTH".
+                    <span class="no">NO SOLO SIGN-UPS.</span>
                 </div>
                 <div class="btn-row">
                     <a href="https://discord.gg/sQFwGxFYFB" target="_blank" rel="noopener" class="big-btn discord">JOIN THE DISCORD</a>
