@@ -681,7 +681,11 @@
     <section id="teams" class="section-wrapper">
         <h2 class="section-title">THE 8 TEAMS</h2>
         <div class="title-rule"></div>
-        <p class="lead"><span id="teams-counter" class="date-highlight">0/8 TEAMS LOCKED</span></p>
+        <p class="lead">
+            <span id="teams-counter" class="date-highlight">0 TEAMS SIGNED UP · 8 SLOTS</span><br>
+            More than 8 sign-ups: some teams receive direct invites, the rest settle it
+            in the qualifiers on <b>OCT 10 + 11</b>.
+        </p>
         <div class="team-grid" id="team-grid"></div>
     </section>
 </div>
@@ -843,21 +847,30 @@
     })();
 
     // === TEAMS (add signed-up teams here as they PM blopp) ===
+    // status: 'signed' (default) | 'invited' | 'qualifier' — blopp assigns invites later
     const TEAMS = [
-        // 'Team Name',
+        { name: 'Playlist dlya blondinok' },
     ];
+    const SLOTS = 8;
     (function () {
         const grid = document.getElementById('team-grid');
-        for (let i = 0; i < 8; i++) {
-            const t = TEAMS[i];
+        const labels = { signed: 'SIGNED UP', invited: 'INVITED', qualifier: 'QUALIFIER' };
+        TEAMS.forEach(t => {
             const card = document.createElement('div');
-            card.className = 'team-card ' + (t ? 'locked' : 'open');
-            card.innerHTML = t
-                ? '<div class="t-name">' + t + '</div><div class="t-sub">LOCKED IN</div>'
-                : '<div class="t-name">SLOT OPEN</div><div class="t-sub">COULD BE YOU</div>';
+            card.className = 'team-card locked';
+            card.innerHTML = '<div class="t-name">' + t.name + '</div><div class="t-sub">'
+                + labels[t.status || 'signed'] + '</div>';
+            grid.appendChild(card);
+        });
+        for (let i = TEAMS.length; i < SLOTS; i++) {
+            const card = document.createElement('div');
+            card.className = 'team-card open';
+            card.innerHTML = '<div class="t-name">SLOT OPEN</div><div class="t-sub">COULD BE YOU</div>';
             grid.appendChild(card);
         }
-        document.getElementById('teams-counter').textContent = TEAMS.length + '/8 TEAMS LOCKED';
+        const n = TEAMS.length;
+        document.getElementById('teams-counter').textContent =
+            n + (n === 1 ? ' TEAM' : ' TEAMS') + ' SIGNED UP · ' + SLOTS + ' SLOTS';
     })();
 
     // === COUNTDOWN (to Oct 17 2026, 17:00 CEST — WC digit boxes) ===
