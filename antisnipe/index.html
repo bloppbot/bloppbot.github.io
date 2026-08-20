@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anti-Snipe Minimap Overlay (Dota 2, current map)</title>
+<meta name="description" content="Free anti stream-snipe minimap overlay for Dota 2 streamers: semi-transparent map cover with fake wards and cut-outs for towers, made for the current map.">
+<style>
+  :root{--bg:#0f1420;--panel:#171e2e;--text:#e6ebf5;--muted:#9aa6bf;--accent:#2fe52f;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,Segoe UI,Roboto,sans-serif}
+  main{max-width:900px;margin:0 auto;padding:32px 20px 60px}
+  h1{font-size:28px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 24px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+  @media (max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border-radius:10px;padding:16px}
+  .card img{width:100%;height:auto;border-radius:6px;display:block;background:#222 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect width="8" height="8" fill="%23333"/><rect x="8" y="8" width="8" height="8" fill="%23333"/></svg>')}
+  a.btn{display:inline-block;margin:8px 8px 0 0;padding:9px 14px;border-radius:6px;background:var(--accent);color:#062a06;font-weight:700;text-decoration:none}
+  a.btn.sec{background:#2a3550;color:var(--text)}
+  ol,ul{padding-left:20px}
+  code{background:#0b0f18;padding:2px 6px;border-radius:4px}
+  h2{font-size:19px;margin:28px 0 8px}
+  .foot{color:var(--muted);font-size:13px;margin-top:36px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Anti-Snipe Minimap Overlay</h1>
+  <p class="sub">For Dota 2 streamers on the current map (7.4x). Put it over your minimap in OBS: snipers see a map full of wards, you still see towers, heroes and creeps.</p>
+
+  <div class="grid">
+    <div class="card">
+      <img src="preview.jpg" alt="Overlay in action on stream footage">
+      <p class="sub" style="margin:10px 0 0">On stream: map covered at 50%, real buildings visible through the holes, fake wards everywhere.</p>
+    </div>
+    <div class="card">
+      <img src="antisnipe_simple_50.png" alt="antisnipe overlay 50%">
+      <p style="margin:10px 0 0"><strong>antisnipe_simple_50.png</strong> (recommended)<br>
+      <a class="btn" href="antisnipe_simple_50.png" download>Download 50%</a>
+      <a class="btn sec" href="antisnipe_simple_60.png" download>60%</a>
+      <a class="btn sec" href="antisnipe_simple_75.png" download>75%</a>
+      <a class="btn sec" href="antisnipe_iconsonly.png" download>wards only</a></p>
+    </div>
+  </div>
+
+  <h2>What it is</h2>
+  <ul>
+    <li>A 1024x1024 PNG of the <em>Simple Minimap</em> terrain at 50% opacity (60% / 75% variants too), covered with fake observer and sentry wards at real ward spots: runes, Roshan pits, Tormentors, outposts, lotus pools, twin gates, shops, lane towers, jungle camps.</li>
+    <li>Transparent holes at every tower, barracks, ancient and outpost, so the real building state stays readable for you and your viewers.</li>
+    <li>Hero, creep and courier icons are drawn by the game on top of the map texture, so they stay visible through the 50% cover. The real wards drown in the fake ones.</li>
+    <li>Map geometry, icon sprites and building positions come straight from the game files, so everything lines up with the real minimap.</li>
+  </ul>
+
+  <h2>How to use (OBS / Streamlabs)</h2>
+  <ol>
+    <li>Add an <strong>Image</strong> source with the PNG, above your game capture.</li>
+    <li>Scale it to the size of your minimap square. The PNG covers the whole minimap square, including the few pixels that sit under the HUD frame, so make it slightly larger than the visible map. Example for 2560x1440 with the default minimap: 340x340 px at x=-6, y=1110. For 1920x1080: 255x255 px at x=-4, y=833.</li>
+    <li>Check that the tower holes sit exactly on your tower icons. If not, nudge position/scale. Done.</li>
+    <li>Optional: if you use the default (colourful) minimap instead of the Simple Minimap, take <code>antisnipe_iconsonly.png</code> and set the Image source opacity to taste, or ask for a default-map version.</li>
+  </ol>
+  <p class="sub">Note: the overlay is static, it does not react to the game. If Valve moves towers again, the holes move with the next version.</p>
+
+  <p class="foot">Made by BloppBOT for the Ability Draft community. Free to use and share. Questions: the AD Discord.</p>
+</main>
+</body>
+</html>
