@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transparent Twitch Chat Overlay (OBS browser source)</title>
+<meta name="description" content="Free transparent Twitch chat overlay for OBS: shows the last few messages, each one disappears after a timeout. No login, no install, just a browser source URL.">
+<style>
+  :root{--bg:#0f1420;--panel:#171e2e;--text:#e6ebf5;--muted:#9aa6bf;--accent:#2fe52f;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,Segoe UI,Roboto,sans-serif}
+  main{max-width:900px;margin:0 auto;padding:32px 20px 60px}
+  h1{font-size:28px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 24px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+  @media (max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border-radius:10px;padding:16px}
+  label{display:block;margin:10px 0 4px;color:var(--muted);font-size:14px}
+  input,select{width:100%;padding:8px 10px;border-radius:6px;border:1px solid #2a3550;background:#0b0f18;color:var(--text);font:inherit}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  a.btn,button.btn{display:inline-block;margin:8px 8px 0 0;padding:9px 14px;border-radius:6px;background:var(--accent);color:#062a06;font-weight:700;text-decoration:none;border:0;cursor:pointer;font:inherit}
+  a.btn.sec,button.btn.sec{background:#2a3550;color:var(--text)}
+  ol,ul{padding-left:20px}
+  code{background:#0b0f18;padding:2px 6px;border-radius:4px;word-break:break-all}
+  h2{font-size:19px;margin:28px 0 8px}
+  .foot{color:var(--muted);font-size:13px;margin-top:36px}
+  #url{margin-top:12px;padding:10px;background:#0b0f18;border-radius:6px;font-family:ui-monospace,Consolas,monospace;font-size:13px;word-break:break-all}
+  iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:6px;background:#222 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect width="8" height="8" fill="%23333"/><rect x="8" y="8" width="8" height="8" fill="%23333"/></svg>')}
+</style>
+</head>
+<body>
+<main>
+  <h1>Transparent Twitch Chat Overlay</h1>
+  <p class="sub">A browser source for OBS. Shows the last few chat messages on a transparent background, every message vanishes after a timeout. No login, no install, no third-party service, connects straight to Twitch chat.</p>
+
+  <div class="grid">
+    <div class="card">
+      <label for="ch">Twitch channel</label>
+      <input id="ch" placeholder="bloppdota2" autocomplete="off">
+      <div class="row">
+        <div><label for="max">Max messages</label><input id="max" type="number" min="1" max="20" value="4"></div>
+        <div><label for="to">Timeout (seconds)</label><input id="to" type="number" min="5" max="3600" value="120"></div>
+      </div>
+      <div class="row">
+        <div><label for="size">Font size (px)</label><input id="size" type="number" min="10" max="72" value="22"></div>
+        <div><label for="align">Position</label><select id="align"><option value="bottom">bottom (newest at bottom)</option><option value="top">top (newest at bottom)</option></select></div>
+      </div>
+      <div class="row">
+        <div><label for="bg">Message background</label><select id="bg"><option value="">dark box (default)</option><option value="none">none, text only</option></select></div>
+        <div><label for="bots">Bots (Nightbot etc.)</label><select id="bots"><option value="hide">hide</option><option value="show">show</option></select></div>
+      </div>
+      <div id="url">…</div>
+      <button class="btn" id="copy">Copy URL</button>
+      <a class="btn sec" id="open" href="#" target="_blank" rel="noopener">Open</a>
+      <a class="btn sec" id="demo" href="#" target="_blank" rel="noopener">Demo (fake chat)</a>
+    </div>
+    <div class="card">
+      <iframe id="prev" src="overlay.html?demo=1&status=1&size=16" title="live preview"></iframe>
+      <p class="sub" style="margin:10px 0 0">Preview with fake messages. The checkerboard is transparency, in OBS it is your game.</p>
+    </div>
+  </div>
+
+  <h2>How to use (OBS / Streamlabs)</h2>
+  <ol>
+    <li>Type your channel above, copy the URL.</li>
+    <li>OBS: <strong>+ Source → Browser</strong>, paste the URL. Width 500, height 400 works for 4 messages at 22 px; make it taller for more messages or bigger text.</li>
+    <li>Leave "Custom CSS" as is, the page is already transparent. Drag it where you want it.</li>
+    <li>Optional: tick "Shutdown source when not visible" and "Refresh browser when scene becomes active".</li>
+  </ol>
+
+  <h2>What it does</h2>
+  <ul>
+    <li>Keeps the newest <em>N</em> messages (default 4). A new one pushes the oldest out.</li>
+    <li>Every message fades out after the timeout (default 120 s), so a quiet chat leaves an empty screen instead of stale lines.</li>
+    <li>Twitch emotes, user name colours, broadcaster / mod / VIP / sub badge colours.</li>
+    <li>Timeouts, bans and deleted messages are removed from the overlay too.</li>
+    <li>Reconnects on its own if Twitch drops the connection.</li>
+  </ul>
+
+  <h2>URL parameters</h2>
+  <ul>
+    <li><code>channel</code> your Twitch name (required)</li>
+    <li><code>max</code> messages shown, default 4</li>
+    <li><code>timeout</code> seconds until a message disappears, default 120</li>
+    <li><code>size</code> font size in px, default 22</li>
+    <li><code>align</code> <code>bottom</code> (default) or <code>top</code></li>
+    <li><code>bg</code> <code>none</code> for text only, or any CSS colour like <code>rgba(0,0,0,0.8)</code></li>
+    <li><code>font</code> a font name installed on your PC, e.g. <code>Bahnschrift</code></li>
+    <li><code>bots</code> <code>hide</code> (default) or <code>show</code></li>
+    <li><code>status</code> <code>1</code> shows a small connection indicator (for testing)</li>
+    <li><code>demo</code> <code>1</code> fakes messages so you can position the source</li>
+  </ul>
+
+  <p class="foot">Made by BloppBOT. One HTML file, MIT, no tracking. Source: <a href="https://github.com/bloppbot/bloppbot.github.io/tree/main/chat-overlay" style="color:var(--accent)">github.com/bloppbot/bloppbot.github.io/chat-overlay</a></p>
+</main>
+<script>
+(function(){
+  var base = location.href.replace(/index\.html$/,'').replace(/\/?(\?.*)?$/,'/') + 'overlay.html';
+  var ids = ['ch','max','to','size','align','bg','bots'];
+  var els = {}; ids.forEach(function(i){ els[i]=document.getElementById(i); });
+  function build(extra){
+    var p = new URLSearchParams();
+    p.set('channel', (els.ch.value||'yourchannel').trim().toLowerCase().replace(/^#/,''));
+    if(els.max.value!=='4') p.set('max', els.max.value);
+    if(els.to.value!=='120') p.set('timeout', els.to.value);
+    if(els.size.value!=='22') p.set('size', els.size.value);
+    if(els.align.value!=='bottom') p.set('align', els.align.value);
+    if(els.bg.value) p.set('bg', els.bg.value);
+    if(els.bots.value!=='hide') p.set('bots', els.bots.value);
+    if(extra) Object.keys(extra).forEach(function(k){ p.set(k, extra[k]); });
+    return base + '?' + p.toString();
+  }
+  function update(){
+    var u = build();
+    document.getElementById('url').textContent = u;
+    document.getElementById('open').href = u;
+    document.getElementById('demo').href = build({demo:'1',status:'1'});
+  }
+  ids.forEach(function(i){ els[i].addEventListener('input', update); els[i].addEventListener('change', update); });
+  document.getElementById('copy').addEventListener('click', function(){
+    navigator.clipboard.writeText(build()).then(function(){
+      var b=document.getElementById('copy'); b.textContent='Copied'; setTimeout(function(){b.textContent='Copy URL';},1200);
+    });
+  });
+  update();
+})();
+</script>
+</body>
+</html>

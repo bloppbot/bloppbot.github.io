@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Twitch chat overlay</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --size:22px;
+    --pad:10px;
+    --gap:8px;
+    --bg:rgba(0,0,0,0.55);
+    --radius:8px;
+    --font:"Inter","Segoe UI",Roboto,Arial,sans-serif;
+  }
+  html,body{margin:0;padding:0;background:transparent;overflow:hidden;height:100%}
+  body{font-family:var(--font);font-size:var(--size);color:#fff;
+       -webkit-font-smoothing:antialiased;
+       text-shadow:0 1px 2px rgba(0,0,0,.8)}
+  #chat{position:absolute;left:0;right:0;bottom:0;padding:var(--pad);
+        display:flex;flex-direction:column;justify-content:flex-end;gap:var(--gap)}
+  body.top #chat{bottom:auto;top:0;justify-content:flex-start}
+  .msg{background:var(--bg);border-radius:var(--radius);padding:.35em .6em;
+       line-height:1.35;word-wrap:break-word;overflow-wrap:anywhere;
+       animation:in .18s ease-out;transition:opacity .6s ease,transform .6s ease}
+  .msg.out{opacity:0;transform:translateX(-12px)}
+  body.nobg .msg{background:transparent;padding:0}
+  .name{font-weight:700;margin-right:.35em}
+  .name::after{content:":";color:#fff;font-weight:400}
+  .badge{display:inline-block;width:.85em;height:.85em;border-radius:3px;
+         margin-right:.3em;vertical-align:-.08em}
+  .badge.broadcaster{background:#e91916}
+  .badge.moderator{background:#00ad03}
+  .badge.vip{background:#e005b9}
+  .badge.subscriber{background:#9147ff}
+  .emote{height:1.5em;vertical-align:middle;margin:0 .05em}
+  .action{font-style:italic}
+  #status{position:absolute;left:8px;top:8px;font-size:12px;opacity:.6;
+          background:rgba(0,0,0,.6);padding:2px 6px;border-radius:4px}
+  #status.hide{display:none}
+  @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="status">connecting…</div>
+<div id="chat"></div>
+<script>
+(function(){
+  var q = new URLSearchParams(location.search);
+  var channel = (q.get('channel')||'').toLowerCase().replace(/^#/,'');
+  var MAX     = Math.max(1, parseInt(q.get('max')||'4',10));
+  var TIMEOUT = Math.max(1, parseFloat(q.get('timeout')||'120'))*1000; // seconds → ms
+  var size    = q.get('size');
+  var bg      = q.get('bg');
+  var font    = q.get('font');
+  var hideBots= (q.get('bots')||'hide')==='hide';
+  var showStatus = q.get('status')==='1';
+
+  if(size) document.documentElement.style.setProperty('--size', size+'px');
+  if(font) document.documentElement.style.setProperty('--font', '"'+font+'",sans-serif');
+  if(bg==='0'||bg==='none') document.body.classList.add('nobg');
+  else if(bg) document.documentElement.style.setProperty('--bg', bg);
+  if(q.get('align')==='top') document.body.classList.add('top');
+
+  var chat = document.getElementById('chat');
+  var status = document.getElementById('status');
+  if(!showStatus) status.classList.add('hide');
+  function setStatus(t){ status.textContent = t; }
+
+  if(!channel){
+    status.classList.remove('hide');
+    setStatus('add ?channel=yourname to the URL');
+    return;
+  }
+
+  var BOTS = {nightbot:1,streamelements:1,streamlabs:1,moobot:1,fossabot:1,wizebot:1,botrix:1};
+
+  function parseTags(s){
+    var o={}; if(!s) return o;
+    s.split(';').forEach(function(kv){ var i=kv.indexOf('='); o[kv.slice(0,i)]=kv.slice(i+1); });
+    return o;
+  }
+  function unescapeTag(v){
+    return (v||'').replace(/\\s/g,' ').replace(/\\:/g,';').replace(/\\\\/g,'\\');
+  }
+  function esc(s){ return s.replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+  // Twitch emote offsets are in UTF-16 code points minus surrogates → use Array.from
+  function renderText(text, emotesTag){
+    var chars = Array.from(text);
+    if(!emotesTag) return esc(text);
+    var spans = [];
+    emotesTag.split('/').forEach(function(e){
+      var p=e.split(':'); if(p.length<2) return;
+      var id=p[0];
+      p[1].split(',').forEach(function(r){
+        var se=r.split('-'); spans.push({id:id,s:+se[0],e:+se[1]});
+      });
+    });
+    spans.sort(function(a,b){return a.s-b.s;});
+    var out='', pos=0;
+    spans.forEach(function(sp){
+      if(sp.s<pos) return;
+      out += esc(chars.slice(pos,sp.s).join(''));
+      var code = chars.slice(sp.s,sp.e+1).join('');
+      out += '<img class="emote" alt="'+esc(code)+'" src="https://static-cdn.jtvnw.net/emoticons/v2/'+sp.id+'/default/dark/2.0">';
+      pos = sp.e+1;
+    });
+    out += esc(chars.slice(pos).join(''));
+    return out;
+  }
+
+  var timers = new Map();
+  function removeMsg(el){
+    if(!el || !el.parentNode) return;
+    el.classList.add('out');
+    var t = timers.get(el); if(t) clearTimeout(t); timers.delete(el);
+    setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 650);
+  }
+  function addMsg(tags, user, text){
+    var el = document.createElement('div');
+    el.className='msg';
+    var badges = (tags.badges||'');
+    var b='';
+    ['broadcaster','moderator','vip','subscriber'].forEach(function(k){
+      if(badges.indexOf(k+'/')>=0) b+='<span class="badge '+k+'"></span>';
+    });
+    var name = tags['display-name'] || user;
+    var color = tags.color || '#9147ff';
+    var action = false;
+    var m = text.match(/^ACTION (.*)$/);
+    if(m){ action=true; text=m[1]; }
+    el.innerHTML = b + '<span class="name" style="color:'+esc(color)+'">'+esc(name)+'</span>'
+                 + '<span class="text'+(action?' action':'')+'">'+renderText(text, tags.emotes)+'</span>';
+    el.dataset.user = user;
+    el.dataset.id = tags.id||'';
+    chat.appendChild(el);
+    while(chat.children.length > MAX){
+      var first = chat.firstElementChild;
+      // hard-remove instantly so the count never exceeds MAX
+      var t = timers.get(first); if(t) clearTimeout(t); timers.delete(first);
+      chat.removeChild(first);
+    }
+    timers.set(el, setTimeout(function(){ removeMsg(el); }, TIMEOUT));
+  }
+  function clearUser(user){
+    Array.prototype.slice.call(chat.children).forEach(function(el){
+      if(el.dataset.user===user) removeMsg(el);
+    });
+  }
+  function clearId(id){
+    Array.prototype.slice.call(chat.children).forEach(function(el){
+      if(el.dataset.id===id) removeMsg(el);
+    });
+  }
+
+  var ws, backoff=1000;
+  function connect(){
+    setStatus('connecting…');
+    ws = new WebSocket('wss://irc-ws.chat.twitch.tv:443');
+    ws.onopen = function(){
+      backoff=1000;
+      ws.send('CAP REQ :twitch.tv/tags twitch.tv/commands');
+      ws.send('PASS SCHMOOPIIE');
+      ws.send('NICK justinfan'+Math.floor(10000+Math.random()*80000));
+      ws.send('JOIN #'+channel);
+      setStatus('#'+channel+' connected');
+    };
+    ws.onmessage = function(ev){
+      ev.data.split('\r\n').forEach(function(line){
+        if(!line) return;
+        if(line.indexOf('PING')===0){ ws.send('PONG :tmi.twitch.tv'); return; }
+        var tags={}, rest=line;
+        if(rest[0]==='@'){ var sp=rest.indexOf(' '); tags=parseTags(rest.slice(1,sp)); rest=rest.slice(sp+1); }
+        var mm = rest.match(/^:(\w+)!\S+ PRIVMSG #\S+ :(.*)$/);
+        if(mm){
+          var user=mm[1].toLowerCase();
+          if(hideBots && BOTS[user]) return;
+          addMsg(tags, user, mm[2]);
+          return;
+        }
+        var ct = rest.match(/^:tmi\.twitch\.tv CLEARCHAT #\S+ :(\S+)$/);
+        if(ct){ clearUser(ct[1].toLowerCase()); return; }
+        if(/CLEARCHAT #\S+$/.test(rest)){ Array.prototype.slice.call(chat.children).forEach(removeMsg); return; }
+        if(/CLEARMSG/.test(rest) && tags['target-msg-id']){ clearId(tags['target-msg-id']); return; }
+      });
+    };
+    ws.onclose = function(){
+      setStatus('disconnected, retrying…');
+      setTimeout(connect, backoff);
+      backoff = Math.min(backoff*2, 30000);
+    };
+    ws.onerror = function(){ try{ws.close();}catch(e){} };
+  }
+  connect();
+
+  // demo mode: ?demo=1 fakes a few messages so you can position it in OBS
+  if(q.get('demo')==='1'){
+    var demo=[['blopp','#1e90ff','ez mmr'],['friscydriscy','#ffd700','2550 damage WIN btw'],
+              ['herpes','#00ad03','party abuser? never heard of him'],['electroimpostor_smurfboy','#e005b9','im not smurfing'],
+              ['bloppbot','#e91916','bleep bloop 4 messages max, 2 min timeout']];
+    var i=0;
+    setInterval(function(){ var d=demo[i++%demo.length]; addMsg({'display-name':d[0],color:d[1],badges:i===1?'broadcaster/1':''},d[0],d[2]); }, 1500);
+  }
+})();
+</script>
+</body>
+</html>
