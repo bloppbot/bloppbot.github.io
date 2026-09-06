@@ -3,42 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RUMBLE IN THE JUNGLE VI — Dota 2 Ability Draft Tournament</title>
-<meta name="description" content="Rumble in the Jungle VI — the most competitive Dota 2 Ability Draft team tournament. October 17—18 & 24—25, 2026. 8 teams, EU West, €300+ prize pool. Full teams of 5 only. Sign up on Discord.">
-<meta name="keywords" content="Dota 2, Ability Draft, tournament, Rumble in the Jungle, AD tournament, Dota 2 community tournament, esports, EU West, 2026">
-<link rel="canonical" href="https://bloppbot.github.io/rumble6/">
+<title>RUMBLE IN THE JUNGLE VI — v3 preview</title>
+<meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#030805">
-<meta property="og:title" content="RUMBLE IN THE JUNGLE VI">
-<meta property="og:description" content="The most competitive Dota 2 Ability Draft tournament there is. OCT 17—18 & 24—25, 2026. 8 teams. Assemble your 5 and sign up on Discord.">
-<meta property="og:image" content="https://bloppbot.github.io/rumble6/assets/og.jpg">
-<meta property="og:image:width" content="1536">
-<meta property="og:image:height" content="864">
-<meta property="og:url" content="https://bloppbot.github.io/rumble6/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Rumble in the Jungle">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="RUMBLE IN THE JUNGLE VI">
-<meta name="twitter:description" content="The most competitive Dota 2 Ability Draft tournament there is. OCT 17—18 & 24—25, 2026. Full teams of 5, sign up on Discord.">
-<meta name="twitter:image" content="https://bloppbot.github.io/rumble6/assets/og.jpg">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SportsEvent",
-  "name": "Rumble in the Jungle VI",
-  "description": "Dota 2 Ability Draft team tournament. 8 teams, double elimination, EU West server.",
-  "startDate": "2026-10-17",
-  "endDate": "2026-10-25",
-  "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
-  "eventStatus": "https://schema.org/EventScheduled",
-  "location": { "@type": "VirtualLocation", "url": "https://bloppbot.github.io/rumble6/" },
-  "image": "https://bloppbot.github.io/rumble6/assets/og.jpg",
-  "organizer": { "@type": "Person", "name": "blopp" },
-  "sport": "Dota 2 Ability Draft"
-}
-</script>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
@@ -62,8 +30,8 @@
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    html, body { cursor: url('assets/cursor.png') 1 1, auto; }
-    a, button, .nav-btn, .big-btn { cursor: url('assets/cursor_hand.png') 1 1, pointer; }
+    html, body { cursor: url('../assets/cursor.png') 1 1, auto; }
+    a, button, .nav-btn, .big-btn { cursor: url('../assets/cursor_hand.png') 1 1, pointer; }
     body {
         background: var(--bg);
         color: var(--cream);
@@ -83,7 +51,7 @@
         position: fixed; inset: 0; z-index: 0;
         background:
             linear-gradient(rgba(4,12,7,0.86), rgba(3,8,5,0.95)),
-            url('assets/scene_waterfall_1536.jpg') center / cover no-repeat;
+            url('../assets/scene_waterfall_1536.jpg') center / cover no-repeat;
         image-rendering: pixelated;
     }
     .bg-vignette {
@@ -106,14 +74,33 @@
         70%  { opacity: 0.5; }
         100% { transform: translateY(-55vh) translateX(3vw); opacity: 0; }
     }
+    /* torch cursor: warm light that lights the pixel art as you move (screen blend), flickers like a flame */
     .mouse-glow {
-        position: fixed; width: 240px; height: 240px;
+        position: fixed; width: 380px; height: 380px;
         transform: translate(-50%, -50%);
-        background: radial-gradient(circle, rgba(110,224,122,0.06) 0%, transparent 65%);
-        border-radius: 50%; pointer-events: none; z-index: 2;
-        opacity: 0; transition: opacity .6s;
+        background: radial-gradient(circle, rgba(255,176,80,0.15) 0%, rgba(255,120,40,0.06) 32%, rgba(255,90,30,0.02) 52%, transparent 66%);
+        border-radius: 50%; pointer-events: none; z-index: 4;
+        mix-blend-mode: screen;
+        opacity: 0; transition: opacity .5s;
     }
-    .mouse-glow.active { opacity: 1; }
+    .mouse-glow.active { opacity: 1; animation: torchFlicker 0.9s steps(3) infinite; }
+    @keyframes torchFlicker { 0% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(0.94); } 100% { transform: translate(-50%, -50%) scale(1.03); } }
+
+    /* drifting pixel leaves and spores, two depths */
+    .leaf {
+        position: fixed; top: -24px; width: 14px; height: 8px;
+        background: #4f8a3c; opacity: 0; z-index: 1; pointer-events: none;
+        animation: leafDrift linear infinite;
+    }
+    .leaf.far { width: 10px; height: 6px; background: #2f5e2c; filter: blur(0.6px); }
+    .leaf:nth-child(3n) { background: #8aa33a; }
+    @keyframes leafDrift {
+        0%   { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+        6%   { opacity: 0.9; }
+        50%  { transform: translate(-9vw, 52vh) rotate(180deg); }
+        94%  { opacity: 0.7; }
+        100% { transform: translate(-16vw, 108vh) rotate(360deg); opacity: 0; }
+    }
     .scanlines {
         position: fixed; inset: 0; pointer-events: none; z-index: 9999;
         background: repeating-linear-gradient(0deg, rgba(0,0,0,0.16) 0 1px, transparent 1px 4px);
@@ -135,7 +122,7 @@
     .px-frame {
         position: relative;
         border: 34px solid transparent;
-        border-image-source: url('assets/frame2.png');
+        border-image-source: url('../assets/frame2.png');
         border-image-slice: 140;
         border-image-width: 34px;
         border-image-repeat: stretch;
@@ -156,7 +143,13 @@
         
         transform-origin: 50% 40%;
     }
-    @keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.07); } }
+    /* depth layer: the cave rim cut from the approved art, floats above the water and shifts with the mouse */
+    .hero-rim {
+        position: absolute; inset: 0; width: 100%; height: 100%;
+        object-fit: cover; image-rendering: pixelated; pointer-events: none;
+        transform: none; transition: transform .18s var(--ease-out-strong);
+        will-change: transform;
+    }
     .hero-overlay {
         position: absolute; inset: 0;
         display: flex; flex-direction: column;
@@ -382,8 +375,9 @@
     .caster-links a:active { transform: translate(2px, 2px); box-shadow: 0 0 0 rgba(0,0,0,0.6); }
 
     /* divider strips */
-    .strip { height: 230px; overflow: hidden; border-top: 3px solid var(--line); border-bottom: 3px solid var(--line); margin: 40px 0 0; position: relative; }
-    .strip video, .strip img { width: 100%; height: 100%; object-fit: cover; display: block; image-rendering: pixelated; }
+    /* scene strips = windows into the jungle: the scene scrolls slower than the page (parallax) and sits taller */
+    .strip { height: 300px; overflow: hidden; border-top: 3px solid var(--line); border-bottom: 3px solid var(--line); margin: 40px 0 0; position: relative; }
+    .strip video, .strip img { position: absolute; left: 0; top: -25%; width: 100%; height: 150%; object-fit: cover; display: block; image-rendering: pixelated; will-change: transform; }
     .strip::after { content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(3,8,5,0.45), rgba(3,8,5,0.15) 40%, rgba(3,8,5,0.45)); pointer-events: none; }
 
     /* signup */
@@ -427,7 +421,7 @@
     @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
         .firefly { animation: none; opacity: 0; }
-        .team-card.open .t-name, .cd-live, .hero-img, .h-title, .fuse::after, .road-node .rn-torch { animation: none; }
+        .team-card.open .t-name, .cd-live, .h-title, .fuse::after, .road-node .rn-torch, .mouse-glow.active, .leaf { animation: none; }
         .cd-num.tick { animation: none; }
         .reveal, .reveal .sg { opacity: 1; transform: none; transition: none; }
     }
@@ -457,9 +451,10 @@
 <div class="container">
     <header class="hero">
         <div class="hero-screen px-frame">
-            <video class="hero-img" autoplay muted loop playsinline poster="assets/scene_behindfall_1536.jpg" aria-label="Rumble in the Jungle VI">
-                <source src="assets/loop_hero_falls.mp4" type="video/mp4">
+            <video class="hero-img" autoplay muted loop playsinline poster="../assets/scene_behindfall_1536.jpg" aria-label="Rumble in the Jungle VI">
+                <source src="../assets/loop_hero_falls.mp4" type="video/mp4">
             </video>
+            <img class="hero-rim" src="../assets/hero_rim.png" alt="" aria-hidden="true" id="hero-rim">
             <div class="hero-overlay">
                 <h1 class="h-title">RUMBLE IN THE JUNGLE VI</h1>
                 <div class="h-bar"></div>
@@ -500,7 +495,7 @@
         <h2 class="section-title">THE RUMBLE</h2>
         <div class="title-rule"></div>
         <div class="about-card px-frame has-bg">
-            <img class="card-bg" src="assets/scene_waterfall_1536.jpg" alt="" aria-hidden="true"><div class="card-shade"></div>
+            <img class="card-bg" src="../assets/scene_waterfall_1536.jpg" alt="" aria-hidden="true"><div class="card-shade"></div>
             <div class="about-inner">
                 <p>
                     <b>The most competitive Ability Draft tournament there is.</b><br>
@@ -529,7 +524,7 @@
     </section>
 </div>
 
-<div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/scene_gatepath_1536.png" data-lazy><source src="assets/loop_strip_gatepath.mp4" type="video/mp4"></video></div>
+<div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="../assets/scene_gatepath_1536.png" data-lazy><source src="../assets/loop_strip_gatepath.mp4" type="video/mp4"></video></div>
 
 <div class="container">
     <section id="teams" class="section-wrapper">
@@ -549,7 +544,7 @@
         <h2 class="section-title">PRIZE POOL</h2>
         <div class="title-rule"></div>
         <div class="prize-card px-frame">
-            <video class="prize-bg" muted loop playsinline preload="none" poster="assets/scene_arenafloor_1536.jpg" data-lazy aria-hidden="true"><source src="assets/loop_strip_arena.mp4" type="video/mp4"></video>
+            <video class="prize-bg" muted loop playsinline preload="none" poster="../assets/scene_arenafloor_1536.jpg" data-lazy aria-hidden="true"><source src="../assets/loop_strip_arena.mp4" type="video/mp4"></video>
             <div class="prize-shade"></div>
             <div class="about-inner" style="text-align:center">
                 <div class="base-pool-label">BASE POOL (HOST)</div>
@@ -575,14 +570,14 @@
     </section>
 </div>
 
-<div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/scene_monkeywalk_1536.jpg" data-lazy><source src="assets/loop_strip_monkeys.mp4" type="video/mp4"></video></div>
+<div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="../assets/scene_monkeywalk_1536.jpg" data-lazy><source src="../assets/loop_strip_monkeys.mp4" type="video/mp4"></video></div>
 
 <div class="container">
     <section id="signup" class="section-wrapper">
         <h2 class="section-title">SIGN UP</h2>
         <div class="title-rule"></div>
         <div class="signup-box px-frame has-bg">
-            <img class="card-bg" src="assets/scene_tunnel_1536.jpg" alt="" aria-hidden="true"><div class="card-shade"></div>
+            <img class="card-bg" src="../assets/scene_tunnel_1536.jpg" alt="" aria-hidden="true"><div class="card-shade"></div>
             <div class="signup-inner">
                 <ol class="steps">
                     <li>Join the Discord — button below.</li>
@@ -610,7 +605,7 @@
     </section>
 </div>
 
-<div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/scene_arenafloor_1536.jpg" data-lazy><source src="assets/loop_strip_arena.mp4" type="video/mp4"></video></div>
+<div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="../assets/scene_arenafloor_1536.jpg" data-lazy><source src="../assets/loop_strip_arena.mp4" type="video/mp4"></video></div>
 
 <div class="container">
     <section id="casters" class="section-wrapper">
@@ -618,9 +613,9 @@
         <div class="title-rule"></div>
         <div class="casters-box px-frame">
             <div class="casters-inner">
-                <video class="casters-img" autoplay muted loop playsinline poster="assets/casters.png" aria-label="BloPP and Young Elodin at the caster desk" id="casters-vid">
-                    <source src="assets/casters_anim_flat.mp4" type="video/mp4">
-                    <img src="assets/casters.png" alt="BloPP and Young Elodin at the caster desk">
+                <video class="casters-img" autoplay muted loop playsinline poster="../assets/casters.png" aria-label="BloPP and Young Elodin at the caster desk" id="casters-vid">
+                    <source src="../assets/casters_anim_flat.mp4" type="video/mp4">
+                    <img src="../assets/casters.png" alt="BloPP and Young Elodin at the caster desk">
                 </video>
                 <div class="casters-names">
                     <div class="sg">
@@ -705,21 +700,47 @@
         }
     })();
 
-    // scroll fuse
+    // leaves + spores (two depths)
+    (function () {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const n = window.innerWidth < 640 ? 10 : 24;
+        for (let i = 0; i < n; i++) {
+            const e = document.createElement('div');
+            e.className = 'leaf' + (i % 2 ? ' far' : '');
+            e.style.left = (10 + Math.random() * 95) + '%';
+            e.style.animationDelay = (Math.random() * 18) + 's';
+            e.style.animationDuration = (Math.random() * 8 + (i % 2 ? 20 : 13)) + 's';
+            document.body.appendChild(e);
+        }
+    })();
+
+    // scroll fuse + strip parallax (whole pixels only)
     (function () {
         const f = document.getElementById('fuse');
+        const strips = [...document.querySelectorAll('.strip')].map(s => ({ el: s, media: s.querySelector('video, img') }));
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let ticking = false;
         function upd() {
+            ticking = false;
             const max = document.documentElement.scrollHeight - innerHeight;
             f.style.width = (max > 0 ? Math.min(100, scrollY / max * 100) : 0) + '%';
+            if (reduce) return;
+            strips.forEach(s => {
+                const r = s.el.getBoundingClientRect();
+                if (r.bottom < 0 || r.top > innerHeight) return;
+                const p = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
+                s.media.style.transform = 'translateY(' + Math.round(p * 120) + 'px)';
+            });
         }
-        addEventListener('scroll', upd, { passive: true }); addEventListener('resize', upd); upd();
+        function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(upd); } }
+        addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); upd();
     })();
 
     // === TEAMS (mirror of data/rumble6-teams.json; logo = optional, roster = optional) ===
     const TEAMS = [
-        { name: 'Playlist dlya blondinok', logo: 'assets/logos/blondinok.png', roster: null },
-        { name: 'Mallards', logo: 'assets/logos/mallards.png', roster: ['kitchen', '007shadow', 'thundertoss', 'CCrush', 'Sadpanda008'] },
-        { name: "Don't Peek", logo: 'assets/logos/dontpeek.png', roster: ['BigGoose', 'noertti', 'sifla', 'Fruugu', 'balll'] },
+        { name: 'Playlist dlya blondinok', logo: '../assets/logos/blondinok.png', roster: null },
+        { name: 'Mallards', logo: '../assets/logos/mallards.png', roster: ['kitchen', '007shadow', 'thundertoss', 'CCrush', 'Sadpanda008'] },
+        { name: "Don't Peek", logo: '../assets/logos/dontpeek.png', roster: ['BigGoose', 'noertti', 'sifla', 'Fruugu', 'balll'] },
     ];
     const SLOTS = 8;
     (function () {
@@ -814,15 +835,26 @@
         a.download = 'rumble-vi-2026.ics'; a.click(); URL.revokeObjectURL(a.href);
     });
 
-    // mouse glow
-    const mouseGlow = document.getElementById('mouseGlow');
-    let mouseTimeout;
-    document.addEventListener('mousemove', (e) => {
-        mouseGlow.style.left = e.clientX + 'px'; mouseGlow.style.top = e.clientY + 'px';
-        mouseGlow.classList.add('active');
-        clearTimeout(mouseTimeout);
-        mouseTimeout = setTimeout(() => mouseGlow.classList.remove('active'), 1200);
-    });
+    // torch cursor + hero depth parallax
+    (function () {
+        const mouseGlow = document.getElementById('mouseGlow');
+        const rim = document.getElementById('hero-rim');
+        const hero = document.querySelector('.hero-screen');
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let mouseTimeout;
+        document.addEventListener('mousemove', (e) => {
+            mouseGlow.style.left = e.clientX + 'px'; mouseGlow.style.top = e.clientY + 'px';
+            mouseGlow.classList.add('active');
+            clearTimeout(mouseTimeout);
+            mouseTimeout = setTimeout(() => mouseGlow.classList.remove('active'), 1600);
+            if (reduce || !rim) return;
+            const r = hero.getBoundingClientRect();
+            if (e.clientY < r.top - 200 || e.clientY > r.bottom + 200) { rim.style.transform = 'none'; return; }
+            const mx = (e.clientX - r.left) / r.width - 0.5;    // -0.5 .. 0.5
+            const my = (e.clientY - r.top) / r.height - 0.5;
+            rim.style.transform = 'translate(' + Math.round(-mx * 16) + 'px,' + Math.round(-my * 10) + 'px)';
+        });
+    })();
 </script>
 </body>
 </html>
