@@ -106,14 +106,18 @@
         70%  { opacity: 0.5; }
         100% { transform: translateY(-55vh) translateX(3vw); opacity: 0; }
     }
+    /* torch cursor: warm light that lights the pixel art as you move (screen blend), flickers like a flame */
     .mouse-glow {
-        position: fixed; width: 240px; height: 240px;
+        position: fixed; width: 380px; height: 380px;
         transform: translate(-50%, -50%);
-        background: radial-gradient(circle, rgba(110,224,122,0.06) 0%, transparent 65%);
-        border-radius: 50%; pointer-events: none; z-index: 2;
-        opacity: 0; transition: opacity .6s;
+        background: radial-gradient(circle, rgba(255,176,80,0.15) 0%, rgba(255,120,40,0.06) 32%, rgba(255,90,30,0.02) 52%, transparent 66%);
+        border-radius: 50%; pointer-events: none; z-index: 4;
+        mix-blend-mode: screen;
+        opacity: 0; transition: opacity .5s;
     }
-    .mouse-glow.active { opacity: 1; }
+    .mouse-glow.active { opacity: 1; animation: torchFlicker 0.9s steps(3) infinite; }
+    @keyframes torchFlicker { 0% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(0.94); } 100% { transform: translate(-50%, -50%) scale(1.03); } }
+
     .scanlines {
         position: fixed; inset: 0; pointer-events: none; z-index: 9999;
         background: repeating-linear-gradient(0deg, rgba(0,0,0,0.16) 0 1px, transparent 1px 4px);
@@ -156,7 +160,13 @@
         
         transform-origin: 50% 40%;
     }
-    @keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.07); } }
+    /* depth layer: the cave rim cut from the approved art, floats above the water and shifts with the mouse */
+    .hero-rim {
+        position: absolute; inset: 0; width: 100%; height: 100%;
+        object-fit: cover; image-rendering: pixelated; pointer-events: none;
+        transform: none; transition: transform .18s var(--ease-out-strong);
+        will-change: transform;
+    }
     .hero-overlay {
         position: absolute; inset: 0;
         display: flex; flex-direction: column;
@@ -382,7 +392,8 @@
     .caster-links a:active { transform: translate(2px, 2px); box-shadow: 0 0 0 rgba(0,0,0,0.6); }
 
     /* divider strips */
-    .strip { height: 230px; overflow: hidden; border-top: 3px solid var(--line); border-bottom: 3px solid var(--line); margin: 40px 0 0; position: relative; }
+    /* scene strips = windows into the jungle: the scene scrolls slower than the page (parallax) and sits taller */
+    .strip { height: 300px; overflow: hidden; border-top: 3px solid var(--line); border-bottom: 3px solid var(--line); margin: 40px 0 0; position: relative; }
     .strip video, .strip img { width: 100%; height: 100%; object-fit: cover; display: block; image-rendering: pixelated; }
     .strip::after { content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(3,8,5,0.45), rgba(3,8,5,0.15) 40%, rgba(3,8,5,0.45)); pointer-events: none; }
 
@@ -427,7 +438,7 @@
     @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
         .firefly { animation: none; opacity: 0; }
-        .team-card.open .t-name, .cd-live, .hero-img, .h-title, .fuse::after, .road-node .rn-torch { animation: none; }
+        .team-card.open .t-name, .cd-live, .h-title, .fuse::after, .road-node .rn-torch, .mouse-glow.active { animation: none; }
         .cd-num.tick { animation: none; }
         .reveal, .reveal .sg { opacity: 1; transform: none; transition: none; }
     }
@@ -460,6 +471,7 @@
             <video class="hero-img" autoplay muted loop playsinline poster="assets/scene_behindfall_1536.jpg" aria-label="Rumble in the Jungle VI">
                 <source src="assets/loop_hero_falls.mp4" type="video/mp4">
             </video>
+            <img class="hero-rim" src="assets/hero_rim.png" alt="" aria-hidden="true" id="hero-rim">
             <div class="hero-overlay">
                 <h1 class="h-title">RUMBLE IN THE JUNGLE VI</h1>
                 <div class="h-bar"></div>
@@ -814,15 +826,26 @@
         a.download = 'rumble-vi-2026.ics'; a.click(); URL.revokeObjectURL(a.href);
     });
 
-    // mouse glow
-    const mouseGlow = document.getElementById('mouseGlow');
-    let mouseTimeout;
-    document.addEventListener('mousemove', (e) => {
-        mouseGlow.style.left = e.clientX + 'px'; mouseGlow.style.top = e.clientY + 'px';
-        mouseGlow.classList.add('active');
-        clearTimeout(mouseTimeout);
-        mouseTimeout = setTimeout(() => mouseGlow.classList.remove('active'), 1200);
-    });
+    // torch cursor + hero depth parallax
+    (function () {
+        const mouseGlow = document.getElementById('mouseGlow');
+        const rim = document.getElementById('hero-rim');
+        const hero = document.querySelector('.hero-screen');
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let mouseTimeout;
+        document.addEventListener('mousemove', (e) => {
+            mouseGlow.style.left = e.clientX + 'px'; mouseGlow.style.top = e.clientY + 'px';
+            mouseGlow.classList.add('active');
+            clearTimeout(mouseTimeout);
+            mouseTimeout = setTimeout(() => mouseGlow.classList.remove('active'), 1600);
+            if (reduce || !rim) return;
+            const r = hero.getBoundingClientRect();
+            if (e.clientY < r.top - 200 || e.clientY > r.bottom + 200) { rim.style.transform = 'none'; return; }
+            const mx = (e.clientX - r.left) / r.width - 0.5;    // -0.5 .. 0.5
+            const my = (e.clientY - r.top) / r.height - 0.5;
+            rim.style.transform = 'translate(' + Math.round(-mx * 16) + 'px,' + Math.round(-my * 10) + 'px)';
+        });
+    })();
 </script>
 </body>
 </html>
