@@ -86,21 +86,6 @@
     .mouse-glow.active { opacity: 1; animation: torchFlicker 0.9s steps(3) infinite; }
     @keyframes torchFlicker { 0% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(0.94); } 100% { transform: translate(-50%, -50%) scale(1.03); } }
 
-    /* drifting pixel leaves and spores, two depths */
-    .leaf {
-        position: fixed; top: -24px; width: 14px; height: 8px;
-        background: #4f8a3c; opacity: 0; z-index: 1; pointer-events: none;
-        animation: leafDrift linear infinite;
-    }
-    .leaf.far { width: 10px; height: 6px; background: #2f5e2c; filter: blur(0.6px); }
-    .leaf:nth-child(3n) { background: #8aa33a; }
-    @keyframes leafDrift {
-        0%   { transform: translate(0, 0) rotate(0deg); opacity: 0; }
-        6%   { opacity: 0.9; }
-        50%  { transform: translate(-9vw, 52vh) rotate(180deg); }
-        94%  { opacity: 0.7; }
-        100% { transform: translate(-16vw, 108vh) rotate(360deg); opacity: 0; }
-    }
     .scanlines {
         position: fixed; inset: 0; pointer-events: none; z-index: 9999;
         background: repeating-linear-gradient(0deg, rgba(0,0,0,0.16) 0 1px, transparent 1px 4px);
@@ -421,7 +406,7 @@
     @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
         .firefly { animation: none; opacity: 0; }
-        .team-card.open .t-name, .cd-live, .h-title, .fuse::after, .road-node .rn-torch, .mouse-glow.active, .leaf { animation: none; }
+        .team-card.open .t-name, .cd-live, .h-title, .fuse::after, .road-node .rn-torch, .mouse-glow.active { animation: none; }
         .cd-num.tick { animation: none; }
         .reveal, .reveal .sg { opacity: 1; transform: none; transition: none; }
     }
@@ -696,20 +681,6 @@
             e.style.top = (40 + Math.random() * 60) + '%';
             e.style.animationDelay = (Math.random() * 18) + 's';
             e.style.animationDuration = (Math.random() * 12 + 12) + 's';
-            document.body.appendChild(e);
-        }
-    })();
-
-    // leaves + spores (two depths)
-    (function () {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const n = window.innerWidth < 640 ? 10 : 24;
-        for (let i = 0; i < n; i++) {
-            const e = document.createElement('div');
-            e.className = 'leaf' + (i % 2 ? ' far' : '');
-            e.style.left = (10 + Math.random() * 95) + '%';
-            e.style.animationDelay = (Math.random() * 18) + 's';
-            e.style.animationDuration = (Math.random() * 8 + (i % 2 ? 20 : 13)) + 's';
             document.body.appendChild(e);
         }
     })();
