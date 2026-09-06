@@ -140,7 +140,7 @@
         max-height: 68vh;            /* was 52vh: the loop gets room to breathe */
         object-fit: cover;
         image-rendering: pixelated;
-        animation: kenburns 46s ease-in-out infinite alternate;
+        
         transform-origin: 50% 40%;
     }
     @keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.07); } }
@@ -148,7 +148,7 @@
     .hero-rim {
         position: absolute; inset: 0; width: 100%; height: 100%;
         object-fit: cover; image-rendering: pixelated; pointer-events: none;
-        transform: scale(1.06); transition: transform .18s var(--ease-out-strong);
+        transform: none; transition: transform .18s var(--ease-out-strong);
         will-change: transform;
     }
     .hero-overlay {
@@ -730,7 +730,7 @@
                 const r = s.el.getBoundingClientRect();
                 if (r.bottom < 0 || r.top > innerHeight) return;
                 const p = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;   // -0.5 .. 0.5 across the viewport
-                s.media.style.transform = 'translateY(' + (p * 70).toFixed(1) + 'px)';
+                s.media.style.transform = 'translateY(' + Math.round(p * 60) + 'px)';
             });
         }
         function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(upd); } }
@@ -850,10 +850,10 @@
             mouseTimeout = setTimeout(() => mouseGlow.classList.remove('active'), 1600);
             if (reduce || !rim) return;
             const r = hero.getBoundingClientRect();
-            if (e.clientY < r.top - 200 || e.clientY > r.bottom + 200) { rim.style.transform = 'scale(1.06)'; return; }
+            if (e.clientY < r.top - 200 || e.clientY > r.bottom + 200) { rim.style.transform = 'none'; return; }
             const mx = (e.clientX - r.left) / r.width - 0.5;    // -0.5 .. 0.5
             const my = (e.clientY - r.top) / r.height - 0.5;
-            rim.style.transform = 'scale(1.06) translate(' + (-mx * 22).toFixed(1) + 'px,' + (-my * 14).toFixed(1) + 'px)';
+            rim.style.transform = 'translate(' + Math.round(-mx * 16) + 'px,' + Math.round(-my * 10) + 'px)';
         });
     })();
 </script>
