@@ -78,7 +78,7 @@
     ::-webkit-scrollbar-thumb { background: var(--green-deep); border: 3px solid var(--bg-deep); }
     ::-webkit-scrollbar-thumb:hover { background: var(--green); }
 
-    /* === BACKGROUND LAYERS (WC recipe, jungle flavor) === */
+    /* === BACKGROUND LAYERS === */
     .bg-base {
         position: fixed; inset: 0; z-index: 0;
         background:
@@ -91,16 +91,11 @@
         background: radial-gradient(circle at 50% 40%, transparent 25%, rgba(2,5,3,0.78) 100%);
         pointer-events: none;
     }
-
-    /* green pixel fireflies (filled by JS) */
     .firefly {
-        position: fixed;
-        width: 4px; height: 4px;
+        position: fixed; width: 4px; height: 4px;
         background: var(--green-bright);
         box-shadow: 0 0 6px rgba(110,224,122,0.8);
-        opacity: 0;
-        z-index: 1;
-        pointer-events: none;
+        opacity: 0; z-index: 1; pointer-events: none;
         animation: fireflyRise linear infinite;
     }
     .firefly:nth-child(odd) { background: #e8a33d; box-shadow: 0 0 6px rgba(255,180,70,0.7); width: 3px; height: 3px; }
@@ -111,30 +106,32 @@
         70%  { opacity: 0.5; }
         100% { transform: translateY(-55vh) translateX(3vw); opacity: 0; }
     }
-
     .mouse-glow {
         position: fixed; width: 240px; height: 240px;
         transform: translate(-50%, -50%);
         background: radial-gradient(circle, rgba(110,224,122,0.06) 0%, transparent 65%);
-        border-radius: 50%;
-        pointer-events: none; z-index: 2;
+        border-radius: 50%; pointer-events: none; z-index: 2;
         opacity: 0; transition: opacity .6s;
     }
     .mouse-glow.active { opacity: 1; }
-
     .scanlines {
         position: fixed; inset: 0; pointer-events: none; z-index: 9999;
         background: repeating-linear-gradient(0deg, rgba(0,0,0,0.16) 0 1px, transparent 1px 4px);
         mix-blend-mode: multiply;
     }
 
-    .container {
-        position: relative; z-index: 3;
-        width: min(1100px, 94vw);
-        margin: 0 auto;
+    /* === NEW: SCROLL FUSE (signature detail) — red fuse burns along the top edge as you scroll === */
+    .fuse { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 10000; background: var(--red); box-shadow: 0 0 8px rgba(212,42,42,0.6); pointer-events: none; }
+    .fuse::after {
+        content: ''; position: absolute; right: -3px; top: -3px; width: 9px; height: 9px;
+        background: #ffb347; box-shadow: 0 0 10px 3px rgba(255,150,40,0.85);
+        animation: emberFlick 0.35s steps(2) infinite;
     }
+    @keyframes emberFlick { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(0.7); opacity: 0.75; } }
 
-    /* === PIXEL FRAME (9-slice jungle stone) === */
+    .container { position: relative; z-index: 3; width: min(1100px, 94vw); margin: 0 auto; }
+
+    /* === PIXEL FRAME === */
     .px-frame {
         position: relative;
         border: 34px solid transparent;
@@ -147,225 +144,190 @@
     }
     @media (max-width: 640px) { .px-frame { border-width: 24px; border-image-width: 24px; } }
 
-    /* === HERO === */
+    /* === HERO (taller screen, slow push-in, real CTA) === */
     .hero { margin-top: 28px; position: relative; }
     .hero-screen { overflow: hidden; }
     .hero-img {
-        display: block;
-        width: 100%;
+        display: block; width: 100%;
         aspect-ratio: 16 / 9;
-        max-height: 52vh;
+        max-height: 68vh;            /* was 52vh: the loop gets room to breathe */
         object-fit: cover;
         image-rendering: pixelated;
+        animation: kenburns 46s ease-in-out infinite alternate;
+        transform-origin: 50% 40%;
     }
+    @keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.07); } }
     .hero-overlay {
         position: absolute; inset: 0;
         display: flex; flex-direction: column;
         align-items: center; justify-content: flex-end;
-        padding-bottom: 4.5%;
-        background: linear-gradient(rgba(3,8,5,0.05) 40%, rgba(3,8,5,0.82) 94%);
+        padding-bottom: 4.2%;
+        background: linear-gradient(rgba(3,8,5,0.03) 42%, rgba(3,8,5,0.86) 94%);
         text-align: center;
     }
     .h-title {
         font-family: 'Press Start 2P', monospace;
-        font-size: clamp(1rem, 3.4vw, 2.2rem);
+        font-size: clamp(1.05rem, 3.7vw, 2.45rem);
         color: var(--red);
         text-shadow:
             var(--px) var(--px) 0 #1f0202,
             calc(var(--px) * 2) calc(var(--px) * 2) 0 rgba(0,0,0,0.65),
             0 0 26px rgba(190,40,40,0.45);
-        letter-spacing: 2px;
-        line-height: 1.35;
+        letter-spacing: 2px; line-height: 1.35;
+        animation: ignite 0.9s var(--ease-out-strong) both;   /* one-time entrance */
     }
-    .h-bar {
-        width: 150px; height: 3px;
-        background: var(--red);
-        box-shadow: 2px 2px 0 rgba(0,0,0,0.6);
-        margin: 16px auto;
+    @keyframes ignite {
+        0%   { opacity: 0; transform: translateY(8px); text-shadow: var(--px) var(--px) 0 #1f0202, 0 0 0 rgba(255,120,60,0); }
+        55%  { opacity: 1; text-shadow: var(--px) var(--px) 0 #1f0202, 0 0 46px rgba(255,120,60,0.95); }
+        100% { opacity: 1; transform: none; text-shadow: var(--px) var(--px) 0 #1f0202, calc(var(--px) * 2) calc(var(--px) * 2) 0 rgba(0,0,0,0.65), 0 0 26px rgba(190,40,40,0.45); }
     }
+    .h-bar { width: 150px; height: 3px; background: var(--red); box-shadow: 2px 2px 0 rgba(0,0,0,0.6); margin: 16px auto; }
     .h-sub {
         font-family: 'Press Start 2P', monospace;
         font-size: clamp(0.55rem, 1.5vw, 0.95rem);
         color: var(--cream);
         text-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.8), 0 0 16px rgba(240,255,250,0.4);
     }
-    .h-tag {
-        margin-top: 14px;
+    .h-cta {
+        margin-top: 18px;
+        display: inline-flex; align-items: center; gap: 12px;
         font-family: 'Press Start 2P', monospace;
-        font-size: clamp(0.42rem, 1.1vw, 0.58rem);
-        color: var(--green-bright);
-        text-decoration: none;
-        text-shadow: 2px 2px 0 rgba(0,0,0,0.85);
-        animation: pulse 2.6s ease-in-out infinite;
+        font-size: clamp(0.5rem, 1.2vw, 0.68rem);
+        color: #fff; text-decoration: none;
+        background: var(--red);
+        border: 3px solid var(--red-bright);
+        padding: 13px 18px;
+        box-shadow: inset 0 0 0 2px rgba(0,0,0,0.35), 5px 5px 0 rgba(0,0,0,0.6);
+        transition: transform .06s;
     }
-    .h-tag:hover { animation: none; color: #fff; }
-    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .h-cta .slots { color: #ffd0d0; font-size: 0.8em; border-left: 2px solid rgba(255,255,255,0.35); padding-left: 12px; }
+    @media (hover: hover) and (pointer: fine) {
+        .h-cta:hover { background: var(--red-bright); transform: translate(2px, 2px); box-shadow: inset 0 0 0 2px rgba(0,0,0,0.35), 3px 3px 0 rgba(0,0,0,0.6); }
+    }
+    .h-cta:active { transform: translate(3px, 3px); box-shadow: inset 0 0 0 2px rgba(0,0,0,0.35), 1px 1px 0 rgba(0,0,0,0.7); }
 
-    /* === NAV === */
+    /* === NAV (one primary; single scrollable row on phones) === */
     .nav-bar {
         position: sticky; top: 0; z-index: 50;
-        display: flex; flex-wrap: wrap; justify-content: center;
-        gap: 10px;
-        padding: 12px 10px;
-        margin-top: 22px;
+        display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+        padding: 12px 10px; margin-top: 22px;
         background: rgba(2, 5, 3, 0.94);
-        border-top: 3px solid var(--line);
-        border-bottom: 3px solid var(--line);
+        border-top: 3px solid var(--line); border-bottom: 3px solid var(--line);
         backdrop-filter: blur(2px);
     }
     .nav-btn {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.6rem;
-        text-decoration: none;
-        color: var(--cream);
-        background: var(--panel);
-        padding: 12px 16px;
-        border: 3px solid var(--green-deep);
+        font-family: 'Press Start 2P', monospace; font-size: 0.6rem;
+        text-decoration: none; color: var(--cream); background: var(--panel);
+        padding: 12px 16px; border: 3px solid var(--green-deep);
         box-shadow: inset 0 0 0 2px rgba(0,0,0,0.45), 4px 4px 0 rgba(0,0,0,0.5);
-        transition: transform 0.06s, background 0.12s;
+        transition: transform 0.06s, background 0.12s; white-space: nowrap;
     }
     @media (hover: hover) and (pointer: fine) {
         .nav-btn:hover { background: var(--green-deep); color: #fff; transform: translate(1px, 1px); box-shadow: inset 0 0 0 2px rgba(0,0,0,0.45), 2px 2px 0 rgba(0,0,0,0.5); }
-        .nav-btn.signup:hover { background: var(--red); }
+        .nav-btn.signup:hover { background: var(--red-bright); }
         .nav-btn.discord:hover { background: #3c46b8; }
     }
-    .nav-btn:active {
-        transform: translate(2px, 2px);
-        box-shadow: inset 0 0 0 2px rgba(0,0,0,0.45), 1px 1px 0 rgba(0,0,0,0.7);
-    }
-    .nav-btn.signup { border-color: var(--red); }
+    .nav-btn:active { transform: translate(2px, 2px); box-shadow: inset 0 0 0 2px rgba(0,0,0,0.45), 1px 1px 0 rgba(0,0,0,0.7); }
+    .nav-btn.signup { border-color: var(--red-bright); background: var(--red); color: #fff; }   /* the ONE primary */
     .nav-btn.discord { border-color: var(--discord); }
+    @media (max-width: 640px) {
+        .nav-bar { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; padding: 10px 14px; gap: 8px;
+                   -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); }
+        .nav-bar::-webkit-scrollbar { display: none; }
+        .nav-btn { font-size: 0.52rem; padding: 10px 12px; }
+    }
 
-    /* === COUNTDOWN (WC digit boxes, jungle flavor) === */
+    /* === COUNTDOWN + SLOT METER === */
     .countdown-container { text-align: center; margin: 34px 0 0; }
+    .countdown-label {
+        font-family: 'Press Start 2P', monospace; font-size: 0.55rem; color: var(--cream-dim);
+        letter-spacing: 1px; margin-bottom: 14px;
+    }
     .countdown-timer { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
     .cd-box {
-        min-width: 96px;
-        background: var(--panel);
-        border: 3px solid var(--green-deep);
+        min-width: 96px; background: var(--panel); border: 3px solid var(--green-deep);
         box-shadow: inset 0 0 0 2px rgba(0,0,0,0.5), var(--px) var(--px) 0 rgba(0,0,0,0.6);
         padding: 14px 10px 10px;
     }
-    .cd-num {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 1.7rem;
-        color: var(--green-bright);
-        text-shadow: 3px 3px 0 rgba(0,0,0,0.7), 0 0 18px var(--green-glow);
-    }
+    .cd-num { font-family: 'Press Start 2P', monospace; font-size: 1.7rem; color: var(--green-bright); text-shadow: 3px 3px 0 rgba(0,0,0,0.7), 0 0 18px var(--green-glow); }
     .cd-num.tick { animation: numFlip 0.22s steps(3); }
-    @keyframes numFlip {
-        0% { transform: scaleY(0.15); filter: brightness(2.2); }
-        100% { transform: none; filter: none; }
-    }
-    .cd-text {
-        margin-top: 8px;
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.5rem;
-        color: var(--cream-dim);
-        text-transform: uppercase;
-    }
-    .cd-live {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 1rem;
-        color: var(--red-bright);
-        text-shadow: 2px 2px 0 rgba(0,0,0,0.8), 0 0 20px rgba(212,42,42,0.5);
-        animation: pulse 2.6s ease-in-out infinite;
-    }
+    @keyframes numFlip { 0% { transform: scaleY(0.15); filter: brightness(2.2); } 100% { transform: none; filter: none; } }
+    .cd-text { margin-top: 8px; font-family: 'Press Start 2P', monospace; font-size: 0.5rem; color: var(--cream-dim); text-transform: uppercase; }
+    .cd-live { font-family: 'Press Start 2P', monospace; font-size: 1rem; color: var(--red-bright); text-shadow: 2px 2px 0 rgba(0,0,0,0.8), 0 0 20px rgba(212,42,42,0.5); animation: pulse 2.6s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    .slot-meter { margin: 22px auto 0; width: min(560px, 92%); }
+    .slot-meter .sm-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-family: 'Press Start 2P', monospace; font-size: 0.5rem; color: var(--cream-dim); margin-bottom: 10px; }
+    .slot-meter .sm-row b { color: var(--red-bright); font-weight: normal; }
+    .slot-meter .sm-row .sm-taken { color: var(--green-bright); }
+    .slot-bar { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; }
+    .slot-bar span { height: 14px; background: var(--panel); border: 2px solid var(--line); box-shadow: 2px 2px 0 rgba(0,0,0,0.5); }
+    .slot-bar span.on { background: var(--green-deep); border-color: var(--green-bright); box-shadow: 2px 2px 0 rgba(0,0,0,0.5), 0 0 10px rgba(110,224,122,0.35); }
 
     /* === SECTIONS === */
     .section-wrapper { padding: 56px 0 30px; scroll-margin-top: 64px; }
-    .section-title {
-        font-family: 'Press Start 2P', monospace;
-        font-size: clamp(0.85rem, 2.6vw, 1.35rem);
-        color: var(--green-bright);
-        text-shadow: 3px 3px 0 rgba(0,0,0,0.8), 0 0 18px var(--green-glow);
-        margin-bottom: 8px;
-    }
-    .title-rule {
-        width: 120px; height: 3px;
-        background: var(--red);
-        box-shadow: 2px 2px 0 rgba(0,0,0,0.6);
-        margin: 14px 0 26px;
-    }
+    .section-title { font-family: 'Press Start 2P', monospace; font-size: clamp(0.85rem, 2.6vw, 1.35rem); color: var(--green-bright); text-shadow: 3px 3px 0 rgba(0,0,0,0.8), 0 0 18px var(--green-glow); margin-bottom: 8px; }
+    .title-rule { width: 120px; height: 3px; background: var(--red); box-shadow: 2px 2px 0 rgba(0,0,0,0.6); margin: 14px 0 26px; }
     .lead { color: var(--cream-dim); max-width: 720px; }
     .lead b { color: var(--cream); }
 
-    /* info chips */
-    .chips {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 12px;
-        margin-top: 26px;
-    }
-    .chip {
-        background: var(--panel);
-        border: 3px solid var(--line);
-        box-shadow: 6px 6px 0 rgba(0,0,0,0.45);
-        padding: 18px 16px 16px;
-    }
-    .chip .label {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.5rem;
-        color: var(--green);
-        display: block;
-    }
-    .chip .value {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.68rem;
-        color: var(--cream);
-        display: block;
-        margin-top: 12px;
-        line-height: 1.7;
-    }
-    .chip .value .accent { color: var(--red-bright); }
+    .chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 26px; }
+    .chip { background: var(--panel); border: 3px solid var(--line); box-shadow: 6px 6px 0 rgba(0,0,0,0.45); padding: 18px 16px 16px; }
+    .chip .label { font-family: 'Press Start 2P', monospace; font-size: 0.5rem; color: var(--green); display: block; }
+    .chip .value { font-family: 'Press Start 2P', monospace; font-size: 0.68rem; color: var(--cream); display: block; margin-top: 12px; line-height: 1.7; }
+    @media (max-width: 560px) { .chips { grid-template-columns: repeat(2, 1fr); } .chips .chip:last-child { grid-column: span 2; } }
 
-    /* merged about card */
     .about-card { margin-top: 26px; }
     .about-inner { background: var(--panel-2); padding: 26px 24px; position: relative; z-index: 1; }
-    .date-highlight {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.7rem;
-        color: var(--green-bright);
-        text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
-    }
-    .ics-link {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.48rem;
-        color: var(--cream-dim);
-        text-decoration: none;
-        border-bottom: 2px dotted var(--line);
-        padding-bottom: 2px;
-        white-space: nowrap;
-    }
+    .date-highlight { font-family: 'Press Start 2P', monospace; font-size: 0.7rem; color: var(--green-bright); text-shadow: 2px 2px 0 rgba(0,0,0,0.8); }
+    .ics-link { font-family: 'Press Start 2P', monospace; font-size: 0.48rem; color: var(--cream-dim); text-decoration: none; border-bottom: 2px dotted var(--line); padding-bottom: 2px; white-space: nowrap; }
     .ics-link:hover { color: var(--green-bright); border-color: var(--green-deep); }
 
-    /* prize pool (WC layout) */
-    .prize-card { margin-top: 26px; }
-    .base-pool-label {
-        font-family: 'Press Start 2P', monospace; font-size: 0.6rem;
-        color: var(--cream-dim); text-transform: uppercase;
+    /* === NEW: ROAD TO THE FINAL (timeline replaces the format paragraph) === */
+    .road { margin-top: 24px; display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: stretch; gap: 0; }
+    .road-node { background: var(--panel); border: 3px solid var(--line); box-shadow: 6px 6px 0 rgba(0,0,0,0.45); padding: 16px 14px 14px; text-align: center; position: relative; }
+    .road-node.final { border-color: var(--red); background: rgba(168,22,22,0.07); }
+    .road-node .rn-date { font-family: 'Press Start 2P', monospace; font-size: 0.55rem; color: var(--green-bright); text-shadow: 2px 2px 0 rgba(0,0,0,0.8); }
+    .road-node.final .rn-date { color: var(--red-bright); }
+    .road-node .rn-stage { font-family: 'Press Start 2P', monospace; font-size: 0.72rem; color: var(--cream); margin-top: 12px; line-height: 1.6; }
+    .road-node .rn-fmt { font-size: 1.05rem; color: var(--cream-dim); margin-top: 8px; line-height: 1.3; }
+    .road-node .rn-torch { position: absolute; top: -9px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: #ffb347; box-shadow: 0 0 10px 3px rgba(255,150,40,0.7); animation: emberFlick 0.5s steps(2) infinite alternate; }
+    .road-link { width: 46px; display: flex; align-items: center; justify-content: center; }
+    .road-link::before { content: ''; width: 100%; height: 3px; background: var(--red); box-shadow: 2px 2px 0 rgba(0,0,0,0.6); }
+    @media (max-width: 700px) {
+        .road { grid-template-columns: 1fr; }
+        .road-link { width: auto; height: 34px; }
+        .road-link::before { width: 3px; height: 100%; }
     }
-    .total-prize {
-        font-family: 'Press Start 2P', monospace;
-        font-size: clamp(1.8rem, 5vw, 3rem);
-        color: var(--green-bright);
-        margin: 12px 0 6px;
-        text-shadow: var(--px) var(--px) 0 #0b2410, calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6), 0 0 30px var(--green-glow);
+
+    /* === CARD BACKDROPS: every framed card sits in its own place in the jungle === */
+    .has-bg { overflow: hidden; }
+    .card-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.22; filter: saturate(0.8); z-index: 0; image-rendering: pixelated; }
+    .card-shade { position: absolute; inset: 0; background: linear-gradient(rgba(11,26,14,0.55), rgba(11,26,14,0.94) 70%); z-index: 0; }
+    .has-bg > .about-inner, .has-bg > .signup-inner, .has-bg > .casters-inner { background: transparent; }
+
+    /* === MOBILE STICKY CTA === */
+    .mob-cta { display: none; }
+    @media (max-width: 560px) {
+        .mob-cta { display: block; position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 60; text-align: center;
+            font-family: 'Press Start 2P', monospace; font-size: 0.6rem; color: #fff; text-decoration: none;
+            background: var(--red); border: 3px solid var(--red-bright); padding: 14px 10px;
+            box-shadow: inset 0 0 0 2px rgba(0,0,0,0.35), 4px 4px 0 rgba(0,0,0,0.7); }
+        footer { padding-bottom: 90px; }
     }
+
+    /* === PRIZE POOL (arena loop behind the card, like the WC trophy card) === */
+    .prize-card { margin-top: 26px; overflow: hidden; }
+    .prize-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.32; filter: saturate(0.85); z-index: 0; }
+    .prize-shade { position: absolute; inset: 0; background: linear-gradient(rgba(11,26,14,0.55), rgba(11,26,14,0.92)); z-index: 0; }
+    .prize-card .about-inner { background: transparent; }
+    .crest-img { width: 132px; display: block; margin: 0 auto 6px; image-rendering: pixelated; filter: drop-shadow(0 0 14px rgba(255,180,70,0.35)); }
+    .base-pool-label { font-family: 'Press Start 2P', monospace; font-size: 0.6rem; color: var(--cream-dim); text-transform: uppercase; }
+    .total-prize { font-family: 'Press Start 2P', monospace; font-size: clamp(1.8rem, 5vw, 3rem); color: var(--green-bright); margin: 12px 0 6px; text-shadow: var(--px) var(--px) 0 #0b2410, calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,0.6), 0 0 30px var(--green-glow); }
     .prize-historic { margin: 14px 0; color: var(--cream); font-size: 1.15rem; }
     .prize-historic .star { color: var(--red-bright); }
-    .distribution-grid {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-        gap: 12px; margin: 18px 0 8px;
-    }
-    .dist-item {
-        background: var(--panel);
-        border: 3px solid var(--line);
-        box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.55);
-        padding: 12px 8px;
-        display: flex; flex-direction: column; gap: 6px;
-        text-align: center;
-    }
+    .distribution-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 18px 0 8px; }
+    .dist-item { background: rgba(8,18,9,0.85); border: 3px solid var(--line); box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.55); padding: 12px 8px; display: flex; flex-direction: column; gap: 6px; text-align: center; }
     .dist-item.rank-1 { border-color: #ffd97a; }
     .dist-item.rank-2 { border-color: #c8ccd2; }
     .dist-item.rank-3 { border-color: #b9763a; }
@@ -376,154 +338,66 @@
     .pool-note-text { color: var(--cream-dim); font-size: 1.05rem; margin-top: 10px; }
     .pool-note-text .heart { color: #e2574c; }
 
-    /* teams */
-    .team-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-        gap: 14px;
-        margin-top: 22px;
-    }
+    /* === TEAMS (logo cards, roster on hover, open slots) === */
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 22px; }
     .team-card {
-        background: var(--panel);
-        border: 3px solid var(--line);
+        background: var(--panel); border: 3px solid var(--line);
         box-shadow: 6px 6px 0 rgba(0,0,0,0.45);
-        padding: 20px 16px;
-        text-align: center;
-        min-height: 92px;
-        display: flex; flex-direction: column; justify-content: center; gap: 8px;
+        overflow: hidden; position: relative;
+        transition: transform .1s steps(2), border-color .15s, box-shadow .15s;
     }
     .team-card.locked { border-color: var(--green-deep); }
-    .team-card .t-name {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.62rem;
-        color: var(--cream);
-        line-height: 1.6;
+    @media (hover: hover) and (pointer: fine) {
+        .team-card.locked:hover { transform: translateY(-4px); border-color: var(--green-bright); box-shadow: 8px 8px 0 rgba(0,0,0,0.5), 0 0 22px rgba(110,224,122,0.18); }
     }
-    .team-card.locked .t-name { color: var(--green-bright); text-shadow: 2px 2px 0 rgba(0,0,0,0.8); }
+    .t-banner { height: 150px; position: relative; background: radial-gradient(ellipse at 50% 60%, #16301b 0%, #071008 72%); display: flex; align-items: center; justify-content: center; }
+    .t-banner::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(0,0,0,0.12) 0 2px, transparent 2px 6px); pointer-events: none; }
+    .t-banner img { height: 112px; width: auto; image-rendering: pixelated; filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.6)); position: relative; }
+    .t-banner .t-mark { font-family: 'Press Start 2P', monospace; font-size: 2.6rem; color: var(--line); text-shadow: 3px 3px 0 rgba(0,0,0,0.7); }
+    .t-body { padding: 12px 12px 14px; text-align: center; border-top: 3px solid rgba(110,224,122,0.14); }
+    .team-card .t-name { font-family: 'Press Start 2P', monospace; font-size: 0.6rem; color: var(--green-bright); text-shadow: 2px 2px 0 rgba(0,0,0,0.8); line-height: 1.6; }
+    .team-card .t-sub { font-family: 'Press Start 2P', monospace; font-size: 0.42rem; color: var(--cream-dim); margin-top: 8px; }
+    .t-roster { position: absolute; inset: 0; background: rgba(3,8,5,0.94); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; opacity: 0; transition: opacity .18s var(--ease-out-strong); padding: 14px; }
+    .t-roster .r-title { font-family: 'Press Start 2P', monospace; font-size: 0.45rem; color: var(--green); margin-bottom: 6px; }
+    .t-roster .r-name { font-size: 1.15rem; color: var(--cream); line-height: 1.2; }
+    .t-roster .r-name.cpt::after { content: ' ★'; color: var(--red-bright); }
+    @media (hover: hover) and (pointer: fine) { .team-card.locked:hover .t-roster { opacity: 1; } }
+    .team-card.open { border-style: dashed; border-color: var(--line); background: rgba(8,18,9,0.55); text-decoration: none; }
+    .team-card.open .t-banner { background: none; }
     .team-card.open .t-name { color: var(--cream-dim); animation: pulse 2.6s ease-in-out infinite; }
-    .team-card .t-sub {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.42rem;
-        color: var(--cream-dim);
-    }
+    @media (hover: hover) and (pointer: fine) { .team-card.open:hover { border-color: var(--red-bright); } .team-card.open:hover .t-mark { color: var(--red); } }
 
-    /* casters (WC desk layout, jungle flavor) */
+    /* === CASTERS === */
     .casters-box { margin-top: 26px; }
     .casters-inner { background: var(--panel-2); padding: 26px 24px; position: relative; z-index: 1; text-align: center; }
-    .casters-img {
-        width: min(560px, 86%);
-        display: block;
-        margin: 0 auto;
-        image-rendering: pixelated;
-    }
-    .casters-names {
-        display: grid; grid-template-columns: 1fr 1fr;
-        width: min(560px, 86%);
-        margin: 6px auto 0;
-    }
+    .casters-img { width: min(560px, 86%); display: block; margin: 0 auto; image-rendering: pixelated; }
+    .casters-names { display: grid; grid-template-columns: 1fr 1fr; width: min(560px, 86%); margin: 6px auto 0; }
     .casters-names > div { text-align: center; }
     .casters-names-solo { grid-template-columns: 1fr; margin-top: 26px; }
-    .caster-name {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.72rem;
-        color: var(--green-bright);
-        text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
-    }
-    .caster-role {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.42rem;
-        color: var(--cream-dim);
-        margin-top: 8px;
-    }
+    .caster-name { font-family: 'Press Start 2P', monospace; font-size: 0.72rem; color: var(--green-bright); text-shadow: 2px 2px 0 rgba(0,0,0,0.8); }
+    .caster-role { font-family: 'Press Start 2P', monospace; font-size: 0.42rem; color: var(--cream-dim); margin-top: 8px; }
     .caster-links { margin-top: 10px; display: flex; gap: 10px; justify-content: center; }
-    .caster-links a {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.5rem;
-        color: var(--cream);
-        text-decoration: none;
-        background: var(--panel);
-        border: 2px solid var(--green-deep);
-        padding: 7px 9px;
-        box-shadow: 2px 2px 0 rgba(0,0,0,0.6);
-    }
-    @media (hover: hover) and (pointer: fine) {
-        .caster-links a:hover { color: var(--green-bright); background: var(--green-deep); }
-    }
-    .caster-links a:active {
-        transform: translate(2px, 2px);
-        box-shadow: 0 0 0 rgba(0,0,0,0.6);
-    }
+    .caster-links a { font-family: 'Press Start 2P', monospace; font-size: 0.5rem; color: var(--cream); text-decoration: none; background: var(--panel); border: 2px solid var(--green-deep); padding: 7px 9px; box-shadow: 2px 2px 0 rgba(0,0,0,0.6); }
+    @media (hover: hover) and (pointer: fine) { .caster-links a:hover { color: var(--green-bright); background: var(--green-deep); } }
+    .caster-links a:active { transform: translate(2px, 2px); box-shadow: 0 0 0 rgba(0,0,0,0.6); }
 
     /* divider strips */
-    .strip {
-        height: 230px;
-        overflow: hidden;
-        border-top: 3px solid var(--line);
-        border-bottom: 3px solid var(--line);
-        margin: 40px 0 0;
-        position: relative;
-    }
-    .strip video {
-        width: 100%; height: 100%;
-        object-fit: cover;
-        display: block;
-        image-rendering: pixelated;
-    }
-    .strip::after {
-        content: '';
-        position: absolute; inset: 0;
-        background: linear-gradient(rgba(3,8,5,0.45), rgba(3,8,5,0.15) 40%, rgba(3,8,5,0.45));
-        pointer-events: none;
-    }
+    .strip { height: 230px; overflow: hidden; border-top: 3px solid var(--line); border-bottom: 3px solid var(--line); margin: 40px 0 0; position: relative; }
+    .strip video, .strip img { width: 100%; height: 100%; object-fit: cover; display: block; image-rendering: pixelated; }
+    .strip::after { content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(3,8,5,0.45), rgba(3,8,5,0.15) 40%, rgba(3,8,5,0.45)); pointer-events: none; }
 
     /* signup */
     .signup-box { margin-top: 26px; }
     .signup-inner { background: var(--panel-2); padding: 26px 24px; position: relative; z-index: 1; }
     .steps { list-style: none; counter-reset: step; }
-    .steps li {
-        counter-increment: step;
-        display: flex;
-        align-items: baseline;
-        gap: 16px;
-        padding: 12px 0;
-        border-bottom: 2px dashed var(--line);
-        font-size: 23px;
-    }
+    .steps li { counter-increment: step; display: flex; align-items: baseline; gap: 16px; padding: 12px 0; border-bottom: 2px dashed var(--line); font-size: 23px; }
     .steps li:last-child { border-bottom: none; }
-    .steps li::before {
-        content: counter(step);
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.85rem;
-        color: var(--green-bright);
-        text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
-        flex-shrink: 0;
-    }
-    .rule-box {
-        margin-top: 24px;
-        border: 3px solid var(--red);
-        background: rgba(168, 22, 22, 0.08);
-        padding: 16px 18px;
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.62rem;
-        line-height: 2;
-        color: var(--cream);
-    }
+    .steps li::before { content: counter(step); font-family: 'Press Start 2P', monospace; font-size: 0.85rem; color: var(--green-bright); text-shadow: 2px 2px 0 rgba(0,0,0,0.8); flex-shrink: 0; }
+    .rule-box { margin-top: 24px; border: 3px solid var(--red); background: rgba(168, 22, 22, 0.08); padding: 16px 18px; font-family: 'Press Start 2P', monospace; font-size: 0.62rem; line-height: 2; color: var(--cream); }
     .rule-box .no { color: var(--red-bright); }
     .btn-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 26px; }
-    .big-btn {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.7rem;
-        text-decoration: none;
-        color: #fff;
-        padding: 16px 22px;
-        border: 3px solid;
-        box-shadow: 5px 5px 0 rgba(0,0,0,0.55);
-        transition: transform 0.06s;
-        display: inline-block;
-    }
-    @media (hover: hover) and (pointer: fine) {
-        .big-btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 rgba(0,0,0,0.55); }
-    }
+    .big-btn { font-family: 'Press Start 2P', monospace; font-size: 0.7rem; text-decoration: none; color: #fff; padding: 16px 22px; border: 3px solid; box-shadow: 5px 5px 0 rgba(0,0,0,0.55); transition: transform 0.06s; display: inline-block; }
+    @media (hover: hover) and (pointer: fine) { .big-btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 rgba(0,0,0,0.55); } }
     .big-btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 rgba(0,0,0,0.55); }
     .big-btn.discord { background: var(--discord); border-color: #7a86ff; }
     .big-btn.donate { background: var(--green-deep); border-color: var(--green-bright); }
@@ -535,70 +409,41 @@
     .video-caption { margin-top: 14px; color: var(--cream-dim); font-size: 19px; }
     .video-caption a { color: var(--green-bright); }
 
-    /* footer */
-    footer {
-        margin-top: 70px;
-        padding: 30px 20px 40px;
-        border-top: 3px solid var(--line);
-        text-align: center;
-        color: var(--cream-dim);
-        font-size: 18px;
-    }
-    footer .f-title {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.55rem;
-        color: var(--green);
-        margin-bottom: 10px;
-    }
+    footer { margin-top: 70px; padding: 30px 20px 40px; border-top: 3px solid var(--line); text-align: center; color: var(--cream-dim); font-size: 18px; }
+    footer .f-title { font-family: 'Press Start 2P', monospace; font-size: 0.55rem; color: var(--green); margin-bottom: 10px; }
     footer .f-links { margin-top: 14px; }
-    footer .f-links a {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.5rem;
-        color: var(--cream-dim);
-        text-decoration: none;
-    }
+    footer .f-links a { font-family: 'Press Start 2P', monospace; font-size: 0.5rem; color: var(--cream-dim); text-decoration: none; }
     footer .f-links a:hover { color: var(--green-bright); }
     footer .f-links span { color: var(--line); margin: 0 8px; }
 
-    /* === SCROLL REVEALS (JS-gated: nothing hidden without JS) === */
-    .reveal {
-        opacity: 0;
-        transform: translateY(14px);
-        transition: opacity 0.45s var(--ease-out-strong), transform 0.45s var(--ease-out-strong);
-    }
+    /* === SCROLL REVEALS (JS-gated, with a safety timeout so nothing stays hidden) === */
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.45s var(--ease-out-strong), transform 0.45s var(--ease-out-strong); }
     .reveal.in { opacity: 1; transform: none; }
-    .reveal .sg {
-        opacity: 0;
-        transform: translateY(10px);
-        transition: opacity 0.4s var(--ease-out-strong), transform 0.4s var(--ease-out-strong);
-    }
-    .reveal.in .sg {
-        opacity: 1;
-        transform: none;
-        transition-delay: calc(var(--i, 0) * 55ms);
-    }
+    .reveal .sg { opacity: 0; transform: translateY(10px); transition: opacity 0.4s var(--ease-out-strong), transform 0.4s var(--ease-out-strong); }
+    .reveal.in .sg { opacity: 1; transform: none; transition-delay: calc(var(--i, 0) * 55ms); }
 
-    a:focus-visible, button:focus-visible {
-        outline: 3px solid var(--green-bright);
-        outline-offset: 3px;
-    }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--green-bright); outline-offset: 3px; }
 
     @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
         .firefly { animation: none; opacity: 0; }
-        .h-tag, .team-card.open .t-name, .cd-live { animation: none; }
+        .team-card.open .t-name, .cd-live, .hero-img, .h-title, .fuse::after, .road-node .rn-torch { animation: none; }
         .cd-num.tick { animation: none; }
         .reveal, .reveal .sg { opacity: 1; transform: none; transition: none; }
     }
-
     @media (max-width: 560px) {
         .strip { height: 140px; }
         .steps li { font-size: 20px; }
         body { font-size: 19px; }
         .hero { margin-top: 14px; }
+        .hero-img { max-height: 60vh; min-height: 340px; }   /* keep room for title + CTA on phones */
+        .hero-overlay { padding-bottom: 18px; }
+        .slot-meter .sm-row { flex-direction: column; align-items: center; gap: 6px; }
         .cd-box { min-width: 68px; padding: 12px 8px 8px; }
         .cd-num { font-size: 1.15rem; }
         .caster-name { font-size: 0.5rem; }
+        .h-cta { flex-direction: column; gap: 6px; }
+        .h-cta .slots { border-left: 0; padding-left: 0; }
     }
 </style>
 </head>
@@ -606,6 +451,7 @@
 <div class="bg-base"></div>
 <div class="bg-vignette"></div>
 <div class="scanlines"></div>
+<div class="fuse" id="fuse"></div>
 <div class="mouse-glow" id="mouseGlow"></div>
 
 <div class="container">
@@ -618,7 +464,7 @@
                 <h1 class="h-title">RUMBLE IN THE JUNGLE VI</h1>
                 <div class="h-bar"></div>
                 <div class="h-sub">OCT 17 — 18 &amp; 24 — 25 ★ 2026</div>
-                <a href="#signup" class="h-tag">SIGN-UPS OPEN · TEAMS OF 5</a>
+                <a href="#signup" class="h-cta">SIGN UP YOUR TEAM <span class="slots" id="hero-slots">3 TEAMS IN · CLOSES OCT 9</span></a>
             </div>
         </div>
     </header>
@@ -636,11 +482,15 @@
 
 <div class="container">
     <div class="countdown-container" role="timer" aria-label="Countdown to Rumble in the Jungle VI">
+        <div class="countdown-label" id="cd-label">SIGN-UPS CLOSE IN</div>
         <div class="countdown-timer" id="countdown">
             <div class="cd-box"><div class="cd-num" id="cd-d">--</div><div class="cd-text">DAYS</div></div>
             <div class="cd-box"><div class="cd-num" id="cd-h">--</div><div class="cd-text">HRS</div></div>
             <div class="cd-box"><div class="cd-num" id="cd-m">--</div><div class="cd-text">MIN</div></div>
             <div class="cd-box"><div class="cd-num" id="cd-s">--</div><div class="cd-text">SEC</div></div>
+        </div>
+        <div class="slot-meter">
+            <div class="sm-row" style="justify-content:center"><span><span class="sm-taken" id="sm-taken">3 TEAMS IN</span> · SIGN-UPS OPEN UNTIL <b>OCT 9</b> · THE RUMBLE STARTS <b>OCT 17</b></span></div>
         </div>
     </div>
 </div>
@@ -649,19 +499,21 @@
     <section id="info" class="section-wrapper">
         <h2 class="section-title">THE RUMBLE</h2>
         <div class="title-rule"></div>
-        <div class="about-card px-frame">
+        <div class="about-card px-frame has-bg">
+            <img class="card-bg" src="assets/scene_waterfall_1536.jpg" alt="" aria-hidden="true"><div class="card-shade"></div>
             <div class="about-inner">
                 <p>
                     <b>The most competitive Ability Draft tournament there is.</b><br>
                     The TI of Ability Draft. Five editions in the books. The sixth one hits this October.
                 </p>
-                <p style="margin-top: 12px;">
-                    <b>8 teams</b>, two weekends. Day one opens with the group stage — two groups,
-                    best-of-ones — seeding everyone into a <b>double-elimination</b> bracket.
-                    Day two runs the playoffs in best-of-threes. The final weekend settles it:
-                    upper and lower bracket finals, then a <b>best-of-five grand final</b>.
-                </p>
-                <p style="margin-top: 12px;">
+                <div class="road">
+                    <div class="road-node"><span class="rn-torch"></span><div class="rn-date">SAT OCT 17</div><div class="rn-stage">GROUPS</div><div class="rn-fmt">two groups · best-of-one<br>seeds the bracket</div></div>
+                    <div class="road-link"></div>
+                    <div class="road-node"><span class="rn-torch"></span><div class="rn-date">SUN OCT 18</div><div class="rn-stage">PLAYOFFS</div><div class="rn-fmt">double elimination<br>best-of-three</div></div>
+                    <div class="road-link"></div>
+                    <div class="road-node final"><span class="rn-torch"></span><div class="rn-date">OCT 24 — 25</div><div class="rn-stage">FINALS</div><div class="rn-fmt">UB + LB finals<br>grand final best-of-five</div></div>
+                </div>
+                <p style="margin-top: 22px;">
                     Save the dates: <span class="date-highlight">OCT 17 — 18 &amp; 24 — 25, 2026</span>
                     &nbsp; <a href="#" id="ics-btn" class="ics-link">+ ADD TO CALENDAR</a>
                 </p>
@@ -677,14 +529,16 @@
     </section>
 </div>
 
+<div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/scene_gatepath_1536.png" data-lazy><source src="assets/loop_strip_gatepath.mp4" type="video/mp4"></video></div>
+
 <div class="container">
     <section id="teams" class="section-wrapper">
-        <h2 class="section-title">THE 8 TEAMS</h2>
+        <h2 class="section-title">THE TEAMS</h2>
         <div class="title-rule"></div>
         <p class="lead">
-            <span id="teams-counter" class="date-highlight">0 TEAMS SIGNED UP · 8 SLOTS</span><br>
-            More than 8 sign-ups: some teams receive direct invites, the rest settle it
-            in the qualifiers on <b>OCT 10 + 11</b>.
+            <span id="teams-counter" class="date-highlight">0 TEAMS SIGNED UP · SIGN-UPS OPEN</span><br>
+            <b>8 teams</b> play the main event. More than 8 sign-ups: some teams receive direct invites,
+            the rest settle it in the qualifiers on <b>OCT 10 + 11</b>. Hover a team for the roster.
         </p>
         <div class="team-grid" id="team-grid"></div>
     </section>
@@ -695,6 +549,8 @@
         <h2 class="section-title">PRIZE POOL</h2>
         <div class="title-rule"></div>
         <div class="prize-card px-frame">
+            <video class="prize-bg" muted loop playsinline preload="none" poster="assets/scene_arenafloor_1536.jpg" data-lazy aria-hidden="true"><source src="assets/loop_strip_arena.mp4" type="video/mp4"></video>
+            <div class="prize-shade"></div>
             <div class="about-inner" style="text-align:center">
                 <div class="base-pool-label">BASE POOL (HOST)</div>
                 <div class="total-prize">€300</div>
@@ -725,7 +581,8 @@
     <section id="signup" class="section-wrapper">
         <h2 class="section-title">SIGN UP</h2>
         <div class="title-rule"></div>
-        <div class="signup-box px-frame">
+        <div class="signup-box px-frame has-bg">
+            <img class="card-bg" src="assets/scene_tunnel_1536.jpg" alt="" aria-hidden="true"><div class="card-shade"></div>
             <div class="signup-inner">
                 <ol class="steps">
                     <li>Join the Discord — button below.</li>
@@ -761,7 +618,7 @@
         <div class="title-rule"></div>
         <div class="casters-box px-frame">
             <div class="casters-inner">
-                <video class="casters-img" autoplay muted loop playsinline poster="assets/casters.png" aria-label="BloPP and Young Elodin at the caster desk">
+                <video class="casters-img" autoplay muted loop playsinline poster="assets/casters.png" aria-label="BloPP and Young Elodin at the caster desk" id="casters-vid">
                     <source src="assets/casters_anim_flat.mp4" type="video/mp4">
                     <img src="assets/casters.png" alt="BloPP and Young Elodin at the caster desk">
                 </video>
@@ -801,23 +658,25 @@
         <h2 class="section-title">LAST RUMBLE</h2>
         <div class="title-rule"></div>
         <p class="lead">
-            Watch the full final day of <b>Rumble in the Jungle V</b>: lower bracket
-            finals and the grand final.
+            <b>Rumble in the Jungle V</b>, the documentary. Two hours, eight teams, one champion.
+            The full final day VOD is linked below.
         </p>
         <div class="video-outer px-frame">
             <div class="video-frame">
-                <iframe src="https://www.youtube-nocookie.com/embed/v-EdnuPYb84"
-                        title="Rumble in the Jungle V — Final Day"
+                <iframe src="https://www.youtube-nocookie.com/embed/mooVUQr9crs"
+                        title="Rumble in the Jungle V — The Documentary"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen loading="lazy"></iframe>
             </div>
         </div>
         <p class="video-caption">
-            Player doesn't load? Watch on
-            <a href="https://www.youtube.com/watch?v=v-EdnuPYb84" target="_blank" rel="noopener">YouTube</a>.
+            Want the raw thing? <a href="https://www.youtube.com/watch?v=v-EdnuPYb84" target="_blank" rel="noopener">Final day VOD</a>: lower bracket finals + grand final.
+            Player doesn't load? <a href="https://www.youtube.com/watch?v=mooVUQr9crs" target="_blank" rel="noopener">Watch on YouTube</a>.
         </p>
     </section>
 </div>
+
+<a href="#signup" class="mob-cta">SIGN UP YOUR TEAM · CLOSES OCT 9</a>
 
 <footer>
     <div class="f-title">RUMBLE IN THE JUNGLE VI</div>
@@ -832,7 +691,7 @@
 </footer>
 
 <script>
-    // fireflies (WC ember system, jungle flavor)
+    // fireflies
     (function () {
         const n = window.innerWidth < 640 ? 14 : 28;
         for (let i = 0; i < n; i++) {
@@ -846,12 +705,21 @@
         }
     })();
 
-    // === TEAMS (add signed-up teams here as they PM blopp) ===
-    // status: 'signed' (default) | 'invited' | 'qualifier' — blopp assigns invites later
+    // scroll fuse
+    (function () {
+        const f = document.getElementById('fuse');
+        function upd() {
+            const max = document.documentElement.scrollHeight - innerHeight;
+            f.style.width = (max > 0 ? Math.min(100, scrollY / max * 100) : 0) + '%';
+        }
+        addEventListener('scroll', upd, { passive: true }); addEventListener('resize', upd); upd();
+    })();
+
+    // === TEAMS (mirror of data/rumble6-teams.json; logo = optional, roster = optional) ===
     const TEAMS = [
-        { name: 'Playlist dlya blondinok' },
-        { name: 'Mallards' },
-        { name: "Don't Peek" },
+        { name: 'Playlist dlya blondinok', logo: 'assets/logos/blondinok.png', roster: null },
+        { name: 'Mallards', logo: 'assets/logos/mallards.png', roster: ['kitchen', '007shadow', 'thundertoss', 'CCrush', 'Sadpanda008'] },
+        { name: "Don't Peek", logo: 'assets/logos/dontpeek.png', roster: ['BigGoose', 'noertti', 'sifla', 'Fruugu', 'balll'] },
     ];
     const SLOTS = 8;
     (function () {
@@ -860,123 +728,97 @@
         TEAMS.forEach(t => {
             const card = document.createElement('div');
             card.className = 'team-card locked';
-            card.innerHTML = '<div class="t-name">' + t.name + '</div><div class="t-sub">'
-                + labels[t.status || 'signed'] + '</div>';
+            const art = t.logo ? '<img src="' + t.logo + '" alt="">' : '<span class="t-mark">' + t.name.charAt(0).toUpperCase() + '</span>';
+            const roster = t.roster
+                ? '<div class="t-roster"><div class="r-title">ROSTER</div>' + t.roster.map((p, i) => '<div class="r-name' + (i === 0 ? ' cpt' : '') + '">' + p + '</div>').join('') + '</div>'
+                : '<div class="t-roster"><div class="r-title">ROSTER</div><div class="r-name">5 players locked in</div></div>';
+            card.innerHTML = '<div class="t-banner">' + art + '</div><div class="t-body"><div class="t-name">' + t.name + '</div><div class="t-sub">'
+                + labels[t.status || 'signed'] + '</div></div>' + roster;
             grid.appendChild(card);
         });
-        for (let i = TEAMS.length; i < SLOTS; i++) {
-            const card = document.createElement('div');
-            card.className = 'team-card open';
-            card.innerHTML = '<div class="t-name">SLOT OPEN</div><div class="t-sub">COULD BE YOU</div>';
-            grid.appendChild(card);
-        }
+        // one open card, uncapped: sign-ups never look "full"
+        const open = document.createElement('a');
+        open.className = 'team-card open'; open.href = '#signup';
+        open.innerHTML = '<div class="t-banner"><span class="t-mark">?</span></div><div class="t-body"><div class="t-name">YOUR TEAM HERE</div><div class="t-sub">SIGN-UPS OPEN UNTIL OCT 9</div></div>';
+        grid.appendChild(open);
         const n = TEAMS.length;
-        document.getElementById('teams-counter').textContent =
-            n + (n === 1 ? ' TEAM' : ' TEAMS') + ' SIGNED UP · ' + SLOTS + ' SLOTS';
+        document.getElementById('teams-counter').textContent = n + (n === 1 ? ' TEAM' : ' TEAMS') + ' SIGNED UP · SIGN-UPS OPEN';
+        document.getElementById('hero-slots').textContent = n + (n === 1 ? ' TEAM' : ' TEAMS') + ' IN · CLOSES OCT 9';
+        document.getElementById('sm-taken').textContent = n + (n === 1 ? ' TEAM' : ' TEAMS') + ' IN';
     })();
 
-    // === COUNTDOWN (to Oct 17 2026, 17:00 CEST — WC digit boxes) ===
+    // === PHASE-AWARE COUNTDOWN: sign-up deadline -> event start -> live ===
     (function () {
         const wrap = document.getElementById('countdown');
-        const start = new Date('2026-10-17T15:00:00Z').getTime();
-        const els = {
-            d: document.getElementById('cd-d'),
-            h: document.getElementById('cd-h'),
-            m: document.getElementById('cd-m'),
-            s: document.getElementById('cd-s')
-        };
+        const label = document.getElementById('cd-label');
+        const PHASES = [
+            { until: new Date('2026-10-09T21:59:59Z').getTime(), label: 'SIGN-UPS CLOSE IN' },
+            { until: new Date('2026-10-17T15:00:00Z').getTime(), label: 'THE RUMBLE STARTS IN' },
+        ];
+        function current() { return PHASES.find(p => p.until > Date.now()); }
+        let phase = current();
+        if (phase) label.textContent = phase.label;
+        const start = phase ? phase.until : 0;
+        const els = { d: document.getElementById('cd-d'), h: document.getElementById('cd-h'), m: document.getElementById('cd-m'), s: document.getElementById('cd-s') };
         function set(el, v) {
             const t = String(v).padStart(2, '0');
-            if (el.textContent !== t) {
-                el.textContent = t;
-                el.classList.remove('tick');
-                void el.offsetWidth;
-                el.classList.add('tick');
-            }
+            if (el.textContent !== t) { el.textContent = t; el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); }
         }
         function tick() {
-            const d = start - Date.now();
-            if (d <= 0) {
-                wrap.innerHTML = '<div class="cd-live">THE RUMBLE IS LIVE</div>';
-                return;
-            }
-            set(els.d, Math.floor(d / 86400000));
-            set(els.h, Math.floor(d % 86400000 / 3600000));
-            set(els.m, Math.floor(d % 3600000 / 60000));
-            set(els.s, Math.floor(d % 60000 / 1000));
+            const p = current();
+            if (!p) { label.textContent = ''; wrap.innerHTML = '<div class="cd-live">THE RUMBLE IS LIVE</div>'; return; }
+            if (p !== phase) { phase = p; label.textContent = p.label; }
+            const d = p.until - Date.now();
+            set(els.d, Math.floor(d / 86400000)); set(els.h, Math.floor(d % 86400000 / 3600000));
+            set(els.m, Math.floor(d % 3600000 / 60000)); set(els.s, Math.floor(d % 60000 / 1000));
             setTimeout(tick, 1000);
         }
         tick();
     })();
 
-    // === SCROLL REVEALS (staggered, reduced-motion aware) ===
+    // === SCROLL REVEALS (with a safety net: everything visible after 1.5 s no matter what) ===
     (function () {
         if (!('IntersectionObserver' in window)) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        document.querySelectorAll('.chips .chip, .team-grid .team-card, .distribution-grid .dist-item, .steps li')
+        document.querySelectorAll('.chips .chip, .team-grid .team-card, .distribution-grid .dist-item, .steps li, .road .road-node')
             .forEach(el => el.classList.add('sg'));
         document.querySelectorAll('.sg').forEach(el => {
             el.style.setProperty('--i', Array.prototype.indexOf.call(el.parentElement.children, el));
         });
         const io = new IntersectionObserver((entries) => {
-            entries.forEach(en => {
-                if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
-            });
+            entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
         }, { rootMargin: '0px 0px -60px 0px', threshold: 0.1 });
-        document.querySelectorAll('.section-wrapper, .countdown-container').forEach(el => {
-            el.classList.add('reveal');
-            io.observe(el);
-        });
+        document.querySelectorAll('.section-wrapper, .countdown-container').forEach(el => { el.classList.add('reveal'); io.observe(el); });
+        setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('in')), 1500);
     })();
 
-    // === LAZY STRIP VIDEOS (saves ~10MB on initial load) ===
+    // === LAZY VIDEOS ===
     (function () {
         const vids = document.querySelectorAll('video[data-lazy]');
         const io = new IntersectionObserver((entries) => {
-            entries.forEach(en => {
-                const v = en.target;
-                if (en.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); }
-                else v.pause();
-            });
+            entries.forEach(en => { const v = en.target; if (en.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause(); });
         }, { rootMargin: '200px' });
         vids.forEach(v => io.observe(v));
     })();
 
-    // add to calendar (.ics, both weekends)
+    // add to calendar
     document.getElementById('ics-btn').addEventListener('click', (e) => {
         e.preventDefault();
-        const ics = [
-            'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Rumble in the Jungle//EN',
-            'BEGIN:VEVENT',
-            'UID:rumble6-weekend1@bloppbot.github.io',
-            'DTSTART:20261017T150000Z',
-            'DTEND:20261018T210000Z',
-            'SUMMARY:Rumble in the Jungle VI - Groups + Playoffs',
-            'DESCRIPTION:Dota 2 Ability Draft tournament\\, weekend 1. https://bloppbot.github.io/rumble6/',
-            'URL:https://bloppbot.github.io/rumble6/',
-            'END:VEVENT',
-            'BEGIN:VEVENT',
-            'UID:rumble6-weekend2@bloppbot.github.io',
-            'DTSTART:20261024T150000Z',
-            'DTEND:20261025T210000Z',
-            'SUMMARY:Rumble in the Jungle VI - Finals',
-            'DESCRIPTION:Dota 2 Ability Draft tournament\\, finals weekend. https://bloppbot.github.io/rumble6/',
-            'URL:https://bloppbot.github.io/rumble6/',
-            'END:VEVENT','END:VCALENDAR'
-        ].join('\r\n');
+        const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Rumble in the Jungle//EN',
+            'BEGIN:VEVENT','UID:rumble6-weekend1@bloppbot.github.io','DTSTART:20261017T150000Z','DTEND:20261018T210000Z',
+            'SUMMARY:Rumble in the Jungle VI - Groups + Playoffs','DESCRIPTION:Dota 2 Ability Draft tournament\\, weekend 1. https://bloppbot.github.io/rumble6/','URL:https://bloppbot.github.io/rumble6/','END:VEVENT',
+            'BEGIN:VEVENT','UID:rumble6-weekend2@bloppbot.github.io','DTSTART:20261024T150000Z','DTEND:20261025T210000Z',
+            'SUMMARY:Rumble in the Jungle VI - Finals','DESCRIPTION:Dota 2 Ability Draft tournament\\, finals weekend. https://bloppbot.github.io/rumble6/','URL:https://bloppbot.github.io/rumble6/','END:VEVENT','END:VCALENDAR'].join('\r\n');
         const a = document.createElement('a');
         a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
-        a.download = 'rumble-vi-2026.ics';
-        a.click();
-        URL.revokeObjectURL(a.href);
+        a.download = 'rumble-vi-2026.ics'; a.click(); URL.revokeObjectURL(a.href);
     });
 
     // mouse glow
     const mouseGlow = document.getElementById('mouseGlow');
     let mouseTimeout;
     document.addEventListener('mousemove', (e) => {
-        mouseGlow.style.left = e.clientX + 'px';
-        mouseGlow.style.top = e.clientY + 'px';
+        mouseGlow.style.left = e.clientX + 'px'; mouseGlow.style.top = e.clientY + 'px';
         mouseGlow.classList.add('active');
         clearTimeout(mouseTimeout);
         mouseTimeout = setTimeout(() => mouseGlow.classList.remove('active'), 1200);
