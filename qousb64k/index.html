@@ -192,7 +192,7 @@ footer { padding-block: 60px 80px; color: var(--mute); font-size: 14px; }
     <div class="date">14<span class="dot">.</span>11<span class="dot">.</span>
       <small>Samstag, 2026. Rund 150 Leute, erst trinken, später selber auflegen.</small>
     </div>
-    <p class="lead">Das Badeschiff will <b>2.600 €</b> für Trinkhalle und Laderaum. Hier sind die Alternativen: 12 Locations, die für so einen Abend realistisch sind, mit Kapazität, Anlage, Sperrstunde und Preismodell. Dazu eine fertige Anfrage-Mail.</p>
+    <p class="lead">Das Badeschiff will <b>2.600 €</b> für Trinkhalle und Laderaum. Hier sind die Alternativen: 10 Locations, die für so einen Abend realistisch sind, mit Kapazität, Anlage, Sperrstunde und Preismodell. Dazu eine fertige Anfrage-Mail.</p>
     <div class="facts">
       <div><div class="k">Gäste</div><div class="v">~150 <em>stehend</em></div></div>
       <div><div class="k">Datum</div><div class="v">Sa 14.11.</div></div>
@@ -233,7 +233,7 @@ footer { padding-block: 60px 80px; color: var(--mute); font-size: 14px; }
   <h2>Drei Preismodelle, drei Rechnungen</h2>
   <div class="explain">
     <div><div class="price">z. B. Badeschiff 2.600 €</div><h3>Raummiete</h3><p>Fixer Betrag für den Raum. Getränke zahlen Gäste oder ihr zusätzlich. Planbar, aber das Geld ist weg, egal wie viel getrunken wird.</p></div>
-    <div><div class="price">z. B. Auersperg 3.000 €, Celeste 650 €</div><h3>Mindestumsatz</h3><p>Keine Miete, aber die Bar muss einen Betrag umsetzen. Bei 150 Leuten reichen dafür rund 20 € Getränke pro Kopf. Wird er unterschritten, zahlt ihr die Differenz.</p></div>
+    <div><div class="price">z. B. Auersperg 3.000 €, Nordberg, Laby</div><h3>Mindestumsatz</h3><p>Keine Miete, aber die Bar muss einen Betrag umsetzen. Bei 150 Leuten reichen dafür rund 20 € Getränke pro Kopf. Wird er unterschritten, zahlt ihr die Differenz.</p></div>
     <div><div class="price">z. B. All iN 29,40 € p. P.</div><h3>Getränkepauschale</h3><p>Fixer Preis pro Gast, dafür offene Bar. Teuer bei 150 Leuten (hier rund 4.400 €), aber Gäste zahlen nichts mehr selbst.</p></div>
   </div>
 </section>
@@ -313,48 +313,36 @@ const V = [
     pro: 'Ohne Miete, auf genau diese Art Buchung eingestellt, Fotobox vorhanden.',
     con: '150 ist am oberen Ende. Weniger echter Club. Konfetti verboten.',
     mail: 'office@nordbergwien.at', tel: '+436641000973', telTxt: '+43 664 1000 973', web: 'https://www.nordberg.wien/partylocation/' },
-  { r: 5, t: 'club', nm: true, name: 'Celeste', addr: 'Hamburgerstraße 18, 1050', cap: [120, 200], capTxt: 'Club 120 + Jazzbar 40–60',
-    vibe: 'Underground-Club mit Jazzkeller, elektronische Nächte, Privat-Events im Kalender.',
-    specs: [['Kapazität', 'Club ~120, ganzes Haus ~200', 'p'], ['Anlage', 'Club-Anlage, DJ-Setup wahrscheinlich', ''], ['Sperrstunde', 'nicht angegeben', ''], ['Preis', 'Mindestumsatz 650 € Club + 450 € Jazzbar', 'p', true]],
-    pro: 'Wahrscheinlich der günstigste echte Club mit Underground-Credibility. Eigenes Buffet erlaubt.',
-    con: 'Zahlen aus einem älteren Artikel, bitte bestätigen. Für 150 braucht ihr beide Räume.',
-    mail: 'office@celeste.co.at', tel: '+4315865314', telTxt: '01 586 53 14', web: 'https://www.celeste.co.at/' },
-  { r: 6, t: 'club', nm: false, name: 'WERK', addr: 'Spittelauer Lände 12, 1090', cap: [100, 250], capTxt: '150+ laut alter Recherche',
-    vibe: 'Wiener Underground unter den Stadtbahnbögen, Industrial, zwei Floors.',
-    specs: [['Kapazität', '150+', 'p'], ['Anlage', 'Pioneer Club-PA', 'p'], ['Sperrstunde', 'Lizenz bis 06:00', 'p'], ['Preis', 'Miete geschätzt 1.500–2.500 €', 'p']],
-    pro: 'Echter Club-Sound, Kulturverein-Preise, U4 Spittelau vor der Tür.',
-    con: 'Samstag ist Programmtag. Anfragen nur übers Kontaktformular, Werte aus der alten Recherche.',
-    web: 'https://www.daswerk.org/contact' },
-  { r: 7, t: 'space', nm: false, name: 'All iN Club', addr: 'Stadtbahnbögen 90–91, 1090', cap: [50, 180], capTxt: '50–180, ideal 100',
+  { r: 5, t: 'space', nm: false, name: 'All iN Club', addr: 'Stadtbahnbögen 90–91, 1090', cap: [50, 180], capTxt: '50–180, ideal 100',
     vibe: 'Saubere Mietlocation im Stadtbahnbogen, zwei Räume, eine lange Bar.',
     specs: [['Kapazität', '190 m², 50–180, ideal 100', 'v'], ['Anlage', 'Sound, Licht, Bühne, Laptop per Klinke', 'v'], ['Sperrstunde', 'bis 04:00', 'v'], ['Preis', '290 € Abend · Pauschale 29,40 € p. P.', 'v', true]],
     pro: 'Günstigste bekannte Miete, transparente Preise, Fass-Angebote.',
     con: 'Für 150 eng. DJ-Setup unklar, eigene CDJs oder Controller mitbringen.',
     mail: 'info@allinclub.at', tel: '+4312365289', telTxt: '+43 1 236 52 89', web: 'https://allinclub.at/' },
-  { r: 8, t: 'bar', nm: false, name: 'Bolena', addr: 'Lange Gasse 61, 1080', cap: [50, 130], capTxt: 'Partyraum bis 130',
+  { r: 6, t: 'bar', nm: false, name: 'Bolena', addr: 'Lange Gasse 61, 1080', cap: [50, 130], capTxt: 'Partyraum bis 130',
     vibe: 'Weinbar mit eigenem Partyraum, bei Privatbuchung länger offen.',
     specs: [['Kapazität', 'Partyraum bis 130', 'v'], ['Anlage', 'voll ausgestattete DJ-Anlage', 'p'], ['Sperrstunde', 'bis 03:00 (privat)', 'v'], ['Preis', '300 € Miete oder 1.000 € Umsatz am WE', 'p', true]],
     pro: 'Sehr günstig, DJ-Anlage vorhanden.',
     con: '130 ist knapp unter 150, Schluss um 03:00.',
     mail: 'bolena@bolena.at', tel: '+436642108518', telTxt: '+43 664 210 85 18', web: 'https://www.bolena.at/' },
-  { r: 9, t: 'club', nm: false, name: 'FLUCC', addr: 'Praterstern, 1020', cap: [200, 350], capTxt: 'Deck ~200 · Wanne ~350',
+  { r: 7, t: 'club', nm: false, name: 'FLUCC', addr: 'Praterstern, 1020', cap: [200, 350], capTxt: 'Deck ~200 · Wanne ~350',
     vibe: 'Ikonischer Kulturclub am Praterstern mit echtem Club-Rig.',
     specs: [['Kapazität', 'Deck ~200', 'p'], ['Anlage', 'Club-Anlage', ''], ['Sperrstunde', 'nicht angegeben', ''], ['Preis', 'Vermietung "eingeschränkt möglich"', 'v']],
     pro: 'Wenn es klappt, der coolste Raum auf der Liste.',
     con: 'Samstage sind fast sicher bespielt, eher ein Longshot.',
     mail: 'booking@flucc.at', web: 'https://flucc.at/faq/' },
-  { r: 10, t: 'space', nm: false, name: 'WUK Projektraum', addr: 'Währinger Straße 59, 1090', cap: [100, 250], capTxt: 'Projektraum 250 m², 250',
+  { r: 8, t: 'space', nm: false, name: 'WUK Projektraum', addr: 'Währinger Straße 59, 1090', cap: [100, 250], capTxt: 'Projektraum 250 m², 250',
     vibe: 'Kulturzentrum mit mietbarem Projektraum, privat erlaubt.',
     specs: [['Kapazität', '250 stehend', 'v'], ['Anlage', 'auf Anfrage', ''], ['Sperrstunde', 'unbekannt', ''], ['Preis', 'auf Anfrage inkl. Technik + Personal', 'v']],
     pro: 'Flexible leere Fläche, Platz genug.',
     con: 'Bar und Sound müsst ihr vermutlich selbst organisieren.',
     mail: 'projektraum@wuk.at', tel: '+4369914040089', telTxt: '+43 699 140 40 089', web: 'https://www.wuk.at/en/offers/renting-spaces/' },
-  { r: 11, t: 'club', nm: true, name: '9Under', addr: 'Keller 9er Bräu, Liechtenwerderplatz 2, 1090', cap: [80, 120], capTxt: '~120', small: true,
+  { r: 9, t: 'club', nm: true, name: '9Under', addr: 'Keller 9er Bräu, Liechtenwerderplatz 2, 1090', cap: [80, 120], capTxt: '~120', small: true,
     vibe: 'Club-Keller unter dem 9er Bräu mit DJ- und Licht-Setup.',
     specs: [['Kapazität', '~120', 'p'], ['Anlage', 'volles DJ- + Licht-Setup', 'p'], ['Sperrstunde', 'unbekannt', ''], ['Preis', '700 € Mindestumsatz', 'p', true]],
     pro: 'Sehr günstig, falls es noch existiert.',
     con: 'Website offline. Erst beim 9er Bräu anrufen, ob der Keller noch läuft. Etwas klein.' },
-  { r: 12, t: 'space', nm: false, name: 'Studio67', addr: 'Gumpendorfer Straße 67, 1060', cap: [50, 150], capTxt: 'bis 150',
+  { r: 10, t: 'space', nm: false, name: 'Studio67', addr: 'Gumpendorfer Straße 67, 1060', cap: [50, 150], capTxt: 'bis 150',
     vibe: 'Eventraum mit DJ-Booth, Lizenz bis 04:00.',
     specs: [['Kapazität', 'bis 150 stehend', 'v'], ['Anlage', 'volle Anlage + DJ-Booth', 'v'], ['Sperrstunde', 'bis 04:00', 'v'], ['Preis', '299 €/h + 2.490 € Mindestumsatz', 'v']],
     pro: 'Alles da, transparent bepreist.',
@@ -387,7 +375,7 @@ function card(v) {
   const specs = v.specs.map(s => '<div><div class="k">' + s[0] + ' ' + Q[s[2]] + '</div><div class="v' + (s[3] ? ' hi' : '') + '">' + s[1] + '</div></div>').join('');
   const links = [v.mail && '<a href="mailto:' + v.mail + '">' + v.mail + '</a>', v.tel && '<a href="tel:' + v.tel + '">' + v.telTxt + '</a>', v.web && '<a href="' + v.web + '" target="_blank" rel="noopener">Website</a>',
     '<a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.name + ' ' + v.addr + ' Wien') + '" target="_blank" rel="noopener">Karte</a>'].filter(Boolean).join('');
-  const tag = v.top ? 'zuerst anrufen' : v.r === 12 ? 'nur Vergleich' : v.small ? 'Backup' : v.t === 'club' ? 'Club' : v.t === 'bar' ? 'Bar' : 'Eventraum';
+  const tag = v.top ? 'zuerst anrufen' : v.name === 'Studio67' ? 'nur Vergleich' : v.small ? 'Backup' : v.t === 'club' ? 'Club' : v.t === 'bar' ? 'Bar' : 'Eventraum';
   const plz = (v.addr.match(/\b1\d{2}0\b/) || [''])[0], bez = BEZ[plz] || '';
   const q = encodeURIComponent(v.addr + ', Wien');
   const map = '<div class="map"><iframe loading="lazy" title="Karte ' + v.name + '" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=' + q + '&z=15&output=embed"></iframe>' +
