@@ -456,6 +456,120 @@
         .h-cta { flex-direction: column; gap: 6px; }
         .h-cta .slots { border-left: 0; padding-left: 0; }
     }
+
+    /* =====================================================================
+       V4 VISUAL PASS (2026-09-23, staging /rumble6/v2/). Numbered to match the review list.
+       ===================================================================== */
+
+    /* [1] PIXEL-GRID TYPE: Press Start 2P is drawn on an 8 px grid; any size that is not a multiple of 8
+       smears the glyphs (the TEAMS chip "8" read as "&"). Every pixel-font size snapped to 8/16/24/32/40/48. */
+    .h-title { font-size: 40px; }
+    .h-sub { font-size: 16px; }
+    .h-cta { font-size: 16px; padding: 16px 22px; }
+    .h-cta .slots { font-size: 8px; }
+    .nav-btn { font-size: 8px; letter-spacing: 1px; }
+    .countdown-label, .cd-text, .slot-meter .sm-row, .base-pool-label, .ics-link,
+    .road-node .rn-date, .chip .label, .team-card .t-sub, .t-roster .r-title, .caster-role,
+    .caster-links a, footer .f-title, footer .f-links a, .dist-item .place { font-size: 8px; }
+    .cd-num { font-size: 32px; }
+    .cd-live { font-size: 16px; }
+    .section-title { font-size: 32px; }
+    .chip .value { font-size: 16px; line-height: 1.5; }
+    .date-highlight { font-size: 16px; }
+    .road-node .rn-stage { font-size: 16px; }
+    .total-prize { font-size: 48px; }
+    .dist-item .percent { font-size: 16px; }
+    .team-card .t-name { font-size: 8px; line-height: 2; }
+    .t-banner .t-mark { font-size: 40px; }
+    .caster-name { font-size: 16px; }
+    .rule-box { font-size: 16px; line-height: 1.8; }
+    .big-btn { font-size: 16px; }
+    .steps li::before { font-size: 16px; }
+    @media (max-width: 900px) { .h-title { font-size: 24px; } .section-title { font-size: 24px; } .total-prize { font-size: 40px; } }
+    @media (max-width: 560px) {
+        .h-title { font-size: 16px; } .h-sub, .h-cta { font-size: 8px; } .cd-num { font-size: 16px; }
+        .section-title { font-size: 16px; } .chip .value, .date-highlight, .road-node .rn-stage { font-size: 8px; line-height: 2; }
+        .total-prize { font-size: 32px; } .rule-box, .big-btn, .caster-name { font-size: 8px; } .caster-name { line-height: 2; }
+        .dist-item .percent { font-size: 16px; }
+    }
+
+    /* [2] CHAPTER HEADERS: red chapter number + a long ember rule instead of the short stub */
+    body { counter-reset: chapter; }
+    .section-title { counter-increment: chapter; display: flex; align-items: baseline; gap: 18px; }
+    .section-title::before {
+        content: counter(chapter, decimal-leading-zero);
+        font-size: 16px; color: var(--red-bright); text-shadow: 2px 2px 0 #1f0202; flex-shrink: 0;
+    }
+    .title-rule {
+        width: 100%; height: 3px; box-shadow: none; position: relative;
+        background: linear-gradient(90deg, var(--red) 0, var(--red) 140px, rgba(168,22,22,0.35) 140px, rgba(46,110,58,0.25) 55%, transparent 100%);
+    }
+    .title-rule::before { content: ''; position: absolute; left: 136px; top: -3px; width: 9px; height: 9px; background: #ffb347;
+        box-shadow: 0 0 10px 3px rgba(255,150,40,0.6); animation: emberFlick 0.5s steps(2) infinite alternate; }
+
+    /* [3] NAV: one quiet bar, tabs instead of 7 boxes, the section you are in lights up (scrollspy) */
+    .nav-bar { gap: 0; padding: 0 10px; }
+    .nav-btn { background: none; border: 0; box-shadow: none; padding: 20px 18px 17px; color: var(--cream-dim);
+        border-bottom: 3px solid transparent; transition: color .12s, border-color .12s; }
+    .nav-btn.active { color: var(--green-bright); border-bottom-color: var(--green-bright); text-shadow: 0 0 10px var(--green-glow); }
+    .nav-btn.signup { background: var(--red); color: #fff; border: 3px solid var(--red-bright); padding: 12px 16px; margin: 8px 10px; align-self: center;
+        box-shadow: inset 0 0 0 2px rgba(0,0,0,0.35), 3px 3px 0 rgba(0,0,0,0.6); }
+    .nav-btn.discord { color: #9aa3ff; }
+    @media (hover: hover) and (pointer: fine) {
+        .nav-btn:hover { background: none; color: var(--cream); transform: none; box-shadow: none; border-bottom-color: var(--green-deep); }
+        .nav-btn.signup:hover { background: var(--red-bright); border-bottom-color: var(--red-bright); box-shadow: inset 0 0 0 2px rgba(0,0,0,0.35), 3px 3px 0 rgba(0,0,0,0.6); }
+        .nav-btn.discord:hover { background: none; color: #c3c8ff; border-bottom-color: var(--discord); }
+    }
+    .nav-btn:active { transform: none; box-shadow: none; }
+    @media (max-width: 640px) { .nav-btn { padding: 16px 12px 13px; } .nav-btn.signup { padding: 10px 12px; margin: 6px 6px; } }
+
+    /* [4] COUNTDOWN: blinking colons like a stadium clock */
+    .countdown-timer { align-items: flex-start; gap: 10px; }
+    .cd-colon { font-family: 'Press Start 2P', monospace; font-size: 32px; color: var(--green-deep); padding-top: 18px; animation: colonBlink 1s steps(1) infinite; }
+    @keyframes colonBlink { 50% { color: transparent; } }
+    .cd-box { min-width: 104px; padding: 18px 10px 12px; }
+    @media (max-width: 560px) { .cd-colon { font-size: 16px; padding-top: 16px; } .countdown-timer { gap: 4px; flex-wrap: nowrap; } .cd-box { min-width: 62px; } }
+
+    /* [5] TEAMS: every team gets its own colour light, bigger marks, the open slot becomes a slim bar under the grid */
+    .team-grid { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 900px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 460px) { .team-grid { grid-template-columns: 1fr; } }
+    .t-banner { height: 176px; background: radial-gradient(ellipse at 50% 58%, var(--acc-glow, #16301b) 0%, #071008 70%); }
+    .t-banner img { height: 128px; }
+    .team-card.locked { border-color: var(--acc-line, var(--green-deep)); }
+    .team-card .t-name { color: var(--acc, var(--green-bright)); }
+    .t-body { border-top-color: var(--acc-line, rgba(110,224,122,0.14)); }
+    @media (hover: hover) and (pointer: fine) {
+        .team-card.locked:hover { border-color: var(--acc, var(--green-bright)); box-shadow: 8px 8px 0 rgba(0,0,0,0.5), 0 0 26px var(--acc-glow, rgba(110,224,122,0.18)); }
+    }
+    .team-card.open { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 22px; padding: 18px; }
+    .team-card.open .t-banner { height: auto; }
+    .team-card.open .t-mark { font-size: 24px; }
+    .team-card.open .t-body { border: 0; padding: 0; text-align: left; }
+
+    /* [6] PRIZE: the pool counts up when you reach it, places wear their medal colour and show the base cut */
+    .dist-item.rank-1 .percent { color: #ffd97a; } .dist-item.rank-2 .percent { color: #dfe3e8; } .dist-item.rank-3 .percent { color: #e0a060; }
+    .dist-item.rank-1 { box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.55), 0 0 22px rgba(255,217,122,0.18); }
+    .dist-item .dist-team { color: var(--cream); }
+
+    /* [7] CASTERS: the desk sits in the arena instead of a flat green box; all three casters in one row */
+    .casters-inner { background: transparent; }
+    .casters-img { -webkit-mask-image: radial-gradient(ellipse 60% 62% at 50% 50%, #000 58%, transparent 100%);
+        mask-image: radial-gradient(ellipse 60% 62% at 50% 50%, #000 58%, transparent 100%); }
+    .casters-names-3 { grid-template-columns: repeat(3, 1fr); width: min(760px, 100%); margin-top: 10px; gap: 12px; }
+    .casters-names-3 > div { background: rgba(3,8,5,0.6); border: 3px solid var(--line); padding: 16px 8px 14px; box-shadow: 4px 4px 0 rgba(0,0,0,0.45); }
+    @media (max-width: 560px) { .casters-names-3 { grid-template-columns: 1fr; } }
+
+    /* [8] FOOTER FIX: the footer was painted UNDER the fixed background (no z-index) */
+    footer { position: relative; z-index: 3; background: rgba(2,5,3,0.9); }
+    /* [9] SMALL FIXES: sign-up steps no longer split around the bold words (li was flex, <b> became its own column),
+       Discord tab lost its stray blue underline, team names readable at 16 px, phone grids 2-up */
+    .nav-btn.discord { border-color: transparent; }
+    .team-card .t-name { font-size: 16px; line-height: 1.5; }
+    .t-body { min-height: 92px; display: flex; flex-direction: column; justify-content: center; }
+    @media (max-width: 1100px) { .team-card .t-name { font-size: 8px; line-height: 2; } }
+    @media (max-width: 560px) { .distribution-grid { grid-template-columns: repeat(2, 1fr); } .team-grid { grid-template-columns: repeat(2, 1fr); }
+        .t-banner { height: 130px; } .t-banner img { height: 88px; } .t-body { min-height: 70px; } }
 </style>
 </head>
 <body>
@@ -496,9 +610,9 @@
     <div class="countdown-container" role="timer" aria-label="Countdown to Rumble in the Jungle VI">
         <div class="countdown-label" id="cd-label">SIGN-UPS CLOSE IN</div>
         <div class="countdown-timer" id="countdown">
-            <div class="cd-box"><div class="cd-num" id="cd-d">--</div><div class="cd-text">DAYS</div></div>
-            <div class="cd-box"><div class="cd-num" id="cd-h">--</div><div class="cd-text">HRS</div></div>
-            <div class="cd-box"><div class="cd-num" id="cd-m">--</div><div class="cd-text">MIN</div></div>
+            <div class="cd-box"><div class="cd-num" id="cd-d">--</div><div class="cd-text">DAYS</div></div><span class="cd-colon" aria-hidden="true">:</span>
+            <div class="cd-box"><div class="cd-num" id="cd-h">--</div><div class="cd-text">HRS</div></div><span class="cd-colon" aria-hidden="true">:</span>
+            <div class="cd-box"><div class="cd-num" id="cd-m">--</div><div class="cd-text">MIN</div></div><span class="cd-colon" aria-hidden="true">:</span>
             <div class="cd-box"><div class="cd-num" id="cd-s">--</div><div class="cd-text">SEC</div></div>
         </div>
         <div class="slot-meter">
@@ -530,7 +644,7 @@
                     &nbsp; <a href="#" id="ics-btn" class="ics-link">+ ADD TO CALENDAR</a>
                 </p>
                 <div class="chips">
-                    <div class="chip"><span class="label">TEAMS</span><span class="value">8</span></div>
+                    <div class="chip"><span class="label">TEAMS</span><span class="value">EIGHT</span></div>
                     <div class="chip"><span class="label">MODE</span><span class="value">ABILITY DRAFT</span></div>
                     <div class="chip"><span class="label">FORMAT</span><span class="value">DOUBLE ELIM</span></div>
                     <div class="chip"><span class="label">SERVER</span><span class="value">EU WEST</span></div>
@@ -565,17 +679,17 @@
             <div class="prize-shade"></div>
             <div class="about-inner" style="text-align:center">
                 <div class="base-pool-label">BASE POOL (HOST)</div>
-                <div class="total-prize">€300</div>
+                <div class="total-prize" id="pool-num" data-to="300">€300</div>
                 <div class="prize-historic">
                     <span class="star">★</span>
                     Historically ≈ €1000+ with community additions
                     <span class="star">★</span>
                 </div>
                 <div class="distribution-grid">
-                    <div class="dist-item rank-1"><span class="place">1ST</span><span class="percent">50%</span><span class="dist-team">TBD</span></div>
-                    <div class="dist-item rank-2"><span class="place">2ND</span><span class="percent">25%</span><span class="dist-team">TBD</span></div>
-                    <div class="dist-item rank-3"><span class="place">3RD</span><span class="percent">15%</span><span class="dist-team">TBD</span></div>
-                    <div class="dist-item rank-4"><span class="place">4TH</span><span class="percent">10%</span><span class="dist-team">TBD</span></div>
+                    <div class="dist-item rank-1"><span class="place">1ST</span><span class="percent">50%</span><span class="dist-team">€150+</span></div>
+                    <div class="dist-item rank-2"><span class="place">2ND</span><span class="percent">25%</span><span class="dist-team">€75+</span></div>
+                    <div class="dist-item rank-3"><span class="place">3RD</span><span class="percent">15%</span><span class="dist-team">€45+</span></div>
+                    <div class="dist-item rank-4"><span class="place">4TH</span><span class="percent">10%</span><span class="dist-team">€30+</span></div>
                 </div>
                 <p class="pool-note-text">
                     <span class="heart">♥</span> Community donations push the pool past the base every
@@ -597,9 +711,9 @@
             <img class="card-bg" src="assets/scene_tunnel_1536.jpg" alt="" aria-hidden="true"><div class="card-shade"></div>
             <div class="signup-inner">
                 <ol class="steps">
-                    <li>Join the Discord — button below.</li>
-                    <li>Assemble your squad — exactly <b>5 players</b>, pick a team name you won't regret on stream.</li>
-                    <li>PM <b>blopp</b> on Discord with your team name and all 5 players. Done.</li>
+                    <li><span>Join the Discord — button below.</span></li>
+                    <li><span>Assemble your squad — exactly <b>5 players</b>, pick a team name you won't regret on stream.</span></li>
+                    <li><span>PM <b>blopp</b> on Discord with your team name and all 5 players. Done.</span></li>
                 </ol>
                 <div class="rule-box">
                     ONLY FULL TEAMS OF 5 ARE ACCEPTED.<br>
@@ -628,13 +742,14 @@
     <section id="casters" class="section-wrapper">
         <h2 class="section-title">YOUR CASTERS</h2>
         <div class="title-rule"></div>
-        <div class="casters-box px-frame">
+        <div class="casters-box px-frame has-bg">
+            <img class="card-bg" src="assets/scene_arenafloor_1536.jpg" alt="" aria-hidden="true"><div class="card-shade"></div>
             <div class="casters-inner">
                 <video class="casters-img" autoplay muted loop playsinline poster="assets/casters.png" aria-label="BloPP and Young Elodin at the caster desk" id="casters-vid">
                     <source src="assets/casters_anim_flat.mp4" type="video/mp4">
                     <img src="assets/casters.png" alt="BloPP and Young Elodin at the caster desk">
                 </video>
-                <div class="casters-names">
+                <div class="casters-names casters-names-3">
                     <div class="sg">
                         <div class="caster-name">BLOPP!</div>
                         <div class="caster-role">HOST &amp; CASTER</div>
@@ -650,8 +765,6 @@
                             <a href="https://www.twitch.tv/young_elodin" target="_blank" rel="noopener" title="Twitch">TWITCH</a>
                         </div>
                     </div>
-                </div>
-                <div class="casters-names casters-names-solo">
                     <div class="sg">
                         <div class="caster-name">TIARIN HINO</div>
                         <div class="caster-role">CASTER</div>
@@ -692,7 +805,7 @@
 
 <footer>
     <div class="f-title">RUMBLE IN THE JUNGLE VI</div>
-    OCT 17 — 18 &amp; 24 — 25 · 2026 · see you in the jungle
+    OCT 17 — 18 &amp; 24 — 25 · 2026 · hosted by blopp
     <div class="f-links">
         <a href="https://www.youtube.com/@BLOPPDOTA2" target="_blank" rel="noopener">YOUTUBE</a>
         <span>·</span>
@@ -741,10 +854,10 @@
 
     // === TEAMS (mirror of data/rumble6-teams.json; logo = optional, roster = optional) ===
     const TEAMS = [
-        { name: 'Playlist dlya blondinok', logo: 'assets/logos/blondinok.png', roster: null },
-        { name: 'Mallards', logo: 'assets/logos/mallards.png', roster: ['kitchen', '007shadow', 'thundertoss', 'CCrush', 'Sadpanda008'] },
-        { name: "Don't Peek", logo: 'assets/logos/dontpeek.png', roster: ['BigGoose', 'noertti', 'sifla', 'Fruugu', 'balll'] },
-        { name: 'Burger Boys', logo: 'assets/logos/burgerboys_v2.png', roster: ['Friscy', 'Dingus', 'Erik', 'Poof', 'Jynx'] },
+        { name: 'Playlist dlya blondinok', logo: 'assets/logos/blondinok.png', roster: null, acc: '#e04040' },
+        { name: 'Mallards', logo: 'assets/logos/mallards.png', roster: ['kitchen', '007shadow', 'thundertoss', 'CCrush', 'Sadpanda008'], acc: '#6fd060' },
+        { name: "Don't Peek", logo: 'assets/logos/dontpeek.png', roster: ['BigGoose', 'noertti', 'sifla', 'Fruugu', 'balll'], acc: '#e8a33d' },
+        { name: 'Burger Boys', logo: 'assets/logos/burgerboys_v2.png', roster: ['Friscy', 'Dingus', 'Erik', 'Poof', 'Jynx'], acc: '#5b8cff' },
     ];
     const SLOTS = 8;
     (function () {
@@ -753,6 +866,7 @@
         TEAMS.forEach(t => {
             const card = document.createElement('div');
             card.className = 'team-card locked';
+            if (t.acc) { card.style.setProperty('--acc', t.acc); card.style.setProperty('--acc-line', t.acc + '66'); card.style.setProperty('--acc-glow', t.acc + '38'); }
             const art = t.logo ? '<img src="' + t.logo + '" alt="">' : '<span class="t-mark">' + t.name.charAt(0).toUpperCase() + '</span>';
             const roster = t.roster
                 ? '<div class="t-roster"><div class="r-title">ROSTER</div>' + t.roster.map((p, i) => '<div class="r-name' + (i === 0 ? ' cpt' : '') + '">' + p + '</div>').join('') + '</div>'
@@ -858,6 +972,38 @@
             const my = (e.clientY - r.top) / r.height - 0.5;
             rim.style.transform = 'translate(' + Math.round(-mx * 16) + 'px,' + Math.round(-my * 10) + 'px)';
         });
+    })();
+
+    // [3] scrollspy: the nav tab of the section on screen lights up
+    (function () {
+        const links = [...document.querySelectorAll('.nav-bar a[href^="#"]')];
+        const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(en => {
+                if (!en.isIntersecting) return;
+                links.forEach(a => a.classList.remove('active'));
+                const a = map.get(en.target.id); if (a && !a.classList.contains('signup')) a.classList.add('active');
+            });
+        }, { rootMargin: '-45% 0px -50% 0px' });
+        map.forEach((a, id) => { const s = document.getElementById(id); if (s) io.observe(s); });
+    })();
+
+    // [6] prize pool counts up once, in whole steps, when it scrolls into view
+    (function () {
+        const el = document.getElementById('pool-num');
+        if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const to = +el.dataset.to; let done = false;
+        const io = new IntersectionObserver((en) => {
+            if (done || !en[0].isIntersecting) return; done = true; io.disconnect();
+            const t0 = performance.now(), dur = 900;
+            (function step(t) {
+                const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+                el.textContent = '€' + Math.round(to * e / 5) * 5;
+                if (k < 1) requestAnimationFrame(step); else el.textContent = '€' + to;
+            })(t0);
+        }, { threshold: 0.6 });
+        el.textContent = '€0'; io.observe(el);
+        setTimeout(() => { if (!done) { el.textContent = '€' + to; } }, 8000);
     })();
 </script>
 </body>
