@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<title>14.11. · Locations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --ink: #0e0c12;
+  --ink-2: #15121a;
+  --panel: #1a1620;
+  --line: #2d2733;
+  --line-soft: #221d28;
+  --bone: #efe7dc;
+  --fog: #a89fa6;
+  --mute: #736a73;
+  --wine: #b3324f;
+  --wine-deep: #5c1a2b;
+  --brass: #dcaa60;
+  --ok: #7fc59a;
+  --warn: #e0b35a;
+  --no: #d36a6a;
+  --disp: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--ink); color: var(--bone); font-family: var(--disp); font-size: 17px; line-height: 1.55; font-variation-settings: "opsz" 16; }
+a { color: inherit; }
+::selection { background: var(--wine); color: #fff; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; }
+.mono { font-family: var(--mono); }
+
+/* ---------- top bar ---------- */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(14,12,18,0.82); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line-soft); }
+.top .wrap { display: flex; align-items: center; gap: 22px; height: 56px; }
+.logo { font-weight: 800; letter-spacing: -0.02em; font-size: 18px; white-space: nowrap; }
+.logo span { color: var(--wine); }
+.top nav { margin-left: auto; display: flex; gap: 20px; font-size: 14px; color: var(--fog); overflow-x: auto; scrollbar-width: none; }
+.top nav::-webkit-scrollbar { display: none; }
+.top nav a { text-decoration: none; white-space: nowrap; transition: color .15s; }
+.top nav a:hover { color: var(--bone); }
+
+/* ---------- hero ---------- */
+.hero { position: relative; overflow: hidden; padding-block: 72px 64px; border-bottom: 1px solid var(--line-soft); }
+.hero::before { content: ''; position: absolute; inset: -20% -10% auto auto; width: 70vw; height: 70vw; max-width: 900px; max-height: 900px;
+  background: radial-gradient(circle at 60% 40%, rgba(179,50,79,0.35), rgba(92,26,43,0.12) 45%, transparent 70%); pointer-events: none; }
+.hero::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background-image: repeating-linear-gradient(115deg, transparent 0 22px, rgba(239,231,220,0.018) 22px 23px); }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--brass); }
+.date { position: relative; font-weight: 800; font-size: clamp(88px, 20vw, 232px); line-height: .82; letter-spacing: -0.055em; margin: 18px 0 10px; font-variation-settings: "opsz" 96; }
+.date .dot { color: var(--wine); }
+.date small { display: block; font-size: clamp(18px, 2.6vw, 28px); letter-spacing: -0.01em; font-weight: 400; color: var(--fog); margin-top: 18px; line-height: 1.2; }
+.hero p.lead { position: relative; max-width: 58ch; color: var(--fog); font-size: 19px; margin: 22px 0 0; }
+.hero p.lead b { color: var(--bone); font-weight: 600; }
+.facts { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 40px; }
+.facts div { background: var(--ink-2); padding: 16px 18px; }
+.facts .k { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
+.facts .v { font-size: 22px; font-weight: 600; margin-top: 4px; letter-spacing: -0.01em; }
+.facts .v em { font-style: normal; color: var(--brass); }
+@media (max-width: 720px) { .facts { grid-template-columns: 1fr 1fr; } }
+
+/* ---------- sections ---------- */
+section { padding-block: 72px 24px; scroll-margin-top: 60px; }
+h2 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.05; letter-spacing: -0.035em; font-weight: 800; margin: 10px 0 14px; text-wrap: balance; font-variation-settings: "opsz" 72; }
+.sub { color: var(--fog); max-width: 64ch; margin: 0 0 30px; }
+
+/* key findings */
+.findings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.finding { border-top: 2px solid var(--wine); padding-top: 16px; }
+.finding .n { font-family: var(--mono); font-size: 12px; color: var(--brass); }
+.finding h3 { font-size: 21px; line-height: 1.2; margin: 6px 0 8px; letter-spacing: -0.015em; }
+.finding p { margin: 0; color: var(--fog); font-size: 16px; }
+@media (max-width: 820px) { .findings { grid-template-columns: 1fr; } }
+
+/* capacity chart */
+.chart-box { background: var(--ink-2); border: 1px solid var(--line); padding: 22px 22px 14px; overflow-x: auto; }
+.chart { min-width: 620px; position: relative; }
+.crow { display: grid; grid-template-columns: 170px 1fr 150px; align-items: center; gap: 14px; height: 34px; }
+.crow .cn { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.crow .cn .r { font-family: var(--mono); font-size: 11px; color: var(--mute); margin-right: 6px; font-weight: 400; }
+.crow .track { position: relative; height: 34px; }
+.crow .bar { position: absolute; top: 12px; height: 10px; border-radius: 5px; background: linear-gradient(90deg, var(--wine-deep), var(--wine)); }
+.crow .bar.ref { background: repeating-linear-gradient(90deg, var(--fog) 0 6px, transparent 6px 10px); opacity: .7; }
+.crow .bar.small { background: linear-gradient(90deg, #3a3340, #5a5160); }
+.crow .cp { font-family: var(--mono); font-size: 12.5px; color: var(--fog); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.crow .cp b { color: var(--bone); font-weight: 500; }
+.guide150 { position: absolute; top: -6px; bottom: 26px; width: 0; border-left: 1px dashed var(--brass); }
+.guide150 span { position: absolute; top: -14px; left: 6px; font-family: var(--mono); font-size: 11px; color: var(--brass); white-space: nowrap; }
+.axis { display: grid; grid-template-columns: 170px 1fr 150px; gap: 14px; margin-top: 6px; }
+.axis .ticks { position: relative; height: 18px; border-top: 1px solid var(--line); }
+.axis .ticks span { position: absolute; top: 4px; transform: translateX(-50%); font-family: var(--mono); font-size: 11px; color: var(--mute); }
+.chart-note { color: var(--mute); font-size: 13px; margin: 12px 0 0; }
+
+/* filters + cards */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.chip { font: 500 14px var(--disp); color: var(--fog); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; transition: all .15s; }
+.chip:hover { color: var(--bone); border-color: var(--fog); }
+.chip[aria-pressed="true"] { background: var(--bone); color: var(--ink); border-color: var(--bone); }
+.cards { display: grid; gap: 14px; }
+.card[hidden] { display: none; }
+.card { background: var(--panel); border: 1px solid var(--line); display: grid; grid-template-columns: 88px 1fr; }
+.card.top3 { border-color: rgba(179,50,79,0.55); background: linear-gradient(180deg, rgba(179,50,79,0.08), var(--panel) 40%); }
+.card .rank { border-right: 1px solid var(--line); padding: 20px 0; text-align: center; }
+.card .rank .num { font-weight: 800; font-size: 40px; line-height: 1; letter-spacing: -0.04em; }
+.card.top3 .rank .num { color: var(--wine); }
+.card .rank .tag { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin-top: 8px; padding-inline: 6px; }
+.card .body { padding: 18px 22px 20px; min-width: 0; }
+.card .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+.card h3 { font-size: 25px; letter-spacing: -0.025em; line-height: 1.1; margin: 0; }
+.card .addr { color: var(--mute); font-size: 14px; }
+.card .vibe { color: var(--fog); margin: 8px 0 14px; font-size: 16px; }
+.specs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); margin-bottom: 14px; }
+.specs div { background: var(--ink-2); padding: 10px 12px; min-width: 0; }
+.specs .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+.specs .v { font-size: 15px; margin-top: 2px; line-height: 1.35; overflow-wrap: anywhere; }
+.specs .v.hi { color: var(--brass); font-weight: 600; }
+@media (max-width: 760px) { .specs { grid-template-columns: 1fr 1fr; } .card { grid-template-columns: 1fr; } .card .rank { border-right: 0; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; padding: 12px 18px; text-align: left; } .card .rank .tag { margin: 0; } }
+.pc { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 15px; }
+.pc div b { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2px; font-weight: 500; }
+.pc .pro b { color: var(--ok); } .pc .con b { color: var(--no); }
+.pc p { margin: 0; color: var(--fog); }
+@media (max-width: 600px) { .pc { grid-template-columns: 1fr; } }
+.foot { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line-soft); font-size: 14px; }
+.foot a { color: var(--bone); text-decoration: none; border-bottom: 1px solid var(--wine); }
+.foot a:hover { color: var(--brass); }
+.src { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--mute); }
+.q { display: inline-block; font-family: var(--mono); font-size: 10px; padding: 1px 6px; border-radius: 3px; margin-left: 4px; vertical-align: 1px; }
+.q.v { background: rgba(127,197,154,0.14); color: var(--ok); }
+.q.d { background: rgba(224,179,90,0.14); color: var(--warn); }
+.q.p { background: rgba(168,159,166,0.14); color: var(--fog); }
+
+/* call plan */
+.plan { display: grid; grid-template-columns: 1.1fr 1fr; gap: 26px; align-items: start; }
+@media (max-width: 860px) { .plan { grid-template-columns: 1fr; } }
+.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--line-soft); }
+.steps li::before { content: counter(s, decimal-leading-zero); font-family: var(--mono); color: var(--wine); font-size: 14px; padding-top: 4px; }
+.steps b { font-size: 18px; }
+.steps p { margin: 2px 0 0; color: var(--fog); font-size: 15px; }
+.mail { background: var(--ink-2); border: 1px solid var(--line); }
+.mail-head { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--line); gap: 10px; }
+.mail-head span { font-family: var(--mono); font-size: 12px; color: var(--fog); }
+.copy { margin-left: auto; font: 600 13px var(--disp); background: var(--wine); color: #fff; border: 0; border-radius: 999px; padding: 7px 14px; cursor: pointer; transition: background .15s, transform .1s; }
+.copy:hover { background: #c83d5c; } .copy:active { transform: scale(.97); }
+.mail pre { margin: 0; padding: 16px; white-space: pre-wrap; font: 14px/1.6 var(--mono); color: var(--bone); max-height: 520px; overflow: auto; }
+
+/* model explainer + out list */
+.explain { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.explain div { background: var(--ink-2); padding: 20px; }
+.explain h3 { margin: 0 0 6px; font-size: 19px; }
+.explain p { margin: 0; color: var(--fog); font-size: 15px; }
+.explain .price { font-family: var(--mono); color: var(--brass); font-size: 13px; margin-bottom: 8px; }
+@media (max-width: 820px) { .explain { grid-template-columns: 1fr; } }
+.out { columns: 2; column-gap: 32px; font-size: 15px; color: var(--fog); padding: 0; list-style: none; margin: 0; }
+.out li { break-inside: avoid; padding: 8px 0; border-bottom: 1px solid var(--line-soft); }
+.out li b { color: var(--bone); }
+@media (max-width: 700px) { .out { columns: 1; } }
+footer { padding-block: 60px 80px; color: var(--mute); font-size: 14px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="logo">14<span>.</span>11<span>.</span></div>
+    <nav>
+      <a href="#kurz">Kurzfassung</a>
+      <a href="#vergleich">Vergleich</a>
+      <a href="#locations">Locations</a>
+      <a href="#anrufen">Anrufplan</a>
+      <a href="#raus">Raus</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Location-Suche · Wien · Stand 23.09.2026</div>
+    <div class="date">14<span class="dot">.</span>11<span class="dot">.</span>
+      <small>Samstag, 2026. Rund 150 Leute, erst trinken, später selber auflegen.</small>
+    </div>
+    <p class="lead">Das Badeschiff will <b>2.600 €</b> für Trinkhalle und Laderaum. Hier sind die Alternativen: 12 Locations, die für so einen Abend realistisch sind, mit Kapazität, Anlage, Sperrstunde und Preismodell. Dazu der Anrufplan und eine fertige Anfrage-Mail.</p>
+    <div class="facts">
+      <div><div class="k">Gäste</div><div class="v">~150 <em>stehend</em></div></div>
+      <div><div class="k">Datum</div><div class="v">Sa 14.11.</div></div>
+      <div><div class="k">Musik</div><div class="v">selber auflegen</div></div>
+      <div><div class="k">Benchmark</div><div class="v"><em>2.600 €</em> Miete</div></div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+<section id="kurz">
+  <div class="eyebrow">Kurzfassung</div>
+  <h2>Drei Dinge, die die Suche verändern</h2>
+  <div class="findings">
+    <div class="finding">
+      <div class="n">01</div>
+      <h3>Mindestumsatz schlägt Miete</h3>
+      <p>Viele Clubs verlangen gar keine Raummiete, nur einen Mindestumsatz an der Bar. Wenn 150 Leute trinken, ist der oft schon mit den Getränken erreicht, die sowieso konsumiert werden. Nur die Differenz zahlt ihr drauf.</p>
+    </div>
+    <div class="finding">
+      <div class="n">02</div>
+      <h3>Pratersauna ist raus</h3>
+      <p>Der Club hat im Dezember 2025 zugesperrt, die Betreiberfirma ist im Jänner 2026 in Insolvenz. Seit Juli 2026 läuft nur der Garten als Pool-Bar tagsüber, der Innenraum ist nicht bespielbar.</p>
+    </div>
+    <div class="finding">
+      <div class="n">03</div>
+      <h3>Zuerst anrufen: Weberknecht, Auersperg, Laby</h3>
+      <p>Alle drei haben die richtige Größe für 150 und eine echte DJ-Anlage. Weberknecht mit Gewölbe bis 06:00, Club Auersperg ohne Miete ab 3.000 € Bar-Umsatz, Laby mit Pioneer-Mixer im Clubraum.</p>
+    </div>
+  </div>
+</section>
+
+<section id="vergleich">
+  <div class="eyebrow">Vergleich</div>
+  <h2>Wer passt für 150 Leute?</h2>
+  <p class="sub">Stehkapazität pro Location, laut eigener Website oder Eventverzeichnis. Die gestrichelte Linie ist eure Gästezahl. Wer links davon endet, ist für 150 zu klein.</p>
+  <div class="chart-box">
+    <div class="chart" id="chart"></div>
+    <p class="chart-note">Kapazitäten sind Richtwerte der Betreiber und Verzeichnisse, Preise ohne Gewähr. Nichts davon ist für den 14.11. bestätigt.</p>
+  </div>
+</section>
+
+<section id="locations">
+  <div class="eyebrow">Locations</div>
+  <h2>Die Kandidaten, beste zuerst</h2>
+  <p class="sub">Herkunft jeder Angabe: <span class="q v">V</span> von der Location selbst, <span class="q d">D</span> aus einem Eventverzeichnis, <span class="q p">P</span> aus einem Presseartikel (kann älter sein). Preise immer schriftlich bestätigen lassen.</p>
+  <div class="filters" role="group" aria-label="Filter">
+    <button class="chip" data-f="all" aria-pressed="true">Alle</button>
+    <button class="chip" data-f="club" aria-pressed="false">Clubs</button>
+    <button class="chip" data-f="bar" aria-pressed="false">Bar + Partyraum</button>
+    <button class="chip" data-f="space" aria-pressed="false">Eventräume</button>
+    <button class="chip" data-f="nomiete" aria-pressed="false">Ohne Raummiete</button>
+  </div>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section id="modell">
+  <div class="eyebrow">Wie Wien abrechnet</div>
+  <h2>Drei Preismodelle, drei Rechnungen</h2>
+  <div class="explain">
+    <div><div class="price">z. B. Badeschiff 2.600 €</div><h3>Raummiete</h3><p>Fixer Betrag für den Raum. Getränke zahlen Gäste oder ihr zusätzlich. Planbar, aber das Geld ist weg, egal wie viel getrunken wird.</p></div>
+    <div><div class="price">z. B. Auersperg 3.000 €, Celeste 650 €</div><h3>Mindestumsatz</h3><p>Keine Miete, aber die Bar muss einen Betrag umsetzen. Bei 150 Leuten reichen dafür rund 20 € Getränke pro Kopf. Wird er unterschritten, zahlt ihr die Differenz.</p></div>
+    <div><div class="price">z. B. All iN 29,40 € p. P.</div><h3>Getränkepauschale</h3><p>Fixer Preis pro Gast, dafür offene Bar. Teuer bei 150 Leuten (hier rund 4.400 €), aber Gäste zahlen nichts mehr selbst.</p></div>
+  </div>
+</section>
+
+<section id="anrufen">
+  <div class="eyebrow">Anrufplan</div>
+  <h2>Reihenfolge und Anfrage</h2>
+  <div class="plan">
+    <ol class="steps">
+      <li><div><b>Weberknecht</b><p>Gewölbekeller für 180 exklusiv am Samstag anfragen, Mindestumsatz und ob die Keller-Bar mit dabei ist. office@weberknecht.net · +43 650 4141696</p></div></li>
+      <li><div><b>Club Auersperg</b><p>3.000 € Bar-Mindestumsatz bestätigen und die Technikpauschale (500 bis 1.500 €) fix schriftlich. +43 670 188 8230</p></div></li>
+      <li><div><b>Café Bar Laby</b><p>Clubraum für 150, Höhe des Mindestumsatzes, Sperrstunde. cafe@laby.at · 0699 101 639 53</p></div></li>
+      <li><div><b>Celeste, dann Nordberg</b><p>Celeste als günstiger Underground-Club (Club + Jazzbar zusammen), Nordberg als sichere Rückfallebene ohne Miete.</p></div></li>
+      <li><div><b>Erste Zusage nehmen</b><p>November-Samstage vor Weihnachten gehen früh weg. Badeschiff bleibt der Fallback mit bekanntem Preis.</p></div></li>
+    </ol>
+    <div class="mail">
+      <div class="mail-head"><span>anfrage.txt</span><button class="copy" id="copy">Text kopieren</button></div>
+<pre id="mailtext">Betreff: Anfrage private Feier, Samstag 14. November 2026, ca. 150 Personen
+
+Hallo,
+
+wir planen eine private Geburtstagsfeier am Samstag, 14. November 2026, mit rund 150 Gästen (Stehparty) und würden gerne eure Location dafür exklusiv mieten.
+
+Ablauf: ab ca. 19:00 gemütlich trinken, später legen wir selbst auf (mehrere DJs aus dem Freundeskreis).
+
+Könnt ihr uns bitte folgendes sagen:
+1. Ist der 14.11.2026 noch frei, und welcher Raum passt für 150 Personen?
+2. Preismodell: Raummiete, Mindestumsatz oder Pauschale, und in welcher Höhe?
+3. Technik: welche Anlage und welches DJ-Setup ist vorhanden (CDJs, Mixer-Modell), oder sollen wir eigenes Equipment mitbringen?
+4. Bis wann dürfen wir bleiben (Sperrstunde)?
+5. Ist Security oder Garderobenpersonal verpflichtend, und was kostet das?
+6. Dürfen wir eigenes Essen oder Catering mitbringen?
+
+Danke und liebe Grüße</pre>
+    </div>
+  </div>
+</section>
+
+<section id="raus">
+  <div class="eyebrow">Geprüft und aussortiert</div>
+  <h2>Warum die üblichen Verdächtigen fehlen</h2>
+  <ul class="out">
+    <li><b>Pratersauna:</b> Club zu, Insolvenz Jänner 2026, nur Tages-Pool-Bar im Garten.</li>
+    <li><b>Flex, Grelle Forelle, SASS, B72, rhiz, Chelsea:</b> keine Privatvermietung auffindbar, samstags eigenes Programm.</li>
+    <li><b>Ost Klub:</b> seit 2014 geschlossen, heute Schwarzberg.</li>
+    <li><b>Schikaneder:</b> Bar nicht exklusiv mietbar, nur das Kino.</li>
+    <li><b>Salzbar:</b> Freitag und Samstag keine exklusive Miete.</li>
+    <li><b>Heuer am Karlsplatz:</b> innen nur 130, Restaurantpreise.</li>
+    <li><b>Club U:</b> Kapazität hängt am Garten, im November nutzlos.</li>
+    <li><b>Kramladen, Luftbad, Lillis Ballroom:</b> gut und teils gratis, aber max. 100 Leute. Plan B, falls es weniger werden.</li>
+  </ul>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">Recherche vom 23.09.2026 aus den Websites der Locations, Eventverzeichnissen (wofeiern, hierfeiern, eventlocations.com) und Presseartikeln. Nichts ist für den 14.11.2026 bestätigt, Preise ohne Gewähr.</div>
+</footer>
+
+<script>
+const V = [
+  { r: 1, t: 'club', nm: false, top: true, name: 'Weberknecht', addr: 'Lerchenfelder Gürtel 49, 1160', cap: [100, 180], capTxt: 'Gewölbe 180 · gesamt 600',
+    vibe: 'Gürtel-Club mit großem Gewölbekeller als Dancefloor, dazu Lounge, Barbereich und Atelier.',
+    specs: [['Kapazität', 'Gewölbe 350 m², 180 Pers.', 'd'], ['Anlage', 'modernes DJ-Pult, Profi-Sound + Licht', 'd'], ['Sperrstunde', 'bis 06:00', 'v', true], ['Preis', 'auf Anfrage', '']],
+    pro: 'Perfekte Größe, echter Club-Aufbau, offen bis 06:00. Externe DJs und Catering erlaubt.',
+    con: 'Kein Preis veröffentlicht. Samstags evtl. eigenes Programm, also Keller exklusiv anfragen.',
+    mail: 'office@weberknecht.net', tel: '+436504141696', telTxt: '+43 650 4141696', web: 'https://weberknecht.at/' },
+  { r: 2, t: 'club', nm: true, top: true, name: 'Club Auersperg', addr: 'Palais Auersperg, Auerspergstraße 1, 1080', cap: [100, 250], capTxt: 'bis 250 · Hauptraum 175 m²',
+    vibe: 'Club-Bar im Palais: drei Räume, eigener Dancefloor, private Atmosphäre mit Stil.',
+    specs: [['Kapazität', '301 m², 3 Räume, bis 250', 'd'], ['Anlage', 'Mischpult/DJ-Anlage, Licht, eigener DJ ok', 'd'], ['Sperrstunde', 'keine Sperrstunde für Musik', 'd'], ['Preis', '0 € Miete, 3.000 € Bar-Mindestumsatz + Technik 500–1.500 €', 'd', true]],
+    pro: 'Keine Miete, die 3.000 € Umsatz schaffen 150 Trinkende locker. Eigene Torte und Essen erlaubt.',
+    con: 'Eher schick als underground. Technikpauschale kann nach oben gehen, Reinigung ab 240 €.',
+    tel: '+436701888230', telTxt: '+43 670 188 8230', web: 'https://www.eventlocations.com/en/venues/club-auersperg-vienna' },
+  { r: 3, t: 'bar', nm: true, top: true, name: 'Café Bar Laby', addr: 'Ottakringer Straße 80, 1170', cap: [50, 260], capTxt: 'Clubraum 50–260',
+    vibe: 'Grätzl-Bar vorne, richtiger Clubraum dahinter, teilbar in zwei Bereiche.',
+    specs: [['Kapazität', 'Club 50–260, gesamt 300', 'v'], ['Anlage', 'Profi-Anlage, Pioneer DJ-Mixer, Nebel, Beamer', 'v', true], ['Sperrstunde', 'nicht angegeben', ''], ['Preis', 'Mindestumsatz, Höhe auf Anfrage', 'v']],
+    pro: 'Richtige Größe und ein DJ-Setup, das genau für Leute gemacht ist, die selber auflegen.',
+    con: 'Etwas außerhalb im 17. Sperrstunde unbekannt.',
+    mail: 'cafe@laby.at', tel: '+4369910163953', telTxt: '0699 101 639 53', web: 'https://www.laby.at/mieten' },
+  { r: 4, t: 'space', nm: true, name: 'Nordberg', addr: 'Nordbergstraße 12, 1090', cap: [60, 160], capTxt: 'Club + Lounge 60–160',
+    vibe: 'Moderne Partylocation, die genau für private Feiern gebaut ist.',
+    specs: [['Kapazität', 'Clubraum + Lounge 60–160', 'v'], ['Anlage', 'Sound + Licht, eigene Musik oder DJ', 'v'], ['Sperrstunde', 'nicht angegeben', ''], ['Preis', '0 € Miete, nur Mindestumsatz', 'v', true]],
+    pro: 'Ohne Miete, auf genau diese Art Buchung eingestellt, Fotobox vorhanden.',
+    con: '150 ist am oberen Ende. Weniger echter Club. Konfetti verboten.',
+    mail: 'office@nordbergwien.at', tel: '+436641000973', telTxt: '+43 664 1000 973', web: 'https://www.nordberg.wien/partylocation/' },
+  { r: 5, t: 'club', nm: true, name: 'Celeste', addr: 'Hamburgerstraße 18, 1050', cap: [120, 200], capTxt: 'Club 120 + Jazzbar 40–60',
+    vibe: 'Underground-Club mit Jazzkeller, elektronische Nächte, Privat-Events im Kalender.',
+    specs: [['Kapazität', 'Club ~120, ganzes Haus ~200', 'p'], ['Anlage', 'Club-Anlage, DJ-Setup wahrscheinlich', ''], ['Sperrstunde', 'nicht angegeben', ''], ['Preis', 'Mindestumsatz 650 € Club + 450 € Jazzbar', 'p', true]],
+    pro: 'Wahrscheinlich der günstigste echte Club mit Underground-Credibility. Eigenes Buffet erlaubt.',
+    con: 'Zahlen aus einem älteren Artikel, bitte bestätigen. Für 150 braucht ihr beide Räume.',
+    mail: 'office@celeste.co.at', tel: '+4315865314', telTxt: '01 586 53 14', web: 'https://www.celeste.co.at/' },
+  { r: 6, t: 'club', nm: false, name: 'WERK', addr: 'Spittelauer Lände 12, 1090', cap: [100, 250], capTxt: '150+ laut alter Recherche',
+    vibe: 'Wiener Underground unter den Stadtbahnbögen, Industrial, zwei Floors.',
+    specs: [['Kapazität', '150+', 'p'], ['Anlage', 'Pioneer Club-PA', 'p'], ['Sperrstunde', 'Lizenz bis 06:00', 'p'], ['Preis', 'Miete geschätzt 1.500–2.500 €', 'p']],
+    pro: 'Echter Club-Sound, Kulturverein-Preise, U4 Spittelau vor der Tür.',
+    con: 'Samstag ist Programmtag. Anfragen nur übers Kontaktformular, Werte aus der alten Recherche.',
+    web: 'https://www.daswerk.org/contact' },
+  { r: 7, t: 'space', nm: false, name: 'All iN Club', addr: 'Stadtbahnbögen 90–91, 1090', cap: [50, 180], capTxt: '50–180, ideal 100',
+    vibe: 'Saubere Mietlocation im Stadtbahnbogen, zwei Räume, eine lange Bar.',
+    specs: [['Kapazität', '190 m², 50–180, ideal 100', 'v'], ['Anlage', 'Sound, Licht, Bühne, Laptop per Klinke', 'v'], ['Sperrstunde', 'bis 04:00', 'v'], ['Preis', '290 € Abend · Pauschale 29,40 € p. P.', 'v', true]],
+    pro: 'Günstigste bekannte Miete, transparente Preise, Fass-Angebote.',
+    con: 'Für 150 eng. DJ-Setup unklar, eigene CDJs oder Controller mitbringen.',
+    mail: 'info@allinclub.at', tel: '+4312365289', telTxt: '+43 1 236 52 89', web: 'https://allinclub.at/' },
+  { r: 8, t: 'bar', nm: false, name: 'Bolena', addr: 'Lange Gasse 61, 1080', cap: [50, 130], capTxt: 'Partyraum bis 130',
+    vibe: 'Weinbar mit eigenem Partyraum, bei Privatbuchung länger offen.',
+    specs: [['Kapazität', 'Partyraum bis 130', 'v'], ['Anlage', 'voll ausgestattete DJ-Anlage', 'p'], ['Sperrstunde', 'bis 03:00 (privat)', 'v'], ['Preis', '300 € Miete oder 1.000 € Umsatz am WE', 'p', true]],
+    pro: 'Sehr günstig, DJ-Anlage vorhanden.',
+    con: '130 ist knapp unter 150, Schluss um 03:00.',
+    mail: 'bolena@bolena.at', tel: '+436642108518', telTxt: '+43 664 210 85 18', web: 'https://www.bolena.at/' },
+  { r: 9, t: 'club', nm: false, name: 'FLUCC', addr: 'Praterstern, 1020', cap: [200, 350], capTxt: 'Deck ~200 · Wanne ~350',
+    vibe: 'Ikonischer Kulturclub am Praterstern mit echtem Club-Rig.',
+    specs: [['Kapazität', 'Deck ~200', 'p'], ['Anlage', 'Club-Anlage', ''], ['Sperrstunde', 'nicht angegeben', ''], ['Preis', 'Vermietung "eingeschränkt möglich"', 'v']],
+    pro: 'Wenn es klappt, der coolste Raum auf der Liste.',
+    con: 'Samstage sind fast sicher bespielt, eher ein Longshot.',
+    mail: 'booking@flucc.at', web: 'https://flucc.at/faq/' },
+  { r: 10, t: 'space', nm: false, name: 'WUK Projektraum', addr: 'Währinger Straße 59, 1090', cap: [100, 250], capTxt: 'Projektraum 250 m², 250',
+    vibe: 'Kulturzentrum mit mietbarem Projektraum, privat erlaubt.',
+    specs: [['Kapazität', '250 stehend', 'v'], ['Anlage', 'auf Anfrage', ''], ['Sperrstunde', 'unbekannt', ''], ['Preis', 'auf Anfrage inkl. Technik + Personal', 'v']],
+    pro: 'Flexible leere Fläche, Platz genug.',
+    con: 'Bar und Sound müsst ihr vermutlich selbst organisieren.',
+    mail: 'projektraum@wuk.at', tel: '+4369914040089', telTxt: '+43 699 140 40 089', web: 'https://www.wuk.at/en/offers/renting-spaces/' },
+  { r: 11, t: 'club', nm: true, name: '9Under', addr: 'Keller 9er Bräu, Liechtenwerderplatz 2, 1090', cap: [80, 120], capTxt: '~120', small: true,
+    vibe: 'Club-Keller unter dem 9er Bräu mit DJ- und Licht-Setup.',
+    specs: [['Kapazität', '~120', 'p'], ['Anlage', 'volles DJ- + Licht-Setup', 'p'], ['Sperrstunde', 'unbekannt', ''], ['Preis', '700 € Mindestumsatz', 'p', true]],
+    pro: 'Sehr günstig, falls es noch existiert.',
+    con: 'Website offline. Erst beim 9er Bräu anrufen, ob der Keller noch läuft. Etwas klein.' },
+  { r: 12, t: 'space', nm: false, name: 'Studio67', addr: 'Gumpendorfer Straße 67, 1060', cap: [50, 150], capTxt: 'bis 150',
+    vibe: 'Eventraum mit DJ-Booth, Lizenz bis 04:00.',
+    specs: [['Kapazität', 'bis 150 stehend', 'v'], ['Anlage', 'volle Anlage + DJ-Booth', 'v'], ['Sperrstunde', 'bis 04:00', 'v'], ['Preis', '299 €/h + 2.490 € Mindestumsatz', 'v']],
+    pro: 'Alles da, transparent bepreist.',
+    con: 'So teuer wie das Badeschiff oder teurer. Nur als Vergleich drin.',
+    mail: 'office@studio67.at', web: 'https://www.studio67.at/geburtstagsfeier-wien-eventlocation-mieten/' },
+];
+const REF = { name: 'Badeschiff (Referenz)', cap: [80, 200], capTxt: 'Trinkhalle 80–200 · Laderaum 120', price: '2.600 € Miete, Security Pflicht' };
+
+// ---------- capacity chart ----------
+(function () {
+  const max = 360, pct = v => (v / max * 100) + '%';
+  const rows = [{ ...REF, ref: true }].concat(V.map(v => ({ name: v.name, r: v.r, cap: v.cap, capTxt: v.capTxt, small: v.small, price: v.specs[3][1] })));
+  const el = document.getElementById('chart');
+  el.innerHTML = rows.map(x =>
+    '<div class="crow"><div class="cn">' + (x.r ? '<span class="r">' + String(x.r).padStart(2, '0') + '</span>' : '') + x.name + '</div>' +
+    '<div class="track"><div class="bar' + (x.ref ? ' ref' : x.small ? ' small' : '') + '" style="left:' + pct(x.cap[0]) + ';width:calc(' + pct(x.cap[1]) + ' - ' + pct(x.cap[0]) + ')"></div></div>' +
+    '<div class="cp"><b>' + x.cap[1] + '</b> max</div></div>').join('') +
+    '<div class="axis"><div></div><div class="ticks">' + [0, 50, 100, 150, 200, 250, 300, 350].map(t => '<span style="left:' + pct(t) + '">' + t + '</span>').join('') + '</div><div></div></div>';
+  // the 150 guide line spans the track column only
+  const track = el.querySelector('.track');
+  const line = document.createElement('div'); line.className = 'guide150';
+  const place = () => { const a = track.getBoundingClientRect(), c = el.getBoundingClientRect(); line.style.left = (a.left - c.left + a.width * 150 / max) + 'px'; };
+  line.innerHTML = '<span>150 Gäste</span>'; el.appendChild(line); place(); addEventListener('resize', place);
+})();
+
+// ---------- cards ----------
+const Q = { v: '<span class="q v">V</span>', d: '<span class="q d">D</span>', p: '<span class="q p">P</span>', '': '' };
+function card(v) {
+  const specs = v.specs.map(s => '<div><div class="k">' + s[0] + ' ' + Q[s[2]] + '</div><div class="v' + (s[3] ? ' hi' : '') + '">' + s[1] + '</div></div>').join('');
+  const links = [v.mail && '<a href="mailto:' + v.mail + '">' + v.mail + '</a>', v.tel && '<a href="tel:' + v.tel + '">' + v.telTxt + '</a>', v.web && '<a href="' + v.web + '" target="_blank" rel="noopener">Website</a>',
+    '<a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.name + ' ' + v.addr + ' Wien') + '" target="_blank" rel="noopener">Karte</a>'].filter(Boolean).join('');
+  const tag = v.top ? 'zuerst anrufen' : v.r === 12 ? 'nur Vergleich' : v.small ? 'Backup' : v.t === 'club' ? 'Club' : v.t === 'bar' ? 'Bar' : 'Eventraum';
+  return '<article class="card' + (v.top ? ' top3' : '') + '" data-t="' + v.t + '" data-nm="' + v.nm + '">' +
+    '<div class="rank"><div class="num">' + String(v.r).padStart(2, '0') + '</div><div class="tag">' + tag + '</div></div>' +
+    '<div class="body"><div class="head"><h3>' + v.name + '</h3><span class="addr">' + v.addr + '</span></div>' +
+    '<p class="vibe">' + v.vibe + '</p><div class="specs">' + specs + '</div>' +
+    '<div class="pc"><div class="pro"><b>Dafür</b><p>' + v.pro + '</p></div><div class="con"><b>Dagegen</b><p>' + v.con + '</p></div></div>' +
+    '<div class="foot">' + links + '</div></div></article>';
+}
+const box = document.getElementById('cards');
+box.innerHTML = V.map(card).join('');
+document.querySelector('.filters').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b));
+  const f = b.dataset.f;
+  box.querySelectorAll('.card').forEach(c => { c.hidden = !(f === 'all' || (f === 'nomiete' ? c.dataset.nm === 'true' : c.dataset.t === f)); });
+});
+
+// ---------- copy ----------
+document.getElementById('copy').addEventListener('click', async e => {
+  const t = document.getElementById('mailtext').textContent, b = e.currentTarget;
+  try { await navigator.clipboard.writeText(t); b.textContent = 'Kopiert'; }
+  catch (err) { const r = document.createRange(); r.selectNodeContents(document.getElementById('mailtext')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Markiert, Strg+C'; }
+  setTimeout(() => { b.textContent = 'Text kopieren'; }, 1800);
+});
+</script>
+</body>
+</html>
