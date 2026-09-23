@@ -143,7 +143,7 @@ h2 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.05; letter-spacing: -0.
 .q.p { background: rgba(168,159,166,0.14); color: var(--fog); }
 
 /* call plan */
-.plan { display: grid; grid-template-columns: 1.1fr 1fr; gap: 26px; align-items: start; }
+.plan { display: block; max-width: 760px; }
 @media (max-width: 860px) { .plan { grid-template-columns: 1fr; } }
 .steps { list-style: none; margin: 0; padding: 0; counter-reset: s; }
 .steps li { counter-increment: s; display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--line-soft); }
@@ -180,7 +180,7 @@ footer { padding-block: 60px 80px; color: var(--mute); font-size: 14px; }
     <nav>
       <a href="#vergleich">Vergleich</a>
       <a href="#locations">Locations</a>
-      <a href="#anrufen">Anrufplan</a>
+      <a href="#anfrage">Anfrage</a>
       <a href="#raus">Raus</a>
     </nav>
   </div>
@@ -192,7 +192,7 @@ footer { padding-block: 60px 80px; color: var(--mute); font-size: 14px; }
     <div class="date">14<span class="dot">.</span>11<span class="dot">.</span>
       <small>Samstag, 2026. Rund 150 Leute, erst trinken, später selber auflegen.</small>
     </div>
-    <p class="lead">Das Badeschiff will <b>2.600 €</b> für Trinkhalle und Laderaum. Hier sind die Alternativen: 12 Locations, die für so einen Abend realistisch sind, mit Kapazität, Anlage, Sperrstunde und Preismodell. Dazu der Anrufplan und eine fertige Anfrage-Mail.</p>
+    <p class="lead">Das Badeschiff will <b>2.600 €</b> für Trinkhalle und Laderaum. Hier sind die Alternativen: 12 Locations, die für so einen Abend realistisch sind, mit Kapazität, Anlage, Sperrstunde und Preismodell. Dazu eine fertige Anfrage-Mail.</p>
     <div class="facts">
       <div><div class="k">Gäste</div><div class="v">~150 <em>stehend</em></div></div>
       <div><div class="k">Datum</div><div class="v">Sa 14.11.</div></div>
@@ -238,17 +238,11 @@ footer { padding-block: 60px 80px; color: var(--mute); font-size: 14px; }
   </div>
 </section>
 
-<section id="anrufen">
-  <div class="eyebrow">Anrufplan</div>
-  <h2>Reihenfolge und Anfrage</h2>
+<section id="anfrage">
+  <div class="eyebrow">Anfrage</div>
+  <h2>Vorlage zum Rausschicken</h2>
   <div class="plan">
-    <ol class="steps">
-      <li><div><b>Weberknecht</b><p>Gewölbekeller für 180 exklusiv am Samstag anfragen, Mindestumsatz und ob die Keller-Bar mit dabei ist. office@weberknecht.net · +43 650 4141696</p></div></li>
-      <li><div><b>Club Auersperg</b><p>3.000 € Bar-Mindestumsatz bestätigen und die Technikpauschale (500 bis 1.500 €) fix schriftlich. +43 670 188 8230</p></div></li>
-      <li><div><b>Café Bar Laby</b><p>Clubraum für 150, Höhe des Mindestumsatzes, Sperrstunde. cafe@laby.at · 0699 101 639 53</p></div></li>
-      <li><div><b>Celeste, dann Nordberg</b><p>Celeste als günstiger Underground-Club (Club + Jazzbar zusammen), Nordberg als sichere Rückfallebene ohne Miete.</p></div></li>
-      <li><div><b>Erste Zusage nehmen</b><p>November-Samstage vor Weihnachten gehen früh weg. Badeschiff bleibt der Fallback mit bekanntem Preis.</p></div></li>
-    </ol>
+    
     <div class="mail">
       <div class="mail-head"><span>anfrage.txt</span><button class="copy" id="copy">Text kopieren</button></div>
 <pre id="mailtext">Betreff: Anfrage private Feier, Samstag 14. November 2026, ca. 150 Personen
