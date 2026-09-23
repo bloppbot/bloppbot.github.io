@@ -105,7 +105,13 @@ h2 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.05; letter-spacing: -0.
 .chip[aria-pressed="true"] { background: var(--bone); color: var(--ink); border-color: var(--bone); }
 .cards { display: grid; gap: 14px; }
 .card[hidden] { display: none; }
-.card { background: var(--panel); border: 1px solid var(--line); display: grid; grid-template-columns: 88px 1fr; }
+.card { background: var(--panel); border: 1px solid var(--line); display: grid; grid-template-columns: 88px 1fr 300px; }
+.card .map { border-left: 1px solid var(--line); position: relative; min-height: 220px; background: var(--ink-2); }
+.card .map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: invert(92%) hue-rotate(180deg) saturate(.55) brightness(.95); }
+.card .map .where { position: absolute; left: 10px; bottom: 10px; right: 10px; z-index: 2; pointer-events: none; font-size: 13px; font-weight: 600; background: rgba(14,12,18,.86); border: 1px solid var(--line); padding: 6px 10px; }
+.card .map .where span { display: block; font-family: var(--mono); font-weight: 400; font-size: 11px; color: var(--fog); }
+.bez { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--brass); }
+@media (max-width: 980px) { .card { grid-template-columns: 88px 1fr; } .card .map { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); min-height: 200px; } }
 .card.top3 { border-color: rgba(179,50,79,0.55); background: linear-gradient(180deg, rgba(179,50,79,0.08), var(--panel) 40%); }
 .card .rank { border-right: 1px solid var(--line); padding: 20px 0; text-align: center; }
 .card .rank .num { font-weight: 800; font-size: 40px; line-height: 1; letter-spacing: -0.04em; }
@@ -121,7 +127,7 @@ h2 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.05; letter-spacing: -0.
 .specs .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
 .specs .v { font-size: 15px; margin-top: 2px; line-height: 1.35; overflow-wrap: anywhere; }
 .specs .v.hi { color: var(--brass); font-weight: 600; }
-@media (max-width: 760px) { .specs { grid-template-columns: 1fr 1fr; } .card { grid-template-columns: 1fr; } .card .rank { border-right: 0; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; padding: 12px 18px; text-align: left; } .card .rank .tag { margin: 0; } }
+@media (max-width: 760px) { .specs { grid-template-columns: 1fr 1fr; } .card { grid-template-columns: 1fr; } .card .map { grid-column: auto; } .card .rank { border-right: 0; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; padding: 12px 18px; text-align: left; } .card .rank .tag { margin: 0; } }
 .pc { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 15px; }
 .pc div b { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2px; font-weight: 500; }
 .pc .pro b { color: var(--ok); } .pc .con b { color: var(--no); }
@@ -172,7 +178,6 @@ footer { padding-block: 60px 80px; color: var(--mute); font-size: 14px; }
   <div class="wrap">
     <div class="logo">14<span>.</span>11<span>.</span></div>
     <nav>
-      <a href="#kurz">Kurzfassung</a>
       <a href="#vergleich">Vergleich</a>
       <a href="#locations">Locations</a>
       <a href="#anrufen">Anrufplan</a>
@@ -198,28 +203,6 @@ footer { padding-block: 60px 80px; color: var(--mute); font-size: 14px; }
 </div>
 
 <main class="wrap">
-
-<section id="kurz">
-  <div class="eyebrow">Kurzfassung</div>
-  <h2>Drei Dinge, die die Suche verändern</h2>
-  <div class="findings">
-    <div class="finding">
-      <div class="n">01</div>
-      <h3>Mindestumsatz schlägt Miete</h3>
-      <p>Viele Clubs verlangen gar keine Raummiete, nur einen Mindestumsatz an der Bar. Wenn 150 Leute trinken, ist der oft schon mit den Getränken erreicht, die sowieso konsumiert werden. Nur die Differenz zahlt ihr drauf.</p>
-    </div>
-    <div class="finding">
-      <div class="n">02</div>
-      <h3>Pratersauna ist raus</h3>
-      <p>Der Club hat im Dezember 2025 zugesperrt, die Betreiberfirma ist im Jänner 2026 in Insolvenz. Seit Juli 2026 läuft nur der Garten als Pool-Bar tagsüber, der Innenraum ist nicht bespielbar.</p>
-    </div>
-    <div class="finding">
-      <div class="n">03</div>
-      <h3>Zuerst anrufen: Weberknecht, Auersperg, Laby</h3>
-      <p>Alle drei haben die richtige Größe für 150 und eine echte DJ-Anlage. Weberknecht mit Gewölbe bis 06:00, Club Auersperg ohne Miete ab 3.000 € Bar-Umsatz, Laby mit Pioneer-Mixer im Clubraum.</p>
-    </div>
-  </div>
-</section>
 
 <section id="vergleich">
   <div class="eyebrow">Vergleich</div>
@@ -404,18 +387,23 @@ const REF = { name: 'Badeschiff (Referenz)', cap: [80, 200], capTxt: 'Trinkhalle
 })();
 
 // ---------- cards ----------
+const BEZ = {"1010": "1. Innere Stadt", "1020": "2. Leopoldstadt", "1050": "5. Margareten", "1060": "6. Mariahilf", "1080": "8. Josefstadt", "1090": "9. Alsergrund", "1160": "16. Ottakring", "1170": "17. Hernals"};
 const Q = { v: '<span class="q v">V</span>', d: '<span class="q d">D</span>', p: '<span class="q p">P</span>', '': '' };
 function card(v) {
   const specs = v.specs.map(s => '<div><div class="k">' + s[0] + ' ' + Q[s[2]] + '</div><div class="v' + (s[3] ? ' hi' : '') + '">' + s[1] + '</div></div>').join('');
   const links = [v.mail && '<a href="mailto:' + v.mail + '">' + v.mail + '</a>', v.tel && '<a href="tel:' + v.tel + '">' + v.telTxt + '</a>', v.web && '<a href="' + v.web + '" target="_blank" rel="noopener">Website</a>',
     '<a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.name + ' ' + v.addr + ' Wien') + '" target="_blank" rel="noopener">Karte</a>'].filter(Boolean).join('');
   const tag = v.top ? 'zuerst anrufen' : v.r === 12 ? 'nur Vergleich' : v.small ? 'Backup' : v.t === 'club' ? 'Club' : v.t === 'bar' ? 'Bar' : 'Eventraum';
+  const plz = (v.addr.match(/\b1\d{2}0\b/) || [''])[0], bez = BEZ[plz] || '';
+  const q = encodeURIComponent(v.addr + ', Wien');
+  const map = '<div class="map"><iframe loading="lazy" title="Karte ' + v.name + '" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=' + q + '&z=15&output=embed"></iframe>' +
+    '<div class="where">' + v.name + '<span>' + (bez ? bez + ' · ' : '') + v.addr + '</span></div></div>';
   return '<article class="card' + (v.top ? ' top3' : '') + '" data-t="' + v.t + '" data-nm="' + v.nm + '">' +
     '<div class="rank"><div class="num">' + String(v.r).padStart(2, '0') + '</div><div class="tag">' + tag + '</div></div>' +
-    '<div class="body"><div class="head"><h3>' + v.name + '</h3><span class="addr">' + v.addr + '</span></div>' +
+    '<div class="body"><div class="bez">' + bez + '</div><div class="head"><h3>' + v.name + '</h3><span class="addr">' + v.addr + '</span></div>' +
     '<p class="vibe">' + v.vibe + '</p><div class="specs">' + specs + '</div>' +
     '<div class="pc"><div class="pro"><b>Dafür</b><p>' + v.pro + '</p></div><div class="con"><b>Dagegen</b><p>' + v.con + '</p></div></div>' +
-    '<div class="foot">' + links + '</div></div></article>';
+    '<div class="foot">' + links + '</div></div>' + map + '</article>';
 }
 const box = document.getElementById('cards');
 box.innerHTML = V.map(card).join('');
