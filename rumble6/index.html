@@ -573,6 +573,69 @@
     @media (max-width: 1100px) { .team-card .t-name { font-size: 8px; line-height: 2; } }
     @media (max-width: 560px) { .distribution-grid { grid-template-columns: repeat(2, 1fr); } .team-grid { grid-template-columns: repeat(2, 1fr); }
         .t-banner { height: 130px; } .t-banner img { height: 88px; } .t-body { min-height: 70px; } }
+    /* [F] FORMAT: groups panel + drawn double-elimination bracket */
+    .fmt-lead { font-size: 1.25rem; color: var(--cream-dim); margin-bottom: 26px; }
+    .fmt-lead b { color: var(--cream); font-weight: normal; }
+    .fmt-stage { background: rgba(8,18,9,0.88); border: 3px solid var(--line); box-shadow: 6px 6px 0 rgba(0,0,0,0.45); padding: 26px 24px 24px; position: relative; }
+    .fmt-stage + .fmt-stage { margin-top: 30px; }
+    .fmt-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 18px; margin-bottom: 20px; }
+    .fmt-day { font-family: 'Press Start 2P', monospace; font-size: 8px; color: #1f0202; background: #ffb347; padding: 7px 9px 6px; box-shadow: 3px 3px 0 rgba(0,0,0,0.6); }
+    .fmt-name { font-family: 'Press Start 2P', monospace; font-size: 16px; color: var(--cream); text-shadow: 3px 3px 0 rgba(0,0,0,0.8); }
+    .fmt-sub { font-size: 1.15rem; color: var(--cream-dim); }
+
+    .groups { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .grp { border: 3px solid var(--green-deep); background: rgba(3,8,5,0.7); }
+    .grp-title { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--green-bright); padding: 12px 14px 10px; border-bottom: 3px solid var(--line); display: flex; justify-content: space-between; }
+    .grp-title span { color: var(--cream-dim); }
+    .grp-row { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 10px; padding: 9px 14px; border-bottom: 2px solid rgba(27,53,33,0.6); }
+    .grp-row:last-child { border-bottom: 0; }
+    .grp-row .pl { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--cream); }
+    .grp-row .tm { color: var(--cream-dim); font-size: 1.15rem; letter-spacing: 1px; }
+    .grp-row .to { font-family: 'Press Start 2P', monospace; font-size: 8px; padding: 5px 7px 4px; }
+    .grp-row.ub .to { color: #04120a; background: var(--green-bright); box-shadow: 0 0 10px var(--green-glow); }
+    .grp-row.lb .to { color: #fff; background: var(--red); }
+    .rr { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 1.1rem; color: var(--cream-dim); }
+    .rr-pips { display: flex; gap: 6px; }
+    .rr-pips i { width: 44px; text-align: center; font-style: normal; font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--cream); background: var(--panel-2); border: 2px solid var(--line); padding: 6px 0 5px; }
+    .safe { margin-top: 16px; font-family: 'Press Start 2P', monospace; font-size: 8px; line-height: 2; color: var(--green-bright); text-shadow: 0 0 10px var(--green-glow); }
+
+    .bracket-scroll { overflow-x: auto; padding-bottom: 8px; margin: 0 -6px; }
+    .bracket { position: relative; min-width: 1000px; padding: 0 6px; }
+    .bk-days { display: grid; grid-template-columns: 3fr 1fr 2fr; gap: 16px; margin-bottom: 16px; }
+    .bk-days div { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--cream-dim); border-bottom: 3px solid var(--line); padding-bottom: 10px; }
+    .bk-days div b { color: #ffb347; font-weight: normal; }
+    .bk-grid { position: relative; display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, auto); column-gap: 16px; row-gap: 14px; }
+    .bk-lane { font-family: 'Press Start 2P', monospace; font-size: 8px; align-self: end; padding-bottom: 2px; }
+    .bk-lane.ub { color: var(--green-bright); } .bk-lane.lb { color: var(--red-bright); }
+    .m { position: relative; z-index: 1; background: var(--panel); border: 3px solid var(--line); box-shadow: 4px 4px 0 rgba(0,0,0,0.5); transition: border-color .15s, box-shadow .15s; }
+    .m .mh { display: flex; justify-content: space-between; gap: 6px; font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--cream-dim); padding: 7px 8px 6px; border-bottom: 2px solid var(--line); background: rgba(0,0,0,0.3); }
+    .m .mh .bo { color: #ffb347; }
+    .m .mh t { font-family: 'VT323', monospace; font-size: 18px; line-height: 8px; color: #ffb347; margin-left: 6px; }
+    .m .mh { white-space: nowrap; align-items: center; }
+    .m .sl { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; font-size: 1.1rem; color: var(--cream); border-bottom: 2px solid rgba(27,53,33,0.55); }
+    .m .sl:last-child { border-bottom: 0; }
+    .m .sl em { font-style: normal; font-family: 'Press Start 2P', monospace; font-size: 8px; padding: 4px 5px 3px; }
+    .m .sl em.u { color: #04120a; background: var(--green-bright); } .m .sl em.l { color: #fff; background: var(--red); }
+    .m .sl.tbd { color: var(--cream-dim); }
+    .m.ub { border-color: var(--green-deep); } .m.lb { border-color: rgba(168,22,22,0.7); }
+    .m.gf { border-color: #ffb347; box-shadow: 4px 4px 0 rgba(0,0,0,0.5), 0 0 24px rgba(255,160,50,0.35); }
+    .m.gf .mh { color: #ffb347; }
+    @media (hover: hover) and (pointer: fine) {
+        .m:hover { border-color: var(--cream); box-shadow: 4px 4px 0 rgba(0,0,0,0.5), 0 0 18px rgba(240,230,210,0.25); }
+    }
+    .bk-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: visible; }
+    .bk-svg path { fill: none; stroke-width: 3; }
+    .bk-svg .w { stroke: var(--green-deep); } .bk-svg .d { stroke: rgba(168,22,22,0.75); stroke-dasharray: 6 5; }
+    .bk-svg .ember { fill: #ffb347; filter: drop-shadow(0 0 5px rgba(255,150,40,0.9)); }
+    .bk-legend { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 20px; font-size: 1.1rem; color: var(--cream-dim); }
+    .bk-legend span::before { content: ''; display: inline-block; width: 26px; height: 3px; vertical-align: middle; margin-right: 10px; }
+    .bk-legend .lw::before { background: var(--green-deep); }
+    .bk-legend .lo::before { content: '✕'; width: auto; height: auto; color: var(--red-bright); margin-right: 8px; }
+    .fmt-tz { margin-top: 10px; font-size: 1.05rem; color: var(--cream-dim); opacity: .8; }
+    .bk-legend .ld::before { background: repeating-linear-gradient(90deg, rgba(168,22,22,0.9) 0 6px, transparent 6px 11px); }
+    .bk-hint { display: none; font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--cream-dim); margin-bottom: 12px; }
+    @media (max-width: 980px) { .bk-hint { display: block; } }
+    @media (max-width: 640px) { .groups { grid-template-columns: 1fr; } .fmt-stage { padding: 20px 14px 18px; } .fmt-name { font-size: 8px; line-height: 2; } }
 </style>
 </head>
 <body>
@@ -601,6 +664,7 @@
 
 <nav class="nav-bar">
     <a href="#info" class="nav-btn">THE RUMBLE</a>
+    <a href="#format" class="nav-btn">FORMAT</a>
     <a href="#teams" class="nav-btn">TEAMS</a>
     <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
     <a href="#signup" class="nav-btn signup">SIGN UP</a>
@@ -657,6 +721,70 @@
         </div>
     </section>
 </div>
+
+<!-- FORMAT:START -->
+<div class="container">
+    <section id="format" class="section-wrapper">
+        <h2 class="section-title">FORMAT</h2>
+        <div class="title-rule"></div>
+        <p class="fmt-lead"><b>Eight teams, two weekends.</b> The groups decide where you start in the bracket, nobody goes home on day one.</p>
+
+        <div class="fmt-stage">
+            <div class="fmt-head"><span class="fmt-day">DAY 1 &middot; SAT OCT 17</span><span class="fmt-name">GROUP STAGE</span><span class="fmt-sub">two groups of four &middot; everyone plays everyone &middot; best-of-one</span></div>
+            <div class="groups">
+                <div class="grp">
+                    <div class="grp-title">GROUP A <span>4 TEAMS</span></div>
+                    <div class="grp-row ub"><span class="pl">1ST</span><span class="tm">A1</span><span class="to">UPPER</span></div>
+                    <div class="grp-row ub"><span class="pl">2ND</span><span class="tm">A2</span><span class="to">UPPER</span></div>
+                    <div class="grp-row lb"><span class="pl">3RD</span><span class="tm">A3</span><span class="to">LOWER</span></div>
+                    <div class="grp-row lb"><span class="pl">4TH</span><span class="tm">A4</span><span class="to">LOWER</span></div>
+                </div>
+                <div class="grp">
+                    <div class="grp-title">GROUP B <span>4 TEAMS</span></div>
+                    <div class="grp-row ub"><span class="pl">1ST</span><span class="tm">B1</span><span class="to">UPPER</span></div>
+                    <div class="grp-row ub"><span class="pl">2ND</span><span class="tm">B2</span><span class="to">UPPER</span></div>
+                    <div class="grp-row lb"><span class="pl">3RD</span><span class="tm">B3</span><span class="to">LOWER</span></div>
+                    <div class="grp-row lb"><span class="pl">4TH</span><span class="tm">B4</span><span class="to">LOWER</span></div>
+                </div>
+            </div>
+            <div class="rr">6 rounds, one every hour:
+                <div class="rr-pips"><i>17</i><i>18</i><i>19</i><i>20</i><i>21</i><i>22</i></div>
+            </div>
+            <div class="safe">&#9733; TOP 2 START IN THE UPPER BRACKET &middot; 3RD + 4TH IN THE LOWER BRACKET</div>
+        </div>
+
+        <div class="fmt-stage">
+            <div class="fmt-head"><span class="fmt-day">OCT 18 + OCT 24 &mdash; 25</span><span class="fmt-name">PLAYOFFS</span><span class="fmt-sub">double elimination &middot; best-of-three &middot; grand final best-of-five</span></div>
+            <div class="bk-hint">SWIPE THE BRACKET &rarr;</div>
+            <div class="bracket-scroll">
+                <div class="bracket" id="bracket">
+                    <div class="bk-days"><div><b>SUN OCT 18</b> &middot; PLAYOFFS START</div><div><b>SAT OCT 24</b> &middot; SEMIS</div><div><b>SUN OCT 25</b> &middot; FINALS</div></div>
+                    <div class="bk-grid" id="bk-grid">
+                        <svg class="bk-svg" id="bk-svg" aria-hidden="true"></svg>
+
+                        <div class="bk-lane ub" style="grid-column:1; grid-row:1;">UPPER BRACKET</div>
+                        <div class="m ub" id="ub1" style="grid-column:1/3; grid-row:2;"><div class="mh"><span>UB SEMI<t>19:30</t></span><span class="bo">BO3</span></div><div class="sl">Group A 1st <em class="u">A1</em></div><div class="sl">Group B 2nd <em class="u">B2</em></div></div>
+                        <div class="m ub" id="ub2" style="grid-column:1/3; grid-row:3;"><div class="mh"><span>UB SEMI<t>19:30</t></span><span class="bo">BO3</span></div><div class="sl">Group B 1st <em class="u">B1</em></div><div class="sl">Group A 2nd <em class="u">A2</em></div></div>
+                        <div class="m ub" id="ubf" style="grid-column:4; grid-row:2/4; align-self:center;"><div class="mh"><span>UB FINAL<t>20:00</t></span><span class="bo">BO3</span></div><div class="sl tbd">UB semi winner</div><div class="sl tbd">UB semi winner</div></div>
+
+                        <div class="m gf" id="gf" style="grid-column:6; grid-row:2/6; align-self:center;"><div class="mh"><span>GRAND FINAL<t>19:30</t></span><span class="bo">BO5</span></div><div class="sl tbd">UB champion</div><div class="sl tbd">LB champion</div></div>
+
+                        <div class="bk-lane lb" style="grid-column:1; grid-row:4;">LOWER BRACKET</div>
+                        <div class="m lb" id="lb1" style="grid-column:1; grid-row:5;"><div class="mh"><span>LB R1<t>17:00</t></span><span class="bo">BO3</span></div><div class="sl">Group A 3rd <em class="l">A3</em></div><div class="sl">Group B 4th <em class="l">B4</em></div></div>
+                        <div class="m lb" id="lb2" style="grid-column:1; grid-row:6;"><div class="mh"><span>LB R1<t>17:00</t></span><span class="bo">BO3</span></div><div class="sl">Group B 3rd <em class="l">B3</em></div><div class="sl">Group A 4th <em class="l">A4</em></div></div>
+                        <div class="m lb" id="lq1" style="grid-column:2 / 4; grid-row:5;"><div class="mh"><span>LB QUARTER<t>22:00</t></span><span class="bo">BO3</span></div><div class="sl tbd">UB semi loser</div><div class="sl tbd">LB R1 winner</div></div>
+                        <div class="m lb" id="lq2" style="grid-column:2 / 4; grid-row:6;"><div class="mh"><span>LB QUARTER<t>22:00</t></span><span class="bo">BO3</span></div><div class="sl tbd">UB semi loser</div><div class="sl tbd">LB R1 winner</div></div>
+                        <div class="m lb" id="lbs" style="grid-column:4; grid-row:5/7; align-self:center;"><div class="mh"><span>LB SEMI<t>17:30</t></span><span class="bo">BO3</span></div><div class="sl tbd">LB quarter winner</div><div class="sl tbd">LB quarter winner</div></div>
+                        <div class="m lb" id="lbf" style="grid-column:5; grid-row:4/7; align-self:center;"><div class="mh"><span>LB FINAL<t>17:00</t></span><span class="bo">BO3</span></div><div class="sl tbd">UB final loser</div><div class="sl tbd">LB semi winner</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bk-legend"><span class="lw">win: move on</span><span class="ld">lose in the upper bracket: drop down, still alive</span><span class="lo">lose in the lower bracket: out</span></div>
+            <div class="fmt-tz">All times CEST. Sunday Oct 25 in CET, the clocks go back that night.</div>
+        </div>
+    </section>
+</div>
+<!-- FORMAT:END -->
 
 <div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/scene_gatepath_1536.png" data-lazy><source src="assets/loop_strip_gatepath.mp4" type="video/mp4"></video></div>
 
@@ -977,6 +1105,34 @@
             const my = (e.clientY - r.top) / r.height - 0.5;
             rim.style.transform = 'translate(' + Math.round(-mx * 16) + 'px,' + Math.round(-my * 10) + 'px)';
         });
+    })();
+
+    // [F] bracket connectors: drawn from the real card positions, redrawn on resize; one ember runs to the grand final
+    (function () {
+        const grid = document.getElementById('bk-grid'), svg = document.getElementById('bk-svg');
+        if (!grid || !svg) return;
+        const W = [['ub1','ubf'],['ub2','ubf'],['ubf','gf'],['lb1','lq1'],['lb2','lq2'],['lq1','lbs'],['lq2','lbs'],['lbs','lbf'],['lbf','gf']];
+        const D = 1;
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function box(id) { const g = grid.getBoundingClientRect(), r = document.getElementById(id).getBoundingClientRect();
+            return { l: r.left - g.left, r: r.right - g.left, t: r.top - g.top, b: r.bottom - g.top, cy: (r.top + r.bottom) / 2 - g.top, cx: (r.left + r.right) / 2 - g.left }; }
+        const R = v => Math.round(v) + 0.5;
+        function draw() {
+            let out = '';
+            W.forEach(([a, b]) => { const A = box(a), B = box(b), mx = R((A.r + B.l) / 2);
+                out += '<path class="w" d="M' + R(A.r) + ' ' + R(A.cy) + ' H' + mx + ' V' + R(B.cy) + ' H' + R(B.l) + '"/>'; });
+            { const A = box('ub2'), B = box('lq1'); const x = R(Math.max(A.l, B.l) + 40);
+              out += '<path class="d" d="M' + x + ' ' + R(A.b) + ' V' + R(B.t) + '"/>'; }
+            { const A = box('ubf'), B = box('lbf'); const y = R(B.t - 16);
+              out += '<path class="d" d="M' + R(A.cx) + ' ' + R(A.b) + ' V' + y + ' H' + R(B.cx) + ' V' + R(B.t) + '"/>'; }
+            const A = box('lbf'), G = box('gf'), mx = R((A.r + G.l) / 2);
+            const route = 'M' + R(A.r) + ' ' + R(A.cy) + ' H' + mx + ' V' + R(G.cy) + ' H' + R(G.l);
+            if (!reduce) out += '<rect class="ember" width="7" height="7" x="-3.5" y="-3.5"><animateMotion dur="2.6s" repeatCount="indefinite" path="' + route + '"/></rect>';
+            svg.innerHTML = out;
+        }
+        draw();
+        window.addEventListener('resize', draw);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
     })();
 
     // [3] scrollspy: the nav tab of the section on screen lights up
