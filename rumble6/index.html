@@ -664,10 +664,10 @@
 
 <nav class="nav-bar">
     <a href="#info" class="nav-btn">THE RUMBLE</a>
-    <a href="#format" class="nav-btn">FORMAT</a>
     <a href="#teams" class="nav-btn">TEAMS</a>
     <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
     <a href="#signup" class="nav-btn signup">SIGN UP</a>
+    <a href="#format" class="nav-btn">FORMAT</a>
     <a href="#casters" class="nav-btn">CASTERS</a>
     <a href="#lastrumble" class="nav-btn">LAST RUMBLE</a>
     <a href="https://discord.gg/sQFwGxFYFB" target="_blank" rel="noopener" class="nav-btn discord">DISCORD</a>
@@ -722,69 +722,7 @@
     </section>
 </div>
 
-<!-- FORMAT:START -->
-<div class="container">
-    <section id="format" class="section-wrapper">
-        <h2 class="section-title">FORMAT</h2>
-        <div class="title-rule"></div>
-        <p class="fmt-lead"><b>Eight teams, two weekends.</b> The groups decide where you start in the bracket, nobody goes home on day one.</p>
 
-        <div class="fmt-stage">
-            <div class="fmt-head"><span class="fmt-day">DAY 1 &middot; SAT OCT 17</span><span class="fmt-name">GROUP STAGE</span><span class="fmt-sub">two groups of four &middot; everyone plays everyone &middot; best-of-one</span></div>
-            <div class="groups">
-                <div class="grp">
-                    <div class="grp-title">GROUP A <span>4 TEAMS</span></div>
-                    <div class="grp-row ub"><span class="pl">1ST</span><span class="tm">A1</span><span class="to">UPPER</span></div>
-                    <div class="grp-row ub"><span class="pl">2ND</span><span class="tm">A2</span><span class="to">UPPER</span></div>
-                    <div class="grp-row lb"><span class="pl">3RD</span><span class="tm">A3</span><span class="to">LOWER</span></div>
-                    <div class="grp-row lb"><span class="pl">4TH</span><span class="tm">A4</span><span class="to">LOWER</span></div>
-                </div>
-                <div class="grp">
-                    <div class="grp-title">GROUP B <span>4 TEAMS</span></div>
-                    <div class="grp-row ub"><span class="pl">1ST</span><span class="tm">B1</span><span class="to">UPPER</span></div>
-                    <div class="grp-row ub"><span class="pl">2ND</span><span class="tm">B2</span><span class="to">UPPER</span></div>
-                    <div class="grp-row lb"><span class="pl">3RD</span><span class="tm">B3</span><span class="to">LOWER</span></div>
-                    <div class="grp-row lb"><span class="pl">4TH</span><span class="tm">B4</span><span class="to">LOWER</span></div>
-                </div>
-            </div>
-            <div class="rr">6 rounds, one every hour:
-                <div class="rr-pips"><i>17</i><i>18</i><i>19</i><i>20</i><i>21</i><i>22</i></div>
-            </div>
-            <div class="safe">&#9733; TOP 2 START IN THE UPPER BRACKET &middot; 3RD + 4TH IN THE LOWER BRACKET</div>
-        </div>
-
-        <div class="fmt-stage">
-            <div class="fmt-head"><span class="fmt-day">OCT 18 + OCT 24 &mdash; 25</span><span class="fmt-name">PLAYOFFS</span><span class="fmt-sub">double elimination &middot; best-of-three &middot; grand final best-of-five</span></div>
-            <div class="bk-hint">SWIPE THE BRACKET &rarr;</div>
-            <div class="bracket-scroll">
-                <div class="bracket" id="bracket">
-                    <div class="bk-days"><div><b>SUN OCT 18</b> &middot; PLAYOFFS START</div><div><b>SAT OCT 24</b> &middot; SEMIS</div><div><b>SUN OCT 25</b> &middot; FINALS</div></div>
-                    <div class="bk-grid" id="bk-grid">
-                        <svg class="bk-svg" id="bk-svg" aria-hidden="true"></svg>
-
-                        <div class="bk-lane ub" style="grid-column:1; grid-row:1;">UPPER BRACKET</div>
-                        <div class="m ub" id="ub1" style="grid-column:1/3; grid-row:2;"><div class="mh"><span>UB SEMI<t>19:30</t></span><span class="bo">BO3</span></div><div class="sl">Group A 1st <em class="u">A1</em></div><div class="sl">Group B 2nd <em class="u">B2</em></div></div>
-                        <div class="m ub" id="ub2" style="grid-column:1/3; grid-row:3;"><div class="mh"><span>UB SEMI<t>19:30</t></span><span class="bo">BO3</span></div><div class="sl">Group B 1st <em class="u">B1</em></div><div class="sl">Group A 2nd <em class="u">A2</em></div></div>
-                        <div class="m ub" id="ubf" style="grid-column:4; grid-row:2/4; align-self:center;"><div class="mh"><span>UB FINAL<t>20:00</t></span><span class="bo">BO3</span></div><div class="sl tbd">UB semi winner</div><div class="sl tbd">UB semi winner</div></div>
-
-                        <div class="m gf" id="gf" style="grid-column:6; grid-row:2/6; align-self:center;"><div class="mh"><span>GRAND FINAL<t>19:30</t></span><span class="bo">BO5</span></div><div class="sl tbd">UB champion</div><div class="sl tbd">LB champion</div></div>
-
-                        <div class="bk-lane lb" style="grid-column:1; grid-row:4;">LOWER BRACKET</div>
-                        <div class="m lb" id="lb1" style="grid-column:1; grid-row:5;"><div class="mh"><span>LB R1<t>17:00</t></span><span class="bo">BO3</span></div><div class="sl">Group A 3rd <em class="l">A3</em></div><div class="sl">Group B 4th <em class="l">B4</em></div></div>
-                        <div class="m lb" id="lb2" style="grid-column:1; grid-row:6;"><div class="mh"><span>LB R1<t>17:00</t></span><span class="bo">BO3</span></div><div class="sl">Group B 3rd <em class="l">B3</em></div><div class="sl">Group A 4th <em class="l">A4</em></div></div>
-                        <div class="m lb" id="lq1" style="grid-column:2 / 4; grid-row:5;"><div class="mh"><span>LB QUARTER<t>22:00</t></span><span class="bo">BO3</span></div><div class="sl tbd">UB semi loser</div><div class="sl tbd">LB R1 winner</div></div>
-                        <div class="m lb" id="lq2" style="grid-column:2 / 4; grid-row:6;"><div class="mh"><span>LB QUARTER<t>22:00</t></span><span class="bo">BO3</span></div><div class="sl tbd">UB semi loser</div><div class="sl tbd">LB R1 winner</div></div>
-                        <div class="m lb" id="lbs" style="grid-column:4; grid-row:5/7; align-self:center;"><div class="mh"><span>LB SEMI<t>17:30</t></span><span class="bo">BO3</span></div><div class="sl tbd">LB quarter winner</div><div class="sl tbd">LB quarter winner</div></div>
-                        <div class="m lb" id="lbf" style="grid-column:5; grid-row:4/7; align-self:center;"><div class="mh"><span>LB FINAL<t>17:00</t></span><span class="bo">BO3</span></div><div class="sl tbd">UB final loser</div><div class="sl tbd">LB semi winner</div></div>
-                    </div>
-                </div>
-            </div>
-            <div class="bk-legend"><span class="lw">win: move on</span><span class="ld">lose in the upper bracket: drop down, still alive</span><span class="lo">lose in the lower bracket: out</span></div>
-            <div class="fmt-tz">All times CEST. Sunday Oct 25 in CET, the clocks go back that night.</div>
-        </div>
-    </section>
-</div>
-<!-- FORMAT:END -->
 
 <div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/scene_gatepath_1536.png" data-lazy><source src="assets/loop_strip_gatepath.mp4" type="video/mp4"></video></div>
 
@@ -866,6 +804,70 @@
         </div>
     </section>
 </div>
+
+<!-- FORMAT:START -->
+<div class="container">
+    <section id="format" class="section-wrapper">
+        <h2 class="section-title">FORMAT</h2>
+        <div class="title-rule"></div>
+        <p class="fmt-lead"><b>Eight teams, two weekends.</b> The groups decide where you start in the bracket, nobody goes home on day one.</p>
+
+        <div class="fmt-stage">
+            <div class="fmt-head"><span class="fmt-day">DAY 1 &middot; SAT OCT 17</span><span class="fmt-name">GROUP STAGE</span><span class="fmt-sub">two groups of four &middot; everyone plays everyone &middot; best-of-one</span></div>
+            <div class="groups">
+                <div class="grp">
+                    <div class="grp-title">GROUP A <span>4 TEAMS</span></div>
+                    <div class="grp-row ub"><span class="pl">1ST</span><span class="tm">A1</span><span class="to">UPPER</span></div>
+                    <div class="grp-row ub"><span class="pl">2ND</span><span class="tm">A2</span><span class="to">UPPER</span></div>
+                    <div class="grp-row lb"><span class="pl">3RD</span><span class="tm">A3</span><span class="to">LOWER</span></div>
+                    <div class="grp-row lb"><span class="pl">4TH</span><span class="tm">A4</span><span class="to">LOWER</span></div>
+                </div>
+                <div class="grp">
+                    <div class="grp-title">GROUP B <span>4 TEAMS</span></div>
+                    <div class="grp-row ub"><span class="pl">1ST</span><span class="tm">B1</span><span class="to">UPPER</span></div>
+                    <div class="grp-row ub"><span class="pl">2ND</span><span class="tm">B2</span><span class="to">UPPER</span></div>
+                    <div class="grp-row lb"><span class="pl">3RD</span><span class="tm">B3</span><span class="to">LOWER</span></div>
+                    <div class="grp-row lb"><span class="pl">4TH</span><span class="tm">B4</span><span class="to">LOWER</span></div>
+                </div>
+            </div>
+            <div class="rr">6 rounds, one every hour:
+                <div class="rr-pips"><i>17</i><i>18</i><i>19</i><i>20</i><i>21</i><i>22</i></div>
+            </div>
+            <div class="safe">&#9733; TOP 2 START IN THE UPPER BRACKET &middot; 3RD + 4TH IN THE LOWER BRACKET</div>
+        </div>
+
+        <div class="fmt-stage">
+            <div class="fmt-head"><span class="fmt-day">OCT 18 + OCT 24 &mdash; 25</span><span class="fmt-name">PLAYOFFS</span><span class="fmt-sub">double elimination &middot; best-of-three &middot; grand final best-of-five</span></div>
+            <div class="bk-hint">SWIPE THE BRACKET &rarr;</div>
+            <div class="bracket-scroll">
+                <div class="bracket" id="bracket">
+                    <div class="bk-days"><div><b>SUN OCT 18</b> &middot; PLAYOFFS START</div><div><b>SAT OCT 24</b> &middot; SEMIS</div><div><b>SUN OCT 25</b> &middot; FINALS</div></div>
+                    <div class="bk-grid" id="bk-grid">
+                        <svg class="bk-svg" id="bk-svg" aria-hidden="true"></svg>
+
+                        <div class="bk-lane ub" style="grid-column:1; grid-row:1;">UPPER BRACKET</div>
+                        <div class="m ub" id="ub1" style="grid-column:1/3; grid-row:2;"><div class="mh"><span>UB SEMI<t>19:30</t></span><span class="bo">BO3</span></div><div class="sl">Group A 1st <em class="u">A1</em></div><div class="sl">Group B 2nd <em class="u">B2</em></div></div>
+                        <div class="m ub" id="ub2" style="grid-column:1/3; grid-row:3;"><div class="mh"><span>UB SEMI<t>19:30</t></span><span class="bo">BO3</span></div><div class="sl">Group B 1st <em class="u">B1</em></div><div class="sl">Group A 2nd <em class="u">A2</em></div></div>
+                        <div class="m ub" id="ubf" style="grid-column:4; grid-row:2/4; align-self:center;"><div class="mh"><span>UB FINAL<t>20:00</t></span><span class="bo">BO3</span></div><div class="sl tbd">UB semi winner</div><div class="sl tbd">UB semi winner</div></div>
+
+                        <div class="m gf" id="gf" style="grid-column:6; grid-row:2/6; align-self:center;"><div class="mh"><span>GRAND FINAL<t>19:30</t></span><span class="bo">BO5</span></div><div class="sl tbd">UB champion</div><div class="sl tbd">LB champion</div></div>
+
+                        <div class="bk-lane lb" style="grid-column:1; grid-row:4;">LOWER BRACKET</div>
+                        <div class="m lb" id="lb1" style="grid-column:1; grid-row:5;"><div class="mh"><span>LB R1<t>17:00</t></span><span class="bo">BO3</span></div><div class="sl">Group A 3rd <em class="l">A3</em></div><div class="sl">Group B 4th <em class="l">B4</em></div></div>
+                        <div class="m lb" id="lb2" style="grid-column:1; grid-row:6;"><div class="mh"><span>LB R1<t>17:00</t></span><span class="bo">BO3</span></div><div class="sl">Group B 3rd <em class="l">B3</em></div><div class="sl">Group A 4th <em class="l">A4</em></div></div>
+                        <div class="m lb" id="lq1" style="grid-column:2 / 4; grid-row:5;"><div class="mh"><span>LB QUARTER<t>22:00</t></span><span class="bo">BO3</span></div><div class="sl tbd">UB semi loser</div><div class="sl tbd">LB R1 winner</div></div>
+                        <div class="m lb" id="lq2" style="grid-column:2 / 4; grid-row:6;"><div class="mh"><span>LB QUARTER<t>22:00</t></span><span class="bo">BO3</span></div><div class="sl tbd">UB semi loser</div><div class="sl tbd">LB R1 winner</div></div>
+                        <div class="m lb" id="lbs" style="grid-column:4; grid-row:5/7; align-self:center;"><div class="mh"><span>LB SEMI<t>17:30</t></span><span class="bo">BO3</span></div><div class="sl tbd">LB quarter winner</div><div class="sl tbd">LB quarter winner</div></div>
+                        <div class="m lb" id="lbf" style="grid-column:5; grid-row:4/7; align-self:center;"><div class="mh"><span>LB FINAL<t>17:00</t></span><span class="bo">BO3</span></div><div class="sl tbd">UB final loser</div><div class="sl tbd">LB semi winner</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bk-legend"><span class="lw">win: move on</span><span class="ld">lose in the upper bracket: drop down, still alive</span><span class="lo">lose in the lower bracket: out</span></div>
+            <div class="fmt-tz">All times CEST. Sunday Oct 25 in CET, the clocks go back that night.</div>
+        </div>
+    </section>
+</div>
+<!-- FORMAT:END -->
 
 <div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/scene_arenafloor_1536.jpg" data-lazy><source src="assets/loop_strip_arena.mp4" type="video/mp4"></video></div>
 
@@ -1106,6 +1108,8 @@
             rim.style.transform = 'translate(' + Math.round(-mx * 16) + 'px,' + Math.round(-my * 10) + 'px)';
         });
     })();
+
+
 
     // [F] bracket connectors: drawn from the real card positions, redrawn on resize; one ember runs to the grand final
     (function () {
