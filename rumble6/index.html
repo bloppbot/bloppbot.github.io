@@ -375,6 +375,9 @@
     .t-roster .r-name { font-size: 1.15rem; color: var(--cream); line-height: 1.2; }
     .t-roster .r-name.cpt::after { content: ' ★'; color: var(--red-bright); }
     @media (hover: hover) and (pointer: fine) { .team-card.locked:hover .t-roster { opacity: 1; } }
+    .team-card.locked { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .team-card.locked.show .t-roster { opacity: 1; }
+    .team-card.locked:focus-visible { outline: 2px solid var(--acc, var(--green-bright)); outline-offset: 3px; }
     .team-card.open { border-style: dashed; border-color: var(--line); background: rgba(8,18,9,0.55); text-decoration: none; }
     .team-card.open .t-banner { background: none; }
     .team-card.open .t-name { color: var(--cream-dim); animation: pulse 2.6s ease-in-out infinite; }
@@ -733,7 +736,7 @@
         <p class="lead">
             <span id="teams-counter" class="date-highlight">0 TEAMS SIGNED UP · SIGN-UPS OPEN</span><br>
             <b>8 teams</b> play the main event. More than 8 sign-ups: some teams receive direct invites,
-            the rest settle it in the qualifiers on <b>OCT 10 + 11</b>. Hover a team for the roster.
+            the rest settle it in the qualifiers on <b>OCT 10 + 11</b>. Hover or tap a team for the roster.
         </p>
         <div class="team-grid" id="team-grid"></div>
     </section>
@@ -1009,6 +1012,16 @@
                 : '<div class="t-roster"><div class="r-title">ROSTER</div><div class="r-name">5 players locked in</div></div>';
             card.innerHTML = '<div class="t-banner">' + art + '</div><div class="t-body"><div class="t-name">' + t.name + '</div><div class="t-sub">'
                 + labels[t.status || 'signed'] + '</div></div>' + roster;
+            // tap/click toggles logo <-> roster (touch has no hover); one card open at a time
+            card.tabIndex = 0; card.setAttribute('role', 'button'); card.setAttribute('aria-expanded', 'false');
+            card.setAttribute('aria-label', t.name + ': show roster');
+            const toggle = () => {
+                const on = !card.classList.contains('show');
+                grid.querySelectorAll('.team-card.show').forEach(c => { c.classList.remove('show'); c.setAttribute('aria-expanded', 'false'); });
+                if (on) { card.classList.add('show'); card.setAttribute('aria-expanded', 'true'); }
+            };
+            card.addEventListener('click', toggle);
+            card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
             grid.appendChild(card);
         });
         // one open card, uncapped: sign-ups never look "full"
