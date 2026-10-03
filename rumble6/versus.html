@@ -92,17 +92,21 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
 .names-row .sep{flex:0 0 120px;font-family:'Press Start 2P',monospace;font-size:28px;text-align:center;color:var(--cream);text-shadow:var(--px) var(--px) 0 rgba(0,0,0,.75);}
 .score{flex:0 0 150px;font-family:'Press Start 2P',monospace;font-size:40px;text-align:center;color:var(--cream);text-shadow:4px 4px 0 rgba(0,0,0,.85);display:none;white-space:nowrap;}
 .has-score .names-row .sep{display:none;} .has-score .score{display:block;}
+/* series as fighting-game bars: one block per map you need, filled = maps won, team colour, pixel bevel; hidden without a score */
+.hpbars{display:none;justify-content:center;align-items:center;margin:18px auto 0;opacity:0;}
+.has-score .hpbars{display:flex;} .go .hpbars{animation:fadeUp .9s ease 1.25s forwards;}
+.hpgap{flex:0 0 150px;}
+.hp{display:flex;gap:6px;padding:5px;background:rgba(3,8,5,.85);border:3px solid #0d1a10;box-shadow:inset 0 0 0 2px rgba(240,230,210,.18),4px 4px 0 rgba(0,0,0,.65);}
+.hp.l{flex-direction:row-reverse;--c:var(--accL);} .hp.r{--c:var(--accR);}
+.hp .seg{width:96px;height:20px;background:rgba(255,255,255,.06);box-shadow:inset 0 -4px 0 rgba(0,0,0,.35);}
+.hp .seg.on{background:var(--c);box-shadow:inset 0 4px 0 rgba(255,255,255,.35),inset 0 -5px 0 rgba(0,0,0,.35),0 0 16px color-mix(in srgb,var(--c) 60%,transparent);}
+.hp .seg.on:last-of-type{animation:segPulse 1.6s ease-in-out 2.2s infinite;}
+@keyframes segPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.35)}}
 .pips{display:flex;gap:9px;margin-top:14px;} .side.l .pips{justify-content:flex-end;}
 .pip{width:14px;height:14px;border:2px solid currentColor;opacity:.45;transform:rotate(45deg);}
 .pip.on{opacity:1;background:currentColor;box-shadow:0 0 14px currentColor;}
 .side.l .pips{color:var(--accL);} .side.r .pips{color:var(--accR);}
 @keyframes fadeUp{0%{opacity:0;transform:translateY(24px)}100%{opacity:1;transform:none}}
-.divider{margin:20px auto 0;width:900px;height:26px;position:relative;opacity:0;}
-.go .divider{animation:fadeUp .9s ease 1.25s forwards;}
-.divider .line{position:absolute;top:50%;height:2px;width:410px;transform:translateY(-50%);}
-.divider .line.l{left:0;background:linear-gradient(90deg,transparent,var(--accL));}
-.divider .line.r{right:0;background:linear-gradient(270deg,transparent,var(--accR));}
-.divider .gem{position:absolute;left:50%;top:50%;width:16px;height:16px;transform:translate(-50%,-50%) rotate(45deg);background:var(--cream);box-shadow:2px 2px 0 rgba(0,0,0,.7);}
 
 /* ===== rosters ===== */
 .roster{position:absolute;top:140px;width:322px;z-index:32;opacity:0;}
@@ -158,11 +162,11 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
   <div class="titlebar">
     <div class="kicker" id="kicker"></div>
     <div class="names-row">
-      <div class="side l"><div><div class="tname" id="nameL"></div><div class="pips" id="pipsL"></div></div><img class="tlogo" id="logoL" alt=""></div>
+      <div class="side l"><div><div class="tname" id="nameL"></div></div><img class="tlogo" id="logoL" alt=""></div>
       <span class="sep">VS</span><span class="score" id="score"></span>
-      <div class="side r"><img class="tlogo" id="logoR" alt=""><div><div class="tname" id="nameR"></div><div class="pips" id="pipsR"></div></div></div>
+      <div class="side r"><img class="tlogo" id="logoR" alt=""><div><div class="tname" id="nameR"></div></div></div>
     </div>
-    <div class="divider"><div class="line l"></div><div class="gem"></div><div class="line r"></div></div>
+    <div class="hpbars" id="hpbars"><div class="hp l" id="hpL"></div><div class="hpgap"></div><div class="hp r" id="hpR"></div></div>
   </div>
   <div class="roster left" id="rosterL"></div>
   <div class="roster right" id="rosterR"></div>
@@ -234,7 +238,8 @@ function render(){
   $('stage').classList.toggle('has-score',!!m);
   $('score').textContent=m?m[1]+' - '+m[2]:'';
   const need=bo?Math.ceil(bo/2):0;
-  pips($('pipsL'),m?+m[1]:0,need);pips($('pipsR'),m?+m[2]:0,need);
+  const bar=(el,w)=>{el.innerHTML=Array.from({length:Math.max(need,1)},(_,i)=>'<div class="seg'+(i<w?' on':'')+'"></div>').join('');};
+  bar($('hpL'),m?+m[1]:0);bar($('hpR'),m?+m[2]:0);
   selL.value=st.left;selR.value=st.right;selRound.value=st.round;inScore.value=st.score;selBo.value=st.bo;chkRoster.checked=st.roster;
   const q=new URLSearchParams({left:st.left,right:st.right});if(st.round)q.set('round',st.round);if(st.score)q.set('score',st.score);if(st.bo)q.set('bo',st.bo);if(!st.roster)q.set('roster','0');q.set('clean','1');
   $('urlHint').textContent=location.origin+location.pathname+'?'+q.toString();
