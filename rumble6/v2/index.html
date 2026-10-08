@@ -1266,7 +1266,7 @@
 <script>
     // DONO:JS: donations sheet (published CSV, edited by blopp) -> pool total, split amounts, supporters list
     (function () {
-        const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTn2vvZAVk-Uacc_c9Q7AkXpqdoEyQ_A7sNWK4ru3uckqtYr9n63MlTaqHB8W5OL-WPrs1sxKOxStwO/pub?gid=0&single=true&output=csv', BASE = 300;
+        const CSV = 'https://docs.google.com/spreadsheets/d/19WoA4RSo4sGhDxzjKaN5AogD7rVOnMjQhPNS8nIXQR4/gviz/tq?tqx=out:csv&gid=0', BASE = 300;
         function parse(t) {   // RFC-4180-ish: quotes, escaped quotes, commas/newlines inside quotes
             const rows = []; let row = [], f = '', q = false;
             for (let i = 0; i < t.length; i++) {
@@ -1281,7 +1281,11 @@
         }
         const money = (v) => { const s = String(v).replace(/[^0-9.,-]/g, ''); const n = parseFloat(/,\d{1,2}$/.test(s) ? s.replace(/\./g, '').replace(',', '.') : s.replace(/,/g, '')); return isFinite(n) ? n : 0; };
         const fmt = (n) => '€' + (Math.round(n * 100) % 100 ? n.toFixed(2) : Math.round(n));
-        fetch(CSV, { cache: 'no-store' }).then(r => r.ok ? r.text() : Promise.reject(r.status)).then(t => {
+        let last = '';
+        function load() {
+        if (document.hidden) return;
+        fetch(CSV + '&_=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.text() : Promise.reject(r.status)).then(t => {
+            if (t === last) return; last = t;
             const rows = parse(t.trim()); if (rows.length < 2) return;
             const h = rows[0].map(x => x.trim().toLowerCase()), iN = h.indexOf('name'), iA = h.indexOf('amount');
             if (iA < 0) return;
@@ -1295,14 +1299,16 @@
             el.dataset.to = Math.round(total); if (el.textContent !== '€0') el.textContent = fmt(total);
             const pct = { 'rank-1': .5, 'rank-2': .25, 'rank-3': .15, 'rank-4': .1 };
             document.querySelectorAll('#prizepool .dist-item').forEach(d => { const k = Object.keys(pct).find(c => d.classList.contains(c)); const s = d.querySelector('.dist-team'); if (k && s) s.textContent = fmt(Math.round(total * pct[k])) + '+'; });
-            if (!list.length) return;
-            const ol = document.getElementById('dono-list');
+            document.getElementById('dono-wall').hidden = !list.length; if (!list.length) return;
+            const ol = document.getElementById('dono-list'); ol.textContent = '';
             list.forEach((d, i) => { const li = document.createElement('li'); if (i < 3) li.className = 'top';
                 const n = document.createElement('span'); n.className = 'n'; n.textContent = d.name; n.title = d.name;
                 const a = document.createElement('span'); a.className = 'a'; a.textContent = fmt(d.amt); li.append(n, a); ol.appendChild(li); });
             document.getElementById('dono-count').textContent = '(' + list.length + ')';
             document.getElementById('dono-wall').hidden = false;
         }).catch(() => {});   // sheet unreachable: page stays as before (base pool only)
+        }
+        load(); setInterval(load, 8000); document.addEventListener('visibilitychange', load);   // edits show up within ~10 s
     })();
 </script>
 </body>
