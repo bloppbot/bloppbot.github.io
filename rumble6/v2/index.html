@@ -1308,7 +1308,7 @@
             document.getElementById('dono-wall').hidden = false;
         }).catch(() => {});   // sheet unreachable: page stays as before (base pool only)
         }
-        load(); setInterval(load, 8000); document.addEventListener('visibilitychange', load);   // edits show up within ~10 s
+        load(); setInterval(load, 30000); document.addEventListener('visibilitychange', load);   // website: 30 s is enough (blopp 10-08)
     })();
 </script>
 </body>
