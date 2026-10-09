@@ -691,6 +691,45 @@
     .st b { font-size: 7px; padding-left: 6px; }
     @media (max-width: 760px) { .sr { grid-template-columns: 1fr; gap: 8px; } }
 
+    /* === GROUP STAGE v2 (2026-10-09): banner strip + standings + matches, filled by the inline script in #format === */
+    .gs2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .g2 { border: 3px solid var(--green-deep); background: rgba(3,8,5,0.78); box-shadow: 5px 5px 0 rgba(0,0,0,0.5); min-width: 0; }
+    .g2h { font-family: 'Press Start 2P', monospace; font-size: 15px; color: var(--green-bright); text-align: center; padding: 14px 10px 12px; text-shadow: 2px 2px 0 #000, 0 0 14px var(--green-glow); border-bottom: 3px solid var(--line); background: linear-gradient(180deg, rgba(46,110,58,0.25), transparent); }
+    .g2strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 10px; border-bottom: 3px solid var(--line); }
+    .g2b { position: relative; border: 2px solid var(--a); background: #06120a; text-align: center; min-width: 0; }
+    .g2bi { aspect-ratio: 640/368; background: center/cover; border-bottom: 2px solid var(--a); image-rendering: pixelated; filter: saturate(1.05); }
+    .g2q { background: repeating-linear-gradient(45deg, #1a0606 0 8px, #250909 8px 16px); }
+    .g2bl { position: absolute; left: 50%; top: calc(100% - 46px); transform: translate(-50%, -50%); width: 34px; height: 34px; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(2px 2px 0 #000); }
+    .g2b span { display: block; font-family: 'Press Start 2P', monospace; font-size: 6px; line-height: 1.6; color: var(--cream); padding: 16px 3px 6px; min-height: 40px; display: flex; align-items: center; justify-content: center; }
+    .gq2 { display: grid; place-items: center; font-family: 'Press Start 2P', monospace; color: var(--red-bright); border: 2px dashed var(--red); background: #120404; font-size: 11px; }
+    .g2tab { width: 100%; border-collapse: collapse; }
+    .g2tab th { font-family: 'Press Start 2P', monospace; font-size: 6px; color: var(--cream-dim); font-weight: normal; text-align: center; padding: 10px 6px 6px; }
+    .g2tab th:nth-child(2) { text-align: left; }
+    .g2tab td { text-align: center; padding: 7px 6px; border-top: 2px solid rgba(27,53,33,0.7); font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--cream); }
+    .g2tab tbody tr:nth-child(2) td { border-bottom: 2px dashed var(--green-deep); }
+    .g2r { width: 30px; color: var(--cream-dim) !important; }
+    .g2n { text-align: left !important; } .g2n div { display: flex; align-items: center; gap: 8px; }
+    .g2n b { font-weight: normal; font-size: 8px; line-height: 1.5; border-left: 3px solid var(--a); padding-left: 7px; }
+    .g2tl, .g2ml { width: 26px; height: 26px; flex: 0 0 26px; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(2px 2px 0 #000); }
+    .g2tl.gq2, .g2ml.gq2 { font-size: 9px; }
+    .g2to { font-size: 6px; padding: 4px 6px 3px; }
+    .g2to.ub { color: #04120a; background: var(--green-bright); box-shadow: 0 0 10px var(--green-glow); }
+    .g2to.lb { color: #fff; background: var(--red); }
+    .g2to.tbd { color: var(--cream-dim); }
+    .g2games { border-top: 3px solid var(--line); padding: 4px 10px 8px; }
+    .g2gh { font-family: 'Press Start 2P', monospace; font-size: 6px; color: var(--cream-dim); text-align: center; padding: 8px 0 4px; }
+    .g2m { display: grid; grid-template-columns: 46px 1fr 50px 1fr; align-items: center; gap: 8px; padding: 6px 0; border-top: 2px solid rgba(27,53,33,0.6); }
+    .g2t { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--green-bright); }
+    .g2s { display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .g2m .g2s:nth-child(2) { flex-direction: row-reverse; text-align: right; }
+    .g2m .g2s:nth-child(2) b { border-left: 0; padding-left: 0; border-right: 3px solid var(--a); padding-right: 6px; }
+    .g2s b { font-family: 'Press Start 2P', monospace; font-weight: normal; font-size: 7px; line-height: 1.5; color: var(--cream); border-left: 3px solid var(--a); padding-left: 6px; }
+    .g2s.won b { color: var(--green-bright); } .g2s.lost { opacity: 0.45; }
+    .g2vs { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--red-bright); text-align: center; }
+    .g2m.done .g2vs { color: var(--cream); }
+    @media (max-width: 900px) { .gs2 { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) { .g2m { grid-template-columns: 40px 1fr 34px 1fr; gap: 5px; } .g2s b { font-size: 6px; } .g2ml { width: 20px; height: 20px; flex-basis: 20px; } .g2b span { font-size: 5px; } }
+
     /* === TEAMS DRAFT: WC-style seeded cards (versus loop banner, logo badge, medals, AD MMR) === */
     #teams .team-grid, #teams .slot-meter-under { display: none !important; }
     .seed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 16px; margin-top: 22px; }
@@ -897,18 +936,38 @@
 
         <div class="fmt-stage">
             <div class="fmt-head"><span class="fmt-day">DAY 1 &middot; SAT OCT 17</span><span class="fmt-name">GROUP STAGE</span><span class="fmt-sub">two groups of four &middot; everyone plays everyone &middot; best-of-one</span></div>
-            <div class="groups">
-                <div class="grp">
-                    <div class="grp-title">GROUP A <span>DRAWN OCT 9</span></div>
-                    <div class="grp-row tr"><span class="gt" style="--acc:#5b8cff"><img src="assets/logos/burgerboys_v2.png" alt=""><b>BURGER BOYS</b></span></div><div class="grp-row tr"><span class="gt" style="--acc:#7fb2e5"><img src="assets/logos/vikings.png" alt=""><b>VIKINGS</b></span></div><div class="grp-row tr"><span class="gt" style="--acc:#f2e030"><img src="assets/logos/gymesports.png" alt=""><b>GYM ESPORTS</b></span></div><div class="grp-row tr"><span class="gt" style="--acc:#d42a2a"><span class="gq">?</span><b>QUALIFIER WINNER</b></span></div>
-                </div>
-                <div class="grp">
-                    <div class="grp-title">GROUP B <span>DRAWN OCT 9</span></div>
-                    <div class="grp-row tr"><span class="gt" style="--acc:#7cc242"><img src="assets/logos/tmnt.png" alt=""><b>TMNT</b></span></div><div class="grp-row tr"><span class="gt" style="--acc:#f5a623"><img src="assets/logos/nwo_v2.png" alt=""><b>NEW WORLD ORDER</b></span></div><div class="grp-row tr"><span class="gt" style="--acc:#e8a33d"><img src="assets/logos/dontpeek.png" alt=""><b>DON'T PEEK</b></span></div><div class="grp-row tr"><span class="gt" style="--acc:#3fd0c9"><img src="assets/logos/spacemarines.png" alt=""><b>SPACE MARINES</b></span></div>
-                </div>
-            </div>
-            <div class="rr">6 rounds, one every hour, both groups play at the same time:</div>
-            <div class="sched"><div class="sr"><div class="sh">17:00</div><div class="sa"><em>A</em><div class="sm"><span class="st" style="--acc:#7fb2e5"><img src="assets/logos/vikings.png" alt=""><b>VIKINGS</b></span><i>vs</i><span class="st" style="--acc:#f2e030"><img src="assets/logos/gymesports.png" alt=""><b>GYM ESPORTS</b></span></div></div><div class="sa"><em>B</em><div class="sm"><span class="st" style="--acc:#f5a623"><img src="assets/logos/nwo_v2.png" alt=""><b>NEW WORLD ORDER</b></span><i>vs</i><span class="st" style="--acc:#e8a33d"><img src="assets/logos/dontpeek.png" alt=""><b>DON'T PEEK</b></span></div></div></div><div class="sr"><div class="sh">18:00</div><div class="sa"><em>A</em><div class="sm"><span class="st" style="--acc:#5b8cff"><img src="assets/logos/burgerboys_v2.png" alt=""><b>BURGER BOYS</b></span><i>vs</i><span class="st" style="--acc:#d42a2a"><span class="gq">?</span><b>QUALIFIER WINNER</b></span></div></div><div class="sa"><em>B</em><div class="sm"><span class="st" style="--acc:#7cc242"><img src="assets/logos/tmnt.png" alt=""><b>TMNT</b></span><i>vs</i><span class="st" style="--acc:#3fd0c9"><img src="assets/logos/spacemarines.png" alt=""><b>SPACE MARINES</b></span></div></div></div><div class="sr"><div class="sh">19:00</div><div class="sa"><em>A</em><div class="sm"><span class="st" style="--acc:#7fb2e5"><img src="assets/logos/vikings.png" alt=""><b>VIKINGS</b></span><i>vs</i><span class="st" style="--acc:#d42a2a"><span class="gq">?</span><b>QUALIFIER WINNER</b></span></div></div><div class="sa"><em>B</em><div class="sm"><span class="st" style="--acc:#f5a623"><img src="assets/logos/nwo_v2.png" alt=""><b>NEW WORLD ORDER</b></span><i>vs</i><span class="st" style="--acc:#3fd0c9"><img src="assets/logos/spacemarines.png" alt=""><b>SPACE MARINES</b></span></div></div></div><div class="sr"><div class="sh">20:00</div><div class="sa"><em>A</em><div class="sm"><span class="st" style="--acc:#5b8cff"><img src="assets/logos/burgerboys_v2.png" alt=""><b>BURGER BOYS</b></span><i>vs</i><span class="st" style="--acc:#f2e030"><img src="assets/logos/gymesports.png" alt=""><b>GYM ESPORTS</b></span></div></div><div class="sa"><em>B</em><div class="sm"><span class="st" style="--acc:#7cc242"><img src="assets/logos/tmnt.png" alt=""><b>TMNT</b></span><i>vs</i><span class="st" style="--acc:#e8a33d"><img src="assets/logos/dontpeek.png" alt=""><b>DON'T PEEK</b></span></div></div></div><div class="sr"><div class="sh">21:00</div><div class="sa"><em>A</em><div class="sm"><span class="st" style="--acc:#f2e030"><img src="assets/logos/gymesports.png" alt=""><b>GYM ESPORTS</b></span><i>vs</i><span class="st" style="--acc:#d42a2a"><span class="gq">?</span><b>QUALIFIER WINNER</b></span></div></div><div class="sa"><em>B</em><div class="sm"><span class="st" style="--acc:#e8a33d"><img src="assets/logos/dontpeek.png" alt=""><b>DON'T PEEK</b></span><i>vs</i><span class="st" style="--acc:#3fd0c9"><img src="assets/logos/spacemarines.png" alt=""><b>SPACE MARINES</b></span></div></div></div><div class="sr"><div class="sh">22:00</div><div class="sa"><em>A</em><div class="sm"><span class="st" style="--acc:#5b8cff"><img src="assets/logos/burgerboys_v2.png" alt=""><b>BURGER BOYS</b></span><i>vs</i><span class="st" style="--acc:#7fb2e5"><img src="assets/logos/vikings.png" alt=""><b>VIKINGS</b></span></div></div><div class="sa"><em>B</em><div class="sm"><span class="st" style="--acc:#7cc242"><img src="assets/logos/tmnt.png" alt=""><b>TMNT</b></span><i>vs</i><span class="st" style="--acc:#f5a623"><img src="assets/logos/nwo_v2.png" alt=""><b>NEW WORLD ORDER</b></span></div></div></div></div>
+            <div class="gs2" id="gs2"></div>
+            <script>
+            // === GROUP STAGE (draw 2026-10-09 22:00Z). Fill results here: w = 'a' or 'b' (winner), null = not played yet ===
+            (function () {
+                const TM = {
+                    'Burger Boys': ['burgerboys', 'burgerboys_v2', '#5b8cff'], 'Vikings': ['vikings', 'vikings', '#7fb2e5'], 'GYM Esports': ['gym', 'gymesports', '#f2e030'],
+                    'Qualifier winner': [null, null, '#d42a2a'], 'TMNT': ['tmnt', 'tmnt', '#7cc242'], 'New World Order': ['nwo', 'nwo_v2', '#f5a623'],
+                    "Don't Peek": ['dontpeek', 'dontpeek', '#e8a33d'], 'Space Marines': ['spacemarines', 'spacemarines', '#3fd0c9'] };
+                const G = { A: ['Burger Boys', 'Vikings', 'GYM Esports', 'Qualifier winner'], B: ['TMNT', 'New World Order', "Don't Peek", 'Space Marines'] };
+                const ORDER = [[1, 2], [0, 3], [1, 3], [0, 2], [2, 3], [0, 1]], HOURS = ['17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
+                const RESULTS = { A: [null, null, null, null, null, null], B: [null, null, null, null, null, null] };   // per hour, 'a' | 'b'
+                const root = document.getElementById('gs2');
+                const logo = (n, c) => TM[n][1] ? '<img class="' + c + '" src="assets/logos/' + TM[n][1] + '.png" alt="">' : '<span class="' + c + ' gq2">?</span>';
+                const esc = s => s.replace(/'/g, '&#39;');
+                Object.keys(G).forEach(g => {
+                    const teams = G[g], rec = {};
+                    teams.forEach(n => rec[n] = { w: 0, l: 0 });
+                    const ms = ORDER.map(([i, j], k) => ({ t: HOURS[k], a: teams[i], b: teams[j], w: RESULTS[g][k] }));
+                    ms.forEach(m => { if (!m.w) return; const W = m.w === 'a' ? m.a : m.b, L = m.w === 'a' ? m.b : m.a; rec[W].w++; rec[L].l++; });
+                    const played = ms.some(m => m.w);
+                    const table = teams.slice().sort((x, y) => played ? (rec[y].w - rec[x].w) || (rec[x].l - rec[y].l) || (teams.indexOf(x) - teams.indexOf(y)) : 0);
+                    const strip = teams.map(n => '<div class="g2b" style="--a:' + TM[n][2] + '">' + (TM[n][0] ? '<div class="g2bi" style="background-image:url(assets/versus/vs_' + TM[n][0] + '.jpg)"></div>' : '<div class="g2bi g2q"></div>') + logo(n, 'g2bl') + '<span>' + esc(n.toUpperCase()) + '</span></div>').join('');
+                    const rows = table.map((n, k) => '<tr style="--a:' + TM[n][2] + '"><td class="g2r">' + (played ? k + 1 : '-') + '</td><td class="g2n"><div>' + logo(n, 'g2tl') + '<b>' + esc(n.toUpperCase()) + '</b></div></td><td>' + rec[n].w + '</td><td>' + rec[n].l + '</td><td><span class="g2to ' + (played ? (k < 2 ? 'ub' : 'lb') : 'tbd') + '">' + (played ? (k < 2 ? 'UPPER' : 'LOWER') : 'TBD') + '</span></td></tr>').join('');
+                    const side = (n, won, lost) => '<span class="g2s' + (won ? ' won' : lost ? ' lost' : '') + '" style="--a:' + TM[n][2] + '">' + logo(n, 'g2ml') + '<b>' + esc(n.toUpperCase()) + '</b></span>';
+                    const games = ms.map(m => '<div class="g2m' + (m.w ? ' done' : '') + '"><span class="g2t">' + m.t + '</span>' + side(m.a, m.w === 'a', m.w === 'b')
+                        + '<span class="g2vs">' + (m.w ? (m.w === 'a' ? '1 : 0' : '0 : 1') : 'VS') + '</span>' + side(m.b, m.w === 'b', m.w === 'a') + '</div>').join('');
+                    root.insertAdjacentHTML('beforeend', '<div class="g2"><div class="g2h">GROUP ' + g + '</div><div class="g2strip">' + strip + '</div>'
+                        + '<table class="g2tab"><thead><tr><th>#</th><th>TEAM</th><th>W</th><th>L</th><th>STARTS IN</th></tr></thead><tbody>' + rows + '</tbody></table>'
+                        + '<div class="g2games"><div class="g2gh">MATCHES · CEST</div>' + games + '</div></div>');
+                });
+            })();
+            </script>
             <div class="safe">&#9733; TOP 2 START IN THE UPPER BRACKET &middot; 3RD + 4TH IN THE LOWER BRACKET</div>
         </div>
 
