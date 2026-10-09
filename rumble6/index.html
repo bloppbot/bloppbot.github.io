@@ -653,6 +653,26 @@
     @media (max-width: 980px) { .bk-hint { display: block; } }
     @media (max-width: 640px) { .groups { grid-template-columns: 1fr; } .fmt-stage { padding: 20px 14px 18px; } .fmt-name { font-size: 8px; line-height: 2; } }
 
+    /* === QUALIFIER (sign-ups closed 2026-10-09) === */
+    .q-link { color: var(--green-bright); }
+    .qual { margin-top: 26px; background: var(--panel); border: 3px solid var(--red); padding: 18px 20px 16px; }
+    .q-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin-bottom: 14px; font-family: 'Press Start 2P', monospace; }
+    .q-k { font-size: 0.85rem; color: var(--red-bright); text-shadow: 2px 2px 0 rgba(0,0,0,0.7); }
+    .q-d { font-size: 0.5rem; color: var(--cream-dim); }
+    .q-match { display: grid; grid-template-columns: 76px 1fr auto 1fr; align-items: center; gap: 12px; padding: 10px 0; border-top: 2px dashed var(--green-deep); }
+    .q-time { font-family: 'Press Start 2P', monospace; font-size: 0.8rem; color: var(--green-bright); }
+    .q-t { display: flex; align-items: center; gap: 10px; min-width: 0; font-family: 'Press Start 2P', monospace; font-size: 0.6rem; line-height: 1.5; color: var(--cream); }
+    .q-t:last-child { justify-content: flex-start; text-align: right; flex-direction: row-reverse; }
+    .q-t img { width: 44px; height: 44px; flex: 0 0 44px; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(2px 2px 0 #000); }
+    .q-t em { font-style: normal; color: var(--acc); }
+    .q-vs { font-family: 'Press Start 2P', monospace; font-size: 0.7rem; color: var(--red-bright); }
+    .q-final { border-top: 2px dashed var(--green-deep); padding-top: 12px; text-align: center; color: var(--cream); font-size: 1.15rem; }
+    .q-final b { color: var(--red-bright); font-weight: normal; }
+    @media (max-width: 640px) {
+        .q-match { grid-template-columns: 1fr; gap: 8px; text-align: center; }
+        .q-t, .q-t:last-child { justify-content: center; flex-direction: row; text-align: left; }
+    }
+
     /* === TEAMS DRAFT: WC-style seeded cards (versus loop banner, logo badge, medals, AD MMR) === */
     #teams .team-grid, #teams .slot-meter-under { display: none !important; }
     .seed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 16px; margin-top: 22px; }
@@ -700,7 +720,7 @@
                 <h1 class="h-title">RUMBLE IN THE JUNGLE VI</h1>
                 <div class="h-bar"></div>
                 <div class="h-sub">OCT 17 — 18 &amp; 24 — 25 ★ 2026</div>
-                <a href="#signup" class="h-cta">SIGN UP YOUR TEAM <span class="slots" id="hero-slots">3 TEAMS IN · CLOSES OCT 9</span></a>
+                <a href="#teams" class="h-cta">SEE THE FIELD <span class="slots" id="hero-slots">SIGN-UPS CLOSED · QUALIFIER OCT 10</span></a>
             </div>
         </div>
     </header>
@@ -710,7 +730,7 @@
     <a href="#info" class="nav-btn">THE RUMBLE</a>
     <a href="#teams" class="nav-btn">TEAMS</a>
     <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
-    <a href="#signup" class="nav-btn signup">SIGN UP</a>
+    <a href="#qualifier" class="nav-btn signup">QUALIFIER</a>
     <a href="#format" class="nav-btn">FORMAT</a>
     <a href="#casters" class="nav-btn">CASTERS</a>
     <a href="#lastrumble" class="nav-btn">LAST RUMBLE</a>
@@ -719,7 +739,7 @@
 
 <div class="container">
     <div class="countdown-container" role="timer" aria-label="Countdown to Rumble in the Jungle VI">
-        <div class="countdown-label" id="cd-label">SIGN-UPS CLOSE IN</div>
+        <div class="countdown-label" id="cd-label">THE RUMBLE STARTS IN</div>
         <div class="countdown-timer" id="countdown">
             <div class="cd-box"><div class="cd-num" id="cd-d">--</div><div class="cd-text">DAYS</div></div><span class="cd-colon" aria-hidden="true">:</span>
             <div class="cd-box"><div class="cd-num" id="cd-h">--</div><div class="cd-text">HRS</div></div><span class="cd-colon" aria-hidden="true">:</span>
@@ -727,7 +747,7 @@
             <div class="cd-box"><div class="cd-num" id="cd-s">--</div><div class="cd-text">SEC</div></div>
         </div>
         <div class="slot-meter">
-            <div class="sm-row" style="justify-content:center"><span><span class="sm-taken" id="sm-taken">3 TEAMS IN</span> · SIGN-UPS OPEN UNTIL <b>OCT 9</b> · THE RUMBLE STARTS <b>OCT 17</b></span></div>
+            <div class="sm-row" style="justify-content:center"><span><span class="sm-taken" id="sm-taken">11 TEAMS IN</span> · SIGN-UPS CLOSED · THE RUMBLE STARTS <b>OCT 17, 17:00 CEST</b></span></div>
         </div>
     </div>
 </div>
@@ -775,11 +795,17 @@
         <h2 class="section-title">THE TEAMS</h2>
         <div class="title-rule"></div>
         <p class="lead">
-            <span id="teams-counter" class="date-highlight">0 TEAMS SIGNED UP · SIGN-UPS OPEN</span><br>
-            <b>8 teams</b> play the main event. More than 8 sign-ups: some teams receive direct invites,
-            the rest settle it in the qualifiers on <b>OCT 10 + 11</b>.
+            <span id="teams-counter" class="date-highlight">11 TEAMS SIGNED UP · SIGN-UPS CLOSED</span><br>
+            <b>8 teams</b> play the main event. Seeds <b>1 to 7</b> are invited,
+            seeds <b>8 to 11</b> play the <a href="#qualifier" class="q-link">qualifier</a> on <b>OCT 10</b> for the last slot.
         </p>
         <div class="team-grid" id="team-grid"></div>
+        <div class="qual px-frame" id="qualifier">
+            <div class="q-head"><span class="q-k">QUALIFIER</span><span class="q-d">SAT OCT 10 · BEST-OF-ONE · CEST · NOT STREAMED</span></div>
+            <div class="q-match"><div class="q-time">20:00</div><div class="q-t" style="--acc:#e0334f"><img src="assets/logos/oldravens.png" alt=""><span><em>#8</em> OLD RAVENS</span></div><div class="q-vs">VS</div><div class="q-t" style="--acc:#e04040"><img src="assets/logos/blondinok.png" alt=""><span><em>#11</em> PLAYLIST DLYA BLONDINOK</span></div></div>
+            <div class="q-match"><div class="q-time">21:00</div><div class="q-t" style="--acc:#6fd060"><img src="assets/logos/mallards.png" alt=""><span><em>#9</em> MALLARDS</span></div><div class="q-vs">VS</div><div class="q-t" style="--acc:#c86be0"><img src="assets/logos/hymer_v2.png" alt=""><span><em>#10</em> HYMER</span></div></div>
+            <div class="q-final">The two winners play each other for the <b>last main event slot</b> · time TBA</div>
+        </div>
     </section>
 </div>
 
@@ -825,23 +851,16 @@
         <div class="signup-box px-frame has-bg">
             <img class="card-bg" src="assets/scene_tunnel_1536.jpg" alt="" aria-hidden="true"><div class="card-shade"></div>
             <div class="signup-inner">
-                <ol class="steps">
-                    <li><span>Join the Discord — button below.</span></li>
-                    <li><span>Assemble your squad — exactly <b>5 players</b>, pick a team name you won't regret on stream.</span></li>
-                    <li><span>PM <b>blopp</b> on Discord with your team name and all 5 players. Done.</span></li>
-                </ol>
                 <div class="rule-box">
-                    ONLY FULL TEAMS OF 5 ARE ACCEPTED.<br>
-                    <span class="no">NO SOLO SIGN-UPS.</span>
+                    SIGN-UPS ARE CLOSED.<br>
+                    <span class="no">11 TEAMS ARE IN.</span>
                 </div>
                 <p style="margin-top: 24px;">
-                    <b>8 slots.</b><br>
-                    If more than 8 teams sign up, some teams receive direct invites
-                    and the remaining slots are decided in qualifiers.
+                    Seeds 1 to 7 are invited to the main event, seeds 8 to 11 play the
+                    <a href="#qualifier" class="q-link">qualifier</a> on <span class="date-highlight">OCT 10</span> for the last slot.
                 </p>
                 <p style="margin-top: 12px;">
-                    Sign-ups close <span class="date-highlight">OCT 9</span>
-                    &nbsp;·&nbsp; qualifiers if needed: <span class="date-highlight">OCT 10 + 11</span>
+                    Missed it? Join the Discord: there is always a next Rumble.
                 </p>
                 <div class="btn-row">
                     <a href="https://discord.gg/sQFwGxFYFB" target="_blank" rel="noopener" class="big-btn discord">JOIN THE DISCORD</a>
@@ -980,7 +999,7 @@
     </section>
 </div>
 
-<a href="#signup" class="mob-cta">SIGN UP YOUR TEAM · CLOSES OCT 9</a>
+<a href="#qualifier" class="mob-cta">QUALIFIER · SAT OCT 10 · 20:00 CEST</a>
 
 <footer>
     <div class="f-title">RUMBLE IN THE JUNGLE VI</div>
@@ -1071,15 +1090,7 @@
             card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
             grid.appendChild(card);
         });
-        // one open card, uncapped: sign-ups never look "full"
-        const open = document.createElement('a');
-        open.className = 'team-card open'; open.href = '#signup';
-        open.innerHTML = '<div class="t-banner"><span class="t-mark">?</span></div><div class="t-body"><div class="t-name">YOUR TEAM HERE</div><div class="t-sub">SIGN-UPS OPEN UNTIL OCT 9</div></div>';
-        grid.appendChild(open);
-        const n = TEAMS.length;
-        document.getElementById('teams-counter').textContent = n + (n === 1 ? ' TEAM' : ' TEAMS') + ' SIGNED UP · SIGN-UPS OPEN';
-        document.getElementById('hero-slots').textContent = n + (n === 1 ? ' TEAM' : ' TEAMS') + ' IN · CLOSES OCT 9';
-        document.getElementById('sm-taken').textContent = n + (n === 1 ? ' TEAM' : ' TEAMS') + ' IN';
+        // sign-ups closed 2026-10-09: no open card, counters fixed in the HTML
     })();
 
     // === PHASE-AWARE COUNTDOWN: sign-up deadline -> event start -> live ===
@@ -1283,7 +1294,7 @@
 <script>
     // === TEAMS DRAFT: seeded cards (generated by drafts/rumble-vi-branding/teams-seeding/build_teams_draft.py) ===
     // roster: [name, medalIcon, leaderboardPill, adMmr(null = <20 AD games), steam32, captain, newToAd]
-    const SEEDED = [{"seed": 1, "name": "Burger Boys", "key": "burgerboys", "logo": "assets/logos/burgerboys_v2.png", "acc": "#5b8cff", "hasLoop": true, "roster": [["Friscy", "immortal", null, 3602, 192412922, true, false], ["Erik", "immortal", "#21", 3926, 106473979, false, false], ["Dingus", "immortal", "#2064", 3748, 379941199, false, false], ["Poof", "immortal", "#2875", 3725, 320587966, false, false], ["Jynx", "immortal", "#1701", 3503, 372541122, false, false]]}, {"seed": 2, "name": "TMNT", "key": "tmnt", "logo": "assets/logos/tmnt.png", "acc": "#7cc242", "hasLoop": true, "roster": [["Ptenchik", "immortal", "#4853", 3647, 901021922, true, false], ["Lost", "immortal", "#576", 4116, 265369004, false, false], ["Etsi", "immortal", "#4482", 4081, 211202443, false, false], ["FoXy", "divine-3", null, 3569, 225442653, false, false], ["Shushu", "immortal", "#199", 3071, 210167497, false, false]]}, {"seed": 3, "name": "Vikings", "key": "vikings", "logo": "assets/logos/vikings.png", "acc": "#7fb2e5", "hasLoop": true, "roster": [["Mirrored", "immortal", "#4185", 3884, 148557755, true, false], ["Mahax", "immortal", "#618", 3893, 94301365, false, false], ["^War.Some", null, null, 3469, 86489056, false, false], ["Ben", "archon-4", null, 3345, 145192066, false, false], ["Dante", "immortal", null, 3223, 102819139, false, false]]}, {"seed": 4, "name": "GYM Esports", "key": "gym", "logo": "assets/logos/gymesports.png", "acc": "#f2e030", "hasLoop": true, "roster": [["Yokozuna Hoshoryu", "immortal", null, 3301, 218077154, true, false], ["Ultra Greed", "divine-4", null, 3523, 296779925, false, false], ["Aniki", "immortal", "#870", 3405, 292867484, false, false], ["Poodge", "immortal", "#3326", 3143, 242503644, false, false], ["lil thicc", "immortal", "#4644", 2928, 103938759, false, false]]}, {"seed": 5, "name": "New World Order", "key": "nwo", "logo": "assets/logos/nwo_v2.png", "acc": "#f5a623", "hasLoop": true, "roster": [["Billsive", "immortal", null, 3531, 118036682, true, false], ["Dr. Godbalove", "immortal", "#4369", 3523, 156409111, false, false], ["Actor", null, null, 3483, 17906081, false, false], ["Plupo", "immortal", "#1098", 3039, 81036058, false, false], ["PandaPGOD", "immortal", "#48", 2694, 164544758, false, false]]}, {"seed": 6, "name": "Space Marines", "key": "spacemarines", "logo": "assets/logos/spacemarines.png", "acc": "#3fd0c9", "hasLoop": true, "roster": [["Space Cowboy", "immortal", null, 3449, 153867895, true, false], ["Arnold", "immortal", "#3579", 3447, 110514740, false, false], ["Tkui", "ancient-4", null, 3119, 106989621, false, false], ["Vata", "immortal", "#957", 2639, 349472155, false, false], ["Saya", "immortal", "#538", null, 113561132, false, true]]}, {"seed": 7, "name": "Don't Peek", "key": "dontpeek", "logo": "assets/logos/dontpeek.png", "acc": "#e8a33d", "hasLoop": true, "roster": [["BigGoose", "immortal", "#3859", 2856, 37777993, true, false], ["noertti", "immortal", "#2428", 3739, 54662003, false, false], ["sifla", "immortal", "#4841", 3244, 3292479, false, false], ["Fruugu", "immortal", "#4860", 2947, 56700331, false, false], ["balll", "immortal", "#2086", 2764, 158897083, false, false]]}, {"seed": 8, "name": "Old Ravens", "key": "oldravens", "logo": "assets/logos/oldravens.png", "acc": "#e0334f", "hasLoop": true, "roster": [["n0n1ck", "immortal", "#1344", 3549, 332561278, true, false], ["bwoha", "immortal", "#1721", 3244, 186287226, false, false], ["Oss", "immortal", "#1767", null, 963252025, false, true], ["yukidan", "immortal", "#4821", null, 259103381, false, true], ["lexmach", "immortal", "#4319", null, 160510334, false, true]]}, {"seed": 9, "name": "Mallards", "key": "mallards", "logo": "assets/logos/mallards.png", "acc": "#6fd060", "hasLoop": true, "roster": [["kitchen", null, null, 2842, 86724809, true, false], ["CCrush", null, null, 2769, 86732537, false, false], ["Sadpanda008", "legend-2", null, 2639, 37332980, false, false], ["thundertoss", "archon-4", null, 2423, 75048465, false, false], ["007shadow", "crusader-3", null, 2159, 89791306, false, false]]}, {"seed": 10, "name": "HYMER", "key": "hymer", "logo": "assets/logos/hymer_v2.png", "acc": "#c86be0", "hasLoop": true, "roster": [["толчонка", "legend-1", null, null, 1589402230, true, true], ["Marl", "legend-5", null, null, 1064090113, false, true], ["Srivelat", "ancient-2", null, null, 1093973531, false, true], ["korf", "archon-5", null, null, 975270769, false, true], ["famtomikss", "ancient-1", null, null, 1518775720, false, true]]}, {"seed": 11, "name": "Playlist dlya blondinok", "key": "blondinok", "logo": "assets/logos/blondinok.png", "acc": "#e04040", "hasLoop": true, "roster": [["Азизгул", null, null, 2015, 428156429, true, false], ["Boy next door", "archon-3", null, 2679, 109437833, false, false], ["Каспийский груз", null, null, 2310, 401159520, false, false], ["I feel so alive", "legend-2", null, 2249, 233511245, false, false], ["Kriamant", "archon-3", null, 1959, 917400483, false, false]]}];
+    const SEEDED = [{"seed": 1, "name": "Burger Boys", "key": "burgerboys", "logo": "assets/logos/burgerboys_v2.png", "acc": "#5b8cff", "hasLoop": true, "roster": [["Friscy", "immortal", null, 3671, 192412922, true, false], ["Erik", "immortal", "#21", 3982, 106473979, false, false], ["Dingus", "immortal", "#2064", 3781, 379941199, false, false], ["Poof", "immortal", "#2875", 3725, 320587966, false, false], ["Jynx", "immortal", "#1701", 3503, 372541122, false, false]]}, {"seed": 2, "name": "TMNT", "key": "tmnt", "logo": "assets/logos/tmnt.png", "acc": "#7cc242", "hasLoop": true, "roster": [["Ptenchik", "immortal", "#3686", 3597, 901021922, true, false], ["Lost", "immortal", "#578", 4119, 265369004, false, false], ["Etsi", "immortal", "#4482", 4078, 211202443, false, false], ["FoXy", "divine-3", null, 3554, 225442653, false, false], ["Shushu", "immortal", "#199", 3372, 210167497, false, false]]}, {"seed": 3, "name": "Vikings", "key": "vikings", "logo": "assets/logos/vikings.png", "acc": "#7fb2e5", "hasLoop": true, "roster": [["Mirrored", "immortal", "#4185", 3872, 148557755, true, false], ["Mahax", "immortal", "#618", 3886, 94301365, false, false], ["^War.Some", null, null, 3490, 86489056, false, false], ["Ben", "archon-4", null, 3325, 145192066, false, false], ["Dante", "immortal", null, 3194, 102819139, false, false]]}, {"seed": 4, "name": "New World Order", "key": "nwo", "logo": "assets/logos/nwo_v2.png", "acc": "#f5a623", "hasLoop": true, "roster": [["Billsive", "immortal", null, 3580, 118036682, true, false], ["Dr. Godbalove", "immortal", "#4369", 3520, 156409111, false, false], ["Actor", null, null, 3479, 17906081, false, false], ["Plupo", "immortal", "#1306", 3051, 81036058, false, false], ["PandaPGOD", "immortal", "#50", 2733, 164544758, false, false]]}, {"seed": 5, "name": "GYM Esports", "key": "gym", "logo": "assets/logos/gymesports.png", "acc": "#f2e030", "hasLoop": true, "roster": [["Yokozuna Hoshoryu", "immortal", null, 3319, 218077154, true, false], ["Ultra Greed", "divine-4", null, 3499, 296779925, false, false], ["Aniki", "immortal", "#870", 3420, 292867484, false, false], ["Poodge", "immortal", "#2908", 3140, 242503644, false, false], ["lil thicc", "immortal", "#4644", 2901, 103938759, false, false]]}, {"seed": 6, "name": "Don't Peek", "key": "dontpeek", "logo": "assets/logos/dontpeek.png", "acc": "#e8a33d", "hasLoop": true, "roster": [["BigGoose", "immortal", "#3859", 2958, 37777993, true, false], ["noertti", "immortal", "#2428", 3777, 54662003, false, false], ["sifla", "immortal", "#4752", 3272, 3292479, false, false], ["balll", "immortal", "#2086", 3080, 158897083, false, false], ["Fruugu", "immortal", "#4860", 2978, 56700331, false, false]]}, {"seed": 7, "name": "Space Marines", "key": "spacemarines", "logo": "assets/logos/spacemarines.png", "acc": "#3fd0c9", "hasLoop": true, "roster": [["Space Cowboy", "immortal", null, 3449, 153867895, true, false], ["Arnold", "immortal", "#3579", 3447, 110514740, false, false], ["Tkui", "ancient-4", null, 3119, 106989621, false, false], ["Vata", "immortal", "#957", 2639, 349472155, false, false], ["Saya", "immortal", "#538", null, 113561132, false, true]]}, {"seed": 8, "name": "Old Ravens", "key": "oldravens", "logo": "assets/logos/oldravens.png", "acc": "#e0334f", "hasLoop": true, "roster": [["n0n1ck", "immortal", "#1344", 3556, 332561278, true, false], ["bwoha", "immortal", "#1721", 3251, 186287226, false, false], ["Oss", "immortal", "#3259", null, 963252025, false, true], ["yukidan", "immortal", "#4821", null, 259103381, false, true], ["lexmach", "immortal", "#4319", null, 160510334, false, true]]}, {"seed": 9, "name": "Mallards", "key": "mallards", "logo": "assets/logos/mallards.png", "acc": "#6fd060", "hasLoop": true, "roster": [["kitchen", null, null, 2870, 86724809, true, false], ["CCrush", null, null, 2809, 86732537, false, false], ["Sadpanda008", "legend-3", null, 2653, 37332980, false, false], ["thundertoss", "archon-4", null, 2456, 75048465, false, false], ["007shadow", "crusader-3", null, 2201, 89791306, false, false]]}, {"seed": 10, "name": "HYMER", "key": "hymer", "logo": "assets/logos/hymer_v2.png", "acc": "#c86be0", "hasLoop": true, "roster": [["толчонка", "legend-1", null, null, 1589402230, true, true], ["Marl", "legend-5", null, null, 1064090113, false, true], ["Srivelat", "ancient-2", null, null, 1093973531, false, true], ["korf", "legend-2", null, null, 975270769, false, true], ["famtomikss", "ancient-1", null, null, 1518775720, false, true]]}, {"seed": 11, "name": "Playlist dlya blondinok", "key": "blondinok", "logo": "assets/logos/blondinok.png", "acc": "#e04040", "hasLoop": true, "roster": [["Азизгул", null, null, 2018, 428156429, true, false], ["Boy next door", "archon-3", null, 2691, 109437833, false, false], ["Каспийский груз", null, null, 2312, 401159520, false, false], ["I feel so alive", "legend-2", null, 2258, 233511245, false, false], ["Kriamant", "archon-3", null, 2019, 917400483, false, false]]}];
     (function () {
         const grid = document.createElement('div'); grid.className = 'seed-grid';
         const anchor = document.getElementById('team-grid'); anchor.parentNode.insertBefore(grid, anchor);
