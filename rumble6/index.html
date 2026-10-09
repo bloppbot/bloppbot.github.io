@@ -1098,7 +1098,7 @@
         const wrap = document.getElementById('countdown');
         const label = document.getElementById('cd-label');
         const PHASES = [
-            { until: new Date('2026-10-09T21:59:59Z').getTime(), label: 'SIGN-UPS CLOSE IN' },
+            // sign-up phase removed 2026-10-09 (blopp closed sign-ups)
             { until: new Date('2026-10-17T15:00:00Z').getTime(), label: 'THE RUMBLE STARTS IN' },
         ];
         function current() { return PHASES.find(p => p.until > Date.now()); }
