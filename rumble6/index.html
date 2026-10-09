@@ -348,6 +348,19 @@
     .dist-item.rank-1 .place { color: #ffd97a; }
     .dist-item .percent { font-family: 'Press Start 2P', monospace; font-size: 1rem; color: var(--green-bright); }
     .dist-item .dist-team { font-size: 1rem; color: var(--cream-dim); }
+    /* DONO:CSS: community donations from the sheet (pool split + supporters list) */
+    .pool-split { font-family: 'Press Start 2P', monospace; font-size: 0.62rem; color: var(--cream-dim); margin: 2px 0 4px; line-height: 1.8; }
+    .pool-split b { color: var(--green-bright); font-weight: 400; }
+    .dono-wall { margin: 22px auto 4px; max-width: 640px; text-align: left; }
+    .dono-head { font-family: 'Press Start 2P', monospace; font-size: 0.7rem; color: var(--cream); text-align: center; margin-bottom: 12px; }
+    .dono-head span { color: var(--cream-dim); }
+    .dono-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
+    .dono-list li { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; background: rgba(8,18,9,0.85); border: 3px solid var(--line); padding: 7px 10px; box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.5); min-width: 0; }
+    .dono-list .n { color: var(--cream); font-size: 1.05rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dono-list .a { font-family: 'Press Start 2P', monospace; font-size: 0.62rem; color: var(--green-bright); flex: none; }
+    .dono-list li.top { border-color: #ffd97a; }
+    .dono-list li.top .n { color: #ffd97a; }
+    @media (max-width: 600px) { .dono-list { grid-template-columns: 1fr; } }
     .pool-note-text { color: var(--cream-dim); font-size: 1.05rem; margin-top: 10px; }
     .pool-note-text .heart { color: #e2574c; }
 
@@ -780,6 +793,7 @@
             <div class="about-inner" style="text-align:center">
                 <div class="base-pool-label">BASE POOL (HOST)</div>
                 <div class="total-prize" id="pool-num" data-to="300">€300</div>
+                <div class="pool-split" id="pool-split" hidden><!-- DONO:HTML -->€300 BASE + <b id="pool-dono">€0</b> COMMUNITY</div>
                 <div class="prize-historic">
                     <span class="star">★</span>
                     Historically ≈ €1000+ with community additions
@@ -795,6 +809,7 @@
                     <span class="heart">♥</span> Community donations push the pool past the base every
                     edition — the split above is how placements share the total.
                 </p>
+                <div class="dono-wall" id="dono-wall" hidden><!-- DONO:LIST --><div class="dono-head">THANK YOU, SUPPORTERS <span id="dono-count"></span></div><ol class="dono-list" id="dono-list"></ol></div>
                 <a href="https://www.paypal.com/donate/?hosted_button_id=567SNPMT5BLL6" target="_blank" rel="noopener" class="big-btn donate" style="margin-top:18px">DONATE TO THE POOL</a>
             </div>
         </div>
@@ -1203,18 +1218,66 @@
     (function () {
         const el = document.getElementById('pool-num');
         if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const to = +el.dataset.to; let done = false;
+        let done = false;
         const io = new IntersectionObserver((en) => {
             if (done || !en[0].isIntersecting) return; done = true; io.disconnect();
             const t0 = performance.now(), dur = 900;
             (function step(t) {
                 const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
-                el.textContent = '€' + Math.round(to * e / 5) * 5;
-                if (k < 1) requestAnimationFrame(step); else el.textContent = '€' + to;
+                el.textContent = '€' + Math.round(+el.dataset.to * e / 5) * 5;
+                if (k < 1) requestAnimationFrame(step); else el.textContent = '€' + el.dataset.to;
             })(t0);
         }, { threshold: 0.6 });
         el.textContent = '€0'; io.observe(el);
-        setTimeout(() => { if (!done) { el.textContent = '€' + to; } }, 8000);
+        setTimeout(() => { if (!done) { el.textContent = '€' + el.dataset.to; } }, 8000);
+    })();
+</script>
+<script>
+    // DONO:JS: donations sheet (published CSV, edited by blopp) -> pool total, split amounts, supporters list
+    (function () {
+        const CSV = 'https://docs.google.com/spreadsheets/d/19WoA4RSo4sGhDxzjKaN5AogD7rVOnMjQhPNS8nIXQR4/gviz/tq?tqx=out:csv&gid=0', BASE = 300;
+        function parse(t) {   // RFC-4180-ish: quotes, escaped quotes, commas/newlines inside quotes
+            const rows = []; let row = [], f = '', q = false;
+            for (let i = 0; i < t.length; i++) {
+                const c = t[i];
+                if (q) { if (c === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+                else if (c === '"') q = true; else if (c === ',') { row.push(f); f = ''; }
+                else if (c === '\n' || c === '\r') { if (c === '\r' && t[i + 1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; }
+                else f += c;
+            }
+            if (f || row.length) { row.push(f); rows.push(row); }
+            return rows;
+        }
+        const money = (v) => { const s = String(v).replace(/[^0-9.,-]/g, ''); const n = parseFloat(/,\d{1,2}$/.test(s) ? s.replace(/\./g, '').replace(',', '.') : s.replace(/,/g, '')); return isFinite(n) ? n : 0; };
+        const fmt = (n) => '€' + (Math.round(n * 100) % 100 ? n.toFixed(2) : Math.round(n));
+        let last = '';
+        function load() {
+        if (document.hidden) return;
+        fetch(CSV + '&_=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.text() : Promise.reject(r.status)).then(t => {
+            if (t === last) return; last = t;
+            const rows = parse(t.trim()); if (rows.length < 2) return;
+            const h = rows[0].map(x => x.trim().toLowerCase()), iN = h.indexOf('name'), iA = h.indexOf('amount');
+            if (iA < 0) return;
+            const list = rows.slice(1).map(r => ({ name: ((iN >= 0 ? r[iN] : '') || '').trim() || 'Anonymous', amt: money(r[iA]) })).filter(d => d.amt > 0)
+                .sort((a, b) => b.amt - a.amt);
+            const sum = list.reduce((s, d) => s + d.amt, 0), total = BASE + sum;
+            document.getElementById('pool-dono').textContent = fmt(sum);
+            document.getElementById('pool-split').hidden = false;
+            const lb = document.querySelector('#prizepool .base-pool-label'); if (lb) lb.textContent = 'TOTAL POOL';
+            const el = document.getElementById('pool-num');
+            el.dataset.to = Math.round(total); if (el.textContent !== '€0') el.textContent = fmt(total);
+            const pct = { 'rank-1': .5, 'rank-2': .25, 'rank-3': .15, 'rank-4': .1 };
+            document.querySelectorAll('#prizepool .dist-item').forEach(d => { const k = Object.keys(pct).find(c => d.classList.contains(c)); const s = d.querySelector('.dist-team'); if (k && s) s.textContent = fmt(Math.round(total * pct[k])) + '+'; });
+            document.getElementById('dono-wall').hidden = !list.length; if (!list.length) return;
+            const ol = document.getElementById('dono-list'); ol.textContent = '';
+            list.forEach((d, i) => { const li = document.createElement('li'); if (i < 3) li.className = 'top';
+                const n = document.createElement('span'); n.className = 'n'; n.textContent = d.name; n.title = d.name;
+                const a = document.createElement('span'); a.className = 'a'; a.textContent = fmt(d.amt); li.append(n, a); ol.appendChild(li); });
+            document.getElementById('dono-count').textContent = '(' + list.length + ')';
+            document.getElementById('dono-wall').hidden = false;
+        }).catch(() => {});   // sheet unreachable: page stays as before (base pool only)
+        }
+        load(); setInterval(load, 30000); document.addEventListener('visibilitychange', load);   // website: 30 s is enough (blopp 10-08)
     })();
 </script>
 <script>
