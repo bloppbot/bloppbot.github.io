@@ -673,6 +673,24 @@
         .q-t, .q-t:last-child { justify-content: center; flex-direction: row; text-align: left; }
     }
 
+    /* === GROUPS DRAWN 2026-10-09 + day-1 schedule === */
+    .grp-row.tr { grid-template-columns: 1fr; }
+    .gt, .st { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .gt img, .st img { width: 34px; height: 34px; flex: 0 0 34px; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(2px 2px 0 #000); }
+    .gt b, .st b { font-family: 'Press Start 2P', monospace; font-weight: normal; font-size: 9px; line-height: 1.5; color: var(--cream); border-left: 3px solid var(--acc); padding-left: 8px; }
+    .gq { width: 34px; height: 34px; flex: 0 0 34px; display: grid; place-items: center; font-family: 'Press Start 2P', monospace; font-size: 12px; color: var(--red-bright); border: 2px dashed var(--red); }
+    .sched { margin-top: 10px; border: 3px solid var(--green-deep); background: rgba(3,8,5,0.7); }
+    .sr { display: grid; grid-template-columns: 70px 1fr 1fr; align-items: center; gap: 12px; padding: 8px 14px; border-bottom: 2px solid rgba(27,53,33,0.6); }
+    .sr:last-child { border-bottom: 0; }
+    .sh { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--green-bright); }
+    .sa { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .sa em { font-style: normal; font-family: 'Press Start 2P', monospace; font-size: 7px; color: #04120a; background: var(--green-bright); padding: 4px 5px 3px; }
+    .sm { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+    .sm i { font-style: normal; font-family: 'Press Start 2P', monospace; font-size: 7px; color: var(--red-bright); }
+    .st img { width: 26px; height: 26px; flex-basis: 26px; } .st .gq { width: 26px; height: 26px; flex-basis: 26px; font-size: 9px; }
+    .st b { font-size: 7px; padding-left: 6px; }
+    @media (max-width: 760px) { .sr { grid-template-columns: 1fr; gap: 8px; } }
+
     /* === TEAMS DRAFT: WC-style seeded cards (versus loop banner, logo badge, medals, AD MMR) === */
     #teams .team-grid, #teams .slot-meter-under { display: none !important; }
     .seed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 16px; margin-top: 22px; }
@@ -881,23 +899,16 @@
             <div class="fmt-head"><span class="fmt-day">DAY 1 &middot; SAT OCT 17</span><span class="fmt-name">GROUP STAGE</span><span class="fmt-sub">two groups of four &middot; everyone plays everyone &middot; best-of-one</span></div>
             <div class="groups">
                 <div class="grp">
-                    <div class="grp-title">GROUP A <span>4 TEAMS</span></div>
-                    <div class="grp-row ub"><span class="pl">1ST</span><span class="tm">A1</span><span class="to">UPPER</span></div>
-                    <div class="grp-row ub"><span class="pl">2ND</span><span class="tm">A2</span><span class="to">UPPER</span></div>
-                    <div class="grp-row lb"><span class="pl">3RD</span><span class="tm">A3</span><span class="to">LOWER</span></div>
-                    <div class="grp-row lb"><span class="pl">4TH</span><span class="tm">A4</span><span class="to">LOWER</span></div>
+                    <div class="grp-title">GROUP A <span>DRAWN OCT 9</span></div>
+                    <div class="grp-row tr"><span class="gt" style="--acc:#5b8cff"><img src="assets/logos/burgerboys_v2.png" alt=""><b>BURGER BOYS</b></span></div><div class="grp-row tr"><span class="gt" style="--acc:#7fb2e5"><img src="assets/logos/vikings.png" alt=""><b>VIKINGS</b></span></div><div class="grp-row tr"><span class="gt" style="--acc:#f2e030"><img src="assets/logos/gymesports.png" alt=""><b>GYM ESPORTS</b></span></div><div class="grp-row tr"><span class="gt" style="--acc:#d42a2a"><span class="gq">?</span><b>QUALIFIER WINNER</b></span></div>
                 </div>
                 <div class="grp">
-                    <div class="grp-title">GROUP B <span>4 TEAMS</span></div>
-                    <div class="grp-row ub"><span class="pl">1ST</span><span class="tm">B1</span><span class="to">UPPER</span></div>
-                    <div class="grp-row ub"><span class="pl">2ND</span><span class="tm">B2</span><span class="to">UPPER</span></div>
-                    <div class="grp-row lb"><span class="pl">3RD</span><span class="tm">B3</span><span class="to">LOWER</span></div>
-                    <div class="grp-row lb"><span class="pl">4TH</span><span class="tm">B4</span><span class="to">LOWER</span></div>
+                    <div class="grp-title">GROUP B <span>DRAWN OCT 9</span></div>
+                    <div class="grp-row tr"><span class="gt" style="--acc:#7cc242"><img src="assets/logos/tmnt.png" alt=""><b>TMNT</b></span></div><div class="grp-row tr"><span class="gt" style="--acc:#f5a623"><img src="assets/logos/nwo_v2.png" alt=""><b>NEW WORLD ORDER</b></span></div><div class="grp-row tr"><span class="gt" style="--acc:#e8a33d"><img src="assets/logos/dontpeek.png" alt=""><b>DON'T PEEK</b></span></div><div class="grp-row tr"><span class="gt" style="--acc:#3fd0c9"><img src="assets/logos/spacemarines.png" alt=""><b>SPACE MARINES</b></span></div>
                 </div>
             </div>
-            <div class="rr">6 rounds, one every hour:
-                <div class="rr-pips"><i>17</i><i>18</i><i>19</i><i>20</i><i>21</i><i>22</i></div>
-            </div>
+            <div class="rr">6 rounds, one every hour, both groups play at the same time:</div>
+            <div class="sched"><div class="sr"><div class="sh">17:00</div><div class="sa"><em>A</em><div class="sm"><span class="st" style="--acc:#7fb2e5"><img src="assets/logos/vikings.png" alt=""><b>VIKINGS</b></span><i>vs</i><span class="st" style="--acc:#f2e030"><img src="assets/logos/gymesports.png" alt=""><b>GYM ESPORTS</b></span></div></div><div class="sa"><em>B</em><div class="sm"><span class="st" style="--acc:#f5a623"><img src="assets/logos/nwo_v2.png" alt=""><b>NEW WORLD ORDER</b></span><i>vs</i><span class="st" style="--acc:#e8a33d"><img src="assets/logos/dontpeek.png" alt=""><b>DON'T PEEK</b></span></div></div></div><div class="sr"><div class="sh">18:00</div><div class="sa"><em>A</em><div class="sm"><span class="st" style="--acc:#5b8cff"><img src="assets/logos/burgerboys_v2.png" alt=""><b>BURGER BOYS</b></span><i>vs</i><span class="st" style="--acc:#d42a2a"><span class="gq">?</span><b>QUALIFIER WINNER</b></span></div></div><div class="sa"><em>B</em><div class="sm"><span class="st" style="--acc:#7cc242"><img src="assets/logos/tmnt.png" alt=""><b>TMNT</b></span><i>vs</i><span class="st" style="--acc:#3fd0c9"><img src="assets/logos/spacemarines.png" alt=""><b>SPACE MARINES</b></span></div></div></div><div class="sr"><div class="sh">19:00</div><div class="sa"><em>A</em><div class="sm"><span class="st" style="--acc:#7fb2e5"><img src="assets/logos/vikings.png" alt=""><b>VIKINGS</b></span><i>vs</i><span class="st" style="--acc:#d42a2a"><span class="gq">?</span><b>QUALIFIER WINNER</b></span></div></div><div class="sa"><em>B</em><div class="sm"><span class="st" style="--acc:#f5a623"><img src="assets/logos/nwo_v2.png" alt=""><b>NEW WORLD ORDER</b></span><i>vs</i><span class="st" style="--acc:#3fd0c9"><img src="assets/logos/spacemarines.png" alt=""><b>SPACE MARINES</b></span></div></div></div><div class="sr"><div class="sh">20:00</div><div class="sa"><em>A</em><div class="sm"><span class="st" style="--acc:#5b8cff"><img src="assets/logos/burgerboys_v2.png" alt=""><b>BURGER BOYS</b></span><i>vs</i><span class="st" style="--acc:#f2e030"><img src="assets/logos/gymesports.png" alt=""><b>GYM ESPORTS</b></span></div></div><div class="sa"><em>B</em><div class="sm"><span class="st" style="--acc:#7cc242"><img src="assets/logos/tmnt.png" alt=""><b>TMNT</b></span><i>vs</i><span class="st" style="--acc:#e8a33d"><img src="assets/logos/dontpeek.png" alt=""><b>DON'T PEEK</b></span></div></div></div><div class="sr"><div class="sh">21:00</div><div class="sa"><em>A</em><div class="sm"><span class="st" style="--acc:#f2e030"><img src="assets/logos/gymesports.png" alt=""><b>GYM ESPORTS</b></span><i>vs</i><span class="st" style="--acc:#d42a2a"><span class="gq">?</span><b>QUALIFIER WINNER</b></span></div></div><div class="sa"><em>B</em><div class="sm"><span class="st" style="--acc:#e8a33d"><img src="assets/logos/dontpeek.png" alt=""><b>DON'T PEEK</b></span><i>vs</i><span class="st" style="--acc:#3fd0c9"><img src="assets/logos/spacemarines.png" alt=""><b>SPACE MARINES</b></span></div></div></div><div class="sr"><div class="sh">22:00</div><div class="sa"><em>A</em><div class="sm"><span class="st" style="--acc:#5b8cff"><img src="assets/logos/burgerboys_v2.png" alt=""><b>BURGER BOYS</b></span><i>vs</i><span class="st" style="--acc:#7fb2e5"><img src="assets/logos/vikings.png" alt=""><b>VIKINGS</b></span></div></div><div class="sa"><em>B</em><div class="sm"><span class="st" style="--acc:#7cc242"><img src="assets/logos/tmnt.png" alt=""><b>TMNT</b></span><i>vs</i><span class="st" style="--acc:#f5a623"><img src="assets/logos/nwo_v2.png" alt=""><b>NEW WORLD ORDER</b></span></div></div></div></div>
             <div class="safe">&#9733; TOP 2 START IN THE UPPER BRACKET &middot; 3RD + 4TH IN THE LOWER BRACKET</div>
         </div>
 
