@@ -668,6 +668,9 @@
     .q-vs { font-family: 'Press Start 2P', monospace; font-size: 0.7rem; color: var(--red-bright); }
     .q-final { border-top: 2px dashed var(--green-deep); padding-top: 12px; text-align: center; color: var(--cream); font-size: 1.15rem; }
     .q-final b { color: var(--red-bright); font-weight: normal; }
+    .q-t.lost { opacity: 0.35; } .q-t.won span { color: var(--green-bright); }
+    .q-res { font-family: 'Press Start 2P', monospace; font-size: 0.55rem; color: var(--green-bright); white-space: nowrap; }
+    .q-match.decider { border-top: 3px solid var(--red); }
     @media (max-width: 640px) {
         .q-match { grid-template-columns: 1fr; gap: 8px; text-align: center; }
         .q-t, .q-t:last-child { justify-content: center; flex-direction: row; text-align: left; }
@@ -859,9 +862,10 @@
         <div class="team-grid" id="team-grid"></div>
         <div class="qual px-frame" id="qualifier">
             <div class="q-head"><span class="q-k">QUALIFIER</span><span class="q-d">SAT OCT 10 · BEST-OF-ONE · CEST · NOT STREAMED</span></div>
-            <div class="q-match"><div class="q-time">20:00</div><div class="q-t" style="--acc:#e0334f"><img src="assets/logos/oldravens.png" alt=""><span><em>#8</em> OLD RAVENS</span></div><div class="q-vs">VS</div><div class="q-t" style="--acc:#e04040"><img src="assets/logos/blondinok.png" alt=""><span><em>#11</em> PLAYLIST DLYA BLONDINOK</span></div></div>
-            <div class="q-match"><div class="q-time">21:00</div><div class="q-t" style="--acc:#6fd060"><img src="assets/logos/mallards.png" alt=""><span><em>#9</em> MALLARDS</span></div><div class="q-vs">VS</div><div class="q-t" style="--acc:#c86be0"><img src="assets/logos/hymer_v2.png" alt=""><span><em>#10</em> HYMER</span></div></div>
-            <div class="q-final">The two winners play each other for the <b>last main event slot</b> · time TBA</div>
+            <div class="q-match"><div class="q-time">20:00</div><div class="q-t won" style="--acc:#e0334f"><img src="assets/logos/oldravens.png" alt=""><span><em>#8</em> OLD RAVENS</span></div><div class="q-res">1 : 0</div><div class="q-t lost" style="--acc:#e04040"><img src="assets/logos/blondinok.png" alt=""><span><em>#11</em> PLAYLIST DLYA BLONDINOK</span></div></div>
+            <div class="q-match"><div class="q-time">21:00</div><div class="q-t won" style="--acc:#6fd060"><img src="assets/logos/mallards.png" alt=""><span><em>#9</em> MALLARDS</span></div><div class="q-res">W/O</div><div class="q-t lost" style="--acc:#c86be0"><img src="assets/logos/hymer_v2.png" alt=""><span><em>#10</em> HYMER</span></div></div>
+            <div class="q-match decider"><div class="q-time">NOW</div><div class="q-t" style="--acc:#e0334f"><img src="assets/logos/oldravens.png" alt=""><span><em>#8</em> OLD RAVENS</span></div><div class="q-vs">VS</div><div class="q-t" style="--acc:#6fd060"><img src="assets/logos/mallards.png" alt=""><span><em>#9</em> MALLARDS</span></div></div>
+            <div class="q-final">HYMER did not show up, Mallards advance. <b>Decider:</b> winner takes the <b>last main event slot</b></div>
         </div>
     </section>
 </div>
