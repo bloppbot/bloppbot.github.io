@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RUMBLE IN THE JUNGLE VI — Dota 2 Ability Draft Tournament</title>
-<meta name="description" content="Rumble in the Jungle VI — the most competitive Dota 2 Ability Draft team tournament. October 17—18 & 24—25, 2026. 8 teams, EU West, €300+ prize pool. Full teams of 5 only. Sign up on Discord.">
+<meta name="description" content="Rumble in the Jungle VI — the most competitive Dota 2 Ability Draft team tournament. October 17—18 & 24—25, 2026. 8 teams, EU West, €300+ prize pool. The field is set: groups, schedule and bracket inside.">
 <meta name="keywords" content="Dota 2, Ability Draft, tournament, Rumble in the Jungle, AD tournament, Dota 2 community tournament, esports, EU West, 2026">
 <link rel="canonical" href="https://bloppbot.github.io/rumble6/">
 <meta name="theme-color" content="#030805">
 <meta property="og:title" content="RUMBLE IN THE JUNGLE VI">
-<meta property="og:description" content="The most competitive Dota 2 Ability Draft tournament there is. OCT 17—18 & 24—25, 2026. 8 teams. Assemble your 5 and sign up on Discord.">
+<meta property="og:description" content="The most competitive Dota 2 Ability Draft tournament there is. OCT 17—18 & 24—25, 2026. The 8 teams are set: groups, schedule and bracket.">
 <meta property="og:image" content="https://bloppbot.github.io/rumble6/assets/og.jpg">
 <meta property="og:image:width" content="1536">
 <meta property="og:image:height" content="864">
@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="Rumble in the Jungle">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="RUMBLE IN THE JUNGLE VI">
-<meta name="twitter:description" content="The most competitive Dota 2 Ability Draft tournament there is. OCT 17—18 & 24—25, 2026. Full teams of 5, sign up on Discord.">
+<meta name="twitter:description" content="The most competitive Dota 2 Ability Draft tournament there is. OCT 17—18 & 24—25, 2026. The 8 teams are set: groups, schedule and bracket.">
 <meta name="twitter:image" content="https://bloppbot.github.io/rumble6/assets/og.jpg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
@@ -676,6 +676,10 @@
         .q-t, .q-t:last-child { justify-content: center; flex-direction: row; text-align: left; }
     }
 
+    .qual-mini { margin-top: 18px; text-align: center; font-size: 0.95rem; color: var(--cream-dim); }
+    .qual-mini .qm-k { font-family: 'Press Start 2P', monospace; font-size: 0.5rem; color: var(--green-bright); margin-right: 8px; }
+    .qual-mini b { color: var(--cream); font-weight: normal; }
+
     /* === GROUPS DRAWN 2026-10-09 + day-1 schedule === */
     .grp-row.tr { grid-template-columns: 1fr; }
     .gt, .st { display: flex; align-items: center; gap: 10px; min-width: 0; }
@@ -743,6 +747,10 @@
     .sc-banner video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .sc-banner::after { content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(3,8,5,0) 45%, rgba(8,18,9,0.97) 97%); pointer-events: none; }
     .sc-seed { position: absolute; top: 6px; left: 6px; z-index: 2; font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--acc); background: rgba(3,8,5,0.82); border: 2px solid var(--acc-line); padding: 5px 6px; }
+    .sc-st { position: absolute; top: 6px; right: 6px; z-index: 2; font-family: 'Press Start 2P', monospace; font-size: 7px; padding: 5px 6px; background: rgba(3,8,5,0.85); border: 2px solid var(--green-deep); color: var(--green-bright); }
+    .sc-st.q { color: #fff; background: var(--red); border-color: var(--red-bright); }
+    .sc-st.out { color: var(--cream-dim); border-color: #3a3a3a; }
+    .sc.out { opacity: 0.45; filter: grayscale(0.85); }
     .sc-logo { width: 26px; height: 26px; flex: 0 0 26px; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.7)); }
     .sc-name { position: absolute; left: 8px; right: 8px; bottom: 7px; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center; font-family: 'Press Start 2P', monospace; font-size: 8px; line-height: 1.6; color: var(--acc); text-shadow: 2px 2px 0 rgba(0,0,0,0.9); letter-spacing: 1px; }
     .sc-roster { list-style: none; padding: 2px 0 6px; background: rgba(3,8,5,0.45); border-top: 3px solid var(--acc-line); }
@@ -780,7 +788,7 @@
                 <h1 class="h-title">RUMBLE IN THE JUNGLE VI</h1>
                 <div class="h-bar"></div>
                 <div class="h-sub">OCT 17 — 18 &amp; 24 — 25 ★ 2026</div>
-                <a href="#teams" class="h-cta">SEE THE FIELD <span class="slots" id="hero-slots">SIGN-UPS CLOSED · QUALIFIER OCT 10</span></a>
+                <a href="#teams" class="h-cta">SEE THE FIELD <span class="slots" id="hero-slots">THE 8 TEAMS ARE SET</span></a>
             </div>
         </div>
     </header>
@@ -790,7 +798,7 @@
     <a href="#info" class="nav-btn">THE RUMBLE</a>
     <a href="#teams" class="nav-btn">TEAMS</a>
     <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
-    <a href="#qualifier" class="nav-btn signup">QUALIFIER</a>
+    <a href="#format" class="nav-btn signup">GROUPS</a>
     <a href="#format" class="nav-btn">FORMAT</a>
     <a href="#casters" class="nav-btn">CASTERS</a>
     <a href="#lastrumble" class="nav-btn">LAST RUMBLE</a>
@@ -807,7 +815,7 @@
             <div class="cd-box"><div class="cd-num" id="cd-s">--</div><div class="cd-text">SEC</div></div>
         </div>
         <div class="slot-meter">
-            <div class="sm-row" style="justify-content:center"><span><span class="sm-taken" id="sm-taken">11 TEAMS IN</span> · SIGN-UPS CLOSED · THE RUMBLE STARTS <b>OCT 17, 17:00 CEST</b></span></div>
+            <div class="sm-row" style="justify-content:center"><span><span class="sm-taken" id="sm-taken">8 TEAMS SET</span> · GROUPS DRAWN · THE RUMBLE STARTS <b>OCT 17, 17:00 CEST</b></span></div>
         </div>
     </div>
 </div>
@@ -855,18 +863,12 @@
         <h2 class="section-title">THE TEAMS</h2>
         <div class="title-rule"></div>
         <p class="lead">
-            <span id="teams-counter" class="date-highlight">11 TEAMS SIGNED UP · SIGN-UPS CLOSED</span><br>
+            <span id="teams-counter" class="date-highlight">THE 8 TEAMS ARE SET</span><br>
             <b>8 teams</b> play the main event. Seeds <b>1 to 7</b> are invited,
-            seeds <b>8 to 11</b> play the <a href="#qualifier" class="q-link">qualifier</a> on <b>OCT 10</b> for the last slot.
+            seeds <b>8 to 11</b> played the <a href="#qualifier" class="q-link">qualifier</a> on <b>OCT 10</b>: <b>Old Ravens</b> took the last slot.
         </p>
         <div class="team-grid" id="team-grid"></div>
-        <div class="qual px-frame" id="qualifier">
-            <div class="q-head"><span class="q-k">QUALIFIER</span><span class="q-d">SAT OCT 10 · BEST-OF-ONE · CEST · NOT STREAMED</span></div>
-            <div class="q-match"><div class="q-time">20:00</div><div class="q-t won" style="--acc:#e0334f"><img src="assets/logos/oldravens.png" alt=""><span><em>#8</em> OLD RAVENS</span></div><div class="q-res">1 : 0</div><div class="q-t lost" style="--acc:#e04040"><img src="assets/logos/blondinok.png" alt=""><span><em>#11</em> PLAYLIST DLYA BLONDINOK</span></div></div>
-            <div class="q-match"><div class="q-time">21:00</div><div class="q-t won" style="--acc:#6fd060"><img src="assets/logos/mallards.png" alt=""><span><em>#9</em> MALLARDS</span></div><div class="q-res">W/O</div><div class="q-t lost" style="--acc:#c86be0"><img src="assets/logos/hymer_v2.png" alt=""><span><em>#10</em> HYMER</span></div></div>
-            <div class="q-match decider"><div class="q-time">NOW</div><div class="q-t" style="--acc:#e0334f"><img src="assets/logos/oldravens.png" alt=""><span><em>#8</em> OLD RAVENS</span></div><div class="q-vs">VS</div><div class="q-t" style="--acc:#6fd060"><img src="assets/logos/mallards.png" alt=""><span><em>#9</em> MALLARDS</span></div></div>
-            <div class="q-final">HYMER did not show up, Mallards advance. <b>Decider:</b> winner takes the <b>last main event slot</b></div>
-        </div>
+        <div class="qual-mini" id="qualifier"><span class="qm-k">QUALIFIER OCT 10</span> Old Ravens 1:0 Playlist dlya blondinok &middot; Mallards W/O HYMER &middot; <b>Final: Old Ravens 1:0 Mallards</b></div>
     </section>
 </div>
 
@@ -905,31 +907,6 @@
 
 <div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/scene_monkeywalk_1536.jpg" data-lazy><source src="assets/loop_strip_monkeys.mp4" type="video/mp4"></video></div>
 
-<div class="container">
-    <section id="signup" class="section-wrapper">
-        <h2 class="section-title">SIGN UP</h2>
-        <div class="title-rule"></div>
-        <div class="signup-box px-frame has-bg">
-            <img class="card-bg" src="assets/scene_tunnel_1536.jpg" alt="" aria-hidden="true"><div class="card-shade"></div>
-            <div class="signup-inner">
-                <div class="rule-box">
-                    SIGN-UPS ARE CLOSED.<br>
-                    <span class="no">11 TEAMS ARE IN.</span>
-                </div>
-                <p style="margin-top: 24px;">
-                    Seeds 1 to 7 are invited to the main event, seeds 8 to 11 play the
-                    <a href="#qualifier" class="q-link">qualifier</a> on <span class="date-highlight">OCT 10</span> for the last slot.
-                </p>
-                <p style="margin-top: 12px;">
-                    Missed it? Join the Discord: there is always a next Rumble.
-                </p>
-                <div class="btn-row">
-                    <a href="https://discord.gg/sQFwGxFYFB" target="_blank" rel="noopener" class="big-btn discord">JOIN THE DISCORD</a>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
 
 <!-- FORMAT:START -->
 <div class="container">
@@ -946,9 +923,9 @@
             (function () {
                 const TM = {
                     'Burger Boys': ['burgerboys', 'burgerboys_v2', '#5b8cff'], 'Vikings': ['vikings', 'vikings', '#7fb2e5'], 'GYM Esports': ['gym', 'gymesports', '#f2e030'],
-                    'Qualifier winner': [null, null, '#d42a2a'], 'TMNT': ['tmnt', 'tmnt', '#7cc242'], 'New World Order': ['nwo', 'nwo_v2', '#f5a623'],
+                    'Old Ravens': ['oldravens', 'oldravens', '#e0334f'], 'TMNT': ['tmnt', 'tmnt', '#7cc242'], 'New World Order': ['nwo', 'nwo_v2', '#f5a623'],
                     "Don't Peek": ['dontpeek', 'dontpeek', '#e8a33d'], 'Space Marines': ['spacemarines', 'spacemarines', '#3fd0c9'] };
-                const G = { A: ['Burger Boys', 'Vikings', 'GYM Esports', 'Qualifier winner'], B: ['TMNT', 'New World Order', "Don't Peek", 'Space Marines'] };
+                const G = { A: ['Burger Boys', 'Vikings', 'GYM Esports', 'Old Ravens'], B: ['TMNT', 'New World Order', "Don't Peek", 'Space Marines'] };
                 const ORDER = [[1, 2], [0, 3], [1, 3], [0, 2], [2, 3], [0, 1]], HOURS = ['17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
                 const RESULTS = { A: [null, null, null, null, null, null], B: [null, null, null, null, null, null] };   // per hour, 'a' | 'b'
                 const root = document.getElementById('gs2');
@@ -1073,7 +1050,7 @@
     </section>
 </div>
 
-<a href="#qualifier" class="mob-cta">QUALIFIER · SAT OCT 10 · 20:00 CEST</a>
+<a href="#format" class="mob-cta">GROUPS · SAT OCT 17 · 17:00 CEST</a>
 
 <footer>
     <div class="f-title">RUMBLE IN THE JUNGLE VI</div>
@@ -1375,11 +1352,14 @@
         const note = document.createElement('p'); note.className = 'seed-note';
         note.textContent = 'Seeded by AD MMR (windrun) · hover or tap a card to bring it to life · ★ = captain';
         grid.after(note);
+        // field set 2026-10-10: seeds 1-7 invited, Old Ravens won the qualifier, the other 3 are out
+        const ST = { oldravens: ['q', 'QUALIFIED'], mallards: ['out', 'ELIMINATED'], hymer: ['out', 'ELIMINATED'], blondinok: ['out', 'ELIMINATED'] };
         SEEDED.forEach(t => {
-            const c = document.createElement('div'); c.className = 'sc';
+            const st = ST[t.key] || ['', 'INVITED'];
+            const c = document.createElement('div'); c.className = 'sc' + (st[0] === 'out' ? ' out' : '');
             c.style.setProperty('--acc', t.acc); c.style.setProperty('--acc-line', t.acc + '66'); c.style.setProperty('--acc-glow', t.acc + '40');
             c.innerHTML = '<div class="sc-banner">' + (t.hasLoop ? '<video muted loop playsinline preload="none" poster="assets/versus/vs_' + t.key + '.jpg"><source src="assets/versus/loop_' + t.key + '.mp4" type="video/mp4"></video>' : '<div class="sc-ph">' + t.name.charAt(0) + '</div>')
-                + '<div class="sc-seed">#' + t.seed + '</div>'
+                + '<div class="sc-seed">#' + t.seed + '</div><div class="sc-st ' + st[0] + '">' + st[1] + '</div>'
                 + '<div class="sc-name">' + (t.logo ? '<img class="sc-logo" src="' + t.logo + '" alt="">' : '') + '<span>' + t.name.toUpperCase() + '</span></div></div><ul class="sc-roster">'
                 + t.roster.map(([n, medal, pill, mmr, sid, cpt, isNew]) => '<li class="sc-p"><div class="sc-medal"><img src="assets/ranking-medals/seasonal-rank-' + (medal || 'uncalibrated') + '.png" alt="">'
                     + (pill ? '<span class="sc-pill">' + pill + '</span>' : '') + '</div><div class="sc-pname">'
