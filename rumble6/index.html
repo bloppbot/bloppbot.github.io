@@ -926,7 +926,7 @@
                     'Old Ravens': ['oldravens', 'oldravens', '#e0334f'], 'TMNT': ['tmnt', 'tmnt', '#7cc242'], 'New World Order': ['nwo', 'nwo_v2', '#f5a623'],
                     "Don't Peek": ['dontpeek', 'dontpeek', '#e8a33d'], 'Space Marines': ['spacemarines', 'spacemarines', '#3fd0c9'] };
                 const G = { A: ['Burger Boys', 'Vikings', 'GYM Esports', 'Old Ravens'], B: ['TMNT', 'New World Order', "Don't Peek", 'Space Marines'] };
-                const ORDER = [[1, 2], [0, 3], [1, 3], [0, 2], [2, 3], [0, 1]], HOURS = ['17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
+                const ORDER = { A: [[1, 2], [0, 3], [1, 3], [0, 2], [2, 3], [0, 1]], B: [[1, 2], [0, 3], [1, 3], [0, 2], [0, 1], [2, 3]] }, HOURS = ['17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
                 const RESULTS = { A: [null, null, null, null, null, null], B: [null, null, null, null, null, null] };   // per hour, 'a' | 'b'
                 const root = document.getElementById('gs2');
                 const logo = (n, c) => TM[n][1] ? '<img class="' + c + '" src="assets/logos/' + TM[n][1] + '.png" alt="">' : '<span class="' + c + ' gq2">?</span>';
@@ -934,7 +934,7 @@
                 Object.keys(G).forEach(g => {
                     const teams = G[g], rec = {};
                     teams.forEach(n => rec[n] = { w: 0, l: 0 });
-                    const ms = ORDER.map(([i, j], k) => ({ t: HOURS[k], a: teams[i], b: teams[j], w: RESULTS[g][k] }));
+                    const ms = ORDER[g].map(([i, j], k) => ({ t: HOURS[k], a: teams[i], b: teams[j], w: RESULTS[g][k] }));
                     ms.forEach(m => { if (!m.w) return; const W = m.w === 'a' ? m.a : m.b, L = m.w === 'a' ? m.b : m.a; rec[W].w++; rec[L].l++; });
                     const played = ms.some(m => m.w);
                     const table = teams.slice().sort((x, y) => played ? (rec[y].w - rec[x].w) || (rec[x].l - rec[y].l) || (teams.indexOf(x) - teams.indexOf(y)) : 0);
