@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prediction Game · Rumble in the Jungle VI</title>
+<meta name="description" content="Predict Rumble in the Jungle VI: match winners, group order, final standings and stat awards. Sign in with Steam. 50€ for the winner.">
+<meta property="og:title" content="Rumble VI Prediction Game">
+<meta property="og:description" content="Sign in with Steam, call every match, win 50€.">
+<meta property="og:image" content="https://bloppbot.github.io/rumble6/assets/og.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #030805; --panel: #081209; --panel-2: #0b1a0e; --line: #1b3521;
+  --green: #4caf50; --green-bright: #6fe07a; --green-deep: #2e6e3a;
+  --red: #a81616; --red-bright: #d42a2a; --cream: #f0e6d2; --cream-dim: #b8ad96; --gold: #ffd97a;
+  --ease: cubic-bezier(0.23, 1, 0.32, 1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+@font-face { font-family: 'VT323 Cyr'; src: url('../assets/fonts/pixelify-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; size-adjust: 80%; font-display: swap; }
+html, body { cursor: url('../assets/cursor.png') 1 1, auto; }
+a, button, select, .tm, .chip, label { cursor: url('../assets/cursor_hand.png') 1 1, pointer; }
+body { background: var(--bg); color: var(--cream); font-family: 'VT323', 'VT323 Cyr', monospace; font-size: 21px; line-height: 1.45; min-height: 100vh; }
+.scene { position: fixed; inset: 0; background: url('../assets/scene_arenafloor_1536.jpg') center/cover; filter: brightness(.22) saturate(.9); z-index: -2; image-rendering: pixelated; }
+.vig { position: fixed; inset: 0; background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,.8) 100%); z-index: -1; }
+.px { font-family: 'Press Start 2P', monospace; }
+a { color: var(--green-bright); }
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 16px 80px; }
+
+/* top bar */
+.top { position: sticky; top: 0; z-index: 20; background: rgba(3,8,5,.92); border-bottom: 3px solid var(--line); backdrop-filter: blur(4px); }
+.top .in { max-width: 1060px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 14px; }
+.back { font-family: 'Press Start 2P'; font-size: 10px; color: var(--cream-dim); text-decoration: none; white-space: nowrap; }
+.back:hover { color: var(--green-bright); }
+.tabs { display: flex; gap: 6px; margin-left: auto; }
+.tab { font-family: 'Press Start 2P'; font-size: 10px; padding: 9px 12px; background: var(--panel); color: var(--cream-dim); border: 2px solid var(--line); }
+.tab.on { color: var(--bg); background: var(--green-bright); border-color: var(--green-bright); }
+.tab:active, .btn:active, .tm:active, .chip:active { transform: translateY(1px); }
+
+/* hero */
+.hero { text-align: center; padding: 42px 0 18px; }
+.kick { font-family: 'Press Start 2P'; font-size: 11px; color: var(--green-bright); letter-spacing: 3px; }
+h1 { font-family: 'Press Start 2P'; font-size: clamp(22px, 5vw, 44px); color: var(--red); line-height: 1.25; margin: 14px 0 10px;
+  text-shadow: 3px 3px 0 #1f0202, 6px 6px 0 rgba(0,0,0,.6), 0 0 22px rgba(190,40,40,.45); }
+.bar { width: 170px; height: 3px; background: var(--red); margin: 0 auto 14px; box-shadow: 2px 2px 0 rgba(0,0,0,.7); }
+.sub { color: var(--cream-dim); font-size: 23px; }
+.prize { display: inline-flex; align-items: center; gap: 12px; margin-top: 18px; padding: 10px 18px; border: 3px solid var(--gold); background: rgba(255,217,122,.08);
+  box-shadow: 5px 5px 0 rgba(0,0,0,.6); font-family: 'Press Start 2P'; font-size: 13px; color: var(--gold); }
+.prize b { font-size: 22px; font-weight: normal; }
+
+/* login */
+.auth { margin: 22px auto 0; display: flex; justify-content: center; }
+.steam { display: inline-flex; align-items: center; gap: 12px; background: #171a21; color: #fff; text-decoration: none; padding: 12px 18px; border: 3px solid #66c0f4;
+  box-shadow: 5px 5px 0 rgba(0,0,0,.6); font-family: 'Press Start 2P'; font-size: 11px; }
+.steam:hover { background: #1b2838; }
+.steam svg { width: 26px; height: 26px; }
+.me { display: inline-flex; align-items: center; gap: 12px; padding: 8px 14px 8px 8px; border: 3px solid var(--green-deep); background: var(--panel); box-shadow: 5px 5px 0 rgba(0,0,0,.6); }
+.me img { width: 40px; height: 40px; image-rendering: auto; border: 2px solid var(--line); }
+.me .nm { font-family: 'Press Start 2P'; font-size: 11px; }
+.me .pts { color: var(--gold); font-size: 20px; }
+.me button { background: none; border: 0; color: var(--cream-dim); font-family: 'VT323'; font-size: 18px; text-decoration: underline; }
+
+/* sections */
+.sec { margin-top: 40px; }
+.sh { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+.sh h2 { font-family: 'Press Start 2P'; font-size: 17px; color: var(--green-bright); text-shadow: 3px 3px 0 #000; }
+.sh .note { color: var(--cream-dim); font-size: 19px; }
+.lockpill { font-family: 'Press Start 2P'; font-size: 9px; padding: 5px 8px; border: 2px solid var(--green-deep); color: var(--green-bright); }
+.lockpill.locked { border-color: var(--red); color: #ff6a5a; }
+.card { background: rgba(8,18,9,.9); border: 3px solid var(--green-deep); box-shadow: 6px 6px 0 rgba(0,0,0,.6); }
+.day { margin-bottom: 22px; }
+.dayh { font-family: 'Press Start 2P'; font-size: 11px; color: var(--cream); margin: 18px 0 10px; letter-spacing: 1px; }
+
+/* match card */
+.ms { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.m { padding: 12px; position: relative; }
+.m .meta { display: flex; justify-content: space-between; font-family: 'Press Start 2P'; font-size: 9px; color: var(--cream-dim); margin-bottom: 10px; }
+.m .meta .st { color: var(--green-bright); }
+.m .row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: stretch; }
+.m .vs { align-self: center; font-family: 'Press Start 2P'; font-size: 11px; color: var(--red-bright); }
+.tm { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; background: var(--panel-2); border: 3px solid var(--line); color: var(--cream);
+  font-family: 'Press Start 2P'; font-size: 9px; line-height: 1.4; text-align: center; transition: border-color .15s, background .15s; }
+.tm img { width: 44px; height: 44px; image-rendering: pixelated; }
+.tm .q { width: 44px; height: 44px; display: grid; place-items: center; font-size: 18px; color: var(--cream-dim); border: 2px dashed var(--line); }
+@media (hover: hover) { .tm:not([disabled]):hover { border-color: var(--green); } }
+.tm.sel { border-color: var(--acc, var(--green-bright)); background: color-mix(in srgb, var(--acc, #6fe07a) 16%, var(--panel-2)); box-shadow: inset 0 0 0 2px rgba(0,0,0,.4); }
+.tm[disabled] { cursor: default; opacity: .55; }
+.tm.sel[disabled] { opacity: 1; }
+.tm.win { outline: 3px solid var(--gold); outline-offset: -3px; }
+.scores { display: flex; gap: 6px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.chip { font-family: 'Press Start 2P'; font-size: 9px; padding: 7px 9px; background: var(--panel-2); border: 2px solid var(--line); color: var(--cream-dim); }
+.chip.sel { border-color: var(--gold); color: var(--gold); }
+.chip[disabled] { cursor: default; opacity: .5; }
+.chip.sel[disabled] { opacity: 1; }
+.m .foot { margin-top: 8px; font-size: 18px; color: var(--cream-dim); text-align: center; min-height: 22px; }
+.m .foot b { font-weight: normal; }
+.ok { color: var(--green-bright); } .bad { color: #ff6a5a; }
+
+/* order lists */
+.orders { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.ol { padding: 12px; }
+.ol h3 { font-family: 'Press Start 2P'; font-size: 12px; color: var(--green-bright); margin-bottom: 10px; text-align: center; }
+.or { display: grid; grid-template-columns: 52px 34px 1fr auto; align-items: center; gap: 10px; padding: 6px 8px; border-bottom: 2px solid rgba(46,110,58,.35); }
+.or:last-child { border-bottom: 0; }
+.or .pl { font-family: 'Press Start 2P'; font-size: 10px; color: var(--gold); }
+.or img { width: 34px; height: 34px; image-rendering: pixelated; }
+.or .n { font-family: 'Press Start 2P'; font-size: 10px; line-height: 1.4; }
+.or .arr { display: flex; gap: 4px; }
+.or .arr button { width: 34px; height: 30px; background: var(--panel-2); border: 2px solid var(--line); color: var(--cream); font-family: 'Press Start 2P'; font-size: 10px; }
+.or .arr button:disabled { opacity: .25; cursor: default; }
+.or.hit .pl::after { content: ' ✓'; color: var(--green-bright); }
+
+/* crystal ball */
+.cb { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.c { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.c .t { font-family: 'Press Start 2P'; font-size: 10px; line-height: 1.5; display: flex; gap: 10px; align-items: center; }
+.c .t span { font-size: 20px; }
+.c .how { color: var(--cream-dim); font-size: 18px; margin-top: -4px; }
+.c select, .c input { width: 100%; font-family: 'VT323', 'VT323 Cyr'; font-size: 20px; padding: 7px 8px; background: var(--panel-2); color: var(--cream); border: 2px solid var(--line); outline: none; }
+.c select:focus, .c input:focus { border-color: var(--green); }
+.c select:disabled, .c input:disabled { opacity: .6; }
+.abrow { display: flex; gap: 8px; align-items: center; }
+.abrow img { width: 38px; height: 38px; border: 2px solid var(--line); background: #000; }
+.c.hit { border-color: var(--gold); }
+
+/* leaderboard */
+.lb { width: 100%; border-collapse: collapse; }
+.lb th { font-family: 'Press Start 2P'; font-size: 9px; color: var(--cream-dim); text-align: right; padding: 10px 8px; border-bottom: 3px solid var(--green-deep); font-weight: normal; }
+.lb th:nth-child(2) { text-align: left; }
+.lb td { padding: 8px; border-bottom: 2px solid rgba(46,110,58,.35); text-align: right; font-size: 21px; }
+.lb td.rk { font-family: 'Press Start 2P'; font-size: 11px; color: var(--cream-dim); width: 44px; }
+.lb tr.top1 td.rk { color: var(--gold); } .lb tr.top2 td.rk { color: #d9d9d9; } .lb tr.top3 td.rk { color: #d8955a; }
+.lb td.pl { text-align: left; }
+.lb .who { display: flex; align-items: center; gap: 10px; }
+.lb .who img { width: 32px; height: 32px; border: 2px solid var(--line); }
+.lb .who .nm { font-family: 'Press Start 2P'; font-size: 10px; line-height: 1.4; }
+.lb .tot { color: var(--gold); font-family: 'Press Start 2P'; font-size: 12px; }
+.lb tr.mine td { background: rgba(111,224,122,.09); }
+.bdg { font-size: 15px; padding: 1px 6px; border: 2px solid; margin-left: 4px; white-space: nowrap; }
+.bdg.traitor { color: #ff6a5a; border-color: #7a1f1f; } .bdg.copium { color: #e7b5ff; border-color: #5b2a73; } .bdg.oracle { color: var(--gold); border-color: #7a5a1f; }
+.lbwrap { padding: 6px 10px 10px; overflow-x: auto; }
+.empty { padding: 30px; text-align: center; color: var(--cream-dim); }
+@media (max-width: 640px) { .lb .hide-s { display: none; } .tabs .tab { padding: 8px 8px; font-size: 9px; } .back span { display: none; } }
+
+/* rules */
+.rules { padding: 18px 20px; }
+.rules h3 { font-family: 'Press Start 2P'; font-size: 12px; color: var(--green-bright); margin: 18px 0 8px; }
+.rules h3:first-child { margin-top: 0; }
+.rules ul { list-style: none; } .rules li { padding: 3px 0 3px 22px; position: relative; }
+.rules li::before { content: '◆'; position: absolute; left: 0; color: var(--red-bright); font-size: 14px; top: 7px; }
+.rules b { color: var(--gold); font-weight: normal; }
+
+.toast { position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 30px); opacity: 0; transition: .25s var(--ease); background: var(--panel); border: 3px solid var(--green-bright);
+  padding: 10px 16px; font-family: 'Press Start 2P'; font-size: 10px; z-index: 50; box-shadow: 5px 5px 0 rgba(0,0,0,.6); pointer-events: none; }
+.toast.on { transform: translate(-50%, 0); opacity: 1; } .toast.err { border-color: var(--red-bright); color: #ff6a5a; }
+.gate { margin-top: 16px; padding: 12px 16px; border: 3px dashed var(--green-deep); color: var(--cream-dim); text-align: center; }
+[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="scene"></div><div class="vig"></div>
+<header class="top"><div class="in">
+  <a class="back" href="../">◀ <span>RUMBLE VI</span></a>
+  <nav class="tabs">
+    <button class="tab on" data-tab="predict">PREDICT</button>
+    <button class="tab" data-tab="board">LEADERBOARD</button>
+    <button class="tab" data-tab="rules">RULES</button>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="kick">RUMBLE IN THE JUNGLE VI</div>
+    <h1>PREDICTION GAME</h1>
+    <div class="bar"></div>
+    <div class="sub">Call the matches, the groups, the final standings and the stat kings.</div>
+    <div class="prize">WINNER GETS <b>50€</b></div>
+    <div class="auth" id="auth"></div>
+  </section>
+
+  <div id="tab-predict">
+    <div class="gate" id="gate" hidden>Sign in with Steam to save your picks. You can look around without it.</div>
+
+    <section class="sec">
+      <div class="sh"><h2>MATCH WINNERS</h2><span class="note">5 pts per correct winner · +3 for the exact series score · each pick locks when the match starts</span></div>
+      <div id="matches"></div>
+    </section>
+
+    <section class="sec">
+      <div class="sh"><h2>GROUP ORDER</h2><span class="note">3 pts per correct spot · +4 for a perfect group</span><span class="lockpill" id="lk-groups"></span></div>
+      <div class="orders" id="groups"></div>
+    </section>
+
+    <section class="sec">
+      <div class="sh"><h2>FINAL STANDINGS</h2><span class="note">champion 25 · 2nd 15 · 3rd 10 · 4th 10 · 5 per team in the right 5th-6th / 7th-8th pair</span><span class="lockpill" id="lk-final"></span></div>
+      <div class="orders" id="final"></div>
+    </section>
+
+    <section class="sec">
+      <div class="sh"><h2>CRYSTAL BALL</h2><span class="note">10 pts each · stats from the parsed OpenDota matches</span><span class="lockpill" id="lk-crystal"></span></div>
+      <div class="cb" id="crystal"></div>
+    </section>
+  </div>
+
+  <div id="tab-board" hidden>
+    <section class="sec">
+      <div class="sh"><h2>LEADERBOARD</h2><span class="note" id="lb-note"></span></div>
+      <div class="card lbwrap" id="board"></div>
+    </section>
+  </div>
+
+  <div id="tab-rules" hidden>
+    <section class="sec"><div class="card rules" id="rules"></div></section>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+<datalist id="ablist"></datalist>
+
+<script>
+(function () {
+  const API = new URLSearchParams(location.search).get('api') || 'https://rumble6-predict.bloppbot.workers.dev';
+  const ABIL_IMG = k => `https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/abilities/${k}.png`;
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  let token = null, CFG = null, ME = null, PICKS = {}, ABIL = [], ABIL_BY = {}, skew = 0;
+  try { token = localStorage.getItem('r6p_token'); } catch (e) {}
+
+  // token from the Steam callback
+  const h = new URLSearchParams(location.hash.slice(1));
+  if (h.get('token')) { token = h.get('token'); try { localStorage.setItem('r6p_token', token); } catch (e) {} history.replaceState(null, '', location.pathname + location.search); }
+  if (h.get('login_error')) { setTimeout(() => toast('Steam login failed: ' + h.get('login_error'), true), 300); history.replaceState(null, '', location.pathname + location.search); }
+
+  const now = () => Date.now() + skew;
+  const T = id => CFG.teams.find(t => t.key === id);
+  const fmtTime = ms => new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Vienna', hour: '2-digit', minute: '2-digit' }).format(ms);
+  const tz = ms => new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Vienna', timeZoneName: 'short' }).format(ms).split(' ').pop();
+  const logo = t => t ? `<img src="../${esc(t.logo)}" alt="">` : '<span class="q">?</span>';
+  function left(ms) {
+    const d = ms - now(); if (d <= 0) return 'LOCKED';
+    const dd = Math.floor(d / 864e5), hh = Math.floor(d / 36e5) % 24, mm = Math.floor(d / 6e4) % 60;
+    return 'LOCKS IN ' + (dd ? dd + 'D ' : '') + (dd || hh ? hh + 'H ' : '') + mm + 'M';
+  }
+
+  async function api(path, opt = {}) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers.Authorization = 'Bearer ' + token;
+    const r = await fetch(API + path, { ...opt, headers });
+    if (r.status === 401) { token = null; ME = null; try { localStorage.removeItem('r6p_token'); } catch (e) {} }
+    return r.json();
+  }
+  let tt; function toast(msg, err) { const el = $('#toast'); el.textContent = msg; el.className = 'toast on' + (err ? ' err' : ''); clearTimeout(tt); tt = setTimeout(() => el.className = 'toast' + (err ? ' err' : ''), 2200); }
+
+  // ---------- saving (debounced batch) ----------
+  let pending = {}, st;
+  function setPick(k, v) {
+    if (!ME) { toast('Sign in with Steam first', true); return false; }
+    PICKS[k] = v; pending[k] = v; clearTimeout(st); st = setTimeout(flush, 500); return true;
+  }
+  async function flush() {
+    const body = pending; pending = {};
+    if (!Object.keys(body).length) return;
+    try {
+      const r = await api('/api/picks', { method: 'POST', body: JSON.stringify(body) });
+      const errs = Object.entries(r.errors || {});
+      if (errs.length) { toast(errs[0][1].toUpperCase(), true); errs.forEach(([k]) => delete PICKS[k]); await loadMe(); renderAll(); }
+      else toast('SAVED ✓');
+    } catch (e) { toast('Could not save, try again', true); }
+  }
+
+  // ---------- auth ----------
+  function renderAuth() {
+    const el = $('#auth');
+    if (ME) {
+      el.innerHTML = `<div class="me">${ME.user.avatar ? `<img src="${esc(ME.user.avatar)}" alt="">` : ''}<div><div class="nm">${esc(ME.user.name)}</div>
+        <div class="pts">${ME.score.total} pts</div></div><button id="logout">sign out</button></div>`;
+      $('#logout').onclick = () => { token = null; ME = null; try { localStorage.removeItem('r6p_token'); } catch (e) {} PICKS = {}; renderAll(); };
+    } else {
+      el.innerHTML = `<a class="steam" href="${API}/auth/login"><svg viewBox="0 0 32 32" fill="#fff"><path d="M16 1C8.1 1 1.6 7.1 1 14.8l8 3.3c.7-.5 1.5-.7 2.4-.7h.2l3.6-5.2v-.1c0-3.1 2.5-5.7 5.7-5.7s5.7 2.6 5.7 5.7-2.6 5.7-5.7 5.7h-.1l-5.1 3.7v.2c0 2.4-1.9 4.3-4.3 4.3-2.1 0-3.8-1.5-4.2-3.4L1.5 20.6C3.3 26.8 9.1 31 16 31c8.3 0 15-6.7 15-15S24.3 1 16 1zm-5.6 22.8-1.8-.8c.3.7.9 1.2 1.6 1.5 1.6.7 3.4-.1 4.1-1.7.3-.8.3-1.6 0-2.4s-.9-1.4-1.7-1.7c-.8-.3-1.6-.3-2.3 0l1.9.8c1.2.5 1.7 1.8 1.2 3-.5 1.1-1.8 1.7-3 1.3zm14.2-12.2c0-2.1-1.7-3.8-3.8-3.8s-3.8 1.7-3.8 3.8 1.7 3.8 3.8 3.8 3.8-1.7 3.8-3.8zm-6.6 0c0-1.6 1.3-2.9 2.9-2.9s2.9 1.3 2.9 2.9-1.3 2.9-2.9 2.9-2.9-1.3-2.9-2.9z"/></svg>SIGN IN THROUGH STEAM</a>`;
+    }
+    $('#gate').hidden = !!ME;
+  }
+
+  // ---------- matches ----------
+  function renderMatches() {
+    const byDay = {};
+    CFG.matches.forEach(m => (byDay[m.day] ||= []).push(m));
+    $('#matches').innerHTML = Object.keys(byDay).map(d => `<div class="day"><div class="dayh">${esc(CFG.days[d])}</div><div class="ms">${byDay[d].map(matchCard).join('')}</div></div>`).join('');
+    $('#matches').querySelectorAll('[data-pick]').forEach(b => b.onclick = () => {
+      const m = CFG.matches.find(x => x.id === b.dataset.m);
+      const cur = (PICKS['m:' + m.id] || '').split('|');
+      let w = cur[0], s = cur[1];
+      if (b.dataset.pick === 'team') { w = b.dataset.v; if (m.bo > 1 && !s) s = m.bo === 3 ? '2-1' : '3-1'; }
+      else { s = b.dataset.v; if (!w) { toast('Pick the winner first', true); return; } }
+      if (setPick('m:' + m.id, m.bo > 1 ? `${w}|${s}` : w)) renderMatches();
+    });
+  }
+  function matchCard(m) {
+    const locked = now() >= m.at, known = m.a && m.b;
+    const p = (PICKS['m:' + m.id] || '').split('|'), res = m.result;
+    const side = (k, slot) => {
+      const t = k && T(k), sel = p[0] && p[0] === k, win = res && res.w === k;
+      return `<button class="tm${sel ? ' sel' : ''}${win ? ' win' : ''}" style="--acc:${t ? t.acc : ''}" data-pick="team" data-m="${m.id}" data-v="${esc(k || '')}" ${locked || !known ? 'disabled' : ''}>
+        ${logo(t)}${t ? esc(t.name) : esc(slot)}</button>`;
+    };
+    const opts = m.bo === 3 ? ['2-0', '2-1'] : m.bo === 5 ? ['3-0', '3-1', '3-2'] : [];
+    const scores = opts.length ? `<div class="scores">${opts.map(o => `<button class="chip${p[1] === o ? ' sel' : ''}" data-pick="score" data-m="${m.id}" data-v="${o}" ${locked || !known ? 'disabled' : ''}>${o}</button>`).join('')}</div>` : '';
+    let foot = '';
+    if (res && res.w) {
+      const got = p[0] === res.w, exact = got && m.bo > 1 && p[1] === res.s;
+      foot = p[0] ? `<b class="${got ? 'ok' : 'bad'}">${got ? '+' + (5 + (exact ? 3 : 0)) + ' pts' : '0 pts'}</b> · ${esc(T(res.w).name)} won${res.s ? ' ' + esc(res.s) : ''}` : `${esc(T(res.w).name)} won${res.s ? ' ' + esc(res.s) : ''}`;
+    } else if (!known) foot = 'opens when the teams are known';
+    else foot = locked ? (p[0] ? 'locked · waiting for the result' : 'locked · no pick') : left(m.at).toLowerCase();
+    return `<div class="card m"><div class="meta"><span class="st">${esc(m.stage)} · BO${m.bo}</span><span>${fmtTime(m.at)} ${tz(m.at)}</span></div>
+      <div class="row">${side(m.a, m.slotA)}<span class="vs">VS</span>${side(m.b, m.slotB)}</div>${scores}<div class="foot">${foot}</div></div>`;
+  }
+
+  // ---------- ordered lists ----------
+  function orderList(el, key, defaults, labels, title, result) {
+    const locked = now() >= CFG.bigLock;
+    let arr = PICKS[key] ? PICKS[key].split(',') : defaults.slice();
+    const rows = arr.map((k, i) => {
+      const t = T(k); const hit = result && result[i] === k;
+      return `<div class="or${hit ? ' hit' : ''}"><span class="pl">${labels[i]}</span>${logo(t)}<span class="n">${esc(t.name)}</span>
+        <span class="arr"><button data-k="${key}" data-i="${i}" data-d="-1" ${locked || i === 0 ? 'disabled' : ''} aria-label="up">▲</button><button data-k="${key}" data-i="${i}" data-d="1" ${locked || i === arr.length - 1 ? 'disabled' : ''} aria-label="down">▼</button></span></div>`;
+    }).join('');
+    const unsaved = !PICKS[key] && !locked ? `<div class="foot" style="text-align:center;color:var(--cream-dim);font-size:18px;margin-top:8px">${ME ? 'move a team to save this order' : 'default order, sign in to make your call'}</div>` : '';
+    el.insertAdjacentHTML('beforeend', `<div class="card ol"><h3>${title}</h3>${rows}${unsaved}</div>`);
+    el.lastElementChild.querySelectorAll('button[data-d]').forEach(b => b.onclick = () => {
+      const i = +b.dataset.i, j = i + +b.dataset.d; const a = arr.slice(); [a[i], a[j]] = [a[j], a[i]];
+      if (setPick(key, a.join(','))) renderOrders();
+    });
+  }
+  function renderOrders() {
+    const locked = now() >= CFG.bigLock;
+    ['#lk-groups', '#lk-final', '#lk-crystal'].forEach(s => { const el = $(s); el.textContent = left(CFG.bigLock); el.classList.toggle('locked', locked); });
+    const g = $('#groups'); g.innerHTML = '';
+    for (const G of ['A', 'B']) orderList(g, 'g:' + G, CFG.groups[G], ['1ST', '2ND', '3RD', '4TH'], 'GROUP ' + G, CFG.results.groups[G]);
+    const f = $('#final'); f.innerHTML = '';
+    const seedOrder = CFG.teams.slice().sort((a, b) => a.seed - b.seed).map(t => t.key);
+    orderList(f, 'f', seedOrder, ['1ST', '2ND', '3RD', '4TH', '5-6', '5-6', '7-8', '7-8'], 'YOUR FINAL TABLE', CFG.results.final);
+  }
+
+  // ---------- crystal ball ----------
+  function renderCrystal() {
+    const locked = now() >= CFG.bigLock;
+    const playerOpts = CFG.teams.map(t => `<optgroup label="${esc(t.name)}">${t.roster.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('')}</optgroup>`).join('');
+    $('#crystal').innerHTML = CFG.crystal.map(c => {
+      const v = PICKS['c:' + c.id] || '', res = (CFG.results.crystal || {})[c.id], hit = res && res.map(String).includes(v);
+      let input;
+      if (c.kind === 'player') input = `<select data-c="${c.id}" ${locked ? 'disabled' : ''}><option value="">pick a player</option>${playerOpts}</select>`;
+      else { const a = ABIL_BY[v]; input = `<div class="abrow"><img src="${a ? ABIL_IMG(a.k) : '../assets/favicon-64.png'}" alt=""><input data-c="${c.id}" list="ablist" placeholder="type an ability or hero" value="${a ? esc(a.n + ' (' + a.h + ')') : ''}" ${locked ? 'disabled' : ''}></div>`; }
+      return `<div class="card c${hit ? ' hit' : ''}"><div class="t"><span>${c.icon}</span>${esc(c.t)}</div><div class="how">${esc(c.how)}</div>${input}</div>`;
+    }).join('');
+    $('#crystal').querySelectorAll('select[data-c]').forEach(s => { s.value = PICKS['c:' + s.dataset.c] || ''; s.onchange = () => { if (!s.value) return; if (!setPick('c:' + s.dataset.c, s.value)) s.value = PICKS['c:' + s.dataset.c] || ''; }; });
+    $('#crystal').querySelectorAll('input[data-c]').forEach(inp => inp.onchange = () => {
+      const a = ABIL.find(x => (x.n + ' (' + x.h + ')').toLowerCase() === inp.value.trim().toLowerCase()) || ABIL.find(x => x.n.toLowerCase() === inp.value.trim().toLowerCase());
+      if (!a) { toast('Pick an ability from the list', true); return; }
+      if (setPick('c:' + inp.dataset.c, a.k)) renderCrystal();
+    });
+  }
+
+  // ---------- leaderboard ----------
+  async function renderBoard() {
+    const el = $('#board');
+    let lb; try { lb = await api('/api/leaderboard'); } catch (e) { el.innerHTML = '<div class="empty">Leaderboard is not reachable right now.</div>'; return; }
+    $('#lb-note').textContent = `${lb.players} player${lb.players === 1 ? '' : 's'} · ties: more correct match winners wins`;
+    if (!lb.rows.length) { el.innerHTML = '<div class="empty">Nobody has made a pick yet. Be the first.</div>'; return; }
+    const mine = ME && ME.user.steamid;
+    el.innerHTML = `<table class="lb"><thead><tr><th>#</th><th>PLAYER</th><th class="hide-s">MATCHES</th><th class="hide-s">GROUPS</th><th class="hide-s">STANDINGS</th><th class="hide-s">CRYSTAL</th><th>TOTAL</th></tr></thead><tbody>
+      ${lb.rows.map(r => `<tr class="${r.rank <= 3 ? 'top' + r.rank : ''}${r.steamid === mine ? ' mine' : ''}"><td class="rk">${r.rank}</td>
+        <td class="pl"><div class="who">${r.avatar ? `<img src="${esc(r.avatar)}" alt="">` : ''}<span class="nm">${esc(r.name)}</span>
+        ${r.oracle.length ? `<span class="bdg oracle" title="Oracle of the Day">👑${r.oracle.length > 1 ? '×' + r.oracle.length : ''}</span>` : ''}
+        ${r.badges.includes('traitor') ? '<span class="bdg traitor" title="bet against their own team">🐍 TRAITOR</span>' : ''}${r.badges.includes('copium') ? '<span class="bdg copium" title="bet on their own team">🤡 COPIUM</span>' : ''}</div></td>
+        <td class="hide-s">${r.matches}</td><td class="hide-s">${r.groups}</td><td class="hide-s">${r.standings}</td><td class="hide-s">${r.crystal}</td><td class="tot">${r.total}</td></tr>`).join('')}
+    </tbody></table>`;
+  }
+
+  function renderRules() {
+    $('#rules').innerHTML = `
+      <h3>HOW IT WORKS</h3><ul>
+        <li>Sign in through Steam. One Steam account per person, multi-accounts get removed.</li>
+        <li>Match picks lock when that match starts. Group order, final standings and the crystal ball lock at the first game: <b>Sat Oct 17, 17:00 CEST</b>.</li>
+        <li>Playoff matches open as soon as both teams are known.</li>
+      <h3>POINTS</h3><ul>
+        <li>Correct match winner: <b>5</b> (every match, groups to grand final)</li>
+        <li>Exact series score (Bo3 / Bo5): <b>+3</b></li>
+        <li>Group order: <b>3</b> per correct spot, <b>+4</b> for a perfect group</li>
+        <li>Final standings: champion <b>25</b>, 2nd <b>15</b>, 3rd <b>10</b>, 4th <b>10</b>, 5th-6th and 7th-8th are shared places, <b>5</b> per team in the right pair</li>
+        <li>Crystal ball: <b>10</b> per correct category. If players tie on a stat, every tied answer counts.</li></ul>
+      <h3>CRYSTAL BALL STATS</h3><ul>${CFG.crystal.map(c => `<li>${c.icon} ${esc(c.t)}: ${esc(c.how)}</li>`).join('')}</ul>
+      <h3>BADGES</h3><ul>
+        <li>👑 Oracle of the Day: most match points on a match day</li>
+        <li>🐍 TRAITOR: a Rumble player who bet against their own team</li>
+        <li>🤡 COPIUM: a Rumble player who bet on their own team</li></ul>
+      <h3>PRIZE</h3><ul>
+        <li>The winner gets <b>50€</b>. Tie on points: more correct match winners wins. Still tied: the 50€ get split.</li></ul>`;
+  }
+
+  function renderAll() { renderAuth(); renderMatches(); renderOrders(); renderCrystal(); }
+
+  async function loadMe() {
+    if (!token) { ME = null; return; }
+    try { const r = await api('/api/me'); if (r.user) { ME = r; PICKS = { ...r.picks }; } else ME = null; } catch (e) { ME = null; }
+  }
+
+  document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
+    ['predict', 'board', 'rules'].forEach(t => $('#tab-' + t).hidden = t !== b.dataset.tab);
+    if (b.dataset.tab === 'board') renderBoard();
+    history.replaceState(null, '', b.dataset.tab === 'predict' ? location.pathname + location.search : '#' + b.dataset.tab);
+  });
+
+  (async function init() {
+    try {
+      const [cfg, ab] = await Promise.all([api('/api/config'), fetch('abilities.json').then(r => r.json())]);
+      CFG = cfg; skew = cfg.now - Date.now();
+      ABIL = ab; ABIL.forEach(a => ABIL_BY[a.k] = a);
+      $('#ablist').innerHTML = ABIL.map(a => `<option value="${esc(a.n + ' (' + a.h + ')')}"></option>`).join('');
+    } catch (e) { $('#matches').innerHTML = '<div class="card empty">The prediction server is not reachable right now. Try again in a minute.</div>'; return; }
+    await loadMe();
+    renderAll(); renderRules();
+    const t = location.hash.slice(1); if (t === 'board' || t === 'rules') document.querySelector(`.tab[data-tab="${t}"]`).click();
+    setInterval(() => { if (!document.hidden) { renderMatches(); renderOrders(); } }, 60000);
+  })();
+})();
+</script>
+</body>
+</html>
