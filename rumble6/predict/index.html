@@ -121,6 +121,13 @@ h1 { font-family: 'Press Start 2P'; font-size: clamp(22px, 5vw, 50px); color: va
 .dtab { font-family: 'Press Start 2P'; font-size: 8px; line-height: 1.6; padding: 9px 11px; background: var(--panel); border: 3px solid var(--line); color: var(--cream-dim); text-align: left; }
 .dtab b { display: block; font-weight: normal; color: var(--cream); font-size: 9px; }
 .dtab .cnt { color: var(--green-bright); }
+.dtab .soon { color: var(--gold); }
+.dtab.wait b { color: var(--cream-dim); }
+.unlock { display: flex; gap: 14px; align-items: center; padding: 14px 16px; margin-bottom: 16px; border: 3px dashed #6b5420; background: rgba(40,28,4,.45); }
+.unlock .lk { font-family: 'Press Start 2P'; font-size: 22px; color: var(--gold); }
+.unlock b { display: block; font-family: 'Press Start 2P'; font-size: 10px; font-weight: normal; color: var(--gold); margin-bottom: 6px; line-height: 1.5; }
+.unlock span { color: var(--cream); font-size: 20px; line-height: 1.3; }
+.m.wait .tm { border-style: dashed; }
 .dtab.on { border-color: var(--green-bright); background: var(--panel-2); color: var(--cream); box-shadow: 0 0 14px rgba(110,224,122,.15); }
 @media (hover: hover) { .dtab:not(.on):hover { border-color: var(--green-deep); } }
 
@@ -305,7 +312,7 @@ h1 { font-family: 'Press Start 2P'; font-size: clamp(22px, 5vw, 50px); color: va
   <div id="tab-predict">
     <section class="sec" id="s-matches">
       <div class="sh"><h2>MATCH WINNERS</h2><div class="rule"></div>
-        <div class="note"><span class="pts-chip">5 PTS WINNER</span><span class="pts-chip">+3 EXACT SCORE</span>each pick locks when its match starts</div></div>
+        <div class="note"><span class="pts-chip">5 PTS WINNER</span><span class="pts-chip">+3 EXACT SCORE</span>group games are open now · playoff games unlock after the group stage · each pick locks when its match starts</div></div>
       <div class="days" id="days"></div>
       <div class="ms" id="matches"></div>
     </section>
@@ -448,13 +455,18 @@ h1 { font-family: 'Press Start 2P'; font-size: clamp(22px, 5vw, 50px); color: va
     if (!DAY) DAY = Object.keys(byDay).find(d => byDay[d].some(m => now() < m.at && m.a)) || '1';
     $('#days').innerHTML = Object.keys(byDay).map(d => {
       const ms = byDay[d], picked = ms.filter(m => PICKS['m:' + m.id]).length, [date, name] = CFG.days[d].split(' · ');
-      return `<button class="dtab${d === DAY ? ' on' : ''}" data-d="${d}"><b>${esc(name)}</b>${esc(date)} · <span class="cnt">${picked}/${ms.length}</span></button>`;
+      const open = ms.filter(m => m.a && m.b).length;
+      return `<button class="dtab${d === DAY ? ' on' : ''}${open ? '' : ' wait'}" data-d="${d}"><b>${esc(name)}</b>${esc(date)} · ${open ? `<span class="cnt">${picked}/${ms.length}</span>` : '<span class="soon">UNLOCKS LATER</span>'}</button>`;
     }).join('');
     $$('.dtab').forEach(b => b.onclick = () => { DAY = b.dataset.d; renderMatches(); });
   }
   function renderMatches() {
     renderDays();
-    $('#matches').innerHTML = CFG.matches.filter(m => String(m.day) === DAY).map(matchCard).join('');
+    const dm = CFG.matches.filter(m => String(m.day) === DAY), waiting = dm.filter(m => !(m.a && m.b)).length;
+    const msg = DAY === '2' ? 'These games open right after the group stage on <b style="display:inline;font-family:inherit;font-size:inherit;color:var(--gold)">Sat Oct 17</b>, as soon as the bracket is set. Come back after the groups and make your picks before Sunday 17:00 CEST.'
+      : 'These games open once the previous round is played and both teams are known. Come back after the earlier matches.';
+    const banner = waiting ? `<div class="unlock" style="grid-column:1/-1"><span class="lk">?</span><div><b>${DAY === '2' ? 'PLAYOFFS UNLOCK AFTER THE GROUPS' : 'UNLOCKS AFTER THE EARLIER ROUNDS'}</b><span>${msg}</span></div></div>` : '';
+    $('#matches').innerHTML = banner + dm.map(matchCard).join('');
     $$('#matches [data-pick]').forEach(b => b.onclick = () => {
       const m = CFG.matches.find(x => x.id === b.dataset.m);
       const cur = (PICKS['m:' + m.id] || '').split('|');
@@ -479,9 +491,9 @@ h1 { font-family: 'Press Start 2P'; font-size: clamp(22px, 5vw, 50px); color: va
     if (res && res.w) {
       const got = p[0] === res.w, exact = got && m.bo > 1 && p[1] === res.s;
       foot = (p[0] ? `<b class="${got ? 'ok' : 'bad'}">${got ? '+' + (5 + (exact ? 3 : 0)) + ' PTS' : '0 PTS'}</b> · ` : '') + `${esc(T(res.w).name)} won${res.s ? ' ' + esc(res.s) : ''}`;
-    } else if (!known) foot = 'opens when the teams are known';
+    } else if (!known) foot = ['UBS1', 'UBS2', 'LBR1a', 'LBR1b'].includes(m.id) ? 'unlocks after the group stage' : 'unlocks after the previous round';
     else foot = locked ? (p[0] ? 'locked · waiting for the result' : 'locked · no pick') : (p[0] ? '<span class="ok">✓ picked</span> · ' : '') + left(m.at).toLowerCase();
-    return `<div class="panel m"><div class="meta"><span class="st">${esc(m.stage)} · BO${m.bo}</span><span class="${locked ? 'lk' : ''}">${locked ? '🔒 ' : ''}${fmtTime(m.at)} ${tz(m.at)}</span></div>
+    return `<div class="panel m${known ? '' : ' wait'}"><div class="meta"><span class="st">${esc(m.stage)} · BO${m.bo}</span><span class="${locked ? 'lk' : ''}">${locked ? '🔒 ' : ''}${fmtTime(m.at)} ${tz(m.at)}</span></div>
       <div class="row${p[0] ? ' picked' : ''}">${side(m.a, m.slotA)}<span class="vs">VS</span>${side(m.b, m.slotB)}</div>${scores}<div class="foot">${foot}</div></div>`;
   }
 
