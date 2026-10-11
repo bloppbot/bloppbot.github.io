@@ -768,6 +768,22 @@
     .sc-mmr { font-size: 1.3rem; color: var(--green-bright); text-shadow: 2px 2px 0 rgba(0,0,0,0.85); }
     .sc-new { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--cream-dim); border: 1px solid var(--line); padding: 3px 4px; white-space: nowrap; }
     .seed-note { margin-top: 12px; color: var(--cream-dim); font-size: 1rem; text-align: center; }
+
+    /* === PREDICTION GAME teaser (full game lives in predict/) === */
+    .pg-card { text-align: center; }
+    .pg-lead { color: var(--cream-dim); max-width: 640px; margin: 0 auto 6px; }
+    .pg-prize { display: inline-block; margin: 14px 0 6px; font-family: 'Press Start 2P', monospace; font-size: 0.75rem; color: #ffd97a; border: 3px solid #ffd97a; padding: 9px 14px; background: rgba(255,217,122,0.07); }
+    .pg-prize b { font-size: 1.1rem; font-weight: normal; }
+    .pg-top { list-style: none; max-width: 460px; margin: 18px auto 4px; text-align: left; }
+    .pg-top li { display: grid; grid-template-columns: 34px 30px 1fr auto; align-items: center; gap: 10px; padding: 6px 4px; border-bottom: 2px solid rgba(46,110,58,0.4); }
+    .pg-top .r { font-family: 'Press Start 2P', monospace; font-size: 0.6rem; color: var(--cream-dim); }
+    .pg-top li:nth-child(1) .r { color: #ffd97a; } .pg-top li:nth-child(2) .r { color: #d9d9d9; } .pg-top li:nth-child(3) .r { color: #d8955a; }
+    .pg-top img { width: 30px; height: 30px; border: 2px solid var(--line); }
+    .pg-top .n { font-family: 'Press Start 2P', monospace; font-size: 0.55rem; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .pg-top .p { color: #ffd97a; font-family: 'Press Start 2P', monospace; font-size: 0.6rem; }
+    .pg-top-h { font-family: 'Press Start 2P', monospace; font-size: 0.55rem; color: var(--green-bright); margin-top: 18px; }
+    .pg-empty { color: var(--cream-dim); margin-top: 12px; }
+    .big-btn.predict { background: var(--red); border-color: var(--red-bright); margin-top: 18px; }
 </style>
 </head>
 <body>
@@ -800,6 +816,7 @@
     <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
     <a href="#format" class="nav-btn signup">GROUPS</a>
     <a href="#format" class="nav-btn">FORMAT</a>
+    <a href="#predict" class="nav-btn">PREDICT</a>
     <a href="#casters" class="nav-btn">CASTERS</a>
     <a href="#lastrumble" class="nav-btn">LAST RUMBLE</a>
     <a href="https://discord.gg/sQFwGxFYFB" target="_blank" rel="noopener" class="nav-btn discord">DISCORD</a>
@@ -984,6 +1001,35 @@
     </section>
 </div>
 <!-- FORMAT:END -->
+
+<!-- PREDICT:START -->
+<div class="container">
+    <section id="predict" class="section-wrapper">
+        <h2 class="section-title">PREDICTION GAME</h2>
+        <div class="title-rule"></div>
+        <div class="about-card px-frame pg-card"><div class="about-inner">
+            <p class="pg-lead">Sign in with Steam and call it all: every match, the group order, the final standings and the stat kings.</p>
+            <div class="pg-prize">WINNER GETS <b>50€</b></div>
+            <div class="pg-top-h">TOP 5</div>
+            <ol class="pg-top" id="pg-top"></ol>
+            <div class="pg-empty" id="pg-empty">No picks yet. Be the first.</div>
+            <a href="predict/" class="big-btn predict">PLAY THE PREDICTION GAME</a>
+        </div></div>
+    </section>
+</div>
+<script>
+(function () {
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    fetch('https://rumble6-predict.bloppbot.workers.dev/api/leaderboard').then(r => r.json()).then(lb => {
+        const rows = (lb.rows || []).slice(0, 5);
+        if (!rows.length) return;
+        document.getElementById('pg-empty').hidden = true;
+        document.getElementById('pg-top').innerHTML = rows.map(r => '<li><span class="r">' + r.rank + '</span>' + (r.avatar ? '<img src="' + esc(r.avatar) + '" alt="">' : '<span></span>') +
+            '<span class="n">' + esc(r.name) + '</span><span class="p">' + r.total + '</span></li>').join('');
+    }).catch(() => {});
+})();
+</script>
+<!-- PREDICT:END -->
 
 <div class="strip" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/scene_arenafloor_1536.jpg" data-lazy><source src="assets/loop_strip_arena.mp4" type="video/mp4"></video></div>
 
