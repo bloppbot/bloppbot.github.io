@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumble VI · The 8 Teams (Stream)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'VT323 Cyr';src:url('assets/fonts/pixelify-cyrillic.woff2') format('woff2');unicode-range:U+0400-04FF;}
+:root{--green:#6fe07a;--cream:#f0e6d2;--ink:#e3ece4;--dim:#93a896;--panel:#0b1712;--px:3px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'VT323','VT323 Cyr',monospace;color:var(--ink);}
+#stage{position:absolute;top:50%;left:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);overflow:hidden;
+  background:linear-gradient(rgba(4,10,8,0.80),rgba(3,7,5,0.93)),url('assets/stream_bg_gate.jpg') center/cover no-repeat;image-rendering:pixelated;}
+img,video{image-rendering:pixelated;}
+.vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,transparent 25%,rgba(1,5,3,0.75) 100%);pointer-events:none;z-index:1;}
+.scanlines{position:absolute;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.16) 0 1px,transparent 1px 4px);mix-blend-mode:multiply;}
+.fly{position:absolute;width:4px;height:4px;background:#b6f36a;box-shadow:0 0 8px rgba(160,240,110,.9);opacity:0;z-index:2;pointer-events:none;animation:drift linear infinite;}
+@keyframes drift{0%{transform:translate(0,0);opacity:0}15%{opacity:.9}50%{transform:translate(3vw,-12vh)}85%{opacity:.6}100%{transform:translate(-1vw,-26vh);opacity:0}}
+.head{position:relative;z-index:3;display:flex;align-items:center;justify-content:center;gap:34px;margin-top:24px;}
+.head img{height:88px;filter:drop-shadow(4px 4px 0 rgba(0,0,0,.75));}
+.head h1{font-family:'Press Start 2P',monospace;font-size:2.1rem;color:var(--cream);letter-spacing:2px;text-shadow:var(--px) var(--px) 0 #1f0202,calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,.6);}
+.head .bar{width:4px;height:70px;background:#a81616;box-shadow:2px 2px 0 rgba(0,0,0,.6);}
+.groups{position:relative;z-index:3;width:1848px;margin:10px auto 0;}
+.glabel{font-family:'Press Start 2P',monospace;font-size:.8rem;color:var(--green);letter-spacing:2px;margin:10px 0 8px 2px;text-shadow:2px 2px 0 rgba(0,0,0,.85);}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+.card{background:var(--panel);border:3px solid color-mix(in srgb,var(--acc) 55%,transparent);box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6),0 0 18px color-mix(in srgb,var(--acc) 22%,transparent);overflow:hidden;}
+.banner{position:relative;height:128px;background:#030805;overflow:hidden;}
+.banner video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;}
+.banner::after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(3,8,5,.05) 25%,rgba(11,23,18,.97) 96%);}
+.tname{position:absolute;left:0;right:0;bottom:8px;z-index:2;display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:'Press Start 2P',monospace;font-size:.8rem;color:var(--cream);text-shadow:2px 2px 0 rgba(0,0,0,.9);letter-spacing:1px;}
+.tname img{width:40px;height:40px;object-fit:contain;filter:drop-shadow(2px 2px 0 #000);}
+.roster{list-style:none;border-top:3px solid color-mix(in srgb,var(--acc) 35%,transparent);padding:2px 0 5px;}
+.p{display:flex;align-items:center;gap:9px;padding:2px 12px;min-height:56px;}
+.p + .p{border-top:2px solid rgba(111,224,122,.07);}
+.medal{position:relative;width:38px;flex:0 0 38px;height:36px;}
+.medal img{display:block;margin:0 auto;width:36px;height:36px;object-fit:contain;image-rendering:auto;filter:drop-shadow(1px 1px 1px rgba(0,0,0,.6));}
+.pill{position:absolute;top:23px;left:50%;transform:translateX(-50%);font-size:16px;line-height:1;padding:1px 4px 2px;background:rgba(3,8,5,.95);border:1px solid #2e6e3a;color:var(--green);white-space:nowrap;}
+.flag{width:26px;flex:0 0 26px;}
+.flag img{width:100%;display:block;border:1px solid rgba(0,0,0,.6);image-rendering:auto;}
+.flag.none{height:17px;border:1px dashed rgba(147,168,150,.25);}
+.nm{flex:1;font-size:1.4rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cap{font-family:'Press Start 2P',monospace;font-size:.5rem;color:#05140a;background:var(--green);padding:3px 4px 2px;margin-left:6px;vertical-align:3px;}
+.mmr{font-size:1.5rem;color:var(--green);text-shadow:2px 2px 0 rgba(0,0,0,.85);}
+.mmr.na{color:var(--dim);}
+.note{position:relative;z-index:3;text-align:center;color:var(--dim);font-size:1.25rem;margin-top:10px;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="vignette"></div><div class="scanlines"></div>
+  <div class="head"><img src="assets/logo_wordmark.png" alt="Rumble in the Jungle"><div class="bar"></div><h1>THE 8 TEAMS</h1></div>
+  <div class="groups" id="groups"></div>
+  <div class="note">MMR = AD MMR &bull; C = captain &bull; rosters locked</div>
+</div>
+<script>
+const stage=document.getElementById('stage');
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(-50%,-50%) scale(${s})`;}
+addEventListener('resize',fit);fit();
+for(let i=0;i<22;i++){const e=document.createElement('div');e.className='fly';e.style.left=Math.random()*100+'%';e.style.top=(35+Math.random()*65)+'%';
+  e.style.animationDelay=(Math.random()*16)+'s';e.style.animationDuration=(Math.random()*10+12)+'s';stage.appendChild(e);}
+const TEAMS=[{"g": "A", "name": "Burger Boys", "key": "burgerboys", "logo": "assets/logos/burgerboys_v2.png", "acc": "#5b8cff", "roster": [["Friscy", "immortal", null, 3671, "us", true], ["Erik", "immortal", "#21", 3982, "us", false], ["Dingus", "immortal", "#2064", 3781, "us", false], ["Poof", "immortal", "#2875", 3725, "us", false], ["Jynx", "immortal", "#1701", 3503, "us", false]]}, {"g": "A", "name": "Vikings", "key": "vikings", "logo": "assets/logos/vikings.png", "acc": "#7fb2e5", "roster": [["Mirrored", "immortal", "#4185", 3872, "dk", true], ["Mahax", "immortal", "#618", 3886, "de", false], ["^War.Some", null, null, 3490, "at", false], ["Ben", "archon-4", null, 3325, "se", false], ["Dante", "immortal", null, 3194, "se", false]]}, {"g": "A", "name": "GYM Esports", "key": "gym", "logo": "assets/logos/gymesports.png", "acc": "#f2e030", "roster": [["Yokozuna Hoshoryu", "immortal", null, 3319, "kz", true], ["Ultra Greed", "divine-4", null, 3499, "kz", false], ["Aniki", "immortal", "#870", 3420, "kz", false], ["Poodge", "immortal", "#2908", 3140, "us", false], ["lil thicc", "immortal", "#4644", 2901, "my", false]]}, {"g": "A", "name": "Old Ravens", "key": "oldravens", "logo": "assets/logos/oldravens.png", "acc": "#e0334f", "roster": [["n0n1ck", "immortal", "#1344", 3556, "ru", true], ["bwoha", "immortal", "#1721", 3251, "ru", false], ["Oss", "immortal", "#3259", null, "tj", false], ["yukidan", "immortal", "#4821", null, "ru", false], ["lexmach", "immortal", "#4319", null, "ru", false]]}, {"g": "B", "name": "TMNT", "key": "tmnt", "logo": "assets/logos/tmnt.png", "acc": "#7cc242", "roster": [["Ptenchik", "immortal", "#3686", 3597, "kz", true], ["Lost", "immortal", "#578", 4119, "ru", false], ["Etsi", "immortal", "#4482", 4078, "ua", false], ["FoXy", "divine-3", null, 3554, "ru", false], ["Shushu", "immortal", "#199", 3372, "dz", false]]}, {"g": "B", "name": "New World Order", "key": "nwo", "logo": "assets/logos/nwo_v2.png", "acc": "#f5a623", "roster": [["Billsive", "immortal", null, 3580, "us", true], ["Dr. Godbalove", "immortal", "#4369", 3520, "pe", false], ["Actor", null, null, 3479, null, false], ["Plupo", "immortal", "#1306", 3051, "us", false], ["PandaPGOD", "immortal", "#50", 2733, "us", false]]}, {"g": "B", "name": "Don't Peek", "key": "dontpeek", "logo": "assets/logos/dontpeek.png", "acc": "#a87cf0", "roster": [["BigGoose", "immortal", "#3859", 2958, "fi", true], ["noertti", "immortal", "#2428", 3777, "fi", false], ["sifla", "immortal", "#4752", 3272, "fi", false], ["balll", "immortal", "#2086", 3080, "fi", false], ["Fruugu", "immortal", "#4860", 2978, "fi", false]]}, {"g": "B", "name": "Space Marines", "key": "spacemarines", "logo": "assets/logos/spacemarines.png", "acc": "#3fd0c9", "roster": [["Space Cowboy", "immortal", null, 3449, "us", true], ["Arnold", "immortal", "#3579", 3447, null, false], ["Tkui", "ancient-4", null, 3119, null, false], ["Vata", "immortal", "#957", 2639, "sy", false], ["Saya", "immortal", "#538", null, null, false]]}];
+const card=t=>`<div class="card" style="--acc:${t.acc}">
+  <div class="banner"><video muted loop playsinline autoplay preload="auto" poster="assets/versus/vs_${t.key}.jpg"><source src="assets/versus/loop_${t.key}.mp4" type="video/mp4"></video>
+    <div class="tname"><img src="${t.logo}" alt="">${t.name.toUpperCase()}</div></div>
+  <ul class="roster">${t.roster.map(([n,medal,pill,mmr,cc,cap])=>`<li class="p">
+    <div class="medal"><img src="assets/ranking-medals/seasonal-rank-${medal??'uncalibrated'}.png" alt="">${pill?`<span class="pill">${pill}</span>`:''}</div>
+    ${cc?`<span class="flag"><img src="https://flagcdn.com/${cc}.svg" alt="${cc.toUpperCase()}"></span>`:'<span class="flag none"></span>'}
+    <div class="nm">${n}${cap?'<span class="cap">C</span>':''}</div>
+    <div class="mmr${mmr==null?' na':''}">${mmr??'&mdash;'}</div></li>`).join('')}</ul></div>`;
+document.getElementById('groups').innerHTML=['A','B'].map(g=>`<div class="glabel">GROUP ${g}</div><div class="row">${TEAMS.filter(t=>t.g===g).map(card).join('')}</div>`).join('');
+document.querySelectorAll('video').forEach(v=>v.play().catch(()=>{}));
+</script>
+</body>
+</html>

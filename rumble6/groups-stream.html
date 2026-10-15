@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumble VI · Group Stage (Stream)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stream.css">
+<style>
+.cols{position:relative;z-index:3;display:grid;grid-template-columns:1fr 1fr;gap:32px;width:1800px;margin:30px auto 0;}
+.grp{padding:20px 24px 22px;}
+.grp .ptitle{font-size:1.1rem;margin-bottom:14px;}
+table{width:100%;border-collapse:collapse;}
+th{font-family:'Press Start 2P',monospace;font-size:.6rem;color:var(--dim);text-align:left;padding:0 8px 10px;letter-spacing:1px;}
+th.n,td.n{text-align:center;width:56px;}
+td{padding:13px 8px;font-size:1.6rem;border-top:2px solid rgba(111,224,122,.08);}
+td.r{width:40px;font-family:'Press Start 2P',monospace;font-size:.85rem;color:var(--dim);}
+.tm{display:flex;align-items:center;gap:12px;font-family:'Press Start 2P',monospace;font-size:.78rem;color:var(--cream);text-shadow:2px 2px 0 rgba(0,0,0,.85);}
+tr{border-left:5px solid var(--a);}
+.to{font-family:'Press Start 2P',monospace;font-size:.55rem;padding:5px 7px 4px;letter-spacing:1px;}
+.to.ub{background:var(--green);color:#05140a;}.to.lb{background:#3a2a0e;color:#ffc15e;border:1px solid #8a6420;}.to.tbd{color:var(--dim);border:1px dashed rgba(147,168,150,.35);}
+.mh{font-family:'Press Start 2P',monospace;font-size:.62rem;color:var(--dim);letter-spacing:1px;margin:28px 0 10px;}
+.m{display:grid;grid-template-columns:84px 1fr 86px 1fr;align-items:center;gap:8px;padding:14px 10px;border-top:2px solid rgba(111,224,122,.08);font-size:1.5rem;}
+.m .t{color:var(--dim);}
+.s{display:flex;align-items:center;gap:10px;font-family:'Press Start 2P',monospace;font-size:.62rem;color:var(--cream);}
+.s.b{flex-direction:row-reverse;}
+.s img{width:32px;height:32px;flex:0 0 32px;}
+.s.won{color:var(--green);}.s.lost{opacity:.42;}
+.vs{text-align:center;font-family:'Press Start 2P',monospace;font-size:.7rem;color:var(--dim);}
+.m.done .vs{color:var(--cream);}
+.m.live{background:rgba(168,22,22,.22);outline:2px solid var(--red);}
+.m.live .vs{color:#ff6b6b;animation:blink 1.2s steps(2) infinite;}
+.m.next{background:rgba(111,224,122,.08);outline:2px solid rgba(111,224,122,.45);}
+@keyframes blink{50%{opacity:.35}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="vignette"></div><div class="scanlines"></div>
+  <div class="head"><img src="assets/logo_wordmark.png" alt="Rumble in the Jungle"><div class="bar"></div><h1>GROUP STAGE</h1></div>
+  <div class="cols" id="cols"></div>
+  <div class="note">SAT OCT 17 &bull; best-of-one &bull; top 2 start in the upper bracket, 3rd + 4th in the lower bracket &bull; times CEST</div>
+</div>
+<script src="stream.js"></script>
+<script>
+R6.live(cfg => {
+  const now = cfg.now;
+  const gm = cfg.matches.filter(m => m.day === 1);
+  const open = gm.filter(m => !(m.result && m.result.w)).sort((x, y) => x.at - y.at);
+  const nextAt = open.length ? open[0].at : null;
+  document.getElementById('cols').innerHTML = ['A', 'B'].map(g => {
+    const keys = cfg.groups[g], ms = gm.filter(m => m.stage === 'GROUP ' + g).sort((x, y) => x.at - y.at);
+    const rec = Object.fromEntries(keys.map(k => [k, { w: 0, l: 0 }]));
+    ms.forEach(m => { const w = m.result && m.result.w; if (!w) return; rec[w].w++; rec[w === m.a ? m.b : m.a].l++; });
+    const played = ms.some(m => m.result && m.result.w), fixed = (cfg.results.groups || {})[g];
+    const order = fixed && fixed.length === 4 ? fixed : keys.slice().sort((x, y) => played ? (rec[y].w - rec[x].w) || (rec[x].l - rec[y].l) || keys.indexOf(x) - keys.indexOf(y) : 0);
+    const done = ms.every(m => m.result && m.result.w) || (fixed && fixed.length === 4);
+    const rows = order.map((k, i) => `<tr style="--a:${R6.acc(k)}"><td class="r">${played ? i + 1 : '-'}</td><td><div class="tm">${R6.logo(k)}${R6.esc(R6.name(k).toUpperCase())}</div></td>
+      <td class="n">${rec[k].w}</td><td class="n">${rec[k].l}</td><td><span class="to ${done ? (i < 2 ? 'ub' : 'lb') : 'tbd'}">${done ? (i < 2 ? 'UPPER' : 'LOWER') : 'TBD'}</span></td></tr>`).join('');
+    const side = (k, cls, won, lost) => `<span class="s ${cls}${won ? ' won' : lost ? ' lost' : ''}">${R6.logo(k, '')}${R6.esc(R6.name(k).toUpperCase())}</span>`;
+    const games = ms.map(m => {
+      const w = m.result && m.result.w, st = w ? 'done' : (m.at === nextAt ? (now >= m.at ? 'live' : 'next') : '');
+      return `<div class="m ${st}"><span class="t">${R6.time(m.at)}</span>${side(m.a, 'a', w === m.a, w && w !== m.a)}
+        <span class="vs">${w ? (w === m.a ? '1 : 0' : '0 : 1') : st === 'live' ? 'LIVE' : 'VS'}</span>${side(m.b, 'b', w === m.b, w && w !== m.b)}</div>`;
+    }).join('');
+    return `<div class="panel grp"><div class="ptitle">GROUP ${g}</div>
+      <table><thead><tr><th>#</th><th>TEAM</th><th class="n">W</th><th class="n">L</th><th>STARTS IN</th></tr></thead><tbody>${rows}</tbody></table>
+      <div class="mh">MATCHES</div>${games}</div>`;
+  }).join('');
+});
+</script>
+</body>
+</html>

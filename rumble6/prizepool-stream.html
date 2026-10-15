@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumble VI · Prize Pool (Stream)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stream.css">
+<style>
+.wrap{position:relative;z-index:3;display:flex;gap:32px;width:1720px;margin:120px auto 0;align-items:stretch;}
+.pool{flex:1.15;padding:56px 44px 60px;text-align:center;}
+.lbl{font-family:'Press Start 2P',monospace;font-size:.9rem;color:var(--dim);letter-spacing:2px;}
+.total{font-family:'Press Start 2P',monospace;font-size:7.2rem;line-height:1.15;margin:22px 0 6px;color:var(--cream);
+  text-shadow:6px 6px 0 #1f0202,12px 12px 0 rgba(0,0,0,.55),0 0 40px rgba(111,224,122,.25);}
+.split{font-size:1.9rem;color:var(--dim);min-height:2.2rem;}
+.split b{color:var(--green);font-weight:normal;}
+.dist{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px;}
+.d{padding:18px 8px 16px;background:rgba(3,8,5,.6);border:3px solid rgba(111,224,122,.2);}
+.d .pl{font-family:'Press Start 2P',monospace;font-size:1.05rem;color:var(--cream);}
+.d .pc{font-size:1.5rem;color:var(--dim);margin-top:8px;}
+.d .am{font-family:'Press Start 2P',monospace;font-size:1.25rem;color:var(--green);margin-top:12px;text-shadow:2px 2px 0 rgba(0,0,0,.8);}
+.d.r1{border-color:rgba(255,217,122,.6);}.d.r1 .pl{color:#ffd97a;}
+.donors{flex:1;padding:30px 34px 32px;}
+.donors .ptitle{font-size:1rem;}
+.sub{font-size:1.45rem;color:var(--dim);margin:8px 0 18px;}
+ol{list-style:none;columns:2;column-gap:28px;}
+li{display:flex;justify-content:space-between;gap:12px;padding:6px 2px;border-bottom:2px solid rgba(111,224,122,.08);font-size:1.6rem;break-inside:avoid;}
+li .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+li .a{color:var(--green);}
+li.top .n{color:#ffd97a;}
+.empty{font-size:1.6rem;color:var(--dim);}
+.cta{margin-top:20px;font-family:'Press Start 2P',monospace;font-size:.7rem;color:var(--cream);line-height:1.8;}
+.cta b{color:var(--green);font-weight:normal;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="vignette"></div><div class="scanlines"></div>
+  <div class="head"><img src="assets/logo_wordmark.png" alt="Rumble in the Jungle"><div class="bar"></div><h1>PRIZE POOL</h1></div>
+  <div class="wrap">
+    <div class="panel pool">
+      <div class="lbl" id="lbl">BASE POOL (HOST)</div>
+      <div class="total" id="total">€300</div>
+      <div class="split" id="split"></div>
+      <div class="dist">
+        <div class="d r1"><div class="pl">1ST</div><div class="pc">50%</div><div class="am" data-p=".5"></div></div>
+        <div class="d"><div class="pl">2ND</div><div class="pc">25%</div><div class="am" data-p=".25"></div></div>
+        <div class="d"><div class="pl">3RD</div><div class="pc">15%</div><div class="am" data-p=".15"></div></div>
+        <div class="d"><div class="pl">4TH</div><div class="pc">10%</div><div class="am" data-p=".1"></div></div>
+      </div>
+    </div>
+    <div class="panel donors">
+      <div class="ptitle">THANK YOU, SUPPORTERS <span id="cnt"></span></div>
+      <div class="sub">Every donation goes straight into the pool.</div>
+      <ol id="list"></ol>
+      <div class="empty" id="empty">Be the first to push the pool.</div>
+      <div class="cta">DONATE: <b>BLOPPBOT.GITHUB.IO/RUMBLE6</b></div>
+    </div>
+  </div>
+</div>
+<script src="stream.js"></script>
+<script>
+// same donations sheet as the homepage (published CSV, edited by blopp)
+(function () {
+  const CSV = 'https://docs.google.com/spreadsheets/d/19WoA4RSo4sGhDxzjKaN5AogD7rVOnMjQhPNS8nIXQR4/gviz/tq?tqx=out:csv&gid=0', BASE = 300;
+  function parse(t) {
+    const rows = []; let row = [], f = '', q = false;
+    for (let i = 0; i < t.length; i++) {
+      const c = t[i];
+      if (q) { if (c === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+      else if (c === '"') q = true; else if (c === ',') { row.push(f); f = ''; }
+      else if (c === '\n' || c === '\r') { if (c === '\r' && t[i + 1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; }
+      else f += c;
+    }
+    if (f || row.length) { row.push(f); rows.push(row); }
+    return rows;
+  }
+  const money = v => { const s = String(v).replace(/[^0-9.,-]/g, ''); const n = parseFloat(/,\d{1,2}$/.test(s) ? s.replace(/\./g, '').replace(',', '.') : s.replace(/,/g, '')); return isFinite(n) ? n : 0; };
+  const fmt = n => '€' + (Math.round(n * 100) % 100 ? n.toFixed(2) : Math.round(n));
+  const setTotal = total => { document.getElementById('total').textContent = fmt(total);
+    document.querySelectorAll('.am').forEach(el => el.textContent = fmt(Math.round(total * +el.dataset.p)) + (total === BASE ? '+' : '')); };
+  setTotal(BASE);
+  let last = '';
+  function load() {
+    fetch(CSV + '&_=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.text() : Promise.reject(r.status)).then(t => {
+      if (t === last) return; last = t;
+      const rows = parse(t.trim()); if (rows.length < 2) return;
+      const h = rows[0].map(x => x.trim().toLowerCase()), iN = h.indexOf('name'), iA = h.indexOf('amount');
+      if (iA < 0) return;
+      const list = rows.slice(1).map(r => ({ name: ((iN >= 0 ? r[iN] : '') || '').trim() || 'Anonymous', amt: money(r[iA]) })).filter(d => d.amt > 0).sort((a, b) => b.amt - a.amt);
+      const sum = list.reduce((s, d) => s + d.amt, 0);
+      setTotal(BASE + sum);
+      if (sum > 0) { document.getElementById('lbl').textContent = 'TOTAL PRIZE POOL'; document.getElementById('split').innerHTML = `€${BASE} base + <b>${fmt(sum)}</b> community`; }
+      const ol = document.getElementById('list'); ol.textContent = '';
+      list.slice(0, 20).forEach((d, i) => { const li = document.createElement('li'); if (i < 3) li.className = 'top';
+        li.innerHTML = `<span class="n">${R6.esc(d.name)}</span><span class="a">${fmt(d.amt)}</span>`; ol.appendChild(li); });
+      if (list.length > 20) { const li = document.createElement('li'); li.innerHTML = `<span class="n">+${list.length - 20} more</span>`; ol.appendChild(li); }
+      document.getElementById('cnt').textContent = list.length ? '(' + list.length + ')' : '';
+      document.getElementById('empty').hidden = list.length > 0;
+    }).catch(() => {});
+  }
+  load(); setInterval(load, 30000);
+})();
+</script>
+</body>
+</html>

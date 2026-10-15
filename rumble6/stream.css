@@ -1,0 +1,20 @@
+/* Rumble VI stream pages (1920x1080 OBS browser sources): shared look of teams-stream / prizepool-stream / groups-stream / bracket-stream */
+@font-face{font-family:'VT323 Cyr';src:url('assets/fonts/pixelify-cyrillic.woff2') format('woff2');unicode-range:U+0400-04FF;}
+:root{--green:#6fe07a;--green-deep:#2e6e3a;--cream:#f0e6d2;--ink:#e3ece4;--dim:#93a896;--red:#a81616;--panel:#0b1712;--px:3px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'VT323','VT323 Cyr',monospace;color:var(--ink);}
+#stage{position:absolute;top:50%;left:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);overflow:hidden;
+  background:linear-gradient(rgba(4,10,8,0.80),rgba(3,7,5,0.93)),url('assets/stream_bg_gate.jpg') center/cover no-repeat;image-rendering:pixelated;}
+img,video{image-rendering:pixelated;}
+.vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,transparent 25%,rgba(1,5,3,0.75) 100%);pointer-events:none;z-index:1;}
+.scanlines{position:absolute;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.16) 0 1px,transparent 1px 4px);mix-blend-mode:multiply;}
+.fly{position:absolute;width:4px;height:4px;background:#b6f36a;box-shadow:0 0 8px rgba(160,240,110,.9);opacity:0;z-index:2;pointer-events:none;animation:drift linear infinite;}
+@keyframes drift{0%{transform:translate(0,0);opacity:0}15%{opacity:.9}50%{transform:translate(3vw,-12vh)}85%{opacity:.6}100%{transform:translate(-1vw,-26vh);opacity:0}}
+.head{position:relative;z-index:3;display:flex;align-items:center;justify-content:center;gap:34px;margin-top:24px;}
+.head img{height:88px;filter:drop-shadow(4px 4px 0 rgba(0,0,0,.75));}
+.head h1{font-family:'Press Start 2P',monospace;font-size:2.1rem;color:var(--cream);letter-spacing:2px;text-shadow:var(--px) var(--px) 0 #1f0202,calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,.6);}
+.head .bar{width:4px;height:70px;background:var(--red);box-shadow:2px 2px 0 rgba(0,0,0,.6);}
+.panel{position:relative;z-index:3;background:rgba(11,23,18,.92);border:3px solid rgba(111,224,122,.28);box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6);}
+.ptitle{font-family:'Press Start 2P',monospace;font-size:.85rem;color:var(--green);letter-spacing:2px;text-shadow:2px 2px 0 rgba(0,0,0,.85);}
+.note{position:absolute;left:0;right:0;bottom:22px;z-index:3;text-align:center;color:var(--dim);font-size:1.3rem;}
+.tlogo{width:40px;height:40px;object-fit:contain;filter:drop-shadow(2px 2px 0 #000);flex:0 0 40px;}
