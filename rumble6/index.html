@@ -633,6 +633,12 @@
     .m .sl em { font-style: normal; font-family: 'Press Start 2P', monospace; font-size: 8px; padding: 4px 5px 3px; }
     .m .sl em.u { color: #04120a; background: var(--green-bright); } .m .sl em.l { color: #fff; background: var(--red); }
     .m .sl.tbd { color: var(--cream-dim); }
+    .m .sl.team { border-left: 4px solid var(--a); font-family: 'Press Start 2P', monospace; font-size: 8px; }
+    .m .sl .tn { display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .m .sl .tn img { width: 20px; height: 20px; flex: 0 0 20px; }
+    .m .sl .sc { font-family: 'Press Start 2P', monospace; font-size: 9px; font-weight: normal; color: var(--cream-dim); }
+    .m .sl.won { color: var(--green-bright); } .m .sl.won .sc { color: var(--green-bright); }
+    .m .sl.lost { opacity: 0.45; }
     .m.ub { border-color: var(--green-deep); } .m.lb { border-color: rgba(168,22,22,0.7); }
     .m.gf { border-color: #ffb347; box-shadow: 4px 4px 0 rgba(0,0,0,0.5), 0 0 24px rgba(255,160,50,0.35); }
     .m.gf .mh { color: #ffb347; }
@@ -980,7 +986,7 @@
             <div class="fmt-head"><span class="fmt-day">DAY 1 &middot; SAT OCT 17</span><span class="fmt-name">GROUP STAGE</span><span class="fmt-sub">two groups of four &middot; everyone plays everyone &middot; best-of-one</span></div>
             <div class="gs2" id="gs2"></div>
             <script>
-            // === GROUP STAGE (draw 2026-10-09 22:00Z). Fill results here: w = 'a' or 'b' (winner), null = not played yet ===
+            // === GROUP STAGE (draw 2026-10-09 22:00Z). Results come from the predict API (fed by blopp's results sheet), see R6FEED below ===
             (function () {
                 const TM = {
                     'Burger Boys': ['burgerboys', 'burgerboys_v2', '#5b8cff'], 'Vikings': ['vikings', 'vikings', '#7fb2e5'], 'GYM Esports': ['gym', 'gymesports', '#f2e030'],
@@ -988,19 +994,21 @@
                     "Don't Peek": ['dontpeek', 'dontpeek', '#a87cf0'], 'Space Marines': ['spacemarines', 'spacemarines', '#3fd0c9'] };
                 const G = { A: ['Burger Boys', 'Vikings', 'GYM Esports', 'Old Ravens'], B: ['TMNT', 'New World Order', "Don't Peek", 'Space Marines'] };
                 const ORDER = { A: [[1, 2], [0, 3], [1, 3], [0, 2], [2, 3], [0, 1]], B: [[1, 2], [0, 3], [1, 3], [0, 2], [0, 1], [2, 3]] }, HOURS = ['17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
-                const RESULTS = { A: [null, null, null, null, null, null], B: [null, null, null, null, null, null] };   // per hour, 'a' | 'b'
                 const root = document.getElementById('gs2');
                 const logo = (n, c) => TM[n][1] ? '<img class="' + c + '" src="assets/logos/' + TM[n][1] + '.png" alt="">' : '<span class="' + c + ' gq2">?</span>';
                 const esc = s => s.replace(/'/g, '&#39;');
+                window.R6GROUPS = (RESULTS, FIXED) => { root.textContent = '';   // RESULTS: per hour 'a' | 'b' | null, FIXED: final order after tiebreakers
                 Object.keys(G).forEach(g => {
                     const teams = G[g], rec = {};
                     teams.forEach(n => rec[n] = { w: 0, l: 0 });
                     const ms = ORDER[g].map(([i, j], k) => ({ t: HOURS[k], a: teams[i], b: teams[j], w: RESULTS[g][k] }));
                     ms.forEach(m => { if (!m.w) return; const W = m.w === 'a' ? m.a : m.b, L = m.w === 'a' ? m.b : m.a; rec[W].w++; rec[L].l++; });
                     const played = ms.some(m => m.w);
-                    const table = teams.slice().sort((x, y) => played ? (rec[y].w - rec[x].w) || (rec[x].l - rec[y].l) || (teams.indexOf(x) - teams.indexOf(y)) : 0);
+                    const fixed = FIXED[g] && FIXED[g].length === 4 ? FIXED[g] : null;
+                    const done = !!fixed || ms.every(m => m.w);
+                    const table = fixed || teams.slice().sort((x, y) => played ? (rec[y].w - rec[x].w) || (rec[x].l - rec[y].l) || (teams.indexOf(x) - teams.indexOf(y)) : 0);
                     const strip = teams.map(n => '<div class="g2b" style="--a:' + TM[n][2] + '">' + (TM[n][0] ? '<div class="g2bi" style="background-image:url(assets/versus/vs_' + TM[n][0] + '.jpg)"></div>' : '<div class="g2bi g2q"></div>') + logo(n, 'g2bl') + '<span>' + esc(n.toUpperCase()) + '</span></div>').join('');
-                    const rows = table.map((n, k) => '<tr style="--a:' + TM[n][2] + '"><td class="g2r">' + (played ? k + 1 : '-') + '</td><td class="g2n"><div>' + logo(n, 'g2tl') + '<b>' + esc(n.toUpperCase()) + '</b></div></td><td>' + rec[n].w + '</td><td>' + rec[n].l + '</td><td><span class="g2to ' + (played ? (k < 2 ? 'ub' : 'lb') : 'tbd') + '">' + (played ? (k < 2 ? 'UPPER' : 'LOWER') : 'TBD') + '</span></td></tr>').join('');
+                    const rows = table.map((n, k) => '<tr style="--a:' + TM[n][2] + '"><td class="g2r">' + (played || fixed ? k + 1 : '-') + '</td><td class="g2n"><div>' + logo(n, 'g2tl') + '<b>' + esc(n.toUpperCase()) + '</b></div></td><td>' + rec[n].w + '</td><td>' + rec[n].l + '</td><td><span class="g2to ' + (done ? (k < 2 ? 'ub' : 'lb') : 'tbd') + '">' + (done ? (k < 2 ? 'UPPER' : 'LOWER') : 'TBD') + '</span></td></tr>').join('');
                     const side = (n, won, lost) => '<span class="g2s' + (won ? ' won' : lost ? ' lost' : '') + '" style="--a:' + TM[n][2] + '">' + logo(n, 'g2ml') + '<b>' + esc(n.toUpperCase()) + '</b></span>';
                     const games = ms.map(m => '<div class="g2m' + (m.w ? ' done' : '') + '"><span class="g2t">' + m.t + '</span>' + side(m.a, m.w === 'a', m.w === 'b')
                         + '<span class="g2vs">' + (m.w ? (m.w === 'a' ? '1 : 0' : '0 : 1') : 'VS') + '</span>' + side(m.b, m.w === 'b', m.w === 'a') + '</div>').join('');
@@ -1008,6 +1016,8 @@
                         + '<table class="g2tab"><thead><tr><th>#</th><th>TEAM</th><th>W</th><th>L</th><th>STARTS IN</th></tr></thead><tbody>' + rows + '</tbody></table>'
                         + '<div class="g2games"><div class="g2gh">MATCHES · CEST</div>' + games + '</div></div>');
                 });
+                };
+                window.R6GROUPS({ A: [null, null, null, null, null, null], B: [null, null, null, null, null, null] }, {});
             })();
             </script>
             <div class="safe">&#9733; TOP 2 START IN THE UPPER BRACKET &middot; 3RD + 4TH IN THE LOWER BRACKET</div>
@@ -1044,6 +1054,42 @@
         </div>
     </section>
 </div>
+<script>
+// R6FEED: group results + bracket from the predict API (blopp's results sheet -> worker), polled every 30 s
+(function () {
+    const API = (new URLSearchParams(location.search).get('api') || 'https://rumble6-predict.bloppbot.workers.dev') + '/api/config';
+    const BK = { ub1: 'UBS1', ub2: 'UBS2', ubf: 'UBF', gf: 'GF', lb1: 'LBR1a', lb2: 'LBR1b', lq1: 'LBQ1', lq2: 'LBQ2', lbs: 'LBS', lbf: 'LBF' };
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const orig = {};
+    Object.keys(BK).forEach(id => { const el = document.getElementById(id); if (el) orig[id] = [...el.querySelectorAll('.sl')].map(x => [x.className, x.innerHTML]); });
+    let last = '';
+    function apply(cfg) {
+        const sig = JSON.stringify([cfg.matches, cfg.results]); if (sig === last) return; last = sig;
+        const T = Object.fromEntries(cfg.teams.map(t => [t.key, t])), M = Object.fromEntries(cfg.matches.map(m => [m.id, m]));
+        const res = {}, fixed = {};
+        ['A', 'B'].forEach(g => {
+            res[g] = [1, 2, 3, 4, 5, 6].map(n => { const m = M['G' + g + n], w = m && m.result && m.result.w; return w ? (w === m.a ? 'a' : 'b') : null; });
+            const f = (cfg.results.groups || {})[g]; if (f && f.length === 4) fixed[g] = f.map(k => T[k].name);
+        });
+        if (window.R6GROUPS) window.R6GROUPS(res, fixed);
+        Object.entries(BK).forEach(([id, mid]) => {
+            const el = document.getElementById(id), m = M[mid]; if (!el || !m) return;
+            const sl = el.querySelectorAll('.sl');
+            if (!m.a) { sl.forEach((x, i) => { x.className = orig[id][i][0]; x.innerHTML = orig[id][i][1]; }); el.classList.remove('done'); return; }
+            const w = m.result && m.result.w, sc = m.result && m.result.s ? m.result.s.split('-') : null;
+            [m.a, m.b].forEach((k, i) => {
+                const t = T[k], won = w === k, num = w ? (sc ? (won ? sc[0] : sc[1]) : (won ? '1' : '0')) : '';
+                sl[i].className = 'sl team' + (w ? (won ? ' won' : ' lost') : '');
+                sl[i].style.setProperty('--a', t.acc);
+                sl[i].innerHTML = '<span class="tn"><img src="' + esc(t.logo) + '" alt="">' + esc(t.name.toUpperCase()) + '</span>' + (num ? '<b class="sc">' + num + '</b>' : '');
+            });
+            el.classList.toggle('done', !!w);
+        });
+    }
+    const load = () => fetch(API, { cache: 'no-store' }).then(r => r.json()).then(apply).catch(() => {});
+    load(); setInterval(load, 30000);
+})();
+</script>
 <!-- FORMAT:END -->
 
 <!-- PREDICT:START -->
