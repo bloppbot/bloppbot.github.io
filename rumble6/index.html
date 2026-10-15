@@ -784,6 +784,19 @@
     .pg-top-h { font-family: 'Press Start 2P', monospace; font-size: 0.55rem; color: var(--green-bright); margin-top: 18px; }
     .pg-empty { color: var(--cream-dim); margin-top: 12px; }
     .big-btn.predict { background: var(--red); border-color: var(--red-bright); margin-top: 18px; }
+    /* WATCH:CSS: live stream links (blopp 10-15: stream 1 = Group A, stream 2 = Group B, Sunday split TBA) */
+    .watch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .watch-card { background: var(--panel-2); border: 3px solid var(--wc); box-shadow: 5px 5px 0 rgba(0,0,0,0.55); padding: 20px 18px; text-align: center; }
+    .watch-card .w-k { font-family: 'Press Start 2P', monospace; font-size: 0.65rem; color: var(--wc); letter-spacing: 2px; }
+    .watch-card .w-n { font-family: 'Press Start 2P', monospace; font-size: 1rem; color: var(--cream); margin: 12px 0 6px; }
+    .watch-card .w-g { font-size: 1.15rem; color: var(--cream); opacity: .85; margin-bottom: 16px; }
+    .watch-card .w-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .watch-card .w-btn { font-family: 'Press Start 2P', monospace; font-size: 0.6rem; text-decoration: none; color: #fff; padding: 12px 14px; border: 3px solid; box-shadow: 4px 4px 0 rgba(0,0,0,0.55); }
+    .watch-card .w-btn.tw { background: #4b2a85; border-color: #9b6bff; }
+    .watch-card .w-btn.yt { background: #7a1414; border-color: #ff4a4a; }
+    .watch-note { margin-top: 16px; text-align: center; color: var(--cream); opacity: .8; }
+    @media (max-width: 700px) { .watch-grid { grid-template-columns: 1fr; } }
+    /* WATCH:CSS:END */
 </style>
 </head>
 <body>
@@ -811,6 +824,7 @@
 </div>
 
 <nav class="nav-bar">
+    <a href="#watch" class="nav-btn">WATCH LIVE</a>
     <a href="#info" class="nav-btn">THE RUMBLE</a>
     <a href="#teams" class="nav-btn">TEAMS</a>
     <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
@@ -838,6 +852,35 @@
 </div>
 
 <div class="container">
+    <!-- WATCH:START -->
+    <section id="watch" class="section-wrapper">
+        <h2 class="section-title">WATCH LIVE</h2>
+        <div class="title-rule"></div>
+        <div class="about-card px-frame"><div class="about-inner">
+            <div class="watch-grid">
+                <div class="watch-card" style="--wc:#6fe07a">
+                    <div class="w-k">STREAM 1</div>
+                    <div class="w-n">BLOPP!</div>
+                    <div class="w-g">Saturday: Group A</div>
+                    <div class="w-btns">
+                        <a class="w-btn tw" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener">TWITCH</a>
+                        <a class="w-btn yt" href="https://www.youtube.com/@BLOPPDOTA2" target="_blank" rel="noopener">YOUTUBE</a>
+                    </div>
+                </div>
+                <div class="watch-card" style="--wc:#8df5ea">
+                    <div class="w-k">STREAM 2</div>
+                    <div class="w-n">TIARIN HINO</div>
+                    <div class="w-g">Saturday: Group B</div>
+                    <div class="w-btns">
+                        <a class="w-btn tw" href="https://www.twitch.tv/tiarinhino" target="_blank" rel="noopener">TWITCH</a>
+                    </div>
+                </div>
+            </div>
+            <p class="watch-note">Groups start <b>Sat Oct 17, 17:00 CEST</b>. Which stream covers which playoff match on Sunday is announced here before the day.</p>
+        </div></div>
+    </section>
+    <!-- WATCH:END -->
+
     <section id="info" class="section-wrapper">
         <h2 class="section-title">THE RUMBLE</h2>
         <div class="title-rule"></div>
