@@ -20,11 +20,18 @@ const R6 = {
   logo: (k, cls = 'tlogo') => R6.TEAMS[k] ? `<img class="${cls}" src="assets/logos/${R6.TEAMS[k][1]}.png" alt="">` : '',
   acc: k => R6.TEAMS[k] ? R6.TEAMS[k][2] : '#93a896',
   time: ms => new Date(ms).toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Vienna' }),
+  // live/next per bracket lane: the earliest open match(es) with known teams; LIVE once that match day has started (no result posted yet = still being played)
+  liveMap(ms, now, all = ms) {
+    const open = ms.filter(m => !(m.result && m.result.w) && m.a && m.b).sort((x, y) => x.at - y.at);
+    if (!open.length) return {};
+    const start = Math.min(...all.filter(m => m.day === open[0].day).map(m => m.at)), st = now >= start ? 'live' : 'next';
+    return Object.fromEntries(open.filter(m => m.at === open[0].at).map(m => [m.id, st]));
+  },
   // poll /api/config; render(cfg) on every change (results come in via /api/admin/state during the event)
   live(render, every = 20000) {
     let last = '';
     const load = () => fetch(R6.API + '/api/config', { cache: 'no-store' }).then(r => r.json()).then(cfg => {
-      const sig = JSON.stringify([cfg.matches, cfg.results]); if (sig === last) return; last = sig; render(cfg);
+      const sig = JSON.stringify([cfg.matches, cfg.results, cfg.matches.filter(m => cfg.now >= m.at).length]); if (sig === last) return; last = sig; render(cfg);
     }).catch(() => {});
     load(); setInterval(load, every);
   },

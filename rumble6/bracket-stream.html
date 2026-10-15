@@ -56,12 +56,11 @@ const POS = { UBS1: [0, 80], UBS2: [0, 250], UBF: [740, 165], LBR1a: [0, 460], L
 const FLOW = [['UBS1', 'UBF'], ['UBS2', 'UBF'], ['LBR1a', 'LBQ1'], ['LBR1b', 'LBQ2'], ['LBQ1', 'LBS'], ['LBQ2', 'LBS'], ['LBS', 'LBF'], ['UBF', 'GF'], ['LBF', 'GF']];
 R6.live(cfg => {
   const po = cfg.matches.filter(m => m.day > 1), now = cfg.now;
-  const open = po.filter(m => !(m.result && m.result.w) && m.a && m.b).sort((x, y) => x.at - y.at);
-  const nextAt = open.length ? open[0].at : null;
+  const LM = R6.liveMap(po, now, cfg.matches);
   document.getElementById('ms').innerHTML = po.map(m => {
     const [x, y] = POS[m.id] || [0, 0], r = m.result || {}, w = r.w;
     const sc = (r.s || '').split(/[-:]/).map(Number).filter(n => !isNaN(n)), hi = Math.max(...sc, 0), lo = sc.length > 1 ? Math.min(...sc) : 0;
-    const st = w ? '' : (m.a && m.b && m.at === nextAt ? (now >= m.at ? 'live' : 'next') : '');
+    const st = w ? '' : (LM[m.id] || '');
     const slot = (k, ph) => k
       ? `<div class="sl${w ? (w === k ? ' won' : ' lost') : ''}" style="--a:${R6.acc(k)}">${R6.logo(k, '')}<span class="nm">${R6.esc(R6.name(k).toUpperCase())}</span><span class="sc">${w ? (w === k ? hi : lo) : ''}</span></div>`
       : `<div class="sl tbd"><span class="nm">${R6.esc(ph)}</span></div>`;

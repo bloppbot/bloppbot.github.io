@@ -48,10 +48,9 @@ tr{border-left:5px solid var(--a);}
 R6.live(cfg => {
   const now = cfg.now;
   const gm = cfg.matches.filter(m => m.day === 1);
-  const open = gm.filter(m => !(m.result && m.result.w)).sort((x, y) => x.at - y.at);
-  const nextAt = open.length ? open[0].at : null;
   document.getElementById('cols').innerHTML = ['A', 'B'].map(g => {
     const keys = cfg.groups[g], ms = gm.filter(m => m.stage === 'GROUP ' + g).sort((x, y) => x.at - y.at);
+    const LM = R6.liveMap(ms, now, cfg.matches);   // per group: first game without a result is the live one
     const rec = Object.fromEntries(keys.map(k => [k, { w: 0, l: 0 }]));
     ms.forEach(m => { const w = m.result && m.result.w; if (!w) return; rec[w].w++; rec[w === m.a ? m.b : m.a].l++; });
     const played = ms.some(m => m.result && m.result.w), fixed = (cfg.results.groups || {})[g];
@@ -61,7 +60,7 @@ R6.live(cfg => {
       <td class="n">${rec[k].w}</td><td class="n">${rec[k].l}</td><td><span class="to ${done ? (i < 2 ? 'ub' : 'lb') : 'tbd'}">${done ? (i < 2 ? 'UPPER' : 'LOWER') : 'TBD'}</span></td></tr>`).join('');
     const side = (k, cls, won, lost) => `<span class="s ${cls}${won ? ' won' : lost ? ' lost' : ''}">${R6.logo(k, '')}${R6.esc(R6.name(k).toUpperCase())}</span>`;
     const games = ms.map(m => {
-      const w = m.result && m.result.w, st = w ? 'done' : (m.at === nextAt ? (now >= m.at ? 'live' : 'next') : '');
+      const w = m.result && m.result.w, st = w ? 'done' : (LM[m.id] || '');
       return `<div class="m ${st}"><span class="t">${R6.time(m.at)}</span>${side(m.a, 'a', w === m.a, w && w !== m.a)}
         <span class="vs">${w ? (w === m.a ? '1 : 0' : '0 : 1') : st === 'live' ? 'LIVE' : 'VS'}</span>${side(m.b, 'b', w === m.b, w && w !== m.b)}</div>`;
     }).join('');

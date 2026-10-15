@@ -744,6 +744,12 @@
     .g2s.won b { color: var(--green-bright); } .g2s.lost { opacity: 0.45; }
     .g2vs { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--red-bright); text-align: center; }
     .g2m.done .g2vs { color: var(--cream); }
+    .g2m.live { background: rgba(168,22,22,0.22); outline: 2px solid var(--red); outline-offset: -2px; }
+    .g2m.live .g2vs { color: #ff6b6b; animation: g2blink 1.2s steps(2) infinite; }
+    .g2m.next { background: rgba(111,224,122,0.08); outline: 2px solid rgba(111,224,122,0.45); outline-offset: -2px; }
+    @keyframes g2blink { 50% { opacity: 0.35; } }
+    .m.live { outline: 3px solid var(--red); } .m.live .mh { background: rgba(168,22,22,0.45); }
+    .m .mh .lv { font-style: normal; background: var(--red); color: #fff; padding: 3px 4px 2px; margin-left: 6px; animation: g2blink 1.2s steps(2) infinite; }
     @media (max-width: 900px) { .gs2 { grid-template-columns: 1fr; } }
     @media (max-width: 480px) { .g2m { grid-template-columns: 40px 1fr 34px 1fr; gap: 5px; } .g2s b { font-size: 6px; } .g2ml { width: 20px; height: 20px; flex-basis: 20px; } .g2b span { font-size: 5px; } }
 
@@ -1003,11 +1009,11 @@
                 const LIVE = { A: ['BLOPP!', [['tw', 'TWITCH', 'https://www.twitch.tv/bloppdota2'], ['yt', 'YOUTUBE', 'https://www.youtube.com/@BLOPPDOTA2']]], B: ['TIARIN HINO', [['tw', 'TWITCH', 'https://www.twitch.tv/tiarinhino']]] };   // who streams which group
                 const logo = (n, c) => TM[n][1] ? '<img class="' + c + '" src="assets/logos/' + TM[n][1] + '.png" alt="">' : '<span class="' + c + ' gq2">?</span>';
                 const esc = s => s.replace(/'/g, '&#39;');
-                window.R6GROUPS = (RESULTS, FIXED) => { root.textContent = '';   // RESULTS: per hour 'a' | 'b' | null, FIXED: final order after tiebreakers
+                window.R6GROUPS = (RESULTS, FIXED, LV = { A: [], B: [] }) => { root.textContent = '';   // RESULTS: per hour 'a' | 'b' | null, FIXED: final order after tiebreakers
                 Object.keys(G).forEach(g => {
                     const teams = G[g], rec = {};
                     teams.forEach(n => rec[n] = { w: 0, l: 0 });
-                    const ms = ORDER[g].map(([i, j], k) => ({ t: HOURS[k], a: teams[i], b: teams[j], w: RESULTS[g][k] }));
+                    const ms = ORDER[g].map(([i, j], k) => ({ t: HOURS[k], a: teams[i], b: teams[j], w: RESULTS[g][k], st: LV[g][k] || '' }));
                     ms.forEach(m => { if (!m.w) return; const W = m.w === 'a' ? m.a : m.b, L = m.w === 'a' ? m.b : m.a; rec[W].w++; rec[L].l++; });
                     const played = ms.some(m => m.w);
                     const fixed = FIXED[g] && FIXED[g].length === 4 ? FIXED[g] : null;
@@ -1016,8 +1022,8 @@
                     const strip = teams.map(n => '<div class="g2b" style="--a:' + TM[n][2] + '">' + (TM[n][0] ? '<div class="g2bi" style="background-image:url(assets/versus/vs_' + TM[n][0] + '.jpg)"></div>' : '<div class="g2bi g2q"></div>') + logo(n, 'g2bl') + '<span>' + esc(n.toUpperCase()) + '</span></div>').join('');
                     const rows = table.map((n, k) => '<tr style="--a:' + TM[n][2] + '"><td class="g2r">' + (played || fixed ? k + 1 : '-') + '</td><td class="g2n"><div>' + logo(n, 'g2tl') + '<b>' + esc(n.toUpperCase()) + '</b></div></td><td>' + rec[n].w + '</td><td>' + rec[n].l + '</td><td><span class="g2to ' + (done ? (k < 2 ? 'ub' : 'lb') : 'tbd') + '">' + (done ? (k < 2 ? 'UPPER' : 'LOWER') : 'TBD') + '</span></td></tr>').join('');
                     const side = (n, won, lost) => '<span class="g2s' + (won ? ' won' : lost ? ' lost' : '') + '" style="--a:' + TM[n][2] + '">' + logo(n, 'g2ml') + '<b>' + esc(n.toUpperCase()) + '</b></span>';
-                    const games = ms.map(m => '<div class="g2m' + (m.w ? ' done' : '') + '"><span class="g2t">' + m.t + '</span>' + side(m.a, m.w === 'a', m.w === 'b')
-                        + '<span class="g2vs">' + (m.w ? (m.w === 'a' ? '1 : 0' : '0 : 1') : 'VS') + '</span>' + side(m.b, m.w === 'b', m.w === 'a') + '</div>').join('');
+                    const games = ms.map(m => '<div class="g2m' + (m.w ? ' done' : m.st ? ' ' + m.st : '') + '"><span class="g2t">' + m.t + '</span>' + side(m.a, m.w === 'a', m.w === 'b')
+                        + '<span class="g2vs">' + (m.w ? (m.w === 'a' ? '1 : 0' : '0 : 1') : m.st === 'live' ? 'LIVE' : 'VS') + '</span>' + side(m.b, m.w === 'b', m.w === 'a') + '</div>').join('');
                     root.insertAdjacentHTML('beforeend', '<div class="g2"><div class="g2h">GROUP ' + g + '</div><div class="g2live">LIVE WITH ' + LIVE[g][0] + LIVE[g][1].map(([c, n, u]) => '<a class="' + c + '" href="' + u + '" target="_blank" rel="noopener">' + n + '</a>').join('') + '</div><div class="g2strip">' + strip + '</div>'
                         + '<table class="g2tab"><thead><tr><th>#</th><th>TEAM</th><th>W</th><th>L</th><th>STARTS IN</th></tr></thead><tbody>' + rows + '</tbody></table>'
                         + '<div class="g2games"><div class="g2gh">MATCHES · CEST</div>' + games + '</div></div>');
@@ -1070,14 +1076,21 @@
     Object.keys(BK).forEach(id => { const el = document.getElementById(id); if (el) orig[id] = [...el.querySelectorAll('.sl')].map(x => [x.className, x.innerHTML]); });
     let last = '';
     function apply(cfg) {
-        const sig = JSON.stringify([cfg.matches, cfg.results]); if (sig === last) return; last = sig;
+        const sig = JSON.stringify([cfg.matches, cfg.results, cfg.matches.filter(m => cfg.now >= m.at).length]); if (sig === last) return; last = sig;
         const T = Object.fromEntries(cfg.teams.map(t => [t.key, t])), M = Object.fromEntries(cfg.matches.map(m => [m.id, m]));
-        const res = {}, fixed = {};
+        const liveMap = (ms) => {   // earliest open match(es) with known teams; LIVE once that match day has started
+            const open = ms.filter(m => !(m.result && m.result.w) && m.a && m.b).sort((x, y) => x.at - y.at);
+            if (!open.length) return {};
+            const start = Math.min(...cfg.matches.filter(m => m.day === open[0].day).map(m => m.at)), st = cfg.now >= start ? 'live' : 'next';
+            return Object.fromEntries(open.filter(m => m.at === open[0].at).map(m => [m.id, st]));
+        };
+        const res = {}, fixed = {}, live = {}, LP = liveMap(cfg.matches.filter(m => m.day > 1));
         ['A', 'B'].forEach(g => {
             res[g] = [1, 2, 3, 4, 5, 6].map(n => { const m = M['G' + g + n], w = m && m.result && m.result.w; return w ? (w === m.a ? 'a' : 'b') : null; });
             const f = (cfg.results.groups || {})[g]; if (f && f.length === 4) fixed[g] = f.map(k => T[k].name);
+            const LG = liveMap(cfg.matches.filter(m => m.stage === 'GROUP ' + g)); live[g] = [1, 2, 3, 4, 5, 6].map(n => LG['G' + g + n] || '');
         });
-        if (window.R6GROUPS) window.R6GROUPS(res, fixed);
+        if (window.R6GROUPS) window.R6GROUPS(res, fixed, live);
         Object.entries(BK).forEach(([id, mid]) => {
             const el = document.getElementById(id), m = M[mid]; if (!el || !m) return;
             const sl = el.querySelectorAll('.sl');
@@ -1090,6 +1103,9 @@
                 sl[i].innerHTML = '<span class="tn"><img src="' + esc(t.logo) + '" alt="">' + esc(t.name.toUpperCase()) + '</span>' + (num ? '<b class="sc">' + num + '</b>' : '');
             });
             el.classList.toggle('done', !!w);
+            el.classList.toggle('live', LP[mid] === 'live');
+            const mh = el.querySelector('.mh span'), tag = mh.querySelector('.lv');
+            if (LP[mid] === 'live' && !tag) mh.insertAdjacentHTML('beforeend', '<em class="lv">LIVE</em>'); else if (LP[mid] !== 'live' && tag) tag.remove();
         });
     }
     const load = () => fetch(API, { cache: 'no-store' }).then(r => r.json()).then(apply).catch(() => {});
