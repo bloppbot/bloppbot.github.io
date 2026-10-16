@@ -571,12 +571,13 @@
     .dist-item.rank-1 { box-shadow: var(--px) var(--px) 0 rgba(0,0,0,0.55), 0 0 22px rgba(255,217,122,0.18); }
     .dist-item .dist-team { color: var(--cream); }
 
-    /* [7] CASTERS: the desk sits in the arena instead of a flat green box; all three casters in one row */
+    /* [7] CASTERS: the desk sits in the arena instead of a flat green box; all four casters in one row */
     .casters-inner { background: transparent; }
     .casters-img { -webkit-mask-image: radial-gradient(ellipse 60% 62% at 50% 50%, #000 58%, transparent 100%);
         mask-image: radial-gradient(ellipse 60% 62% at 50% 50%, #000 58%, transparent 100%); }
-    .casters-names-3 { grid-template-columns: repeat(3, 1fr); width: min(760px, 100%); margin-top: 10px; gap: 12px; }
+    .casters-names-3 { grid-template-columns: repeat(4, 1fr); width: min(960px, 100%); margin-top: 10px; gap: 12px; }
     .casters-names-3 > div { background: rgba(3,8,5,0.6); border: 3px solid var(--line); padding: 16px 8px 14px; box-shadow: 4px 4px 0 rgba(0,0,0,0.45); }
+    @media (max-width: 860px) { .casters-names-3 { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 560px) { .casters-names-3 { grid-template-columns: 1fr; } }
 
     /* [8] FOOTER FIX: the footer was painted UNDER the fixed background (no z-index) */
@@ -1177,6 +1178,13 @@
                         <div class="caster-role">CASTER</div>
                         <div class="caster-links">
                             <a href="https://www.twitch.tv/tiarinhino" target="_blank" rel="noopener" title="Twitch">TWITCH</a>
+                        </div>
+                    </div>
+                    <div class="sg">
+                        <div class="caster-name">TWISTED</div>
+                        <div class="caster-role">CASTER</div>
+                        <div class="caster-links">
+                            <a href="https://www.twitch.tv/twistedambitions" target="_blank" rel="noopener" title="Twitch">TWITCH</a>
                         </div>
                     </div>
                 </div>
