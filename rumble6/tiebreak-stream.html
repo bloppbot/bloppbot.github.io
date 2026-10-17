@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumble VI · Group A Tiebreak (Stream)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{--green:#6fe07a;--cream:#f0e6d2;--ink:#e3ece4;--dim:#93a896;--panel:#0b1712;--red:#ff6b5a;--px:3px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'VT323',monospace;color:var(--ink);}
+#stage{position:absolute;top:50%;left:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);overflow:hidden;
+  background:linear-gradient(rgba(4,10,8,0.80),rgba(3,7,5,0.93)),url('assets/stream_bg_gate.jpg') center/cover no-repeat;image-rendering:pixelated;}
+img{image-rendering:pixelated;}
+.vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,transparent 25%,rgba(1,5,3,0.75) 100%);pointer-events:none;z-index:1;}
+.scanlines{position:absolute;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.16) 0 1px,transparent 1px 4px);mix-blend-mode:multiply;}
+.fly{position:absolute;width:4px;height:4px;background:#b6f36a;box-shadow:0 0 8px rgba(160,240,110,.9);opacity:0;z-index:2;pointer-events:none;animation:drift linear infinite;}
+@keyframes drift{0%{transform:translate(0,0);opacity:0}15%{opacity:.9}50%{transform:translate(3vw,-12vh)}85%{opacity:.6}100%{transform:translate(-1vw,-26vh);opacity:0}}
+.head{position:relative;z-index:3;display:flex;align-items:center;justify-content:center;gap:34px;margin-top:24px;}
+.head img{height:88px;filter:drop-shadow(4px 4px 0 rgba(0,0,0,.75));}
+.head h1{font-family:'Press Start 2P',monospace;font-size:2.1rem;color:var(--cream);letter-spacing:2px;text-shadow:var(--px) var(--px) 0 #1f0202,calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,.6);}
+.head .bar{width:4px;height:70px;background:#a81616;box-shadow:2px 2px 0 rgba(0,0,0,.6);}
+.wrap{position:relative;z-index:3;width:1700px;margin:18px auto 0;}
+.rule{background:var(--panel);border:3px solid rgba(111,224,122,.35);box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6);padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:30px;}
+.rule p{font-size:1.75rem;line-height:1.15;}
+.rule b{color:var(--cream);font-weight:normal;}
+.formula{font-family:'Press Start 2P',monospace;font-size:.95rem;color:var(--green);white-space:nowrap;text-shadow:2px 2px 0 rgba(0,0,0,.85);border:2px solid #2e6e3a;padding:12px 16px;background:rgba(3,8,5,.85);}
+.label{font-family:'Press Start 2P',monospace;font-size:.8rem;color:var(--green);letter-spacing:2px;margin:22px 0 10px 2px;text-shadow:2px 2px 0 rgba(0,0,0,.85);}
+.games{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.game{background:var(--panel);border:3px solid rgba(111,224,122,.22);box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6);padding:12px 16px;}
+.gtop{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+.gid{font-family:'Press Start 2P',monospace;font-size:.6rem;color:var(--dim);}
+.gtime{font-size:1.9rem;color:var(--cream);}
+.gtime small{font-size:1.2rem;color:var(--dim);}
+.gl{display:flex;align-items:center;gap:10px;min-height:46px;}
+.gl img{width:34px;height:34px;object-fit:contain;filter:drop-shadow(2px 2px 0 #000);}
+.gl .n{flex:1;font-size:1.6rem;}
+.gl .wl{font-family:'Press Start 2P',monospace;font-size:.6rem;width:52px;}
+.gl .v{font-size:1.8rem;width:110px;text-align:right;text-shadow:2px 2px 0 rgba(0,0,0,.85);}
+.pos{color:var(--green);} .neg{color:var(--red);}
+.table{background:var(--panel);border:3px solid rgba(111,224,122,.35);box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6);}
+.tr{display:grid;grid-template-columns:90px 1fr 230px 230px 70px 240px 200px;align-items:center;padding:4px 20px;min-height:74px;}
+.tr + .tr{border-top:2px solid rgba(111,224,122,.08);}
+.th{min-height:44px;font-family:'Press Start 2P',monospace;font-size:.55rem;color:var(--dim);letter-spacing:1px;}
+.rank{font-family:'Press Start 2P',monospace;font-size:1.5rem;color:var(--cream);text-shadow:3px 3px 0 rgba(0,0,0,.8);}
+.team{display:flex;align-items:center;gap:14px;font-family:'Press Start 2P',monospace;font-size:.95rem;color:var(--cream);text-shadow:2px 2px 0 rgba(0,0,0,.9);}
+.team img{width:52px;height:52px;object-fit:contain;filter:drop-shadow(2px 2px 0 #000);}
+.cell{font-size:1.75rem;}
+.cell small{color:var(--dim);font-size:1.25rem;}
+.op{font-size:1.8rem;color:var(--dim);text-align:center;}
+.avg{font-size:2.4rem;text-align:right;text-shadow:2px 2px 0 rgba(0,0,0,.85);}
+.seed{font-family:'Press Start 2P',monospace;font-size:.7rem;text-align:right;letter-spacing:1px;}
+.seed.ub{color:var(--green);} .seed.lb{color:#ffb347;}
+.tr.ravens .cell,.tr.ravens .avg{color:var(--dim);}
+.note{position:relative;z-index:3;text-align:center;color:var(--dim);font-size:1.3rem;margin-top:14px;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="vignette"></div><div class="scanlines"></div>
+  <div class="head"><img src="assets/logo_wordmark.png" alt="Rumble in the Jungle"><div class="bar"></div><h1>GROUP A TIEBREAK</h1></div>
+  <div class="wrap">
+    <div class="rule">
+      <p><b>Burger Boys, Vikings and GYM Esports all finished 2-1</b> and beat each other in a circle.<br>
+      Only their 3 games against each other count. Fast wins score high, fast losses hurt most.</p>
+      <div class="formula">SCORE = &#177;1800 / GAME SECONDS<br><br>+ WIN &nbsp; &minus; LOSS &nbsp; &rarr; AVERAGE</div>
+    </div>
+
+    <div class="label">THE 3 HEAD-TO-HEAD GAMES</div>
+    <div class="games">
+      <div class="game">
+        <div class="gtop"><span class="gid">GAME 1 &middot; 17:00</span><span class="gtime">52:11 <small>= 3131 s</small></span></div>
+        <div class="gl"><img src="assets/logos/gymesports.png" alt=""><span class="n">GYM Esports</span><span class="wl pos">WIN</span><span class="v pos">+0.575</span></div>
+        <div class="gl"><img src="assets/logos/vikings.png" alt=""><span class="n">Vikings</span><span class="wl neg">LOSS</span><span class="v neg">&minus;0.575</span></div>
+      </div>
+      <div class="game">
+        <div class="gtop"><span class="gid">GAME 4 &middot; 20:00</span><span class="gtime">22:07 <small>= 1327 s</small></span></div>
+        <div class="gl"><img src="assets/logos/burgerboys_v2.png" alt=""><span class="n">Burger Boys</span><span class="wl pos">WIN</span><span class="v pos">+1.356</span></div>
+        <div class="gl"><img src="assets/logos/gymesports.png" alt=""><span class="n">GYM Esports</span><span class="wl neg">LOSS</span><span class="v neg">&minus;1.356</span></div>
+      </div>
+      <div class="game">
+        <div class="gtop"><span class="gid">GAME 6 &middot; 22:00</span><span class="gtime">68:17 <small>= 4097 s</small></span></div>
+        <div class="gl"><img src="assets/logos/vikings.png" alt=""><span class="n">Vikings</span><span class="wl pos">WIN</span><span class="v pos">+0.439</span></div>
+        <div class="gl"><img src="assets/logos/burgerboys_v2.png" alt=""><span class="n">Burger Boys</span><span class="wl neg">LOSS</span><span class="v neg">&minus;0.439</span></div>
+      </div>
+    </div>
+
+    <div class="label">FINAL GROUP A STANDINGS</div>
+    <div class="table">
+      <div class="tr th"><span>#</span><span>TEAM</span><span>GAME A</span><span>GAME B</span><span></span><span style="text-align:right">AVERAGE</span><span style="text-align:right">PLAYOFFS</span></div>
+      <div class="tr"><span class="rank">1</span><span class="team"><img src="assets/logos/burgerboys_v2.png" alt="">BURGER BOYS</span><span class="cell pos">+1.356 <small>vs GYM</small></span><span class="cell neg">&minus;0.439 <small>vs VIK</small></span><span class="op">&divide;2</span><span class="avg pos">+0.459</span><span class="seed ub">UPPER</span></div>
+      <div class="tr"><span class="rank">2</span><span class="team"><img src="assets/logos/vikings.png" alt="">VIKINGS</span><span class="cell neg">&minus;0.575 <small>vs GYM</small></span><span class="cell pos">+0.439 <small>vs BB</small></span><span class="op">&divide;2</span><span class="avg neg">&minus;0.068</span><span class="seed ub">UPPER</span></div>
+      <div class="tr"><span class="rank">3</span><span class="team"><img src="assets/logos/gymesports.png" alt="">GYM ESPORTS</span><span class="cell pos">+0.575 <small>vs VIK</small></span><span class="cell neg">&minus;1.356 <small>vs BB</small></span><span class="op">&divide;2</span><span class="avg neg">&minus;0.391</span><span class="seed lb">LOWER</span></div>
+      <div class="tr ravens"><span class="rank">4</span><span class="team"><img src="assets/logos/oldravens.png" alt="">OLD RAVENS</span><span class="cell">0-3</span><span class="cell"></span><span class="op"></span><span class="avg">&ndash;</span><span class="seed lb">LOWER</span></div>
+    </div>
+  </div>
+  <div class="note">1800 = 30 minutes, just to keep the numbers readable &bull; game times from the official match data</div>
+</div>
+<script>
+const stage=document.getElementById('stage');
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(-50%,-50%) scale(${s})`;}
+addEventListener('resize',fit);fit();
+for(let i=0;i<22;i++){const e=document.createElement('div');e.className='fly';e.style.left=Math.random()*100+'%';e.style.top=(35+Math.random()*65)+'%';
+  e.style.animationDelay=(Math.random()*16)+'s';e.style.animationDuration=(Math.random()*10+12)+'s';stage.appendChild(e);}
+</script>
+</body>
+</html>
