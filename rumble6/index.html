@@ -814,6 +814,23 @@
     .watch-card .w-btn { font-family: 'Press Start 2P', monospace; font-size: 0.6rem; text-decoration: none; color: #fff; padding: 12px 14px; border: 3px solid; box-shadow: 4px 4px 0 rgba(0,0,0,0.55); }
     .watch-card .w-btn.tw { background: #4b2a85; border-color: #9b6bff; }
     .watch-card .w-btn.yt { background: #7a1414; border-color: #ff4a4a; }
+    .watch-card .w-day { display: flex; justify-content: space-between; align-items: center; font-family: 'Press Start 2P', monospace; font-size: 0.55rem; letter-spacing: 2px; color: var(--cream); opacity: .55; padding: 9px 4px; border-top: 2px solid rgba(255,255,255,.07); }
+    .watch-card .w-day .w-done { color: var(--wc); }
+    .watch-card .w-day.sun { opacity: 1; color: var(--wc); border-top-color: var(--wc); margin-top: 4px; }
+    .watch-card .wms { display: flex; flex-direction: column; gap: 10px; margin: 8px 0 20px; }
+    .watch-card .wm { background: #050c07; border: 2px solid rgba(255,255,255,.12); box-shadow: 3px 3px 0 rgba(0,0,0,.6); text-align: left; }
+    .watch-card .wm.ub { border-color: color-mix(in srgb, var(--wc) 70%, transparent); box-shadow: 3px 3px 0 rgba(0,0,0,.6), 0 0 16px color-mix(in srgb, var(--wc) 22%, transparent); }
+    .watch-card .wm-h { display: flex; align-items: center; gap: 10px; padding: 6px 10px; background: rgba(255,255,255,.04); border-bottom: 2px solid rgba(255,255,255,.07); font-family: 'Press Start 2P', monospace; font-size: 0.5rem; letter-spacing: 1px; }
+    .watch-card .wm-t { background: var(--wc); color: #04100a; padding: 4px 6px 3px; }
+    .watch-card .wm-st { color: var(--cream); flex: 1; }
+    .watch-card .wm-bo { color: var(--cream); opacity: .5; }
+    .watch-card .wm-v { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; padding: 10px 10px; min-height: 58px; }
+    .watch-card .wm-tm { display: flex; align-items: center; gap: 9px; font-family: 'Press Start 2P', monospace; font-size: 0.55rem; line-height: 1.5; color: var(--tc); text-shadow: 2px 2px 0 rgba(0,0,0,.85); min-width: 0; }
+    .watch-card .wm-tm.r { justify-content: flex-end; text-align: right; }
+    .watch-card .wm-tm em { font-style: normal; }
+    .watch-card .wm-tm img { width: 36px; height: 36px; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(2px 2px 0 #000); flex: 0 0 36px; }
+    .watch-card .wm-tm.tbd { color: var(--cream); opacity: .7; font-size: 0.5rem; line-height: 1.7; }
+    .watch-card .wm-vs { font-family: 'Press Start 2P', monospace; font-size: 0.6rem; color: #ff5a4a; text-shadow: 2px 2px 0 #000; }
     .watch-note { margin-top: 16px; text-align: center; color: var(--cream); opacity: .8; }
     @media (max-width: 700px) { .watch-grid { grid-template-columns: 1fr; } }
     /* WATCH:CSS:END */
@@ -881,7 +898,7 @@
                 <div class="watch-card" style="--wc:#6fe07a">
                     <div class="w-k">STREAM 1</div>
                     <div class="w-n">BLOPP!</div>
-                    <div class="w-g">Saturday: Group A</div>
+                    <div class="w-day"><span>SAT OCT 17</span><span class="w-done">GROUP A &#10003;</span></div><div class="w-day sun"><span>SUN OCT 18</span><span>PLAYOFFS DAY 1</span></div><div class="wms"><div class="wm"><div class="wm-h"><span class="wm-t">17:00</span><span class="wm-st">LB ROUND 1</span><span class="wm-bo">BO3</span></div><div class="wm-v"><span class="wm-tm l" style="--tc:#3fd0c9"><img src="assets/logos/spacemarines.png" alt=""><em>SPACE MARINES</em></span><span class="wm-vs">VS</span><span class="wm-tm r" style="--tc:#e0334f"><em>OLD RAVENS</em><img src="assets/logos/oldravens.png" alt=""></span></div></div><div class="wm ub"><div class="wm-h"><span class="wm-t">19:30</span><span class="wm-st">UB SEMIFINAL</span><span class="wm-bo">BO3</span></div><div class="wm-v"><span class="wm-tm l" style="--tc:#7cc242"><img src="assets/logos/tmnt.png" alt=""><em>TMNT</em></span><span class="wm-vs">VS</span><span class="wm-tm r" style="--tc:#7fb2e5"><em>VIKINGS</em><img src="assets/logos/vikings.png" alt=""></span></div></div><div class="wm"><div class="wm-h"><span class="wm-t">22:00</span><span class="wm-st">LB QUARTERFINAL</span><span class="wm-bo">BO3</span></div><div class="wm-v"><span class="wm-tm l tbd"><em>LOSER<br>TMNT / VIKINGS</em></span><span class="wm-vs">VS</span><span class="wm-tm r tbd"><em>WINNER<br>SM / RAVENS</em></span></div></div></div>
                     <div class="w-btns">
                         <a class="w-btn tw" href="https://www.twitch.tv/bloppdota2" target="_blank" rel="noopener">TWITCH</a>
                         <a class="w-btn yt" href="https://www.youtube.com/@BLOPPDOTA2" target="_blank" rel="noopener">YOUTUBE</a>
@@ -890,13 +907,13 @@
                 <div class="watch-card" style="--wc:#8df5ea">
                     <div class="w-k">STREAM 2</div>
                     <div class="w-n">TIARIN HINO</div>
-                    <div class="w-g">Saturday: Group B</div>
+                    <div class="w-day"><span>SAT OCT 17</span><span class="w-done">GROUP B &#10003;</span></div><div class="w-day sun"><span>SUN OCT 18</span><span>PLAYOFFS DAY 1</span></div><div class="wms"><div class="wm"><div class="wm-h"><span class="wm-t">17:00</span><span class="wm-st">LB ROUND 1</span><span class="wm-bo">BO3</span></div><div class="wm-v"><span class="wm-tm l" style="--tc:#f2e030"><img src="assets/logos/gymesports.png" alt=""><em>GYM ESPORTS</em></span><span class="wm-vs">VS</span><span class="wm-tm r" style="--tc:#f5a623"><em>NEW WORLD ORDER</em><img src="assets/logos/nwo_v2.png" alt=""></span></div></div><div class="wm ub"><div class="wm-h"><span class="wm-t">19:30</span><span class="wm-st">UB SEMIFINAL</span><span class="wm-bo">BO3</span></div><div class="wm-v"><span class="wm-tm l" style="--tc:#5b8cff"><img src="assets/logos/burgerboys_v2.png" alt=""><em>BURGER BOYS</em></span><span class="wm-vs">VS</span><span class="wm-tm r" style="--tc:#a87cf0"><em>DON'T PEEK</em><img src="assets/logos/dontpeek.png" alt=""></span></div></div><div class="wm"><div class="wm-h"><span class="wm-t">22:00</span><span class="wm-st">LB QUARTERFINAL</span><span class="wm-bo">BO3</span></div><div class="wm-v"><span class="wm-tm l tbd"><em>LOSER<br>BURGER / DP</em></span><span class="wm-vs">VS</span><span class="wm-tm r tbd"><em>WINNER<br>GYM / NWO</em></span></div></div></div>
                     <div class="w-btns">
                         <a class="w-btn tw" href="https://www.twitch.tv/tiarinhino" target="_blank" rel="noopener">TWITCH</a>
                     </div>
                 </div>
             </div>
-            <p class="watch-note">Groups start <b>Sat Oct 17, 17:00 CEST</b>. Which stream covers which playoff match on Sunday is announced here before the day.</p>
+            <p class="watch-note">All times CEST. Both streams run in parallel, pick your match. Semis and finals (Oct 24/25) get announced here.</p>
         </div></div>
     </section>
     <!-- WATCH:END -->
