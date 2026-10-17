@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumble VI · Day 1 in Numbers (Stream)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{--green:#6fe07a;--cream:#f0e6d2;--ink:#e3ece4;--dim:#93a896;--panel:#0b1712;--red:#ff6b5a;--gold:#f2c94c;--px:3px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'VT323',monospace;color:var(--ink);}
+#stage{position:absolute;top:50%;left:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);overflow:hidden;
+  background:linear-gradient(rgba(4,10,8,0.80),rgba(3,7,5,0.93)),url('assets/stream_bg_gate.jpg') center/cover no-repeat;image-rendering:pixelated;}
+img{image-rendering:pixelated;}
+.vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,transparent 25%,rgba(1,5,3,0.75) 100%);pointer-events:none;z-index:1;}
+.scanlines{position:absolute;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.16) 0 1px,transparent 1px 4px);mix-blend-mode:multiply;}
+.fly{position:absolute;width:4px;height:4px;background:#b6f36a;box-shadow:0 0 8px rgba(160,240,110,.9);opacity:0;z-index:2;pointer-events:none;animation:drift linear infinite;}
+@keyframes drift{0%{transform:translate(0,0);opacity:0}15%{opacity:.9}50%{transform:translate(3vw,-12vh)}85%{opacity:.6}100%{transform:translate(-1vw,-26vh);opacity:0}}
+.head{position:relative;z-index:3;display:flex;align-items:center;justify-content:center;gap:34px;margin-top:22px;}
+.head img{height:84px;filter:drop-shadow(4px 4px 0 rgba(0,0,0,.75));}
+.head h1{font-family:'Press Start 2P',monospace;font-size:2.1rem;color:var(--cream);letter-spacing:2px;text-shadow:var(--px) var(--px) 0 #1f0202,calc(var(--px)*2) calc(var(--px)*2) 0 rgba(0,0,0,.6);}
+.head .bar{width:4px;height:66px;background:#a81616;box-shadow:2px 2px 0 rgba(0,0,0,.6);}
+.wrap{position:relative;z-index:3;width:1780px;margin:26px auto 0;}
+.label{font-family:'Press Start 2P',monospace;font-size:.85rem;color:var(--green);letter-spacing:2px;margin:30px 0 12px 2px;text-shadow:2px 2px 0 rgba(0,0,0,.85);}
+.box{background:var(--panel);border:3px solid rgba(111,224,122,.28);box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6);}
+.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
+.tile{padding:18px 20px 16px;}
+.tile .k{font-family:'Press Start 2P',monospace;font-size:.62rem;color:var(--dim);letter-spacing:1px;}
+.tile .v{font-family:'Press Start 2P',monospace;font-size:2.05rem;color:var(--cream);margin:18px 0 12px;text-shadow:3px 3px 0 rgba(0,0,0,.8);}
+.tile .s{font-size:1.5rem;color:var(--dim);}
+.recs{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.rec{padding:18px 18px;display:grid;grid-template-columns:64px 1fr;grid-template-rows:auto auto auto;column-gap:12px;align-items:center;}
+.rec img{grid-row:1/4;width:64px;height:64px;object-fit:contain;filter:drop-shadow(2px 2px 0 #000);}
+.rec .k{font-family:'Press Start 2P',monospace;font-size:.58rem;color:var(--green);letter-spacing:1px;}
+.rec .v{font-size:2.5rem;line-height:1;color:var(--cream);text-shadow:2px 2px 0 rgba(0,0,0,.85);margin:8px 0 4px;}
+.rec .v b{font-family:'Press Start 2P',monospace;font-weight:normal;font-size:1.35rem;color:var(--gold);margin-right:8px;}
+.rec .w{font-size:1.4rem;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bottom{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;}
+.list{padding:10px 20px;}
+.lr{display:grid;grid-template-columns:250px 1fr;align-items:center;min-height:60px;}
+.lr + .lr{border-top:2px solid rgba(111,224,122,.07);}
+.lr .k{font-family:'Press Start 2P',monospace;font-size:.62rem;color:var(--dim);letter-spacing:1px;}
+.lr .v{font-size:1.8rem;}
+.lr .v b{color:var(--cream);font-weight:normal;}
+.lr .v i{font-style:normal;color:var(--green);}
+.lr .v u{text-decoration:none;color:var(--red);}
+.note{position:relative;z-index:3;text-align:center;color:var(--dim);font-size:1.25rem;margin-top:26px;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="vignette"></div><div class="scanlines"></div>
+  <div class="head"><img src="assets/logo_wordmark.png" alt="Rumble in the Jungle"><div class="bar"></div><h1>DAY 1 IN NUMBERS</h1></div>
+  <div class="wrap">
+    <div class="tiles">
+      <div class="tile box"><div class="k">ABILITY DRAFT PLAYED</div><div class="v">7H 59M</div><div class="s">12 group games, avg 39:53</div></div>
+      <div class="tile box"><div class="k">LONGEST GAME</div><div class="v">68:17</div><div class="s">Vikings vs Burger Boys</div></div>
+      <div class="tile box"><div class="k">SHORTEST GAME</div><div class="v">22:07</div><div class="s">Burger Boys vs GYM Esports</div></div>
+      <div class="tile box"><div class="k">BLOODIEST GAME</div><div class="v">100 KILLS</div><div class="s">Burger Boys vs Old Ravens</div></div>
+      <div class="tile box"><div class="k">RADIANT VS DIRE</div><div class="v">6 - 6</div><div class="s">first blood at 0:00 in game 1</div></div>
+    </div>
+
+    <div class="label">SINGLE-GAME RECORDS</div>
+    <div class="recs">
+      <div class="rec box"><img src="assets/logos/burgerboys_v2.png" alt=""><div class="k">MOST GOLD &amp; FARM</div><div class="v"><b>1121</b>GPM &middot; 1137 LH</div><div class="w">Jynx &middot; Hoodwink vs Old Ravens</div></div>
+      <div class="rec box"><img src="assets/logos/burgerboys_v2.png" alt=""><div class="k">MOST HERO DAMAGE</div><div class="v"><b>86.8K</b>damage</div><div class="w">Jynx &middot; Hoodwink vs Old Ravens</div></div>
+      <div class="rec box"><img src="assets/logos/oldravens.png" alt=""><div class="k">MOST KILLS</div><div class="v"><b>20</b>kills</div><div class="w">Oss (Bloodseeker) &amp; balll (Largo)</div></div>
+      <div class="rec box"><img src="assets/logos/tmnt.png" alt=""><div class="k">BEST KDA</div><div class="v"><b>32.0</b>KDA</div><div class="w">Lost &middot; Enchantress vs Don't Peek</div></div>
+      <div class="rec box"><img src="assets/logos/vikings.png" alt=""><div class="k">MOST ASSISTS</div><div class="v"><b>35</b>assists</div><div class="w">Ben &middot; Elder Titan vs Burger Boys</div></div>
+      <div class="rec box"><img src="assets/logos/gymesports.png" alt=""><div class="k">MOST HEALING</div><div class="v"><b>39K</b>healing</div><div class="w">Poodge &middot; Chen vs Vikings</div></div>
+      <div class="rec box"><img src="assets/logos/burgerboys_v2.png" alt=""><div class="k">MOST WARDS</div><div class="v"><b>69</b>wards</div><div class="w">Friscy &middot; Ring Master vs Vikings</div></div>
+      <div class="rec box"><img src="assets/logos/oldravens.png" alt=""><div class="k">MOST STUN TIME</div><div class="v"><b>150</b>seconds</div><div class="w">Sodiq (stand-in) &middot; Winter Wyvern</div></div>
+    </div>
+
+    <div class="bottom">
+      <div>
+        <div class="label">DAY TOTALS</div>
+        <div class="list box">
+          <div class="lr"><span class="k">KILLS</span><span class="v"><b>Erik 45</b> &middot; Jynx 40 &middot; Shushu 40</span></div>
+          <div class="lr"><span class="k">ASSISTS</span><span class="v"><b>Friscy 81</b> &middot; Dante 71 &middot; Ben 66</span></div>
+          <div class="lr"><span class="k">HERO DAMAGE</span><span class="v"><b>Mahax 134.4K</b> &middot; Jynx 134.2K &middot; Mirrored 133.4K</span></div>
+          <div class="lr"><span class="k">FEEDER RACE</span><span class="v"><b>Kawabunga, Oss, lexmach</b> tied on 33 deaths</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="label">THE DRAFT</div>
+        <div class="list box">
+          <div class="lr"><span class="k">TOP MODEL</span><span class="v"><b>Arc Warden</b> picked 4x, won 3</span></div>
+          <div class="lr"><span class="k">UNBEATEN</span><span class="v"><i>Moment of Courage 3-0</i> &middot; <i>Fatal Bonds 3-0</i></span></div>
+          <div class="lr"><span class="k">STRONG</span><span class="v"><i>Chaos Strike 3-1</i> &middot; <i>Chaos Knight model 3-0</i></span></div>
+          <div class="lr"><span class="k">TRAP PICKS</span><span class="v"><u>Venomous Gale 0-3</u> &middot; <u>Overwhelming Odds 0-3</u></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="note">Rumble in the Jungle VI &bull; group stage Sat Oct 17 &bull; data: OpenDota parsed matches</div>
+</div>
+<script>
+const stage=document.getElementById('stage');
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(-50%,-50%) scale(${s})`;}
+addEventListener('resize',fit);fit();
+for(let i=0;i<22;i++){const e=document.createElement('div');e.className='fly';e.style.left=Math.random()*100+'%';e.style.top=(35+Math.random()*65)+'%';
+  e.style.animationDelay=(Math.random()*16)+'s';e.style.animationDuration=(Math.random()*10+12)+'s';stage.appendChild(e);}
+</script>
+</body>
+</html>
