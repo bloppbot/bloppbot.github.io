@@ -128,7 +128,6 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
 .rname{flex:1;min-width:0;display:flex;align-items:baseline;font-family:'VT323','VT323 Cyr',monospace;font-size:27px;color:var(--ink);text-shadow:2px 2px 0 rgba(0,0,0,.7);}
 .rname .pn{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .rname .cpt{color:#ff5a4a;margin-left:5px;flex:0 0 auto;}
-.rmmr.si{font-family:'Press Start 2P',monospace;font-size:11px;color:#ffb347;}
 .rmmr{font-family:'VT323',monospace;font-weight:bold;font-size:29px;color:var(--green);text-shadow:2px 2px 0 rgba(0,0,0,.85);}
 .rmmr.na{color:var(--dim);font-weight:normal;}
 .rnew{font-family:'Press Start 2P',monospace;font-size:9px;color:var(--dim);border:1px solid #1b3521;padding:4px 5px;white-space:nowrap;}
@@ -151,6 +150,15 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
 #pickerToggle{position:fixed;top:12px;right:14px;z-index:1000;width:38px;height:38px;cursor:pointer;background:rgba(3,8,5,.7);border:2px solid rgba(111,224,122,.35);color:rgba(111,224,122,.6);font-size:18px;opacity:.35;transition:opacity .3s;}
 #pickerToggle:hover,#pickerToggle.active{opacity:1;}
 @media (max-width:760px){#picker{left:8px;right:60px;transform:none;}#picker select,#picker input{font-size:16px;}#picker .hint{display:none;}}
+/* blopp 10-17: crowd pick from the prediction game (live /api/crowd), hidden with &crowd=0 or when nobody picked */
+.crowd{display:none;align-items:center;justify-content:center;gap:16px;margin:14px auto 0;opacity:0;font-family:'VT323','VT323 Cyr',monospace;}
+.crowd.on{display:flex;} .go .crowd{animation:fadeUp .9s ease 1.45s forwards;}
+.crowd .cl{font-family:'Press Start 2P',monospace;font-size:13px;color:var(--green);letter-spacing:2px;text-shadow:2px 2px 0 rgba(0,0,0,.85);}
+.crowd .cpv{font-family:'Press Start 2P',monospace;font-size:20px;text-shadow:2px 2px 0 rgba(0,0,0,.85);width:84px;}
+.crowd .cpv.l{text-align:right;color:var(--accL);} .crowd .cpv.r{text-align:left;color:var(--accR);}
+.crowd .cbar{display:flex;width:460px;height:16px;background:#000;border:3px solid #0d1a10;box-shadow:inset 0 0 0 2px rgba(240,230,210,.18),4px 4px 0 rgba(0,0,0,.65);}
+.crowd .cbar i{display:block;height:100%;} .crowd .cbar i.l{background:var(--accL);} .crowd .cbar i.r{background:var(--accR);}
+.crowd .cn{font-size:20px;color:var(--dim,#93a896);}
 </style>
 </head>
 <body>
@@ -168,6 +176,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
       <div class="side r"><img class="tlogo" id="logoR" alt=""><div><div class="tname" id="nameR"></div></div></div>
     </div>
     <div class="hpbars" id="hpbars"><div class="hp l" id="hpL"></div><div class="hpgap"></div><div class="hp r" id="hpR"></div></div>
+    <div class="crowd" id="crowd"><span class="cl">CROWD PICK</span><span class="cpv l" id="cpL"></span><span class="cbar"><i class="l" id="cbL"></i><i class="r" id="cbR"></i></span><span class="cpv r" id="cpR"></span><span class="cn" id="cpN"></span></div>
   </div>
   <div class="roster left" id="rosterL"></div>
   <div class="roster right" id="rosterR"></div>
@@ -192,8 +201,6 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;color:var(--ink
 // team data generated from data/rumble6-teams.json by build_versus.py (same source as the teams section)
 // roster: [name, medalIcon, leaderboardPill, adMmr(null = new to AD), steam32, captain, newToAd]
 const TEAMS={"burgerboys": {"name": "Burger Boys", "seed": 1, "acc": "#5b8cff", "logo": "assets/logos/burgerboys_v2.png", "roster": [["Friscy", "immortal", null, 3671, 192412922, true, false], ["Erik", "immortal", "#21", 3982, 106473979, false, false], ["Dingus", "immortal", "#2064", 3781, 379941199, false, false], ["Poof", "immortal", "#2875", 3725, 320587966, false, false], ["Jynx", "immortal", "#1701", 3503, 372541122, false, false]]}, "tmnt": {"name": "TMNT", "seed": 2, "acc": "#7cc242", "logo": "assets/logos/tmnt.png", "roster": [["Ptenchik", "immortal", "#3686", 3597, 901021922, true, false], ["Lost", "immortal", "#578", 4119, 265369004, false, false], ["Etsi", "immortal", "#4482", 4078, 211202443, false, false], ["FoXy", "divine-3", null, 3554, 225442653, false, false], ["Shushu", "immortal", "#199", 3372, 210167497, false, false]]}, "vikings": {"name": "Vikings", "seed": 3, "acc": "#7fb2e5", "logo": "assets/logos/vikings.png", "roster": [["Mirrored", "immortal", "#4185", 3872, 148557755, true, false], ["Mahax", "immortal", "#618", 3886, 94301365, false, false], ["^War.Some", null, null, 3490, 86489056, false, false], ["Ben", "archon-4", null, 3325, 145192066, false, false], ["Dante", "immortal", null, 3194, 102819139, false, false]]}, "nwo": {"name": "New World Order", "seed": 4, "acc": "#f5a623", "logo": "assets/logos/nwo_v2.png", "roster": [["Billsive", "immortal", null, 3580, 118036682, true, false], ["Dr. Godbalove", "immortal", "#4369", 3520, 156409111, false, false], ["Actor", null, null, 3479, 17906081, false, false], ["Plupo", "immortal", "#1306", 3051, 81036058, false, false], ["PandaPGOD", "immortal", "#50", 2733, 164544758, false, false]]}, "gym": {"name": "GYM Esports", "seed": 5, "acc": "#f2e030", "logo": "assets/logos/gymesports.png", "roster": [["Yokozuna Hoshoryu", "immortal", null, 3319, 218077154, true, false], ["Ultra Greed", "divine-4", null, 3499, 296779925, false, false], ["Aniki", "immortal", "#870", 3420, 292867484, false, false], ["Poodge", "immortal", "#2908", 3140, 242503644, false, false], ["Kawabunga", "immortal", null, 3478, 272993204, false, false]]}, "dontpeek": {"name": "Don't Peek", "seed": 6, "acc": "#a87cf0", "logo": "assets/logos/dontpeek.png", "roster": [["BigGoose", "immortal", "#3859", 2958, 37777993, true, false], ["noertti", "immortal", "#2428", 3777, 54662003, false, false], ["sifla", "immortal", "#4752", 3272, 3292479, false, false], ["balll", "immortal", "#2086", 3080, 158897083, false, false], ["Fruugu", "immortal", "#4860", 2978, 56700331, false, false]]}, "spacemarines": {"name": "Space Marines", "seed": 7, "acc": "#3fd0c9", "logo": "assets/logos/spacemarines.png", "roster": [["Space Cowboy", "immortal", null, 3449, 153867895, true, false], ["Arnold", "immortal", "#3579", 3447, 110514740, false, false], ["Tkui", "ancient-4", null, 3119, 106989621, false, false], ["Vata", "immortal", "#957", 2639, 349472155, false, false], ["Saya", "immortal", "#538", null, 113561132, false, true]]}, "oldravens": {"name": "Old Ravens", "seed": 8, "acc": "#e0334f", "logo": "assets/logos/oldravens.png", "roster": [["n0n1ck", "immortal", "#1344", 3556, 332561278, true, false], ["bwoha", "immortal", "#1721", 3251, 186287226, false, false], ["Oss", "immortal", "#3259", null, 963252025, false, true], ["yukidan", "immortal", "#4821", null, 259103381, false, true], ["lexmach", "immortal", "#4319", null, 160510334, false, true]]}, "mallards": {"name": "Mallards", "seed": 9, "acc": "#6fd060", "logo": "assets/logos/mallards.png", "roster": [["kitchen", null, null, 2870, 86724809, true, false], ["CCrush", null, null, 2809, 86732537, false, false], ["Sadpanda008", "legend-3", null, 2653, 37332980, false, false], ["thundertoss", "archon-4", null, 2456, 75048465, false, false], ["007shadow", "crusader-3", null, 2201, 89791306, false, false]]}, "hymer": {"name": "HYMER", "seed": 10, "acc": "#c86be0", "logo": "assets/logos/hymer_v2.png", "roster": [["толчонка", "legend-1", null, null, 1589402230, true, true], ["Marl", "legend-5", null, null, 1064090113, false, true], ["Srivelat", "ancient-2", null, null, 1093973531, false, true], ["korf", "legend-2", null, null, 975270769, false, true], ["famtomikss", "ancient-1", null, null, 1518775720, false, true]]}, "blondinok": {"name": "Playlist dlya blondinok", "seed": 11, "acc": "#e04040", "logo": "assets/logos/blondinok.png", "roster": [["Азизгул", null, null, 2018, 428156429, true, false], ["Boy next door", "archon-3", null, 2691, 109437833, false, false], ["Каспийский груз", null, null, 2312, 401159520, false, false], ["I feel so alive", "legend-2", null, 2258, 233511245, false, false], ["Kriamant", "archon-3", null, 2019, 917400483, false, false]]}};
-// Sat Oct 17 only: stand-in for yukidan (blopp 10-15)
-if(location.search.includes('standin=1') || (Date.now() >= Date.parse('2026-10-16T22:00:00Z') && Date.now() < Date.parse('2026-10-17T22:00:00Z')))TEAMS.oldravens.roster=TEAMS.oldravens.roster.map(r=>r[4]===259103381?['SodiqControl','immortal','#2396',null,371546728,false,false,true]:r);
 const ROUNDS=['Qualifier','Group A','Group B','Upper Bracket Semi','Upper Bracket Final','Lower Bracket Round 1','Lower Bracket Quarter','Lower Bracket Semi','Lower Bracket Final','Grand Final'];
 const BO_AUTO=r=>/group/i.test(r)?1:/grand/i.test(r)?5:r?3:0;
 function resolveTeam(k,fb){if(!k)return fb;const l=String(k).trim().toLowerCase();if(TEAMS[l])return l;
@@ -209,10 +216,10 @@ function placeVid(vid,side){
   vid.onloadedmetadata=()=>{const w=vid.videoWidth*(1080/vid.videoHeight);const cx=side==='left'?480:1440;vid.style.left=(cx-w/2)+'px';vid.play().catch(()=>{});};
 }
 function rosterHTML(t){
-  return '<div class="rbox">'+t.roster.map(([n,medal,pill,mmr,sid,cpt,isNew,si],i)=>
+  return '<div class="rbox">'+t.roster.map(([n,medal,pill,mmr,sid,cpt],i)=>
     '<div class="rp" style="animation-delay:'+(1.5+i*.08).toFixed(2)+'s"><div class="rmedal"><img src="assets/ranking-medals/seasonal-rank-'+(medal||'uncalibrated')+'.png" alt="">'
     +'</div><div class="rname"><span class="pn">'+n+'</span>'+(cpt?'<span class="cpt">&#9733;</span>':'')+'</div>'
-    +(si?'<div class="rmmr si">STAND-IN</div>':'<div class="rmmr'+(mmr==null?' na':'')+'">'+(mmr!=null?mmr:'&ndash;')+'</div>')+'</div>').join('')+'</div>';
+    +'<div class="rmmr'+(mmr==null?' na':'')+'">'+(mmr!=null?mmr:'&ndash;')+'</div>'+'</div>').join('')+'</div>';
 }
 function pips(el,wins,need){el.innerHTML=need>1?Array.from({length:need},(_,i)=>'<div class="pip'+(i<wins?' on':'')+'"></div>').join(''):'';}
 function fitName(el){
@@ -233,9 +240,24 @@ function setSide(side,key){
   const lg=$(L?'logoL':'logoR');lg.src=t.logo||'';lg.style.display=t.logo?'':'none';
   $(L?'rosterL':'rosterR').innerHTML=st.roster?rosterHTML(t):'';
 }
+// crowd pick: the scheduled match with exactly these two teams (open one first), share of predictors backing each side
+const API='https://rumble6-predict.bloppbot.workers.dev';let CROWD=null,CFGM=null;
+function crowdRender(){
+  const el=$('crowd');if(params.get('crowd')==='0'||!CROWD||!CFGM){el.classList.remove('on');return;}
+  const ms=CFGM.filter(m=>(m.a===st.left&&m.b===st.right)||(m.a===st.right&&m.b===st.left)).sort((x,y)=>(!!(x.result&&x.result.w)-!!(y.result&&y.result.w))||x.at-y.at);
+  const c=ms.length&&CROWD.matches&&CROWD.matches[ms[0].id];if(!c||!c.n){el.classList.remove('on');return;}
+  const w=Object.fromEntries(c.winner),pl=Math.round(100*(w[st.left]||0)/c.n),pr=100-pl;
+  $('cpL').textContent=pl+'%';$('cpR').textContent=pr+'%';$('cbL').style.width=pl+'%';$('cbR').style.width=pr+'%';$('cpN').textContent=c.n+' predictors';el.classList.add('on');
+}
+function crowdLoad(){
+  if(params.get('crowd')==='0')return;
+  Promise.all([fetch(API+'/api/config',{cache:'no-store'}).then(r=>r.json()),fetch(params.get('crowdmock')||API+'/api/crowd',{cache:'no-store'}).then(r=>r.json())])
+    .then(([cfg,cr])=>{CFGM=cfg.matches;CROWD=cr;crowdRender();}).catch(()=>{});
+}
+crowdLoad();setInterval(crowdLoad,60000);
 function render(){
   setSide('left',st.left);setSide('right',st.right);
-  const bo=+st.bo||BO_AUTO(st.round);
+  const bo=+st.bo||BO_AUTO(st.round);crowdRender();
   $('kicker').innerHTML='RUMBLE VI'+(st.round?' &middot; '+st.round.toUpperCase():'');
   const m=/^\s*(\d+)\s*[-:]\s*(\d+)\s*$/.exec(st.score);
   $('stage').classList.toggle('has-score',!!m);

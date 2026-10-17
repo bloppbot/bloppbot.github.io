@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Rumble VI · Crowd Favourites (Stream)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stream.css">
+<style>
+.wrap{position:relative;z-index:3;width:1848px;height:850px;margin:18px auto 0;display:flex;gap:26px;}
+.panel{padding:18px 22px 20px;}
+.ptitle{margin-bottom:14px;}
+.psub{font-size:1.25rem;color:var(--dim);margin:-8px 0 14px;}
+/* page 1: champion + groups */
+.champ{flex:0 0 640px;display:flex;flex-direction:column;}
+.cbs{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;}
+.cb{display:flex;align-items:center;gap:14px;}
+.cb .tlogo{width:60px;height:60px;flex-basis:60px;}
+.cb .cn{font-family:'Press Start 2P',monospace;font-size:.9rem;color:var(--cream);width:200px;line-height:1.4;}
+.cb .ct{flex:1;height:34px;background:rgba(255,255,255,.06);border:3px solid #1d3b24;}
+.cb .ct i{display:block;height:100%;background:var(--a);}
+.cb .cp{font-family:'Press Start 2P',monospace;font-size:1.3rem;width:96px;text-align:right;color:var(--a);}
+.cb.lead .cn{color:var(--a);}
+.tbl{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;}
+.tr{display:flex;align-items:center;gap:10px;background:rgba(6,18,10,.85);border-left:5px solid var(--a);padding:4px 10px;}
+.tr .tlogo{width:38px;height:38px;flex-basis:38px;}
+.tr .pl{font-family:'Press Start 2P',monospace;font-size:.85rem;color:var(--a);width:24px;}
+.tr .tn{font-family:'Press Start 2P',monospace;font-size:.7rem;color:var(--cream);}
+.groups{flex:1;display:flex;gap:22px;}
+.g{flex:1;display:flex;flex-direction:column;}
+.g .ms{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;}
+.m{}
+.m .row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-family:'Press Start 2P',monospace;font-size:.66rem;color:var(--cream);margin-bottom:8px;white-space:nowrap;}
+.m .row .sd{display:flex;align-items:center;gap:8px;min-width:0;}
+.m .row .sd.b{flex-direction:row-reverse;text-align:right;}
+.m .row .tlogo{width:42px;height:42px;flex-basis:42px;}
+.m .row b{font-size:1.1rem;color:var(--a);font-weight:normal;}
+.m .row .sd.fav span{color:var(--a);}
+.m .bar{display:flex;height:20px;border:3px solid #1d3b24;background:#000;}
+.m .bar i{display:block;height:100%;}
+.m .t{font-family:'VT323',monospace;font-size:1.15rem;color:var(--dim);text-align:center;margin-top:3px;}
+/* page 2: crystal ball */
+.crys{flex:1;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:18px;}
+.cc{display:flex;flex-direction:column;background:rgba(11,23,18,.92);border:3px solid rgba(111,224,122,.28);box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6);padding:14px 16px 12px;min-height:262px;}
+.cc .ct{font-family:'Press Start 2P',monospace;font-size:.75rem;color:var(--green);letter-spacing:1px;line-height:1.5;min-height:42px;}
+.cc .top{flex:1;display:flex;align-items:center;gap:16px;}
+.cc .top img{width:84px;height:84px;object-fit:contain;filter:drop-shadow(2px 2px 0 #000);}
+.cc .top .who{min-width:0;}
+.cc .top .nm{font-family:'Press Start 2P',monospace;font-size:1.05rem;color:var(--cream);line-height:1.5;word-break:break-word;}
+.cc .top .sub{font-size:1.4rem;margin-top:4px;color:var(--dim);}
+.cc .pc{font-family:'Press Start 2P',monospace;font-size:1.8rem;color:var(--a,#ffd97a);margin-left:auto;padding-left:8px;}
+.cc .alt{border-top:2px solid rgba(111,224,122,.12);padding-top:7px;font-size:1.35rem;color:var(--dim);line-height:1.25;}
+.cc .alt span{color:var(--ink);}
+.empty{font-size:1.3rem;color:var(--dim);margin-top:14px;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="vignette"></div><div class="scanlines"></div>
+  <div class="head"><img src="assets/logo_wordmark.png" alt="Rumble in the Jungle"><div class="bar"></div><h1 id="title">CROWD FAVOURITES</h1></div>
+  <div class="wrap" id="wrap"></div>
+  <div class="note" id="note"></div>
+</div>
+<script src="stream.js"></script>
+<script>
+// blopp 10-17: who the prediction-game crowd backs. ?page=1 champion + group matches, ?page=2 crystal ball. Live from /api/crowd (aggregates only).
+const Q = new URLSearchParams(location.search), PAGE = Q.get('page') === '2' ? 2 : 1, MOCK = Q.get('mock');
+const pct = (n, t) => t ? Math.round(100 * n / t) : 0;
+let ABIL = {};
+fetch('predict/abilities.json').then(r => r.json()).then(a => { a.forEach(x => { ABIL[x.k] = x; }); }).catch(() => {});
+
+function page1(cfg, cr) {
+  document.getElementById('title').textContent = 'CROWD FAVOURITES';
+  const nf = cr.finalists || 0;
+  const champ = cr.champion.slice(0, 6).map(([k, n], i) => `<div class="cb${i === 0 ? ' lead' : ''}" style="--a:${R6.acc(k)}">${R6.logo(k)}<span class="cn">${R6.esc(R6.name(k).toUpperCase())}</span>
+    <span class="ct"><i style="width:${pct(n, nf)}%"></i></span><span class="cp">${pct(n, nf)}%</span></div>`).join('');
+  const tbl = cr.table.map(([k], i) => `<div class="tr" style="--a:${R6.acc(k)}"><span class="pl">${i + 1}</span>${R6.logo(k)}<span class="tn">${R6.esc(R6.name(k).toUpperCase())}</span></div>`).join('');
+  const grp = ['A', 'B'].map(g => {
+    const ms = cfg.matches.filter(m => m.stage === 'GROUP ' + g).sort((x, y) => x.at - y.at).map(m => {
+      const c = cr.matches[m.id] || { n: 0, winner: [] }, w = Object.fromEntries(c.winner), pa = pct(w[m.a] || 0, c.n), pb = c.n ? 100 - pa : 0;
+      const sd = (k, p, cls) => `<span class="sd ${cls}${p > 50 ? ' fav' : ''}" style="--a:${R6.acc(k)}">${R6.logo(k)}<span>${R6.esc(R6.name(k).toUpperCase())}</span><b>${p}%</b></span>`;
+      return `<div class="m"><div class="row">${sd(m.a, pa, 'a')}${sd(m.b, pb, 'b')}</div>
+        <div class="bar"><i style="width:${pa}%;background:${R6.acc(m.a)}"></i><i style="width:${pb}%;background:${R6.acc(m.b)}"></i></div></div>`;
+    }).join('');
+    return `<div class="panel g"><div class="ptitle">GROUP ${g} &middot; WHO WINS?</div><div class="ms">${ms}</div></div>`;
+  }).join('');
+  document.getElementById('wrap').innerHTML = `<div class="panel champ"><div class="ptitle">WHO LIFTS THE TROPHY?</div>
+    <div class="psub">champion picks of ${nf} predictors</div><div class="cbs">${champ || '<div class="empty">no picks yet</div>'}</div>
+    <div class="ptitle" style="margin-top:14px">PREDICTED FINAL TABLE</div><div class="tbl">${tbl}</div></div><div class="groups">${grp}</div>`;
+}
+
+function page2(cfg, cr) {
+  document.getElementById('title').textContent = 'CRYSTAL BALL';
+  const P = {};
+  cfg.teams.forEach(t => t.roster.forEach(p => { P[p.id] = { name: p.name, team: t.key }; }));
+  const who = (kind, v) => {
+    if (kind === 'player') { const p = P[v] || { name: v, team: '' }; return { img: R6.TEAMS[p.team] ? `assets/logos/${R6.TEAMS[p.team][1]}.png` : '', nm: p.name, sub: R6.name(p.team), acc: R6.acc(p.team) }; }
+    const a = ABIL[v] || { n: v, h: '' };
+    return { img: `https://cdn.datdota.com/images/ability/${v}.png`, nm: a.n, sub: a.h, acc: '#ffd97a' };
+  };
+  document.getElementById('wrap').innerHTML = `<div class="crys">${cfg.crystal.map(c => {
+    const d = cr.crystal[c.id] || { n: 0, top: [] };
+    if (!d.top.length) return `<div class="cc"><div class="ct">${R6.esc(c.t.toUpperCase())}</div><div class="empty">no picks yet</div></div>`;
+    const [v, n] = d.top[0], w = who(c.kind, v);
+    const alts = d.top.slice(1, 3).map(([v2, n2]) => `<span>${R6.esc(who(c.kind, v2).nm)}</span> ${pct(n2, d.n)}%`).join(' &middot; ');
+    return `<div class="cc" style="--a:${w.acc}"><div class="ct">${R6.esc(c.t.toUpperCase())}</div>
+      <div class="top">${w.img ? `<img src="${w.img}" alt="">` : ''}<div class="who"><div class="nm">${R6.esc(w.nm)}</div><div class="sub">${R6.esc(w.sub)}</div></div><span class="pc">${pct(n, d.n)}%</span></div>
+      <div class="alt">${alts ? 'next: ' + alts : '&nbsp;'}</div></div>`;
+  }).join('')}</div>`;
+}
+
+let CFG = null, last = '';
+function draw(cr) {
+  if (!CFG || !cr) return;
+  const sig = JSON.stringify(cr.matches) + JSON.stringify(cr.crystal) + PAGE; if (sig === last) return; last = sig;
+  (PAGE === 2 ? page2 : page1)(CFG, cr);
+  document.getElementById('note').innerHTML = `${cr.predictors} predictors at bloppbot.github.io/rumble6/predict &bull; share of picks per question &bull; ${PAGE === 2 ? 'crystal ball: 10 pts per correct call' : 'picks lock at match start'}`;
+}
+const loadCrowd = () => fetch(MOCK || (R6.API + '/api/crowd'), { cache: 'no-store' }).then(r => r.json()).then(draw).catch(() => {});
+R6.live(cfg => { CFG = cfg; last = ''; loadCrowd(); }, 60000);
+setInterval(loadCrowd, 60000);
+setTimeout(loadCrowd, 1500);   // abilities.json may land after the first draw
+</script>
+</body>
+</html>
