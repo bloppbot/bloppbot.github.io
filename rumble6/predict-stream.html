@@ -55,6 +55,21 @@
 .cc .alt{border-top:2px solid rgba(111,224,122,.12);padding-top:7px;font-size:1.35rem;color:var(--dim);line-height:1.25;}
 .cc .alt span{color:var(--ink);}
 .empty{font-size:1.3rem;color:var(--dim);margin-top:14px;}
+/* page 3: leaderboard */
+.lb{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(10,1fr);grid-auto-flow:column;gap:9px 24px;}
+.lr{display:grid;grid-template-columns:52px 54px 1fr 150px 120px;align-items:center;gap:12px;background:rgba(11,23,18,.92);border:3px solid rgba(111,224,122,.22);
+  box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6);padding:0 16px 0 10px;}
+.lr.top{border-color:#b97c20;background:rgba(30,26,10,.9);}
+.lr .rk{font-family:'Press Start 2P',monospace;font-size:1.05rem;color:var(--dim);text-align:center;}
+.lr.top .rk{color:#ffd97a;}
+.lr .av{width:48px;height:48px;object-fit:cover;border:2px solid rgba(240,230,210,.25);image-rendering:auto;}
+.lr .nm{display:flex;align-items:center;gap:10px;min-width:0;font-size:1.75rem;color:var(--cream);white-space:nowrap;overflow:hidden;}
+.lr .nm span{overflow:hidden;text-overflow:ellipsis;}
+.lr .nm .tlogo{width:30px;height:30px;flex-basis:30px;}
+.lr .hit{font-size:1.4rem;color:var(--dim);text-align:right;}
+.lr .pt{font-family:'Press Start 2P',monospace;font-size:1.25rem;color:var(--green);text-align:right;}
+.lr.top .pt{color:#ffd97a;}
+.lr .pt small{font-size:.6rem;color:var(--dim);margin-left:4px;}
 </style>
 </head>
 <body>
@@ -67,7 +82,7 @@
 <script src="stream.js"></script>
 <script>
 // blopp 10-17: who the prediction-game crowd backs. ?page=1 champion + group matches, ?page=2 crystal ball. Live from /api/crowd (aggregates only).
-const Q = new URLSearchParams(location.search), PAGE = Q.get('page') === '2' ? 2 : 1, MOCK = Q.get('mock');
+const Q = new URLSearchParams(location.search), PAGE = +Q.get('page') === 2 ? 2 : +Q.get('page') === 3 ? 3 : 1, MOCK = Q.get('mock');
 const pct = (n, t) => t ? Math.round(100 * n / t) : 0;
 let ABIL = {};
 fetch('predict/abilities.json').then(r => r.json()).then(a => { a.forEach(x => { ABIL[x.k] = x; }); }).catch(() => {});
@@ -112,6 +127,25 @@ function page2(cfg, cr) {
   }).join('')}</div>`;
 }
 
+// page 3 (blopp 10-17 "we also need something for the leaderboard"): top 20 of /api/leaderboard
+function page3(lb) {
+  document.getElementById('title').textContent = 'PREDICTION LEADERBOARD';
+  const started = lb.rows.some(r => r.total > 0);
+  document.getElementById('wrap').innerHTML = `<div class="lb">${lb.rows.slice(0, 20).map(r => `<div class="lr${started && r.rank <= 3 ? ' top' : ''}">
+    <span class="rk">${started ? r.rank : '-'}</span><img class="av" src="${R6.esc(r.avatar || '')}" alt="" onerror="this.style.visibility='hidden'">
+    <span class="nm">${r.team ? R6.logo(r.team) : ''}<span>${R6.esc(r.name)}</span></span>
+    <span class="hit">${r.decided ? `${r.correct}/${r.decided} right` : `${r.picks} picks`}</span><span class="pt">${r.total}<small>PTS</small></span></div>`).join('')}</div>`;
+  document.getElementById('note').innerHTML = started
+    ? `${lb.players} predictors &bull; 5 per match winner, +3 exact score &bull; groups, standings + crystal ball count at the end &bull; bloppbot.github.io/rumble6/predict`
+    : `${lb.players} predictors locked in &bull; points start with the first result today &bull; 50&euro; for the winner &bull; bloppbot.github.io/rumble6/predict`;
+}
+if (PAGE === 3) {
+  let lbSig = '';
+  const loadLb = () => fetch(MOCK || (R6.API + '/api/leaderboard'), { cache: 'no-store' }).then(r => r.json()).then(lb => {
+    const sig = JSON.stringify(lb.rows.slice(0, 20).map(r => [r.steamid, r.total, r.rank, r.correct])); if (sig === lbSig) return; lbSig = sig; page3(lb);
+  }).catch(() => {});
+  loadLb(); setInterval(loadLb, 30000);
+}
 let CFG = null, last = '';
 function draw(cr) {
   if (!CFG || !cr) return;
@@ -120,9 +154,11 @@ function draw(cr) {
   document.getElementById('note').innerHTML = `${cr.predictors} predictors at bloppbot.github.io/rumble6/predict &bull; share of picks per question &bull; ${PAGE === 2 ? 'crystal ball: 10 pts per correct call' : 'picks lock at match start'}`;
 }
 const loadCrowd = () => fetch(MOCK || (R6.API + '/api/crowd'), { cache: 'no-store' }).then(r => r.json()).then(draw).catch(() => {});
-R6.live(cfg => { CFG = cfg; last = ''; loadCrowd(); }, 60000);
-setInterval(loadCrowd, 60000);
-setTimeout(loadCrowd, 1500);   // abilities.json may land after the first draw
+if (PAGE !== 3) {
+  R6.live(cfg => { CFG = cfg; last = ''; loadCrowd(); }, 60000);
+  setInterval(loadCrowd, 60000);
+  setTimeout(loadCrowd, 1500);
+}   // abilities.json may land after the first draw
 </script>
 </body>
 </html>
