@@ -208,6 +208,9 @@ const TEAMS={"burgerboys": {"name": "Burger Boys", "seed": 1, "acc": "#5b8cff", 
 // Sat Oct 17 only: stand-in for yukidan (blopp 10-15, same rule as teams-stream)
 if(location.search.includes('standin=1')||(Date.now()>=Date.parse('2026-10-16T22:00:00Z')&&Date.now()<Date.parse('2026-10-17T22:00:00Z')))
   Object.values(TEAMS).forEach(t=>t.roster=t.roster.map(r=>r[0]==='yukidan'?['SodiqControl','immortal','#2396',null,null,false,false,'ru',true]:r));
+// Sun Oct 18 only: Ashura stands in for Oss (Old Ravens, blopp 10-18)
+if(location.search.includes('standin=2')||(Date.now()>=Date.parse('2026-10-17T22:00:00Z')&&Date.now()<Date.parse('2026-10-18T22:00:00Z')))
+  Object.values(TEAMS).forEach(t=>t.roster=t.roster.map(r=>r[0]==='Oss'?['Ashura','immortal','#870',null,null,false,false,'ru',true]:r));
 const ROUNDS=['Qualifier','Group A','Group B','Upper Bracket Semi','Upper Bracket Final','Lower Bracket Round 1','Lower Bracket Quarter','Lower Bracket Semi','Lower Bracket Final','Grand Final'];
 const BO_AUTO=r=>/group/i.test(r)?1:/grand/i.test(r)?5:r?3:0;
 function resolveTeam(k,fb){if(!k)return fb;const l=String(k).trim().toLowerCase();if(TEAMS[l])return l;
