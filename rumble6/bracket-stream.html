@@ -57,6 +57,10 @@ const FLOW = [['UBS1', 'UBF'], ['UBS2', 'UBF'], ['LBR1a', 'LBQ1'], ['LBR1b', 'LB
 R6.live(cfg => {
   const po = cfg.matches.filter(m => m.day > 1), now = cfg.now;
   const LM = R6.liveMap(po, now, cfg.matches);
+  // teams not set yet: show each side as soon as its feeder series is decided (blopp 10-18)
+  const FEED = { LBQ1: [['L', 'UBS1'], ['W', 'LBR1a']], LBQ2: [['L', 'UBS2'], ['W', 'LBR1b']], UBF: [['W', 'UBS1'], ['W', 'UBS2']],
+      LBS: [['W', 'LBQ1'], ['W', 'LBQ2']], LBF: [['L', 'UBF'], ['W', 'LBS']], GF: [['W', 'UBF'], ['W', 'LBF']] }, MM = Object.fromEntries(cfg.matches.map(m => [m.id, m]));
+  const pick = ([wl, f]) => { const r = MM[f] && MM[f].a && MM[f].result && MM[f].result.w; return r ? (wl === 'W' ? r : (r === MM[f].a ? MM[f].b : MM[f].a)) : null; };
   document.getElementById('ms').innerHTML = po.map(m => {
     const [x, y] = POS[m.id] || [0, 0], r = m.result || {}, w = r.w;
     const sc = (r.s || '').split(/[-:]/).map(Number).filter(n => !isNaN(n)), hi = Math.max(...sc, 0), lo = sc.length > 1 ? Math.min(...sc) : 0;
@@ -66,7 +70,7 @@ R6.live(cfg => {
       : `<div class="sl tbd"><span class="nm">${R6.esc(ph)}</span></div>`;
     const cls = m.id === 'GF' ? 'gf' : m.id.startsWith('U') ? 'ub' : 'lb';
     return `<div class="m ${cls} ${st}" id="m-${m.id}" style="left:${x}px;top:${y}px"><div class="mh"><span><b>${m.stage}</b>${st ? `<span class="tag">${st === 'live' ? 'LIVE' : 'NEXT'}</span>` : ''}</span><span>${R6.time(m.at)} · BO${m.bo}</span></div>
-      ${slot(m.a, m.slotA)}${slot(m.b, m.slotB)}</div>`;
+      ${slot(m.a || (FEED[m.id] && pick(FEED[m.id][0])), m.slotA)}${slot(m.b || (FEED[m.id] && pick(FEED[m.id][1])), m.slotB)}</div>`;
   }).join('');
   // connectors: right edge of the feeder -> left edge of the target, pixel-step elbow
   const bk = document.getElementById('bk').getBoundingClientRect(), s = bk.width / 1800;

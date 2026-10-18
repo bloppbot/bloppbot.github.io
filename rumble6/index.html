@@ -1091,6 +1091,8 @@
     const API = (new URLSearchParams(location.search).get('api') || 'https://rumble6-predict.bloppbot.workers.dev') + '/api/config';
     const BK = { ub1: 'UBS1', ub2: 'UBS2', ubf: 'UBF', gf: 'GF', lb1: 'LBR1a', lb2: 'LBR1b', lq1: 'LBQ1', lq2: 'LBQ2', lbs: 'LBS', lbf: 'LBF' };
     const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const FEED = { LBQ1: [['L', 'UBS1'], ['W', 'LBR1a']], LBQ2: [['L', 'UBS2'], ['W', 'LBR1b']], UBF: [['W', 'UBS1'], ['W', 'UBS2']],
+      LBS: [['W', 'LBQ1'], ['W', 'LBQ2']], LBF: [['L', 'UBF'], ['W', 'LBS']], GF: [['W', 'UBF'], ['W', 'LBF']] };
     const orig = {};
     Object.keys(BK).forEach(id => { const el = document.getElementById(id); if (el) orig[id] = [...el.querySelectorAll('.sl')].map(x => [x.className, x.innerHTML]); });
     let last = '';
@@ -1113,7 +1115,15 @@
         Object.entries(BK).forEach(([id, mid]) => {
             const el = document.getElementById(id), m = M[mid]; if (!el || !m) return;
             const sl = el.querySelectorAll('.sl');
-            if (!m.a) { sl.forEach((x, i) => { x.className = orig[id][i][0]; x.innerHTML = orig[id][i][1]; }); el.classList.remove('done'); return; }
+            if (!m.a) {   // teams not set yet: show each side as soon as its feeder series is decided (blopp 10-18)
+                const pick = ([wl, f]) => { const r = M[f] && M[f].a && M[f].result && M[f].result.w; return r ? (wl === 'W' ? r : (r === M[f].a ? M[f].b : M[f].a)) : null; };
+                (FEED[mid] || []).map(pick).concat([null, null]).slice(0, 2).forEach((k, i) => {
+                    if (!k) { sl[i].className = orig[id][i][0]; sl[i].innerHTML = orig[id][i][1]; sl[i].style.removeProperty('--a'); return; }
+                    sl[i].className = 'sl team'; sl[i].style.setProperty('--a', T[k].acc);
+                    sl[i].innerHTML = '<span class="tn"><img src="' + esc(T[k].logo) + '" alt="">' + esc(T[k].name.toUpperCase()) + '</span>';
+                });
+                el.classList.remove('done'); return;
+            }
             const w = m.result && m.result.w, sc = m.result && m.result.s ? m.result.s.split('-') : null;
             [m.a, m.b].forEach((k, i) => {
                 const t = T[k], won = w === k, num = w ? (sc ? (won ? sc[0] : sc[1]) : (won ? '1' : '0')) : '';
