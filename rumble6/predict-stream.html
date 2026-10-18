@@ -55,6 +55,25 @@
 .cc .alt{border-top:2px solid rgba(111,224,122,.12);padding-top:7px;font-size:1.35rem;color:var(--dim);line-height:1.25;}
 .cc .alt span{color:var(--ink);}
 .empty{font-size:1.3rem;color:var(--dim);margin-top:14px;}
+/* page 4: today's series */
+.today{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:22px 26px;}
+.sx{display:flex;flex-direction:column;padding:16px 24px 18px;}
+.sx .hd{display:flex;justify-content:space-between;align-items:baseline;font-family:'Press Start 2P',monospace;font-size:.8rem;color:var(--green);letter-spacing:1px;}
+.sx .hd span{font-family:'VT323',monospace;font-size:1.45rem;color:var(--dim);letter-spacing:0;}
+.sx .vs{flex:1;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.sx .sd{display:flex;align-items:center;gap:18px;min-width:0;}
+.sx .sd.b{flex-direction:row-reverse;text-align:right;}
+.sx .sd .tlogo{width:96px;height:96px;flex-basis:96px;}
+.sx .sd .nm{font-family:'Press Start 2P',monospace;font-size:.95rem;color:var(--cream);line-height:1.5;}
+.sx .sd .pc{font-family:'Press Start 2P',monospace;font-size:2.4rem;color:var(--a);margin-top:8px;text-shadow:3px 3px 0 rgba(0,0,0,.8);}
+.sx .sd.dog .pc{color:var(--dim);}
+.sx .mid{font-family:'Press Start 2P',monospace;font-size:1rem;color:var(--dim);}
+.sx .bar{display:flex;height:24px;border:3px solid #1d3b24;background:#000;}
+.sx .bar i{display:block;height:100%;}
+.sx .sc{display:flex;justify-content:space-between;margin-top:10px;font-size:1.5rem;color:var(--dim);}
+.sx .sc b{font-weight:normal;color:var(--cream);}
+.sx .top{text-align:center;font-size:1.45rem;color:var(--dim);margin-top:4px;}
+.sx .top b{font-weight:normal;color:#ffd97a;}
 /* page 3: leaderboard */
 .lb{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(10,1fr);grid-auto-flow:column;gap:9px 24px;}
 .lr{display:grid;grid-template-columns:52px 54px 1fr 150px 120px;align-items:center;gap:12px;background:rgba(11,23,18,.92);border:3px solid rgba(111,224,122,.22);
@@ -82,7 +101,7 @@
 <script src="stream.js"></script>
 <script>
 // blopp 10-17: who the prediction-game crowd backs. ?page=1 champion + group matches, ?page=2 crystal ball. Live from /api/crowd (aggregates only).
-const Q = new URLSearchParams(location.search), PAGE = +Q.get('page') === 2 ? 2 : +Q.get('page') === 3 ? 3 : 1, MOCK = Q.get('mock');
+const Q = new URLSearchParams(location.search), PAGE = [2, 3, 4].includes(+Q.get('page')) ? +Q.get('page') : 1, MOCK = Q.get('mock');
 const pct = (n, t) => t ? Math.round(100 * n / t) : 0;
 let ABIL = {};
 fetch('predict/abilities.json').then(r => r.json()).then(a => { a.forEach(x => { ABIL[x.k] = x; }); }).catch(() => {});
@@ -127,6 +146,30 @@ function page2(cfg, cr) {
   }).join('')}</div>`;
 }
 
+// page 4 (blopp 10-18 "predictions overview for todays games"): every series of the current match day that has both teams set
+function page4(cfg, cr) {
+  document.getElementById('title').textContent = "TODAY'S PREDICTIONS";
+  const tz = { timeZone: 'Europe/Vienna' }, dayOf = t => new Date(t).toLocaleDateString('en-CA', tz);
+  const next = cfg.matches.filter(m => m.bo > 1 && !m.result && m.at > Date.now() - 12 * 3600e3).sort((x, y) => x.at - y.at)[0];
+  const day = Q.get('day') || (next ? dayOf(next.at) : dayOf(Date.now()));
+  const ms = cfg.matches.filter(m => dayOf(m.at) === day).sort((x, y) => x.at - y.at);
+  const ready = ms.filter(m => m.a && m.b), open = ms.filter(m => !(m.a && m.b));
+  const hhmm = t => new Date(t).toLocaleTimeString('en-GB', { ...tz, hour: '2-digit', minute: '2-digit' });
+  document.getElementById('wrap').innerHTML = `<div class="today">${ready.map(m => {
+    const c = cr.matches[m.id] || { n: 0, winner: [], score: [] }, w = Object.fromEntries(c.winner), sc = Object.fromEntries(c.score);
+    const pa = pct(w[m.a] || 0, c.n), pb = c.n ? 100 - pa : 0;
+    const sd = (k, p, cls) => `<div class="sd ${cls}${p < 50 ? ' dog' : ''}" style="--a:${R6.acc(k)}">${R6.logo(k)}<div><div class="nm">${R6.esc(R6.name(k).toUpperCase())}</div><div class="pc">${p}%</div></div></div>`;
+    const ss = k => ['2-0', '2-1'].map(s => `${s} <b>${pct(sc[k + '|' + s] || 0, c.n)}%</b>`).join(' &middot; ');
+    const tp = c.score[0];
+    return `<div class="panel sx"><div class="hd">${R6.esc(m.stage)} &middot; ${hhmm(m.at)} CEST<span>${c.n} picks</span></div>
+      <div class="vs">${sd(m.a, pa, 'a')}<span class="mid">VS</span>${sd(m.b, pb, 'b')}</div>
+      <div class="bar"><i style="width:${pa}%;background:${R6.acc(m.a)}"></i><i style="width:${pb}%;background:${R6.acc(m.b)}"></i></div>
+      <div class="sc"><span>${ss(m.a)}</span><span>${ss(m.b)}</span></div>
+      <div class="top">${tp ? `most picked score: <b>${R6.esc(R6.name(tp[0].split('|')[0]))} ${tp[0].split('|')[1]}</b> (${pct(tp[1], c.n)}%)` : 'no picks yet'}</div></div>`;
+  }).join('') || '<div class="empty">no series with both teams set yet</div>'}</div>`;
+  return open.length ? `${open.map(m => `${R6.esc(m.stage)} ${hhmm(m.at)}`).filter((v, i, a) => a.indexOf(v) === i).join(', ')}: picks open once the teams are known &bull; ` : '';
+}
+
 // page 3 (blopp 10-17 "we also need something for the leaderboard"): top 20 of /api/leaderboard
 function page3(lb) {
   document.getElementById('title').textContent = 'PREDICTION LEADERBOARD';
@@ -149,9 +192,9 @@ if (PAGE === 3) {
 let CFG = null, last = '';
 function draw(cr) {
   if (!CFG || !cr) return;
-  const sig = JSON.stringify(cr.matches) + JSON.stringify(cr.crystal) + PAGE; if (sig === last) return; last = sig;
-  (PAGE === 2 ? page2 : page1)(CFG, cr);
-  document.getElementById('note').innerHTML = `${cr.predictors} predictors at bloppbot.github.io/rumble6/predict &bull; share of picks per question &bull; ${PAGE === 2 ? 'crystal ball: 10 pts per correct call' : 'picks lock at match start'}`;
+  const sig = JSON.stringify(cr.matches) + JSON.stringify(cr.crystal) + PAGE + JSON.stringify(CFG.matches.map(m => [m.a, m.b, m.result])); if (sig === last) return; last = sig;
+  const pre = PAGE === 4 ? page4(CFG, cr) : ((PAGE === 2 ? page2 : page1)(CFG, cr), '');
+  document.getElementById('note').innerHTML = pre + `${cr.predictors} predictors at bloppbot.github.io/rumble6/predict &bull; share of picks per question &bull; ${PAGE === 2 ? 'crystal ball: 10 pts per correct call' : 'picks lock at match start'}`;
 }
 const loadCrowd = () => fetch(MOCK || (R6.API + '/api/crowd'), { cache: 'no-store' }).then(r => r.json()).then(draw).catch(() => {});
 if (PAGE !== 3) {
