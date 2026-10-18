@@ -452,7 +452,7 @@ h1 { font-family: 'Press Start 2P'; font-size: clamp(22px, 5vw, 50px); color: va
   function renderDays() {
     const byDay = {};
     CFG.matches.forEach(m => (byDay[m.day] ||= []).push(m));
-    if (!DAY) DAY = Object.keys(byDay).find(d => byDay[d].some(m => now() < m.at && m.a)) || '1';
+    if (!DAY) DAY = Object.keys(byDay).find(d => byDay[d].some(m => now() < (m.lock || m.at) && m.a)) || '1';
     $('#days').innerHTML = Object.keys(byDay).map(d => {
       const ms = byDay[d], picked = ms.filter(m => PICKS['m:' + m.id]).length, [date, name] = CFG.days[d].split(' · ');
       const open = ms.filter(m => m.a && m.b).length;
@@ -477,7 +477,7 @@ h1 { font-family: 'Press Start 2P'; font-size: clamp(22px, 5vw, 50px); color: va
     });
   }
   function matchCard(m) {
-    const locked = now() >= m.at, known = m.a && m.b;
+    const locked = now() >= (m.lock || m.at), known = m.a && m.b;
     const p = (PICKS['m:' + m.id] || '').split('|'), res = m.result;
     const side = (k, slot) => {
       const t = k && T(k), sel = p[0] && p[0] === k, win = res && res.w === k;
@@ -492,7 +492,7 @@ h1 { font-family: 'Press Start 2P'; font-size: clamp(22px, 5vw, 50px); color: va
       const got = p[0] === res.w, exact = got && m.bo > 1 && p[1] === res.s;
       foot = (p[0] ? `<b class="${got ? 'ok' : 'bad'}">${got ? '+' + (5 + (exact ? 3 : 0)) + ' PTS' : '0 PTS'}</b> · ` : '') + `${esc(T(res.w).name)} won${res.s ? ' ' + esc(res.s) : ''}`;
     } else if (!known) foot = ['UBS1', 'UBS2', 'LBR1a', 'LBR1b'].includes(m.id) ? 'unlocks after the group stage' : 'unlocks after the previous round';
-    else foot = locked ? (p[0] ? 'locked · waiting for the result' : 'locked · no pick') : (p[0] ? '<span class="ok">✓ picked</span> · ' : '') + left(m.at).toLowerCase();
+    else foot = locked ? (p[0] ? 'locked · waiting for the result' : 'locked · no pick') : (p[0] ? '<span class="ok">✓ picked</span> · ' : '') + left(m.lock || m.at).toLowerCase();
     return `<div class="panel m${known ? '' : ' wait'}"><div class="meta"><span class="st">${esc(m.stage)} · BO${m.bo}</span><span class="${locked ? 'lk' : ''}">${locked ? '🔒 ' : ''}${fmtTime(m.at)} ${tz(m.at)}</span></div>
       <div class="row${p[0] ? ' picked' : ''}">${side(m.a, m.slotA)}<span class="vs">VS</span>${side(m.b, m.slotB)}</div>${scores}<div class="foot">${foot}</div></div>`;
   }
