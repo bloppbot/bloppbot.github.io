@@ -9,7 +9,7 @@
 <link rel="canonical" href="https://bloppbot.github.io/rumble6/">
 <meta name="theme-color" content="#030805">
 <meta property="og:title" content="RUMBLE IN THE JUNGLE VI">
-<meta property="og:description" content="The most competitive Dota 2 Ability Draft tournament there is. OCT 17—18 & 24—25, 2026. The 8 teams are set: groups, schedule and bracket.">
+<meta property="og:description" content="The most competitive Dota 2 Ability Draft tournament there is. 4 teams left, finals OCT 24—25, 2026. Bracket, stats and the prediction game.">
 <meta property="og:image" content="https://bloppbot.github.io/rumble6/assets/og.jpg">
 <meta property="og:image:width" content="1536">
 <meta property="og:image:height" content="864">
@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="Rumble in the Jungle">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="RUMBLE IN THE JUNGLE VI">
-<meta name="twitter:description" content="The most competitive Dota 2 Ability Draft tournament there is. OCT 17—18 & 24—25, 2026. The 8 teams are set: groups, schedule and bracket.">
+<meta name="twitter:description" content="The most competitive Dota 2 Ability Draft tournament there is. 4 teams left, finals OCT 24—25, 2026. Bracket, stats and the prediction game.">
 <meta name="twitter:image" content="https://bloppbot.github.io/rumble6/assets/og.jpg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
@@ -855,7 +855,7 @@
                 <h1 class="h-title">RUMBLE IN THE JUNGLE VI</h1>
                 <div class="h-bar"></div>
                 <div class="h-sub">OCT 17 — 18 &amp; 24 — 25 ★ 2026</div>
-                <a href="#teams" class="h-cta">SEE THE FIELD <span class="slots" id="hero-slots">THE 8 TEAMS ARE SET</span></a>
+                <a href="#format" class="h-cta">SEE THE BRACKET <span class="slots" id="hero-slots">4 TEAMS LEFT</span></a>
             </div>
         </div>
     </header>
@@ -866,8 +866,7 @@
     <a href="#info" class="nav-btn">THE RUMBLE</a>
     <a href="#teams" class="nav-btn">TEAMS</a>
     <a href="#prizepool" class="nav-btn">PRIZE POOL</a>
-    <a href="#format" class="nav-btn signup">GROUPS</a>
-    <a href="#format" class="nav-btn">FORMAT</a>
+    <a href="#format" class="nav-btn signup">BRACKET</a>
     <a href="#predict" class="nav-btn">PREDICT</a>
     <a href="stats.html" class="nav-btn">STATS</a>
     <a href="#casters" class="nav-btn">CASTERS</a>
@@ -885,7 +884,7 @@
             <div class="cd-box"><div class="cd-num" id="cd-s">--</div><div class="cd-text">SEC</div></div>
         </div>
         <div class="slot-meter">
-            <div class="sm-row" style="justify-content:center"><span><span class="sm-taken" id="sm-taken">8 TEAMS SET</span> · GROUPS DRAWN · THE RUMBLE STARTS <b>OCT 17, 17:00 CEST</b></span></div>
+            <div class="sm-row" style="justify-content:center"><span><span class="sm-taken" id="sm-taken">4 TEAMS LEFT</span> · NEXT: LB SEMI + UB FINAL <b>SAT OCT 24, 17:30 CEST</b></span></div>
         </div>
     </div>
 </div>
@@ -920,7 +919,7 @@
             <div class="about-inner">
                 <p>
                     <b>The most competitive Ability Draft tournament there is.</b><br>
-                    The TI of Ability Draft. Five editions in the books. The sixth one hits this October.
+                    The TI of Ability Draft. Five editions in the books. The sixth one is on: 4 teams left, finals Oct 24 &amp; 25.
                 </p>
                 <div class="road">
                     <div class="road-node"><span class="rn-torch"></span><div class="rn-date">SAT OCT 17</div><div class="rn-stage">GROUPS</div><div class="rn-fmt">two groups · best-of-one<br>seeds the bracket</div></div>
@@ -1143,7 +1142,7 @@
         <h2 class="section-title">PREDICTION GAME</h2>
         <div class="title-rule"></div>
         <div class="about-card px-frame pg-card"><div class="about-inner">
-            <p class="pg-lead">Sign in with Steam and predict every match, the groups, the final table and who tops the stats.</p>
+            <p class="pg-lead">Sign in with Steam and predict the remaining matches. Groups, final table and crystal ball are locked; each match opens as soon as both teams are known.</p>
             <div class="pg-prize">WINNER GETS <b>50€</b></div>
             <div class="pg-top-h">TOP 5</div>
             <ol class="pg-top" id="pg-top"></ol>
@@ -1242,7 +1241,7 @@
     </section>
 </div>
 
-<a href="#format" class="mob-cta">GROUPS · SAT OCT 17 · 17:00 CEST</a>
+<a href="#watch" class="mob-cta">FINALS · SAT OCT 24 · 17:30 CEST</a>
 
 <footer>
     <div class="f-title">RUMBLE IN THE JUNGLE VI</div>
@@ -1340,14 +1339,17 @@
     (function () {
         const wrap = document.getElementById('countdown');
         const label = document.getElementById('cd-label');
+        // blopp 10-19: count down to the next match day, LIVE while it runs (group/playoff day 1 are over)
         const PHASES = [
-            // sign-up phase removed 2026-10-09 (blopp closed sign-ups)
-            { until: new Date('2026-10-17T15:00:00Z').getTime(), label: 'THE RUMBLE STARTS IN' },
+            { until: Date.parse('2026-10-24T15:30:00Z'), label: 'THE FINAL WEEKEND STARTS IN' },
+            { until: Date.parse('2026-10-24T22:30:00Z'), live: 'SEMIS + UB FINAL ARE LIVE' },
+            { until: Date.parse('2026-10-25T16:00:00Z'), label: 'FINALS DAY STARTS IN' },
+            { until: Date.parse('2026-10-25T23:30:00Z'), live: 'FINALS DAY IS LIVE' },
+            { until: Infinity, live: 'RUMBLE VI IS DONE · GG' },
         ];
+        const TIMER = wrap.innerHTML;
         function current() { return PHASES.find(p => p.until > Date.now()); }
-        let phase = current();
-        if (phase) label.textContent = phase.label;
-        const start = phase ? phase.until : 0;
+        let phase = null;
         const els = { d: document.getElementById('cd-d'), h: document.getElementById('cd-h'), m: document.getElementById('cd-m'), s: document.getElementById('cd-s') };
         function set(el, v) {
             const t = String(v).padStart(2, '0');
@@ -1355,8 +1357,8 @@
         }
         function tick() {
             const p = current();
-            if (!p) { label.textContent = ''; wrap.innerHTML = '<div class="cd-live">THE RUMBLE IS LIVE</div>'; return; }
-            if (p !== phase) { phase = p; label.textContent = p.label; }
+            if (p.live) { label.textContent = ''; if (!wrap.querySelector('.cd-live')) wrap.innerHTML = '<div class="cd-live"></div>'; wrap.querySelector('.cd-live').textContent = p.live; phase = p; if (p.until !== Infinity) setTimeout(tick, 1000); return; }
+            if (p !== phase || !document.getElementById('cd-d')) { phase = p; label.textContent = p.label; if (!document.getElementById('cd-d')) { wrap.innerHTML = TIMER; for (const k in els) els[k] = document.getElementById('cd-' + k); } }
             const d = p.until - Date.now();
             set(els.d, Math.floor(d / 86400000)); set(els.h, Math.floor(d % 86400000 / 3600000));
             set(els.m, Math.floor(d % 3600000 / 60000)); set(els.s, Math.floor(d % 60000 / 1000));
@@ -1550,7 +1552,10 @@
         note.textContent = 'Seeded by AD MMR (windrun) · hover or tap a card to bring it to life · ★ = captain';
         grid.after(note);
         // field set 2026-10-10: seeds 1-7 invited, Old Ravens won the qualifier, the other 3 are out
-        const ST = { oldravens: ['q', 'QUALIFIED'], mallards: ['out', 'ELIMINATED'], hymer: ['out', 'ELIMINATED'], blondinok: ['out', 'ELIMINATED'] };
+        // blopp 10-19: status after playoffs day 1 (LB R1 losers 7th-8th, LB quarter losers 5th-6th)
+        const ST = { burgerboys: ['q', 'UB FINAL'], tmnt: ['q', 'UB FINAL'], dontpeek: ['', 'LB SEMI'], vikings: ['', 'LB SEMI'],
+            gym: ['out', '5TH-6TH'], oldravens: ['out', '5TH-6TH'], nwo: ['out', '7TH-8TH'], spacemarines: ['out', '7TH-8TH'],
+            mallards: ['out', 'QUALIFIER'], hymer: ['out', 'QUALIFIER'], blondinok: ['out', 'QUALIFIER'] };
         SEEDED.forEach(t => {
             const st = ST[t.key] || ['', 'INVITED'];
             const c = document.createElement('div'); c.className = 'sc' + (st[0] === 'out' ? ' out' : '');
