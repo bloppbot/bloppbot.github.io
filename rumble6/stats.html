@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumble VI Stats</title>
+<meta name="description" content="Every number from Rumble in the Jungle VI: records, players, teams, abilities, hero models and every game, overall and per day.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#030805;--bg-deep:#020503;--panel:#081209;--panel-2:#0b1a0e;--line:#1b3521;--green:#4caf50;--green-bright:#6fe07a;--green-deep:#2e6e3a;
+  --red:#a81616;--red-bright:#ff6b5a;--cream:#f0e6d2;--cream-dim:#b8ad96;--dim:#93a896;--gold:#f2c94c;--px:3px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@font-face{font-family:'VT323 Cyr';src:url('assets/fonts/pixelify-cyrillic.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;size-adjust:80%;font-display:swap;}
+body{background:var(--bg);color:var(--cream);font-family:'VT323','VT323 Cyr',monospace;font-size:21px;line-height:1.35;overflow-x:hidden;}
+body::before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(3,8,5,.86),rgba(2,5,3,.95)),url('assets/scene_tunnel_1536.jpg') center/cover;z-index:-1;image-rendering:pixelated;}
+img{image-rendering:pixelated;}
+a{color:var(--green-bright);}
+.px{font-family:'Press Start 2P',monospace;}
+.wrap{max-width:1500px;margin:0 auto;padding:0 16px 80px;}
+header{display:flex;align-items:center;justify-content:center;gap:24px;padding:28px 0 8px;flex-wrap:wrap;text-align:center;}
+header img{height:84px;filter:drop-shadow(4px 4px 0 rgba(0,0,0,.75));}
+header h1{font-family:'Press Start 2P',monospace;font-size:clamp(1.3rem,3.4vw,2.3rem);letter-spacing:2px;text-shadow:3px 3px 0 #1f0202,6px 6px 0 rgba(0,0,0,.6);}
+header .bar{width:4px;height:64px;background:var(--red);}
+.sub{text-align:center;color:var(--dim);font-size:1.15rem;}
+.back{display:inline-block;margin-top:6px;font-family:'Press Start 2P',monospace;font-size:.55rem;text-decoration:none;color:var(--dim);}
+.tabs{position:sticky;top:0;z-index:20;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:12px 0;background:linear-gradient(var(--bg) 70%,transparent);}
+.tab{font-family:'Press Start 2P',monospace;font-size:.62rem;padding:12px 16px;background:var(--panel);border:3px solid var(--line);color:var(--cream-dim);cursor:pointer;box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6);}
+.tab small{display:block;font-family:'VT323',monospace;font-size:1rem;color:var(--dim);margin-top:5px;letter-spacing:0;}
+.tab.on{border-color:var(--green-bright);color:var(--cream);background:var(--panel-2);}
+.jump{display:flex;gap:6px 14px;justify-content:center;flex-wrap:wrap;margin:2px 0 6px;}
+.jump a{font-family:'Press Start 2P',monospace;font-size:.5rem;color:var(--dim);text-decoration:none;}
+.jump a:hover{color:var(--green-bright);}
+h2{font-family:'Press Start 2P',monospace;font-size:clamp(.8rem,1.6vw,1.05rem);color:var(--green-bright);letter-spacing:2px;margin:40px 0 6px;text-shadow:2px 2px 0 rgba(0,0,0,.85);scroll-margin-top:90px;}
+h2 + .hint{color:var(--dim);font-size:1.1rem;margin-bottom:14px;}
+.box{background:rgba(8,18,9,.93);border:3px solid var(--line);box-shadow:var(--px) var(--px) 0 rgba(0,0,0,.6);}
+/* glance */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(170px,100%),1fr));gap:12px;}
+.tile,.rec,.cr,.fc{min-width:0;overflow:hidden;}
+.tile{padding:12px 14px;}
+.tile .k{font-family:'Press Start 2P',monospace;font-size:.48rem;color:var(--dim);letter-spacing:1px;line-height:1.5;}
+.tile .v{font-family:'Press Start 2P',monospace;font-size:1.15rem;margin:10px 0 6px;color:var(--cream);text-shadow:2px 2px 0 rgba(0,0,0,.8);}
+.tile .s{font-size:1.05rem;color:var(--dim);line-height:1.1;}
+/* records */
+.recs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:12px;}
+.rec{padding:12px 14px;}
+.rec .k{font-family:'Press Start 2P',monospace;font-size:.5rem;color:var(--green-bright);letter-spacing:1px;}
+.rec .top{display:flex;align-items:center;gap:12px;margin:10px 0 8px;}
+.rec .top .hi{width:64px;height:36px;object-fit:cover;border:2px solid rgba(240,230,210,.2);}
+.rec .top .v{font-family:'Press Start 2P',monospace;font-size:1.1rem;color:var(--gold);white-space:nowrap;}
+.rec .top .who{line-height:1.1;min-width:0;}
+.rec .top .who b{font-weight:normal;color:var(--cream);}
+.rec .top .who span{display:block;font-size:1rem;color:var(--dim);}
+.rec ol{list-style:none;border-top:2px solid rgba(111,224,122,.1);padding-top:6px;font-size:1.05rem;color:var(--dim);}
+.rec ol li{display:flex;justify-content:space-between;gap:10px;}
+.rec ol li > span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rec ol li b{font-weight:normal;color:var(--cream-dim);}
+.tl{width:22px;height:22px;object-fit:contain;vertical-align:-5px;margin-right:4px;}
+.si{font-family:'Press Start 2P',monospace;font-size:.4rem;color:#ffb347;margin-left:4px;vertical-align:2px;}
+/* crystal */
+.crys{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:12px;}
+.cr{padding:12px 14px;}
+.cr .k{font-family:'Press Start 2P',monospace;font-size:.5rem;color:var(--green-bright);line-height:1.5;}
+.cr .how{font-size:1rem;color:var(--dim);margin-bottom:6px;}
+.cr ol{list-style:none;font-size:1.1rem;}
+.cr li{display:flex;justify-content:space-between;gap:8px;padding:2px 0;}
+.cr li:first-child{color:var(--gold);font-size:1.25rem;}
+.cr li b{font-weight:normal;}
+/* tables */
+.ctrl{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:10px;font-size:1.1rem;color:var(--dim);}
+.ctrl input,.ctrl select{font-family:'VT323',monospace;font-size:1.1rem;background:var(--panel);color:var(--cream);border:2px solid var(--line);padding:4px 8px;}
+.ctrl .seg{display:flex;}
+.ctrl .seg button{font-family:'Press Start 2P',monospace;font-size:.48rem;background:var(--panel);color:var(--dim);border:2px solid var(--line);padding:8px 10px;cursor:pointer;}
+.ctrl .seg button.on{color:var(--cream);border-color:var(--green-bright);}
+.tw{overflow-x:auto;max-height:720px;overflow-y:auto;}
+table{border-collapse:collapse;width:100%;font-size:1.1rem;white-space:nowrap;}
+th{position:sticky;top:0;z-index:2;background:#0d1f11;font-family:'Press Start 2P',monospace;font-size:.45rem;color:var(--dim);letter-spacing:1px;padding:10px 8px;text-align:right;cursor:pointer;user-select:none;border-bottom:2px solid var(--line);}
+th:first-child,td:first-child{position:sticky;left:0;text-align:left;z-index:1;}
+th:first-child{z-index:3;}
+td:first-child{background:#081209;}
+th.on{color:var(--green-bright);}
+th.on::after{content:" \25BC";}
+th.on.asc::after{content:" \25B2";}
+td{padding:5px 8px;text-align:right;border-bottom:1px solid rgba(111,224,122,.07);}
+tr:hover td{background:rgba(111,224,122,.06);}
+tr:hover td:first-child{background:#0e2213;}
+td.best{color:var(--gold);}
+td .ai{width:26px;height:26px;vertical-align:-7px;margin-right:6px;border:1px solid rgba(240,230,210,.2);}
+td .hm{width:44px;height:25px;object-fit:cover;vertical-align:-7px;margin-right:6px;}
+.wr{display:inline-block;width:56px;height:8px;background:rgba(255,255,255,.08);margin-left:6px;vertical-align:1px;}
+.wr i{display:block;height:100%;background:var(--green);}
+/* games */
+.games{display:grid;gap:10px;}
+.gm{padding:0;}
+.gm summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:150px 1fr 120px 1fr 150px;align-items:center;gap:10px;padding:10px 14px;}
+.gm summary::-webkit-details-marker{display:none;}
+.gm .st{font-family:'Press Start 2P',monospace;font-size:.45rem;color:var(--dim);line-height:1.7;}
+.gm .tm{display:flex;align-items:center;gap:10px;font-family:'Press Start 2P',monospace;font-size:.6rem;}
+.gm .tm.b{justify-content:flex-end;text-align:right;}
+.gm .tm img{width:38px;height:38px;object-fit:contain;}
+.gm .tm.lost{opacity:.45;}
+.gm .sc{text-align:center;font-family:'Press Start 2P',monospace;font-size:.9rem;}
+.gm .sc small{display:block;font-family:'VT323',monospace;font-size:1rem;color:var(--dim);margin-top:4px;}
+.gm .mt{text-align:right;font-size:1rem;color:var(--dim);line-height:1.2;}
+.gm[open] summary{border-bottom:2px solid var(--line);}
+.gm .sb{padding:8px 10px 12px;overflow-x:auto;}
+.gm .sb table{font-size:1.05rem;}
+.gm .sb td:first-child{background:transparent;position:static;}
+.gm .sb th:first-child{position:static;}
+.gm .sb tr.sep td{border-top:3px solid var(--line);}
+.abs img{width:24px;height:24px;margin-right:2px;vertical-align:-6px;border:1px solid rgba(240,230,210,.18);}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:12px;}
+.fc{padding:12px 14px;font-size:1.1rem;color:var(--dim);}
+.fc b{display:block;font-family:'Press Start 2P',monospace;font-weight:normal;font-size:.95rem;color:var(--cream);margin-bottom:6px;}
+.foot{margin-top:46px;text-align:center;color:var(--dim);font-size:1.05rem;}
+@media (max-width:760px){
+  body{font-size:19px;}
+  .tiles{grid-template-columns:1fr 1fr;}
+  .tile .v{font-size:.85rem;}
+  .tile .k{font-size:.42rem;}
+  header h1{font-size:1.1rem;}
+  .tab{font-size:.5rem;padding:10px 10px;}
+  .gm summary{grid-template-columns:1fr 70px 1fr;}
+  .gm .st,.gm .mt{display:none;}
+  .gm .tm{font-size:.48rem;}
+  header img{height:60px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><img src="assets/logo_wordmark.png" alt="Rumble in the Jungle"><div class="bar"></div><h1>THE STATS</h1></header>
+  <div class="sub"><span id="upd"></span><br><a class="back" href="./">&larr; BACK TO THE RUMBLE</a></div>
+  <nav class="tabs" id="tabs"></nav>
+  <div class="jump"><a href="#glance">GLANCE</a><a href="#records">RECORDS</a><a href="#crystal">CRYSTAL BALL</a><a href="#players">PLAYERS</a><a href="#teams">TEAMS</a><a href="#abilities">ABILITIES</a><a href="#heroes">HERO MODELS</a><a href="#fun">FUN</a><a href="#games">GAMES</a></div>
+  <main id="main"></main>
+  <div class="foot">Data: parsed replays via OpenDota (lobby games without a league ticket parsed locally from the replay files).<br>
+    Biggest single hit ignores known combat-log artifacts (Spirit Bear hits, split-Brewmaster and other ability-less killing blows logged as the whole HP pool).</div>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const mm = s => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
+const hm = s => `${Math.floor(s / 3600)}h ${Math.floor(s % 3600 / 60)}m`;
+const kf = v => v >= 1e6 ? (v / 1e6).toFixed(2) + 'M' : v >= 10000 ? (v / 1000).toFixed(1) + 'K' : Math.round(v).toLocaleString('en-US');
+const f1 = v => (Math.round(v * 10) / 10).toFixed(1);
+const pct = v => Math.round(v * 100) + '%';
+let D, VIEW = 'all';
+
+function logo(t) { const x = D.teams[t]; return x ? `<img class="tl" src="${esc(x.logo)}" alt="" title="${esc(t)}">` : ''; }
+function who(r) { return `${logo(r.t)}<b>${esc(r.n)}</b>${r.si ? '<span class="si">STAND-IN</span>' : ''}`; }
+const short = { 'New World Order': 'NWO', 'GYM Esports': 'GYM', 'Space Marines': 'SM', 'Old Ravens': 'Ravens', 'Burger Boys': 'Burger', "Don't Peek": 'DP' };
+const sh = t => short[t] || t;
+const hero = id => D.heroes[id] || { n: '?', img: '', icon: '' };
+const abil = k => D.abilities[k] || { n: k, img: '' };
+let DUP = {};
+const aname = k => { const a = abil(k); return DUP[a.n] > 1 && a.hero ? `${a.n} (${a.hero})` : a.n; };
+
+function scope() {
+  const games = D.games.map((g, i) => ({ ...g, i })).filter(g => VIEW === 'all' || g.day === +VIEW);
+  const ids = new Set(games.map(g => g.i));
+  return { games, rows: D.rows.filter(r => ids.has(r.g)) };
+}
+
+// ---------- aggregation ----------
+function players(rows) {
+  const m = new Map();
+  for (const r of rows) {
+    const key = r.n + '|' + r.t;
+    if (!m.has(key)) m.set(key, { n: r.n, t: r.t, si: r.si, G: 0, W: 0, k: 0, d: 0, a: 0, gpm: 0, xpm: 0, lh: 0, dn: 0, hd: 0, td: 0, heal: 0, stuns: 0, obs: 0, sen: 0, stacks: 0, apm: 0, tf: 0, runes: 0, bb: 0, dead: 0, hit: 0, streak: 0, rosh: 0, cour: 0, min: 0, heroes: [] });
+    const p = m.get(key), g = D.games[r.g];
+    p.G++; p.W += r.w; p.min += g.dur / 60; p.heroes.push(r.h);
+    for (const f of ['k', 'd', 'a', 'gpm', 'xpm', 'lh', 'dn', 'hd', 'td', 'heal', 'stuns', 'obs', 'sen', 'stacks', 'apm', 'tf', 'runes', 'bb', 'dead', 'rosh', 'cour']) p[f] += r[f];
+    p.hit = Math.max(p.hit, r.hit); p.streak = Math.max(p.streak, r.streak);
+  }
+  return [...m.values()].map(p => ({ ...p, kda: (p.k + p.a) / Math.max(1, p.d), wr: p.W / p.G, gpm: p.gpm / p.G, xpm: p.xpm / p.G, apm: p.apm / p.G, tf: p.tf / p.G, wards: p.obs + p.sen, hdm: p.hd / p.min }));
+}
+function teamsAgg(games, rows) {
+  const m = {};
+  for (const g of games) for (const [t, rad] of [[g.r, true], [g.d, false]]) {
+    const x = m[t] = m[t] || { t, G: 0, W: 0, dur: 0, rG: 0, rW: 0, fast: null, rows: [] };
+    const won = g.rw === rad; x.G++; x.W += won; x.dur += g.dur; if (rad) { x.rG++; x.rW += won; }
+    if (won && (x.fast === null || g.dur < x.fast)) x.fast = g.dur;
+  }
+  for (const r of rows) m[r.t].rows.push(r);
+  return Object.values(m).map(x => {
+    const s = f => x.rows.reduce((a, r) => a + r[f], 0);
+    return { t: x.t, G: x.G, W: x.W, wr: x.W / x.G, dur: x.dur / x.G, kpg: s('k') / x.G, dpg: s('d') / x.G, apg: s('a') / x.G, gpm: s('gpm') / x.rows.length,
+      xpm: s('xpm') / x.rows.length, hd: s('hd') / x.G, td: s('td') / x.G, heal: s('heal') / x.G, wards: (s('obs') + s('sen')) / x.G, stacks: s('stacks') / x.G,
+      rosh: s('rosh'), apm: s('apm') / x.rows.length, tf: s('tf') / x.rows.length, rad: `${x.rW}-${x.rG - x.rW}`, dire: `${x.W - x.rW}-${x.G - x.rG - (x.W - x.rW)}`, fast: x.fast };
+  });
+}
+function abilAgg(rows) {
+  const m = {};
+  for (const r of rows) for (const k of r.ab) {
+    const x = m[k] = m[k] || { k, P: 0, W: 0, kills: 0, deaths: 0, gpm: 0, hd: 0 };
+    x.P++; x.W += r.w; x.kills += r.k; x.deaths += r.d; x.gpm += r.gpm; x.hd += r.hd;
+  }
+  return Object.values(m).map(x => ({ ...x, wr: x.W / x.P, kills: x.kills / x.P, deaths: x.deaths / x.P, gpm: x.gpm / x.P, hd: x.hd / x.P }));
+}
+function heroAgg(rows) {
+  const m = {};
+  for (const r of rows) {
+    const x = m[r.h] = m[r.h] || { h: r.h, P: 0, W: 0, k: 0, d: 0, a: 0, gpm: 0, hd: 0 };
+    x.P++; x.W += r.w; x.k += r.k; x.d += r.d; x.a += r.a; x.gpm += r.gpm; x.hd += r.hd;
+  }
+  return Object.values(m).map(x => ({ ...x, wr: x.W / x.P, k: x.k / x.P, d: x.d / x.P, a: x.a / x.P, gpm: x.gpm / x.P, hd: x.hd / x.P }));
+}
+
+// ---------- sortable table ----------
+const TBL = {};
+function table(id, cols, data, def, opts = {}) {
+  const st = TBL[id] = TBL[id] || { sort: def, asc: false };
+  const c = cols.find(c => c.k === st.sort) || cols[1];
+  const val = r => (c.v ? c.v(r) : r[c.k]);
+  const sorted = [...data].sort((x, y) => { const a = val(x), b = val(y); return (typeof a === 'string' ? a.localeCompare(b) : (a ?? -1e9) - (b ?? -1e9)) * (st.asc ? 1 : -1); });
+  const best = {};
+  for (const col of cols) if (col.best && data.length > 1) { const vs = data.map(r => (col.v ? col.v(r) : r[col.k])); best[col.k] = col.best === 'min' ? Math.min(...vs) : Math.max(...vs); }
+  const head = cols.map(col => `<th data-k="${col.k}" title="${esc(col.title || '')}" class="${col.k === st.sort ? 'on' + (st.asc ? ' asc' : '') : ''}">${col.h}</th>`).join('');
+  const body = sorted.map(r => '<tr>' + cols.map(col => {
+    const v = col.v ? col.v(r) : r[col.k];
+    return `<td class="${col.k in best && v === best[col.k] ? 'best' : ''}">${col.f ? col.f(v, r) : esc(v)}</td>`;
+  }).join('') + '</tr>').join('');
+  return `<div class="tw box" data-tbl="${id}"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+}
+document.addEventListener('click', e => {
+  const th = e.target.closest('th[data-k]'); if (!th) return;
+  const id = th.closest('[data-tbl]').dataset.tbl, st = TBL[id];
+  if (st.sort === th.dataset.k) st.asc = !st.asc; else { st.sort = th.dataset.k; st.asc = false; }
+  RENDER[id]();
+});
+const RENDER = {};
+
+// ---------- sections ----------
+function glance(games, rows) {
+  const n = games.length; if (!n) return '';
+  const tot = games.reduce((a, g) => a + g.dur, 0), kills = games.reduce((a, g) => a + g.rk + g.dk, 0);
+  const by = f => [...games].sort(f)[0];
+  const L = by((a, b) => b.dur - a.dur), S = by((a, b) => a.dur - b.dur), B = by((a, b) => (b.rk + b.dk) - (a.rk + a.dk)), Q = by((a, b) => (a.rk + a.dk) - (b.rk + b.dk));
+  const fb = by((a, b) => (a.fb ?? 9e9) - (b.fb ?? 9e9)), lead = by((a, b) => b.lead - a.lead), cb = by((a, b) => b.comeback - a.comeback);
+  const W = g => g.rw ? g.r : g.d, Lo = g => g.rw ? g.d : g.r, sum = f => rows.reduce((a, r) => a + r[f], 0);
+  const T = [['GAMES', n, `${new Set(games.map(g => g.series)).size} series`], ['ABILITY DRAFT PLAYED', hm(tot), `avg ${mm(tot / n)} per game`],
+    ['KILLS', kills.toLocaleString('en-US'), `${f1(kills / n)} per game, ${(kills / (tot / 60)).toFixed(2)} per minute`],
+    ['RADIANT WINS', `${games.filter(g => g.rw).length}-${games.filter(g => !g.rw).length}`, pct(games.filter(g => g.rw).length / n) + ' for radiant'],
+    ['LONGEST GAME', mm(L.dur), `${sh(W(L))} over ${sh(Lo(L))}`], ['SHORTEST GAME', mm(S.dur), `${sh(W(S))} over ${sh(Lo(S))}`],
+    ['BLOODIEST GAME', `${B.rk + B.dk} KILLS`, `${sh(B.r)} vs ${sh(B.d)}, ${mm(B.dur)}`], ['CALMEST GAME', `${Q.rk + Q.dk} KILLS`, `${sh(Q.r)} vs ${sh(Q.d)}, ${mm(Q.dur)}`],
+    ['FASTEST FIRST BLOOD', mm(Math.max(0, fb.fb || 0)), `${sh(fb.r)} vs ${sh(fb.d)}`], ['BIGGEST LEAD', kf(lead.lead), `net worth, ${sh(W(lead))} vs ${sh(Lo(lead))}`],
+    ['BIGGEST COMEBACK', kf(cb.comeback), `gold deficit overcome by ${sh(W(cb))}`], ['ROSHANS', games.reduce((a, g) => a + g.rosh, 0), 'killed'],
+    ['HERO DAMAGE', kf(sum('hd')), `${kf(sum('hd') / n)} per game`], ['WARDS PLACED', (sum('obs') + sum('sen')).toLocaleString('en-US'), `${sum('obs')} obs, ${sum('sen')} sentries`],
+    ['STUN TIME', hm(sum('stuns')), 'seconds of stuns dealt, added up'], ['BUYBACKS', sum('bb'), `${sum('cour')} couriers sniped`],
+    ['CAMPS STACKED', sum('stacks'), `${sum('runes')} runes picked up`], ['DIFFERENT ABILITIES', new Set(rows.flatMap(r => r.ab)).size, `on ${new Set(rows.map(r => r.h)).size} hero models`]];
+  return `<h2 id="glance">AT A GLANCE</h2><div class="hint">${n} games${VIEW === 'all' ? ' across all days' : ''}</div><div class="tiles">` +
+    T.map(([k, v, s]) => `<div class="tile box"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${esc(s)}</div></div>`).join('') + '</div>';
+}
+
+const REC = [['k', 'MOST KILLS', v => v], ['d', 'MOST DEATHS', v => v], ['a', 'MOST ASSISTS', v => v], ['kda', 'BEST KDA', v => v.toFixed(1)],
+  ['gpm', 'HIGHEST GPM', v => v], ['xpm', 'HIGHEST XPM', v => v], ['nw', 'HIGHEST NET WORTH', kf], ['lh', 'MOST LAST HITS', v => v],
+  ['dn', 'MOST DENIES', v => v], ['hd', 'MOST HERO DAMAGE', kf], ['hdm', 'HERO DAMAGE PER MINUTE', v => Math.round(v)], ['td', 'MOST TOWER DAMAGE', kf],
+  ['heal', 'MOST HEALING', kf], ['hit', 'BIGGEST SINGLE HIT', kf], ['stuns', 'MOST STUN TIME', v => Math.round(v) + 's'], ['wards', 'MOST WARDS', v => v],
+  ['obs', 'MOST OBSERVERS', v => v], ['sen', 'MOST SENTRIES', v => v], ['stacks', 'MOST CAMPS STACKED', v => v], ['apm', 'HIGHEST APM', v => v],
+  ['tf', 'TEAMFIGHT PARTICIPATION', v => pct(v)], ['streak', 'LONGEST KILL STREAK', v => v], ['runes', 'MOST RUNES', v => v],
+  ['bb', 'MOST BUYBACKS', v => v], ['dead', 'LONGEST TIME DEAD', mm], ['rosh', 'MOST ROSHANS', v => v], ['cour', 'MOST COURIERS KILLED', v => v]];
+function records(games, rows) {
+  const ext = rows.map(r => ({ ...r, kda: (r.k + r.a) / Math.max(1, r.d), wards: r.obs + r.sen, hdm: r.hd / (D.games[r.g].dur / 60) }));
+  const card = ([f, label, fmt]) => {
+    const top = ext.filter(r => r[f] > 0).sort((a, b) => b[f] - a[f]).slice(0, 5); if (!top.length) return '';
+    const g = D.games[top[0].g], h = hero(top[0].h);
+    const extra = f === 'hit' && top[0].hitw ? `${esc(aname(top[0].hitw))} on ${esc(hero(top[0].hito).n)} at ${mm(top[0].hitt)}` : f === 'hit' ? `right-click on ${esc(hero(top[0].hito).n)} at ${mm(top[0].hitt)}` : `${esc(h.n)} vs ${esc(sh(top[0].o))}`;
+    return `<div class="rec box"><div class="k">${label}</div><div class="top"><img class="hi" src="${esc(h.img)}" alt=""><span class="v">${fmt(top[0][f])}</span>
+      <div class="who">${who(top[0])}<span>${extra}, ${esc(g.stage)} D${g.day}</span></div></div>
+      <ol>${top.slice(1).map(r => `<li><span>${logo(r.t)}${esc(r.n)} <b>${esc(hero(r.h).n)}</b></span><span>${fmt(r[f])}</span></li>`).join('')}</ol></div>`;
+  };
+  return `<h2 id="records">SINGLE-GAME RECORDS</h2><div class="hint">best single performances, top 5 each</div><div class="recs">${REC.map(card).join('')}</div>`;
+}
+
+function crystal(rows) {
+  const P = players(rows), ab = abilAgg(rows);
+  const top = (arr, f, fmt, n = 5) => [...arr].sort((a, b) => b[f] - a[f]).slice(0, n).map(p => `<li><span>${who(p)}</span><b>${fmt(p[f])}</b></li>`).join('');
+  const C = [['HIGHEST AVG GPM', 'average over all games played', top(P, 'gpm', v => Math.round(v))], ['MOST KILLS', 'total', top(P, 'k', v => v)],
+    ['MOST ASSISTS', 'total', top(P, 'a', v => v)], ['BEST KDA', '(kills + assists) / deaths, all games combined', top(P, 'kda', v => v.toFixed(2))],
+    ['MOST WARDS PLACED', 'observer + sentry, total', top(P, 'wards', v => v)], ['MOST STUN TIME', 'seconds, total', top(P, 'stuns', v => Math.round(v))],
+    ['BIGGEST SINGLE HIT', 'largest damage instance on a hero', top(P, 'hit', kf)], ['MOST CAMPS STACKED', 'total', top(P, 'stacks', v => v)],
+    ['HIGHEST APM', 'average actions per minute', top(P, 'apm', v => Math.round(v))], ['FEEDER OF THE RUMBLE', 'most deaths, total', top(P, 'd', v => v)],
+    ['HIGHEST WINRATE ABILITY', 'min. 5 picks', [...ab].filter(a => a.P >= 5).sort((a, b) => b.wr - a.wr || b.P - a.P).slice(0, 5).map(a => `<li><span>${esc(aname(a.k))}</span><b>${pct(a.wr)} (${a.W}-${a.P - a.W})</b></li>`).join('') || '<li>nobody at 5 picks yet</li>'],
+    ['MOST PICKED ABILITY', 'picks across all games', [...ab].sort((a, b) => b.P - a.P || b.wr - a.wr).slice(0, 5).map(a => `<li><span>${esc(aname(a.k))}</span><b>${a.P}x</b></li>`).join('')]];
+  return `<h2 id="crystal">CRYSTAL BALL RACE</h2><div class="hint">the 12 crystal ball questions of the prediction game, ${VIEW === 'all' ? 'standings so far (they score after the grand final)' : 'this day only'}</div>
+    <div class="crys">${C.map(([k, how, li]) => `<div class="cr box"><div class="k">${k}</div><div class="how">${how}</div><ol>${li}</ol></div>`).join('')}</div>`;
+}
+
+let PMODE = 'tot', PMIN = 1, PQ = '';
+function playersSec(rows) {
+  const P = players(rows).filter(p => p.G >= PMIN && (!PQ || (p.n + ' ' + p.t).toLowerCase().includes(PQ)));
+  const per = PMODE === 'avg', d = (f, fmt = v => Math.round(v)) => ({ k: f, h: f.toUpperCase(), v: r => per ? r[f] / r.G : r[f], f: v => (per ? f1(v) : fmt(v)), best: 'max' });
+  const cols = [{ k: 'n', h: 'PLAYER', v: r => r.n.toLowerCase(), f: (v, r) => `${who(r)}` }, { k: 'G', h: 'G', best: 'max' }, { k: 'W', h: 'W' }, { k: 'wr', h: 'WIN%', f: v => pct(v), best: 'max' },
+    { ...d('k'), h: 'K' }, { ...d('d'), h: 'D' }, { ...d('a'), h: 'A' }, { k: 'kda', h: 'KDA', f: v => v.toFixed(2), best: 'max' },
+    { k: 'gpm', h: 'GPM', f: v => Math.round(v), best: 'max' }, { k: 'xpm', h: 'XPM', f: v => Math.round(v), best: 'max' },
+    { ...d('lh'), h: 'LH' }, { ...d('dn'), h: 'DN' }, { ...d('hd', kf), h: 'HERO DMG', f: v => kf(v) }, { k: 'hdm', h: 'DMG/MIN', f: v => Math.round(v), best: 'max' },
+    { ...d('td', kf), h: 'TOWER DMG', f: v => kf(v) }, { ...d('heal', kf), h: 'HEAL', f: v => kf(v) }, { ...d('stuns'), h: 'STUNS', title: 'seconds' },
+    { ...d('obs'), h: 'OBS' }, { ...d('sen'), h: 'SEN' }, { ...d('stacks'), h: 'STACKS' }, { k: 'apm', h: 'APM', f: v => Math.round(v), best: 'max' },
+    { k: 'tf', h: 'TF%', f: v => pct(v), best: 'max', title: 'teamfight participation' }, { ...d('runes'), h: 'RUNES' }, { ...d('bb'), h: 'BB' },
+    { ...d('dead', mm), h: 'DEAD', f: v => mm(v) }, { k: 'hit', h: 'BEST HIT', f: v => kf(v), best: 'max' }, { k: 'streak', h: 'STREAK', best: 'max' }];
+  return table('players', cols, P, 'k');
+}
+function playersBlock(rows) {
+  const maxG = Math.max(...players(rows).map(p => p.G));
+  return `<h2 id="players">PLAYERS</h2><div class="hint">click a column to sort, gold = best value</div>
+    <div class="ctrl"><div class="seg" id="pmode"><button data-m="tot" class="${PMODE === 'tot' ? 'on' : ''}">TOTALS</button><button data-m="avg" class="${PMODE === 'avg' ? 'on' : ''}">PER GAME</button></div>
+    <label>min games <select id="pmin">${Array.from({ length: maxG }, (_, i) => `<option ${i + 1 === PMIN ? 'selected' : ''}>${i + 1}</option>`).join('')}</select></label>
+    <label>search <input id="pq" value="${esc(PQ)}" placeholder="player or team"></label></div><div id="ptbl">${playersSec(rows)}</div>`;
+}
+function teamsSec(games, rows) {
+  const cols = [{ k: 't', h: 'TEAM', v: r => r.t, f: v => `${logo(v)}${esc(v)}` }, { k: 'G', h: 'GAMES' }, { k: 'wr', h: 'W-L', f: (v, r) => `${r.W}-${r.G - r.W}`, best: 'max' },
+    { k: 'dur', h: 'AVG TIME', f: mm }, { k: 'kpg', h: 'KILLS/G', f: f1, best: 'max' }, { k: 'dpg', h: 'DEATHS/G', f: f1, best: 'min' }, { k: 'apg', h: 'ASSISTS/G', f: f1, best: 'max' },
+    { k: 'gpm', h: 'GPM', f: v => Math.round(v), best: 'max' }, { k: 'xpm', h: 'XPM', f: v => Math.round(v), best: 'max' }, { k: 'hd', h: 'HERO DMG/G', f: kf, best: 'max' },
+    { k: 'td', h: 'TOWER DMG/G', f: kf, best: 'max' }, { k: 'heal', h: 'HEAL/G', f: kf, best: 'max' }, { k: 'wards', h: 'WARDS/G', f: f1, best: 'max' },
+    { k: 'stacks', h: 'STACKS/G', f: f1, best: 'max' }, { k: 'rosh', h: 'ROSH', best: 'max' }, { k: 'apm', h: 'APM', f: v => Math.round(v), best: 'max' },
+    { k: 'tf', h: 'TF%', f: pct, best: 'max' }, { k: 'rad', h: 'RADIANT', v: r => r.rad }, { k: 'dire', h: 'DIRE', v: r => r.dire }, { k: 'fast', h: 'FASTEST WIN', f: v => v ? mm(v) : '-' }];
+  return table('teams', cols, teamsAgg(games, rows), 'wr');
+}
+let AMIN = 1, AQ = '';
+function abilSec(rows) {
+  const A = abilAgg(rows).filter(a => a.P >= AMIN && (!AQ || aname(a.k).toLowerCase().includes(AQ)));
+  const cols = [{ k: 'k', h: 'ABILITY', v: r => aname(r.k).toLowerCase(), f: (v, r) => `<img class="ai" src="${esc(abil(r.k).img)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">${esc(aname(r.k))}` },
+    { k: 'P', h: 'PICKS', best: 'max' }, { k: 'W', h: 'WINS' }, { k: 'wr', h: 'WIN%', f: v => `${pct(v)}<span class="wr"><i style="width:${Math.round(v * 100)}%"></i></span>` },
+    { k: 'kills', h: 'AVG K', f: f1 }, { k: 'deaths', h: 'AVG D', f: f1 }, { k: 'gpm', h: 'AVG GPM', f: v => Math.round(v) }, { k: 'hd', h: 'AVG HERO DMG', f: kf }];
+  return table('abilities', cols, A, 'P');
+}
+function abilBlock(rows) {
+  return `<h2 id="abilities">ABILITIES</h2><div class="hint">every ability that was drafted and skilled, with the record of the players who took it</div>
+    <div class="ctrl"><label>min picks <select id="amin">${[1, 2, 3, 4, 5, 6].map(i => `<option ${i === AMIN ? 'selected' : ''}>${i}</option>`).join('')}</select></label>
+    <label>search <input id="aq" value="${esc(AQ)}" placeholder="ability"></label></div><div id="atbl">${abilSec(rows)}</div>`;
+}
+function heroSec(rows) {
+  const cols = [{ k: 'h', h: 'HERO MODEL', v: r => hero(r.h).n.toLowerCase(), f: (v, r) => `<img class="hm" src="${esc(hero(r.h).img)}" alt="" loading="lazy">${esc(hero(r.h).n)}` },
+    { k: 'P', h: 'PICKS', best: 'max' }, { k: 'W', h: 'WINS' }, { k: 'wr', h: 'WIN%', f: v => `${pct(v)}<span class="wr"><i style="width:${Math.round(v * 100)}%"></i></span>` },
+    { k: 'k', h: 'AVG K', f: f1 }, { k: 'd', h: 'AVG D', f: f1 }, { k: 'a', h: 'AVG A', f: f1 }, { k: 'gpm', h: 'AVG GPM', f: v => Math.round(v) }, { k: 'hd', h: 'AVG HERO DMG', f: kf }];
+  return table('heroes', cols, heroAgg(rows), 'P');
+}
+function fun(games, rows) {
+  const P = players(rows), F = [];
+  const lead = (f, txt) => { const p = [...P].sort((a, b) => b[f] - a[f])[0]; if (p && p[f] > 0) F.push([`${p.n}: ${typeof p[f] === 'number' && p[f] % 1 ? f1(p[f]) : p[f]}`, txt]); };
+  const ex = rows.filter(r => r.multi >= 4).map(r => `${r.n} (${hero(r.h).n}) ${r.multi === 5 ? 'RAMPAGE' : 'ultra kill'}`);
+  if (ex.length) F.push([ex.length + ' ultra kills or better', ex.join(', ')]);
+  const dl = rows.filter(r => r.d === 0 && r.k + r.a >= 10).sort((a, b) => (b.k + b.a) - (a.k + a.a));
+  if (dl.length) F.push([`${dl.length} deathless games`, dl.slice(0, 6).map(r => `${r.n} ${r.k}-0-${r.a} (${hero(r.h).n})`).join(', ')]);
+  lead('rosh', 'most Roshans killed'); lead('cour', 'most couriers sniped'); lead('bb', 'most buybacks'); lead('runes', 'most runes picked up');
+  const mh = {}; for (const r of rows) (mh[r.n + '|' + r.t] = mh[r.n + '|' + r.t] || new Set()).add(r.h);
+  const most = Object.entries(mh).sort((a, b) => b[1].size - a[1].size)[0]; if (most) F.push([`${most[0].split('|')[0]}: ${most[1].size} different models`, 'most hero models played']);
+  const gg = games.reduce((a, g) => a + g.gg, 0); F.push([`${gg}x "gg"`, 'typed in all chat']);
+  const fw = [...games].filter(g => g.rw ? g.rk >= g.dk : g.dk >= g.rk).length; F.push([`${games.length - fw} of ${games.length} games`, 'won by the team with fewer kills']);
+  return `<h2 id="fun">FUN STUFF</h2><div class="facts">${F.map(([b, s]) => `<div class="fc box"><b>${esc(b)}</b>${esc(s)}</div>`).join('')}</div>`;
+}
+function gamesSec(games) {
+  const rowsOf = gi => D.rows.filter(r => r.g === gi);
+  return `<h2 id="games">EVERY GAME</h2><div class="hint">click a game for the full scoreboard</div><div class="games">` + [...games].sort((a, b) => b.start - a.start).map(g => {
+    const W = g.rw ? g.r : g.d, rs = rowsOf(g.i);
+    const sb = `<table><thead><tr><th>PLAYER</th><th>MODEL</th><th style="text-align:left">ABILITIES</th><th>K</th><th>D</th><th>A</th><th>GPM</th><th>XPM</th><th>LH</th><th>HERO DMG</th><th>TOWER</th><th>HEAL</th><th>WARDS</th><th>STUNS</th><th>APM</th></tr></thead><tbody>` +
+      rs.map((r, j) => `<tr class="${j === 5 ? 'sep' : ''}"><td>${who(r)}</td><td><img class="hm" src="${esc(hero(r.h).img)}" alt="" loading="lazy">${esc(hero(r.h).n)}</td>
+        <td class="abs" style="text-align:left">${r.ab.map(k => `<img src="${esc(abil(k).img)}" alt="" title="${esc(aname(k))}" loading="lazy" onerror="this.style.display='none'">`).join('')}</td>
+        <td>${r.k}</td><td>${r.d}</td><td>${r.a}</td><td>${r.gpm}</td><td>${r.xpm}</td><td>${r.lh}</td><td>${kf(r.hd)}</td><td>${kf(r.td)}</td><td>${kf(r.heal)}</td><td>${r.obs + r.sen}</td><td>${Math.round(r.stuns)}</td><td>${r.apm}</td></tr>`).join('') + '</tbody></table>';
+    return `<details class="gm box"><summary><span class="st">DAY ${g.day} &middot; ${esc(g.stage.toUpperCase())}<br>${esc(g.series)}${g.day > 1 ? ' &middot; GAME ' + g.gno : ''}</span>
+      <span class="tm ${W === g.r ? '' : 'lost'}">${logo(g.r).replace('class="tl"', '')}${esc(g.r.toUpperCase())}</span>
+      <span class="sc">${g.rk} - ${g.dk}<small>${mm(g.dur)}</small></span>
+      <span class="tm b ${W === g.d ? '' : 'lost'}">${esc(g.d.toUpperCase())}${logo(g.d).replace('class="tl"', '')}</span>
+      <span class="mt">radiant left<br>${g.src === 'replay' ? 'from replay' : `<a href="https://www.opendota.com/matches/${g.id}" target="_blank" rel="noopener">${g.id}</a>`}</span></summary>
+      <div class="sb">${sb}</div></details>`;
+  }).join('') + '</div>';
+}
+
+function render() {
+  const { games, rows } = scope();
+  $('#main').innerHTML = glance(games, rows) + records(games, rows) + crystal(rows) + playersBlock(rows) +
+    `<h2 id="teams">TEAMS</h2><div class="hint">per game unless stated</div><div id="ttbl">${teamsSec(games, rows)}</div>` + abilBlock(rows) +
+    `<h2 id="heroes">HERO MODELS</h2><div class="hint">which hero bodies the abilities were drafted onto</div><div id="htbl">${heroSec(rows)}</div>` + fun(games, rows) + gamesSec(games);
+  RENDER.players = () => { $('#ptbl').innerHTML = playersSec(scope().rows); };
+  RENDER.teams = () => { const s = scope(); $('#ttbl').innerHTML = teamsSec(s.games, s.rows); };
+  RENDER.abilities = () => { $('#atbl').innerHTML = abilSec(scope().rows); };
+  RENDER.heroes = () => { $('#htbl').innerHTML = heroSec(scope().rows); };
+  $('#pmode').onclick = e => { const b = e.target.closest('button'); if (!b) return; PMODE = b.dataset.m; $('#pmode').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); RENDER.players(); };
+  $('#pmin').onchange = e => { PMIN = +e.target.value; RENDER.players(); };
+  $('#pq').oninput = e => { PQ = e.target.value.trim().toLowerCase(); RENDER.players(); };
+  $('#amin').onchange = e => { AMIN = +e.target.value; RENDER.abilities(); };
+  $('#aq').oninput = e => { AQ = e.target.value.trim().toLowerCase(); RENDER.abilities(); };
+}
+function tabs() {
+  const T = [{ v: 'all', l: 'OVERALL', s: `${D.games.length} games` }, ...D.days.map(d => ({ v: String(d.n), l: d.label.toUpperCase(), s: `${d.date} · ${d.what}` }))];
+  $('#tabs').innerHTML = T.map(t => `<button class="tab ${t.v === VIEW ? 'on' : ''}" data-v="${t.v}">${t.l}<small>${esc(t.s)}</small></button>`).join('');
+  $('#tabs').onclick = e => { const b = e.target.closest('.tab'); if (!b) return; VIEW = b.dataset.v; tabs(); render(); try { history.replaceState(null, '', VIEW === 'all' ? location.pathname : '?day=' + VIEW); } catch (e) {} };
+}
+fetch('stats/data.json?v=' + Date.now().toString().slice(0, -5)).then(r => r.json()).then(d => {
+  D = d; DUP = {}; Object.values(D.abilities).forEach(a => { DUP[a.n] = (DUP[a.n] || 0) + 1; });
+  const gn = {}; D.games.forEach(g => { gn[g.series] = (gn[g.series] || 0) + 1; g.gno = gn[g.series]; });
+  const q = new URLSearchParams(location.search).get('day'); if (q && D.days.some(x => String(x.n) === q)) VIEW = q;
+  const last = D.days[D.days.length - 1];
+  $('#upd').textContent = `Rumble in the Jungle VI · all games through ${last.label} (${last.date}) · ${D.games.length} games`;
+  tabs(); render();
+});
+</script>
+</body>
+</html>
