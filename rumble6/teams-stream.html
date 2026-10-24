@@ -48,6 +48,12 @@ img,video{image-rendering:pixelated;}
 .mmr{font-size:1.5rem;color:var(--green);text-shadow:2px 2px 0 rgba(0,0,0,.85);}
 .mmr.na{color:var(--dim);}
 .note{position:relative;z-index:3;text-align:center;color:var(--dim);font-size:1.25rem;margin-top:10px;}
+.card{position:relative;}
+.card.out{opacity:.45;filter:grayscale(.85);}
+.st{position:absolute;top:8px;right:8px;z-index:3;font-family:'Press Start 2P',monospace;font-size:.7rem;padding:7px 8px 6px;background:rgba(3,8,5,.85);border:2px solid #2e6e3a;color:var(--green);box-shadow:2px 2px 0 rgba(0,0,0,.6);}
+.st.q{color:#fff;background:#a81616;border-color:#e0392b;}
+.st.out{color:#c9bfae;border-color:#3a3a3a;}
+.st.champ{color:#2a1a00;background:#ffc83c;border-color:#fff1b8;}
 </style>
 </head>
 <body>
@@ -68,7 +74,7 @@ const TEAMS=[{"g": "A", "name": "Burger Boys", "key": "burgerboys", "logo": "ass
 if(location.search.includes('standin=1') || (Date.now() >= Date.parse('2026-10-16T22:00:00Z') && Date.now() < Date.parse('2026-10-17T22:00:00Z')))TEAMS.forEach(t=>t.roster=t.roster.map(r=>r[0]==='yukidan'?['SodiqControl','immortal','#2396',null,'ru',false,true]:r));
 // Sun Oct 18 only: Ashura stands in for Oss (Old Ravens, blopp 10-18)
 if(location.search.includes('standin=2') || (Date.now() >= Date.parse('2026-10-17T22:00:00Z') && Date.now() < Date.parse('2026-10-18T22:00:00Z')))TEAMS.forEach(t=>t.roster=t.roster.map(r=>r[0]==='Oss'?['Ashura','immortal','#870',null,'ru',false,true]:r));
-const card=t=>`<div class="card" style="--acc:${t.acc}">
+const card=t=>`<div class="card" id="c_${t.key}" style="--acc:${t.acc}">
   <div class="banner"><video muted loop playsinline autoplay preload="auto" poster="assets/versus/vs_${t.key}.jpg"><source src="assets/versus/loop_${t.key}.mp4" type="video/mp4"></video>
     <div class="tname"><img src="${t.logo}" alt="">${t.name.toUpperCase()}</div></div>
   <ul class="roster">${t.roster.map(([n,medal,pill,mmr,cc,cap,si])=>`<li class="p">
@@ -78,6 +84,28 @@ const card=t=>`<div class="card" style="--acc:${t.acc}">
     ${si?'<div class="mmr si">STAND-IN</div>':`<div class="mmr${mmr==null?' na':''}">${mmr??'&mdash;'}</div>`}</li>`).join('')}</ul></div>`;
 document.getElementById('groups').innerHTML=['A','B'].map(g=>`<div class="glabel">GROUP ${g}</div><div class="row">${TEAMS.filter(t=>t.g===g).map(card).join('')}</div>`).join('');
 document.querySelectorAll('video').forEach(v=>v.play().catch(()=>{}));
+// live status from the predict worker, same badges as the main page: out = greyed + placement, alive = next match (?api= override for tests)
+const API=new URLSearchParams(location.search).get('api')||'https://rumble6-predict.bloppbot.workers.dev';
+const PLACE={'LB ROUND 1':'7TH-8TH','LB QUARTER':'5TH-6TH','LB SEMI':'4TH','LB FINAL':'3RD','GRAND FINAL':'2ND'};
+let lastSig='';
+function status(cfg){
+  const st={};
+  for(const m of cfg.matches){if(!m.a||!m.b)continue;const w=m.result&&m.result.w;
+    if(!w){for(const k of [m.a,m.b])if(!st[k])st[k]=[m.stage.startsWith('UB')||m.stage==='GRAND FINAL'?'q':'',m.stage];continue;}
+    const l=w===m.a?m.b:m.a;
+    if(m.stage==='GRAND FINAL'){st[w]=['champ','CHAMPION'];st[l]=['out','2ND'];}
+    else if(m.stage.startsWith('LB'))st[l]=['out',PLACE[m.stage]];}
+  return st;
+}
+function paint(cfg){
+  const st=status(cfg),sig=JSON.stringify(st);if(sig===lastSig)return;lastSig=sig;
+  TEAMS.forEach(t=>{const c=document.getElementById('c_'+t.key);if(!c)return;const x=st[t.key];
+    c.classList.toggle('out',!!x&&x[0]==='out');c.querySelector('.st')?.remove();
+    const v=c.querySelector('video');if(x&&x[0]==='out')v.pause();else v.play().catch(()=>{});
+    if(x)c.querySelector('.banner').insertAdjacentHTML('beforeend',`<div class="st ${x[0]}">${x[1]}</div>`);});
+}
+const load=()=>fetch(API+'/api/config',{cache:'no-store'}).then(r=>r.json()).then(paint).catch(()=>{});
+load();setInterval(load,20000);
 </script>
 </body>
 </html>
