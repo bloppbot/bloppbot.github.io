@@ -162,6 +162,7 @@
   .conn { position: fixed; top: 8px; right: 10px; font-size: 15px; color: var(--mute); }
   .conn.bad { color: var(--red-bright); }
   [hidden] { display: none !important; }
+  .adminbar .tin { width: 58px; font: inherit; color: var(--cream); background: #000; border: 1px solid var(--line); padding: 3px 6px; }
   a.btn { color: var(--cream); }
   /* sticky live strip: who is up, who leads, who is online */
   .strip { position: sticky; top: 0; z-index: 5; background: rgba(3, 8, 5, .96); border: 2px solid var(--gold-dim); box-shadow: 4px 4px 0 #000; padding: 10px 14px; margin-bottom: 14px; display: grid; gap: 8px; }
@@ -211,7 +212,7 @@
       <p><b>Captains:</b> the 8 highest-rated players (AD rating + real Dota rank, real rank counts 1.5x). Everyone else goes up for auction, strongest first.</p>
       <p><b>Log in (test mode):</b> enter a Steam ID from the player list (the Dota friend ID or the 17-digit one) and you act as that player. Captains get bid buttons, everyone else watches. Real Steam login comes later.</p>
       <p><b>Gold:</b> an average captain gets <span id="baseTxt"></span>. Stronger captains start with less, weaker ones with more.</p>
-      <p><b>Bidding:</b> opening bid is at least 5, then +5 / +10 / +25 or type an amount. A fresh player waits 25s for an opener, every bid resets the clock to 12s. Highest bid at 0 wins.</p>
+      <p><b>Bidding:</b> opening bid is at least 5, then +5 / +10 / +25 or type an amount. A fresh player waits <span class="tOpenTxt">25</span>s for an opener, every bid resets the clock to <span class="tBidTxt">12</span>s (the admin can change both). Highest bid at 0 wins.</p>
       <p><b>No all-in on one player:</b> every open slot needs at least 5 gold, so your max bid = gold left minus 5 for each other open slot. Full teams can't bid.</p>
       <p><b>No bids:</b> the player goes to the back and comes around again once everyone has been up. Passed twice = unsold. If players run out before teams are full, the admin hands out the rest for 5 each, richest team first.</p>
       <p><b>Suggested price</b> = what the player would cost in the fixed-price market (same ratings). Only a guide, bid what you think he's worth.</p>
@@ -257,8 +258,9 @@ function render() {
   if (!V) return;
   const lot = V.lot && byId[V.lot], bid = V.bid && V.bid.p === V.lot ? V.bid : null;
   const capV = Object.fromEntries(V.caps.map(c => [c.id, c]));
-  const keep = { amt: (document.getElementById('amt') || {}).value, nm: (document.getElementById('nm') || {}).value, f: document.activeElement && document.activeElement.id };
+  const keep = { amt: (document.getElementById('amt') || {}).value, nm: (document.getElementById('nm') || {}).value, tOpen: (document.getElementById('tOpen') || {}).value, tBid: (document.getElementById('tBid') || {}).value, f: document.activeElement && document.activeElement.id };
   document.getElementById('baseTxt').textContent = V.base + ' gold';
+  document.querySelectorAll('.tOpenTxt').forEach(e => e.textContent = V.open_s); document.querySelectorAll('.tBidTxt').forEach(e => e.textContent = V.bid_s);
   document.getElementById('done').classList.toggle('on', V.open === 0);
 
   // live strip
@@ -278,7 +280,10 @@ function render() {
       <button class="btn" data-a="clearbid" ${bid ? '' : 'disabled'}>CLEAR BID</button>
       <button class="btn" data-a="undo" ${V.started ? '' : 'disabled'}>UNDO</button>
       <button class="btn" data-a="fill" ${V.open && V.queue.length + V.out.length <= V.open + 0 ? '' : 'disabled'} title="when the players left = open slots (or fewer)">FILL</button>
-      <button class="btn" data-a="reset">RESET</button>
+      <button class="btn" data-a="reset">RESET DRAFT</button>
+      <span style="margin-left:8px;color:var(--mute)">time per player:</span><input class="tin" id="tOpen" type="number" min="5" max="300" value="${V.open_s}" title="seconds to wait for the first bid">s
+      <span style="color:var(--mute)">after a bid:</span><input class="tin" id="tBid" type="number" min="3" max="120" value="${V.bid_s}" title="every bid resets the clock to this">s
+      <button class="btn" id="setTimes">SET TIME</button>
       <span style="margin-left:8px;color:var(--mute)">gold:</span>
       ${['EQUAL', 'HANDICAP', 'BIG HANDICAP'].map((t, i) => `<button class="btn" data-a="hand" data-v="${i}" aria-pressed="${V.hand === i}" ${V.started ? 'disabled' : ''}>${t}</button>`).join('')}`;
   }
@@ -312,7 +317,7 @@ function render() {
       <div class="hist">${bid ? bid.hist.slice().reverse().map(([c, a]) => esc(byId[c].n) + ' ' + a).join(' · ') : ''}</div></div>`;
   }
 
-  for (const id of ['amt', 'nm']) { const el = document.getElementById(id); if (el && keep[id]) el.value = keep[id]; if (el && keep.f === id) el.focus(); }
+  for (const id of ['amt', 'nm', 'tOpen', 'tBid']) { const el = document.getElementById(id); if (el && keep[id]) el.value = keep[id]; if (el && keep.f === id) el.focus(); }
 
   // captains
   document.getElementById('caps').innerHTML = V.caps.map(cv => {
@@ -347,7 +352,7 @@ function tick() {
     sx.className = 'sx' + (ms == null ? ' idle' : ms < 4000 ? ' low' : '');
   }
   if (!t || !V) return;
-  let ms, total = V.bid && V.bid.p === V.lot ? 12000 : 25000;
+  let ms, total = (V.bid && V.bid.p === V.lot ? V.bid_s : V.open_s) * 1000;
   if (!V.running) { t.firstChild.style.width = '0%'; s.textContent = V.lot ? 'waiting for the admin to start' : ''; return; }
   if (V.frozen != null) { ms = V.frozen; s.textContent = `PAUSED · ${Math.ceil(ms / 1000)}s`; }
   else { ms = Math.max(0, V.deadline - (Date.now() + skew)); s.textContent = `${Math.ceil(ms / 1000)}s`; }
@@ -371,10 +376,11 @@ document.addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b || b.disabled) return;
   if (b.id === 'login') login();
   else if (b.id === 'logout') { tok = null; me = null; try { localStorage.removeItem('rumble-auction-tok'); } catch (e) {} reconnect(); }
+  else if (b.id === 'setTimes') { admin('times', { open: +document.getElementById('tOpen').value, bid: +document.getElementById('tBid').value }); toast('time saved, applies from the next player / bid'); }
   else if (b.dataset.bid) bidAmt(+b.dataset.bid);
   else if (b.id === 'bidgo') bidAmt(parseInt(document.getElementById('amt').value, 10));
   else if (b.dataset.a) {
-    if (b.dataset.a === 'reset' && !confirm('Reset the whole auction?')) return;
+    if (b.dataset.a === 'reset' && !confirm('Reset the whole draft? All sales are wiped, everyone starts with full gold.')) return;
     admin(b.dataset.a, { v: b.dataset.v != null ? +b.dataset.v : undefined });
   }
 });
