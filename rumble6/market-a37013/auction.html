@@ -161,6 +161,28 @@
   .cap .kick { font-size: 15px; color: var(--red-bright); text-decoration: underline; margin-left: 6px; }
   .conn { position: fixed; top: 8px; right: 10px; font-size: 15px; color: var(--mute); }
   .conn.bad { color: var(--red-bright); }
+  [hidden] { display: none !important; }
+  a.btn { color: var(--cream); }
+  /* sticky live strip: who is up, who leads, who is online */
+  .strip { position: sticky; top: 0; z-index: 5; background: rgba(3, 8, 5, .96); border: 2px solid var(--gold-dim); box-shadow: 4px 4px 0 #000; padding: 10px 14px; margin-bottom: 14px; display: grid; gap: 8px; }
+  .strip .row1 { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
+  .strip .k { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--mute); margin-right: 6px; }
+  .strip .up { font-family: 'Press Start 2P', monospace; font-size: clamp(12px, 1.8vw, 16px); color: var(--gold); }
+  .strip .ld { font-family: 'Press Start 2P', monospace; font-size: clamp(11px, 1.6vw, 14px); color: var(--green-bright); }
+  .strip .ld.none { color: var(--cream-dim); }
+  .strip .sx { font-family: 'Press Start 2P', monospace; font-size: 14px; color: var(--cream); margin-left: auto; }
+  .strip .sx.low { color: var(--red-bright); }
+  .strip .sx.idle { font-size: 10px; color: var(--mute); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 18px; padding: 2px 9px; border: 1px solid var(--line); color: var(--mute); }
+  .chip i { width: 9px; height: 9px; border-radius: 50%; background: #3a3a3a; flex: none; }
+  .chip.on { color: var(--cream); border-color: var(--green-deep); }
+  .chip.on i { background: var(--green-bright); box-shadow: 0 0 6px var(--green-bright); }
+  .chip.lead { color: #000; background: var(--green-bright); border-color: var(--green-bright); }
+  .chip.lead i { background: #000; box-shadow: none; }
+  .chip.full { opacity: .4; text-decoration: line-through; }
+  .chip.me { outline: 2px solid var(--gold); outline-offset: 1px; }
+  .cap .seat b.off { color: var(--mute); }
 </style>
 </head>
 <body>
@@ -169,10 +191,12 @@
   <header>
     <div>
       <h1>CAPTAIN'S <em>AUCTION</em> <span style="font-size:.45em;color:var(--mute)">LIVE TEST</span></h1>
+      <p style="margin-top:8px"><a class="btn" href="players.html" style="text-decoration:none">PLAYER LIST + RATINGS</a> <a class="btn" href="index.html" style="text-decoration:none">FIXED-PRICE VERSION</a></p>
       <p class="sub">The 8 strongest players are captains, weaker captains get more gold. Players go up one at a time, strongest first. Every bid resets the clock, highest bid when it hits 0 wins. Every team ends with 5.</p>
     </div>
   </header>
 
+  <div class="strip" id="strip"></div>
   <div class="adminbar" id="admin" hidden></div>
   <div class="seatbar" id="seat"></div>
   <div class="done-banner" id="done"><div class="px">AUCTION COMPLETE</div><p style="margin-top:8px;color:var(--cream-dim)">Avg value per team is on each card. Closer numbers = fairer teams.</p></div>
@@ -237,6 +261,13 @@ function render() {
   document.getElementById('baseTxt').textContent = V.base + ' gold';
   document.getElementById('done').classList.toggle('on', V.open === 0);
 
+  // live strip
+  document.getElementById('strip').innerHTML = `<div class="row1">
+      <span><span class="k">BIDDING ON</span><span class="up">${lot ? esc(lot.n) : V.open ? '—' : 'DONE'}</span></span>
+      <span><span class="k">LEADING</span><span class="ld${bid ? '' : ' none'}">${bid ? `${esc(byId[bid.c].n)} · ${bid.amt}` : 'no bids yet'}</span></span>
+      <span class="sx" id="sx"></span></div>
+    <div class="chips"><span class="k" style="align-self:center">CAPTAINS ${V.caps.filter(c => c.online).length}/8 ONLINE</span>${V.caps.map(c => `<span class="chip${c.online ? ' on' : ''}${bid && bid.c === c.id ? ' lead' : ''}${c.open ? '' : ' full'}${c.id === me ? ' me' : ''}" title="${c.online ? 'online' : 'offline'}${c.open ? ' · max bid ' + c.max : ' · team full'}"><i></i>${esc(byId[c.id].n)}</span>`).join('')}</div>`;
+
   // admin
   const ad = document.getElementById('admin');
   if (ADMIN) {
@@ -289,7 +320,7 @@ function render() {
     const avg = Math.round(vals.reduce((x, y) => x + y, 0) / vals.length);
     return `<div class="cap${bid && bid.c === cv.id ? ' leading' : ''}${cv.id === me ? ' me' : ''}${cv.open ? '' : ' full'}">
       <div class="cap-top"><img class="logo" src="../${LOGO[c.t]}" alt=""><div class="cap-name">${esc(c.n)}<small>captain · ${rankTxt(c)}</small></div></div>
-      <div class="seat">${cv.online ? `<b>● online</b>${cv.online > 1 ? ' x' + cv.online : ''}` : 'offline'}</div>
+      <div class="seat">${cv.online ? `<b>● online</b>${cv.online > 1 ? ' x' + cv.online : ''}` : '<b class="off">○ offline</b>'}</div>
       <div class="budget"><span>gold ${cv.budget}</span><b>${cv.left}</b></div>
       <div class="bar"><i style="width:${Math.max(0, cv.left / cv.budget * 100)}%"></i></div>
       <div class="slots">${[0, 1, 2, 3].map(i => { const k = cv.roster[i]; if (!k) return `<div class="slot">open slot</div>`;
@@ -309,7 +340,12 @@ function render() {
 }
 
 function tick() {
-  const t = document.getElementById('timer'), s = document.getElementById('secs');
+  const t = document.getElementById('timer'), s = document.getElementById('secs'), sx = document.getElementById('sx');
+  if (sx && V) {
+    const ms = V.frozen != null ? V.frozen : V.running && V.deadline ? Math.max(0, V.deadline - (Date.now() + skew)) : null;
+    sx.textContent = !V.lot ? '' : ms == null ? 'WAITING FOR START' : (V.frozen != null ? 'PAUSED ' : '') + Math.ceil(ms / 1000) + 's';
+    sx.className = 'sx' + (ms == null ? ' idle' : ms < 4000 ? ' low' : '');
+  }
   if (!t || !V) return;
   let ms, total = V.bid && V.bid.p === V.lot ? 12000 : 25000;
   if (!V.running) { t.firstChild.style.width = '0%'; s.textContent = V.lot ? 'waiting for the admin to start' : ''; return; }
