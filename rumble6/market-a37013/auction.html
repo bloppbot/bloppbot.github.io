@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Captain's Auction · Rumble</title>
+<link rel="icon" href="../assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --bg: #030805; --panel: #081209; --panel-2: #0b1a0e; --line: #1b3521;
+    --green: #4caf50; --green-bright: #6fe07a; --green-deep: #2e6e3a;
+    --red: #a81616; --red-bright: #d42a2a; --gold: #e8b64a; --gold-dim: #9c7a2e;
+    --cream: #f0e6d2; --cream-dim: #b8ad96; --mute: #6f7d6c;
+  }
+  @font-face { font-family: 'VT323 Cyr'; src: url('../assets/fonts/pixelify-cyrillic.woff2') format('woff2'); unicode-range: U+0400-04FF; size-adjust: 80%; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { background: var(--bg); color: var(--cream); font-family: 'VT323', 'VT323 Cyr', monospace; font-size: 20px; line-height: 1.2; min-height: 100vh; }
+  body::before { content: ""; position: fixed; inset: 0; background: url('../assets/scene_arenafloor_1536.jpg') center/cover; opacity: .10; pointer-events: none; z-index: -1; }
+  .px { font-family: 'Press Start 2P', monospace; letter-spacing: 0; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 16px 80px; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+  header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+  h1 { font-family: 'Press Start 2P', monospace; font-size: clamp(18px, 3.4vw, 30px); line-height: 1.25; color: var(--cream); text-shadow: 3px 3px 0 #000; }
+  h1 em { font-style: normal; color: var(--gold); }
+  .sub { color: var(--cream-dim); font-size: 21px; margin-top: 8px; max-width: 640px; }
+  .tools { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { font-family: 'Press Start 2P', monospace; font-size: 10px; padding: 10px 12px; background: var(--panel-2); border: 2px solid var(--line); box-shadow: 3px 3px 0 #000; transition: transform .12s ease, border-color .12s ease; }
+  .btn:hover { border-color: var(--green-deep); }
+  .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000; }
+  .btn[aria-pressed="true"] { border-color: var(--gold-dim); color: var(--gold); }
+  .btn:disabled { opacity: .35; cursor: default; }
+
+  /* on the clock */
+  .clock { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; padding: 14px 16px; background: var(--panel); border: 2px solid var(--line); box-shadow: 4px 4px 0 #000; margin-bottom: 18px; }
+  .clock .lbl { font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--mute); }
+  .clock .who { font-family: 'Press Start 2P', monospace; font-size: 15px; color: var(--gold); }
+  .clock .meta { color: var(--cream-dim); }
+  .clock .forced { color: var(--red-bright); }
+  .order { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+  .order span { font-size: 17px; padding: 2px 7px; border: 1px solid var(--line); color: var(--mute); }
+  .order span.now { border-color: var(--gold); color: var(--gold); }
+  .order span.done { opacity: .35; }
+
+  /* captains */
+  .caps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 26px; }
+  @media (max-width: 1000px) { .caps { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .caps { grid-template-columns: 1fr; } }
+  .cap { background: var(--panel); border: 2px solid var(--line); box-shadow: 4px 4px 0 #000; padding: 12px; display: flex; flex-direction: column; gap: 8px; transition: border-color .15s ease; }
+  .cap.now { border-color: var(--gold); }
+  .cap-top { display: flex; align-items: center; gap: 10px; }
+  .cap-top img.logo { width: 34px; height: 34px; object-fit: contain; image-rendering: pixelated; }
+  .cap-name { font-family: 'Press Start 2P', monospace; font-size: 11px; line-height: 1.4; overflow-wrap: anywhere; }
+  .cap-name small { display: block; font-family: 'VT323', monospace; font-size: 17px; color: var(--mute); margin-top: 2px; }
+  .budget { display: flex; justify-content: space-between; align-items: baseline; font-size: 19px; }
+  .budget b { font-family: 'Press Start 2P', monospace; font-size: 13px; color: var(--gold); }
+  .bar { height: 6px; background: #000; border: 1px solid var(--line); }
+  .bar i { display: block; height: 100%; background: var(--gold-dim); transition: width .25s cubic-bezier(.23,1,.32,1); }
+  .slots { display: grid; gap: 4px; }
+  .slot { display: flex; justify-content: space-between; gap: 6px; padding: 3px 7px; font-size: 18px; border: 1px dashed var(--line); color: var(--mute); min-height: 28px; align-items: center; }
+  .slot.full { border-style: solid; color: var(--cream); background: var(--panel-2); }
+  .slot.full .g { color: var(--gold); }
+  .slot .f { color: var(--red-bright); font-size: 15px; }
+  .strength { font-size: 17px; color: var(--cream-dim); }
+
+  /* pool */
+  .pool-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+  h2 { font-family: 'Press Start 2P', monospace; font-size: 14px; }
+  .pool { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 10px; }
+  .pl { position: relative; text-align: left; background: var(--panel); border: 2px solid var(--line); box-shadow: 3px 3px 0 #000; padding: 10px 11px; display: grid; grid-template-columns: 38px 1fr auto; gap: 4px 10px; align-items: center; transition: transform .12s ease, border-color .12s ease, opacity .2s ease; }
+  .pl:not(:disabled):hover { border-color: var(--gold-dim); }
+  .pl:not(:disabled):active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000; }
+  .pl:disabled { cursor: default; }
+  .pl.cant { opacity: .38; }
+  .pl.sold { opacity: .14; }
+  .pl.cheapest { border-color: var(--red); }
+  .pl img.medal { width: 38px; height: 38px; grid-row: span 2; }
+  .pl .qm { width: 38px; height: 38px; grid-row: span 2; display: grid; place-items: center; border: 1px dashed var(--line); color: var(--mute); font-family: 'Press Start 2P', monospace; font-size: 12px; }
+  .pl .nm { font-family: 'Press Start 2P', monospace; font-size: 10px; line-height: 1.4; overflow-wrap: anywhere; }
+  .pl .price { font-family: 'Press Start 2P', monospace; font-size: 13px; color: var(--gold); grid-row: span 2; text-align: right; }
+  .pl .price small { display: block; font-family: 'VT323', monospace; font-size: 15px; color: var(--mute); margin-top: 3px; }
+  .pl .info { font-size: 17px; color: var(--cream-dim); display: flex; flex-wrap: wrap; gap: 0 8px; }
+  .pl .info .tm { display: inline-flex; align-items: center; gap: 4px; }
+  .pl .info img { width: 16px; height: 16px; object-fit: contain; }
+  .pl .owner { position: absolute; right: 8px; bottom: 4px; font-size: 15px; color: var(--green-bright); }
+
+  details { margin-top: 34px; background: var(--panel); border: 2px solid var(--line); box-shadow: 4px 4px 0 #000; }
+  summary { cursor: pointer; padding: 14px 16px; font-family: 'Press Start 2P', monospace; font-size: 11px; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "+ "; color: var(--gold); }
+  details[open] summary::before { content: "- "; }
+  .how { padding: 0 16px 16px; color: var(--cream-dim); display: grid; gap: 10px; max-width: 820px; }
+  .how b { color: var(--cream); font-weight: normal; }
+  .how code { font-family: 'VT323', monospace; color: var(--gold); }
+
+  .done-banner { display: none; margin-bottom: 18px; padding: 14px 16px; border: 2px solid var(--gold-dim); background: var(--panel-2); box-shadow: 4px 4px 0 #000; }
+  .done-banner.on { display: block; }
+  .done-banner .px { font-size: 12px; color: var(--gold); }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; background: var(--panel-2); border: 2px solid var(--green-deep); padding: 10px 14px; transition: opacity .2s ease, transform .2s cubic-bezier(.23,1,.32,1); pointer-events: none; }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  /* auction */
+  .stage { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 14px; margin-bottom: 18px; }
+  @media (max-width: 860px) { .stage { grid-template-columns: 1fr; } }
+  .lot { background: var(--panel); border: 2px solid var(--gold-dim); box-shadow: 4px 4px 0 #000; padding: 16px; display: grid; grid-template-columns: 72px 1fr; gap: 6px 16px; align-content: start; }
+  .lot .lbl, .bidbox .lbl { font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--mute); grid-column: 1 / -1; }
+  .lot img.medal, .lot .qm { width: 72px; height: 72px; grid-row: span 3; }
+  .lot .qm { display: grid; place-items: center; border: 1px dashed var(--line); color: var(--mute); font-family: 'Press Start 2P', monospace; }
+  .lot .nm { font-family: 'Press Start 2P', monospace; font-size: clamp(14px, 2.4vw, 22px); line-height: 1.3; overflow-wrap: anywhere; }
+  .lot .info { color: var(--cream-dim); display: flex; flex-wrap: wrap; gap: 0 12px; }
+  .lot .info img { width: 18px; height: 18px; object-fit: contain; vertical-align: -3px; }
+  .lot .est { color: var(--mute); }
+  .lot .est b { color: var(--cream); font-weight: normal; }
+  .bidbox { background: var(--panel); border: 2px solid var(--line); box-shadow: 4px 4px 0 #000; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .bidbox .big { font-family: 'Press Start 2P', monospace; font-size: clamp(22px, 4vw, 34px); color: var(--gold); }
+  .bidbox .lead { color: var(--cream-dim); min-height: 24px; }
+  .bidbox .lead b { color: var(--green-bright); font-weight: normal; }
+  .bidbox .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn.sold { border-color: var(--green-deep); color: var(--green-bright); }
+  .btn.pass { color: var(--cream-dim); }
+  .hist { font-size: 17px; color: var(--mute); max-height: 70px; overflow: hidden; }
+  .cap .bidrow { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .cap .bidrow .btn { padding: 8px 9px; font-size: 9px; }
+  .cap .bidrow input { width: 64px; font: inherit; font-size: 18px; color: var(--cream); background: #000; border: 1px solid var(--line); padding: 3px 6px; }
+  .cap .maxb { font-size: 16px; color: var(--mute); }
+  .cap.leading { border-color: var(--green-deep); }
+  .cap.full .bidrow { display: none; }
+  .queue { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }
+  .q { background: var(--panel); border: 1px solid var(--line); padding: 6px 9px; display: flex; justify-content: space-between; gap: 8px; font-size: 18px; }
+  .q .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .q .e { color: var(--mute); flex: none; }
+  .q.now { border-color: var(--gold); color: var(--gold); }
+  .q.sold { opacity: .25; }
+  .q.passed { border-style: dashed; color: var(--cream-dim); }
+  .q.out { opacity: .2; text-decoration: line-through; }
+  .lap2 { color: var(--red-bright); }
+
+  .seatbar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; padding: 12px 16px; background: var(--panel); border: 2px solid var(--line); box-shadow: 4px 4px 0 #000; margin-bottom: 14px; }
+  .seatbar .lbl { font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--mute); }
+  .seatbar input, .mybid input { font: inherit; color: var(--cream); background: #000; border: 1px solid var(--line); padding: 4px 8px; }
+  .seatbar input { width: 170px; }
+  .seatbar .seats { display: flex; flex-wrap: wrap; gap: 6px; }
+  .seatbar .you { color: var(--green-bright); }
+  .adminbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; border: 2px dashed var(--gold-dim); margin-bottom: 14px; }
+  .adminbar .lbl { font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--gold); margin-right: 6px; }
+  .timer { height: 10px; background: #000; border: 1px solid var(--line); }
+  .timer i { display: block; height: 100%; background: var(--green); }
+  .timer.low i { background: var(--red-bright); }
+  .secs { font-family: 'Press Start 2P', monospace; font-size: 12px; color: var(--cream-dim); }
+  .mybid { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding-top: 6px; border-top: 1px solid var(--line); }
+  .mybid input { width: 80px; font-size: 20px; }
+  .mybid .note { color: var(--mute); font-size: 18px; }
+  .cap.me { box-shadow: 4px 4px 0 #000, 0 0 0 2px var(--green-deep) inset; }
+  .cap .seat { font-size: 16px; color: var(--mute); }
+  .cap .seat b { color: var(--green-bright); font-weight: normal; }
+  .cap .kick { font-size: 15px; color: var(--red-bright); text-decoration: underline; margin-left: 6px; }
+  .conn { position: fixed; top: 8px; right: 10px; font-size: 15px; color: var(--mute); }
+  .conn.bad { color: var(--red-bright); }
+</style>
+</head>
+<body>
+<div class="conn" id="conn">connecting…</div>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>CAPTAIN'S <em>AUCTION</em> <span style="font-size:.45em;color:var(--mute)">LIVE TEST</span></h1>
+      <p class="sub">The 8 strongest players are captains, weaker captains get more gold. Players go up one at a time, strongest first. Every bid resets the clock, highest bid when it hits 0 wins. Every team ends with 5.</p>
+    </div>
+  </header>
+
+  <div class="adminbar" id="admin" hidden></div>
+  <div class="seatbar" id="seat"></div>
+  <div class="done-banner" id="done"><div class="px">AUCTION COMPLETE</div><p style="margin-top:8px;color:var(--cream-dim)">Avg value per team is on each card. Closer numbers = fairer teams.</p></div>
+  <div class="stage" id="stage"></div>
+  <div class="caps" id="caps"></div>
+  <div class="pool-head"><h2>UP NEXT <span id="left" style="color:var(--mute)"></span></h2></div>
+  <div class="queue" id="queue"></div>
+
+  <details>
+    <summary>HOW THE AUCTION WORKS</summary>
+    <div class="how">
+      <p><b>Captains:</b> the 8 highest-rated players (AD rating + real Dota rank, real rank counts 1.5x). Everyone else goes up for auction, strongest first.</p>
+      <p><b>Log in (test mode):</b> enter a Steam ID from the player list (the Dota friend ID or the 17-digit one) and you act as that player. Captains get bid buttons, everyone else watches. Real Steam login comes later.</p>
+      <p><b>Gold:</b> an average captain gets <span id="baseTxt"></span>. Stronger captains start with less, weaker ones with more.</p>
+      <p><b>Bidding:</b> opening bid is at least 5, then +5 / +10 / +25 or type an amount. A fresh player waits 25s for an opener, every bid resets the clock to 12s. Highest bid at 0 wins.</p>
+      <p><b>No all-in on one player:</b> every open slot needs at least 5 gold, so your max bid = gold left minus 5 for each other open slot. Full teams can't bid.</p>
+      <p><b>No bids:</b> the player goes to the back and comes around again once everyone has been up. Passed twice = unsold. If players run out before teams are full, the admin hands out the rest for 5 each, richest team first.</p>
+      <p><b>Suggested price</b> = what the player would cost in the fixed-price market (same ratings). Only a guide, bid what you think he's worth.</p>
+    </div>
+  </details>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const { players: PL, logos: LOGO } = {"players": [{"id": "265369004", "n": "Lost", "t": "tmnt", "tn": "TMNT", "m": "immortal", "lb": 527, "reg": "EU", "eu": null, "mem": 4119, "v": 3919, "p": 950, "cap": true, "q": false}, {"id": "106473979", "n": "Erik", "t": "burgerboys", "tn": "Burger Boys", "m": "immortal", "lb": 21, "reg": "AM", "eu": 840, "mem": 3982, "v": 3815, "p": 655, "cap": true, "q": false}, {"id": "211202443", "n": "Etsi", "t": "tmnt", "tn": "TMNT", "m": "immortal", "lb": 4482, "reg": "EU", "eu": null, "mem": 4078, "v": 3798, "p": 615, "cap": true, "q": false}, {"id": "94301365", "n": "Mahax", "t": "vikings", "tn": "Vikings", "m": "immortal", "lb": 618, "reg": "EU", "eu": null, "mem": 3886, "v": 3770, "p": 555, "cap": true, "q": false}, {"id": "148557755", "n": "Mirrored", "t": "vikings", "tn": "Vikings", "m": "immortal", "lb": 4185, "reg": "EU", "eu": null, "mem": 3872, "v": 3676, "p": 400, "cap": true, "q": false}, {"id": "54662003", "n": "noertti", "t": "dontpeek", "tn": "Don't Peek", "m": "immortal", "lb": 2428, "reg": "EU", "eu": null, "mem": 3777, "v": 3642, "p": 355, "cap": true, "q": false}, {"id": "210167497", "n": "Shushu", "t": "tmnt", "tn": "TMNT", "m": "immortal", "lb": 199, "reg": "EU", "eu": null, "mem": 3372, "v": 3597, "p": 300, "cap": true, "q": false}, {"id": "379941199", "n": "Dingus", "t": "burgerboys", "tn": "Burger Boys", "m": "immortal", "lb": 2064, "reg": "AM", "eu": 82560, "mem": 3781, "v": 3573, "p": 275, "cap": true, "q": false}, {"id": "320587966", "n": "Poof", "t": "burgerboys", "tn": "Burger Boys", "m": "immortal", "lb": 2875, "reg": "AM", "eu": 115000, "mem": 3725, "v": 3539, "p": 245, "cap": false, "q": false}, {"id": "332561278", "n": "n0n1ck", "t": "oldravens", "tn": "Old Ravens", "m": "immortal", "lb": 1344, "reg": "EU", "eu": null, "mem": 3556, "v": 3534, "p": 240, "cap": false, "q": false}, {"id": "292867484", "n": "Aniki", "t": "gym", "tn": "GYM Esports", "m": "immortal", "lb": 870, "reg": "EU", "eu": null, "mem": 3420, "v": 3522, "p": 230, "cap": false, "q": false}, {"id": "113561132", "n": "Saya", "t": "spacemarines", "tn": "Space Marines", "m": "immortal", "lb": 538, "reg": "EU", "eu": null, "mem": null, "v": 3520, "p": 230, "cap": false, "q": false}, {"id": "901021922", "n": "Ptenchik", "t": "tmnt", "tn": "TMNT", "m": "immortal", "lb": 3735, "reg": "EU", "eu": null, "mem": 3597, "v": 3513, "p": 225, "cap": false, "q": false}, {"id": "192412922", "n": "Friscy", "t": "burgerboys", "tn": "Burger Boys", "m": "divine-2", "lb": null, "reg": "AM", "eu": null, "mem": 3671, "v": 3508, "p": 220, "cap": false, "q": false}, {"id": "86489056", "n": "^War.Some", "t": "vikings", "tn": "Vikings", "m": null, "lb": null, "reg": "EU", "eu": null, "mem": 3490, "v": 3490, "p": 205, "cap": false, "q": false}, {"id": "17906081", "n": "Actor", "t": "nwo", "tn": "New World Order", "m": null, "lb": null, "reg": "AM", "eu": null, "mem": 3479, "v": 3479, "p": 195, "cap": false, "q": false}, {"id": "118036682", "n": "Billsive", "t": "nwo", "tn": "New World Order", "m": "immortal", "lb": null, "reg": "AM", "eu": null, "mem": 3580, "v": 3451, "p": 180, "cap": false, "q": false}, {"id": "349472155", "n": "Vata", "t": "spacemarines", "tn": "Space Marines", "m": "immortal", "lb": 542, "reg": "EU", "eu": null, "mem": 2639, "v": 3449, "p": 175, "cap": false, "q": false}, {"id": "225442653", "n": "FoXy", "t": "tmnt", "tn": "TMNT", "m": "divine-3", "lb": null, "reg": "EU", "eu": null, "mem": 3554, "v": 3433, "p": 165, "cap": false, "q": false}, {"id": "81036058", "n": "Plupo", "t": "nwo", "tn": "New World Order", "m": "immortal", "lb": 1050, "reg": "EU", "eu": null, "mem": 3051, "v": 3425, "p": 165, "cap": false, "q": false}, {"id": "110514740", "n": "Arnold", "t": "spacemarines", "tn": "Space Marines", "m": "immortal", "lb": 3579, "reg": "EU", "eu": null, "mem": 3447, "v": 3424, "p": 160, "cap": false, "q": false}, {"id": "186287226", "n": "bwoha", "t": "oldravens", "tn": "Old Ravens", "m": "immortal", "lb": 1721, "reg": "EU", "eu": null, "mem": 3251, "v": 3423, "p": 160, "cap": false, "q": false}, {"id": "156409111", "n": "Dr. Godbalove", "t": "nwo", "tn": "New World Order", "m": "immortal", "lb": 4369, "reg": "AM", "eu": 174760, "mem": 3520, "v": 3414, "p": 155, "cap": false, "q": false}, {"id": "372541122", "n": "Jynx", "t": "burgerboys", "tn": "Burger Boys", "m": "immortal", "lb": 1701, "reg": "AM", "eu": 68040, "mem": 3503, "v": 3404, "p": 150, "cap": false, "q": false}, {"id": "296779925", "n": "Ultra Greed", "t": "gym", "tn": "GYM Esports", "m": "divine-4", "lb": null, "reg": "EU", "eu": null, "mem": 3499, "v": 3403, "p": 150, "cap": false, "q": false}, {"id": "153867895", "n": "Space Cowboy", "t": "spacemarines", "tn": "Space Marines", "m": "immortal", "lb": null, "reg": "AM", "eu": null, "mem": 3449, "v": 3394, "p": 145, "cap": false, "q": false}, {"id": "272993204", "n": "Kawabunga", "t": "gym", "tn": "GYM Esports", "m": "immortal", "lb": null, "reg": "EU", "eu": null, "mem": 3478, "v": 3393, "p": 145, "cap": false, "q": false}, {"id": "158897083", "n": "balll", "t": "dontpeek", "tn": "Don't Peek", "m": "immortal", "lb": 2086, "reg": "EU", "eu": null, "mem": 3080, "v": 3365, "p": 130, "cap": false, "q": false}, {"id": "963252025", "n": "Oss", "t": "oldravens", "tn": "Old Ravens", "m": "immortal", "lb": 3271, "reg": "EU", "eu": null, "mem": null, "v": 3342, "p": 120, "cap": false, "q": false}, {"id": "3292479", "n": "sifla", "t": "dontpeek", "tn": "Don't Peek", "m": "immortal", "lb": 4752, "reg": "EU", "eu": null, "mem": 3272, "v": 3337, "p": 120, "cap": false, "q": false}, {"id": "160510334", "n": "lexmach", "t": "oldravens", "tn": "Old Ravens", "m": "immortal", "lb": 4319, "reg": "EU", "eu": null, "mem": null, "v": 3314, "p": 110, "cap": false, "q": false}, {"id": "259103381", "n": "yukidan", "t": "oldravens", "tn": "Old Ravens", "m": "immortal", "lb": 4821, "reg": "EU", "eu": null, "mem": null, "v": 3303, "p": 105, "cap": false, "q": false}, {"id": "37777993", "n": "BigGoose", "t": "dontpeek", "tn": "Don't Peek", "m": "immortal", "lb": 3859, "reg": "EU", "eu": null, "mem": 2958, "v": 3301, "p": 105, "cap": false, "q": false}, {"id": "164544758", "n": "PandaPGOD", "t": "nwo", "tn": "New World Order", "m": "immortal", "lb": 47, "reg": "AM", "eu": 1880, "mem": 2733, "v": 3300, "p": 105, "cap": false, "q": false}, {"id": "218077154", "n": "Yokozuna Hoshoryu", "t": "gym", "tn": "GYM Esports", "m": "immortal", "lb": null, "reg": "EU", "eu": null, "mem": 3319, "v": 3292, "p": 100, "cap": false, "q": false}, {"id": "56700331", "n": "Fruugu", "t": "dontpeek", "tn": "Don't Peek", "m": "immortal", "lb": 4860, "reg": "EU", "eu": null, "mem": 2978, "v": 3274, "p": 95, "cap": false, "q": false}, {"id": "102819139", "n": "Dante", "t": "vikings", "tn": "Vikings", "m": "immortal", "lb": null, "reg": "EU", "eu": null, "mem": 3194, "v": 3238, "p": 85, "cap": false, "q": false}, {"id": "242503644", "n": "Poodge", "t": "gym", "tn": "GYM Esports", "m": "immortal", "lb": 3397, "reg": "AM", "eu": 135880, "mem": 3140, "v": 3226, "p": 80, "cap": false, "q": false}, {"id": "145192066", "n": "Ben", "t": "vikings", "tn": "Vikings", "m": "archon-4", "lb": null, "reg": "EU", "eu": null, "mem": 3325, "v": 3132, "p": 55, "cap": false, "q": false}, {"id": "106989621", "n": "Tkui", "t": "spacemarines", "tn": "Space Marines", "m": "ancient-4", "lb": null, "reg": "EU", "eu": null, "mem": 3119, "v": 3080, "p": 45, "cap": false, "q": false}, {"id": "1093973531", "n": "Srivelat", "t": "hymer", "tn": "HYMER", "m": "ancient-1", "lb": null, "reg": "EU", "eu": null, "mem": null, "v": 2893, "p": 25, "cap": false, "q": true}, {"id": "1518775720", "n": "famtomikss", "t": "hymer", "tn": "HYMER", "m": "ancient-1", "lb": null, "reg": "EU", "eu": null, "mem": null, "v": 2893, "p": 25, "cap": false, "q": true}, {"id": "86724809", "n": "kitchen", "t": "mallards", "tn": "Mallards", "m": null, "lb": null, "reg": "EU", "eu": null, "mem": 2870, "v": 2870, "p": 20, "cap": false, "q": true}, {"id": "1064090113", "n": "Marl", "t": "hymer", "tn": "HYMER", "m": "legend-5", "lb": null, "reg": "EU", "eu": null, "mem": null, "v": 2863, "p": 20, "cap": false, "q": true}, {"id": "86732537", "n": "CCrush", "t": "mallards", "tn": "Mallards", "m": null, "lb": null, "reg": "EU", "eu": null, "mem": 2809, "v": 2809, "p": 20, "cap": false, "q": true}, {"id": "975270769", "n": "korf", "t": "hymer", "tn": "HYMER", "m": "legend-3", "lb": null, "reg": "EU", "eu": null, "mem": null, "v": 2803, "p": 20, "cap": false, "q": true}, {"id": "1589402230", "n": "толчонка", "t": "hymer", "tn": "HYMER", "m": "legend-2", "lb": null, "reg": "EU", "eu": null, "mem": null, "v": 2773, "p": 15, "cap": false, "q": true}, {"id": "37332980", "n": "Sadpanda008", "t": "mallards", "tn": "Mallards", "m": "legend-3", "lb": null, "reg": "AM", "eu": null, "mem": 2653, "v": 2744, "p": 15, "cap": false, "q": true}, {"id": "109437833", "n": "Boy next door", "t": "blondinok", "tn": "Playlist dlya blondinok", "m": "archon-3", "lb": null, "reg": "EU", "eu": null, "mem": 2691, "v": 2664, "p": 10, "cap": false, "q": true}, {"id": "233511245", "n": "I feel so alive", "t": "blondinok", "tn": "Playlist dlya blondinok", "m": "legend-2", "lb": null, "reg": "EU", "eu": null, "mem": 2258, "v": 2609, "p": 10, "cap": false, "q": true}, {"id": "917400483", "n": "Kriamant", "t": "blondinok", "tn": "Playlist dlya blondinok", "m": "archon-2", "lb": null, "reg": "EU", "eu": null, "mem": 2019, "v": 2582, "p": 10, "cap": false, "q": true}, {"id": "75048465", "n": "thundertoss", "t": "mallards", "tn": "Mallards", "m": "archon-4", "lb": null, "reg": "AM", "eu": null, "mem": 2456, "v": 2518, "p": 5, "cap": false, "q": true}, {"id": "89791306", "n": "007shadow", "t": "mallards", "tn": "Mallards", "m": "crusader-3", "lb": null, "reg": "AM", "eu": null, "mem": 2201, "v": 2334, "p": 5, "cap": false, "q": true}, {"id": "401159520", "n": "Каспийский груз", "t": "blondinok", "tn": "Playlist dlya blondinok", "m": null, "lb": null, "reg": "EU", "eu": null, "mem": 2312, "v": 2312, "p": 5, "cap": false, "q": true}, {"id": "428156429", "n": "Азизгул", "t": "blondinok", "tn": "Playlist dlya blondinok", "m": null, "lb": null, "reg": "EU", "eu": null, "mem": 2018, "v": 2018, "p": 5, "cap": false, "q": true}], "logos": {"burgerboys": "assets/logos/burgerboys_v2.png", "tmnt": "assets/logos/tmnt.png", "vikings": "assets/logos/vikings.png", "nwo": "assets/logos/nwo_v2.png", "gym": "assets/logos/gymesports.png", "dontpeek": "assets/logos/dontpeek.png", "spacemarines": "assets/logos/spacemarines.png", "oldravens": "assets/logos/oldravens.png", "mallards": "assets/logos/mallards.png", "hymer": "assets/logos/hymer_v2.png", "blondinok": "assets/logos/blondinok.png"}};
+const byId = Object.fromEntries(PL.map(p => [p.id, p]));
+const ADMIN = new URLSearchParams(location.search).get('admin');
+const API = 'https://rumble-auction.bloppbot.workers.dev';
+let tok = null, me = null, ws = null;
+try { tok = localStorage.getItem('rumble-auction-tok'); } catch (e) {}
+let V = null, skew = 0;
+
+const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+const medalImg = p => p.m ? `<img class="medal" src="../assets/ranking-medals/seasonal-rank-${p.m}.png" alt="${p.m}">` : `<div class="qm" title="rank hidden">?</div>`;
+const rankTxt = p => p.lb ? `#${p.lb} ${p.reg}${p.reg === 'AM' ? ` (EU~${p.eu > 5000 ? '5000+' : '#' + p.eu})` : ''}` : (p.m === 'immortal' ? 'immortal' : p.m ? p.m.replace('-', ' ') : 'rank hidden');
+const toast = m => { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('on'), 1800); };
+const send = m => { if (ws && ws.readyState === 1) ws.send(JSON.stringify(m)); else toast('not connected'); };
+const admin = (action, extra) => send(Object.assign({ t: 'admin', action }, extra));
+
+function connect() {
+  const conn = document.getElementById('conn');
+  const q = new URLSearchParams(); if (tok) q.set('tok', tok); if (ADMIN) q.set('admin', ADMIN);
+  ws = new WebSocket(API.replace(/^http/, 'ws') + '/ws?' + q);
+  ws.onopen = () => { conn.textContent = 'live'; conn.className = 'conn'; };
+  ws.onmessage = e => {
+    const m = JSON.parse(e.data);
+    if (m.t === 'hello') { me = m.id; if (tok && !m.id) { tok = null; try { localStorage.removeItem('rumble-auction-tok'); } catch (e) {} } if (ADMIN && !m.admin) toast('admin key not accepted'); }
+    else if (m.t === 'state') { V = m; skew = V.now - Date.now(); }
+    else if (m.t === 'err') return toast(m.err);
+    render();
+  };
+  ws.onclose = () => { conn.textContent = 'reconnecting…'; conn.className = 'conn bad'; setTimeout(connect, 1500); };
+}
+setInterval(() => { if (ws && ws.readyState === 1) ws.send('{"t":"ping"}'); }, 25000);
+function reconnect() { if (ws) { ws.onclose = null; ws.close(); } connect(); }
+
+function render() {
+  if (!V) return;
+  const lot = V.lot && byId[V.lot], bid = V.bid && V.bid.p === V.lot ? V.bid : null;
+  const capV = Object.fromEntries(V.caps.map(c => [c.id, c]));
+  const keep = { amt: (document.getElementById('amt') || {}).value, nm: (document.getElementById('nm') || {}).value, f: document.activeElement && document.activeElement.id };
+  document.getElementById('baseTxt').textContent = V.base + ' gold';
+  document.getElementById('done').classList.toggle('on', V.open === 0);
+
+  // admin
+  const ad = document.getElementById('admin');
+  if (ADMIN) {
+    ad.hidden = false;
+    ad.innerHTML = `<span class="lbl">ADMIN</span>
+      ${V.running ? (V.frozen != null ? '<button class="btn" data-a="resume">RESUME</button>' : '<button class="btn" data-a="pause">PAUSE</button>') : `<button class="btn sold" data-a="start" ${V.lot ? '' : 'disabled'}>START</button>`}
+      <button class="btn" data-a="sold" ${V.lot ? '' : 'disabled'}>${bid ? 'SOLD NOW' : 'SKIP (NO BIDS)'}</button>
+      <button class="btn" data-a="clearbid" ${bid ? '' : 'disabled'}>CLEAR BID</button>
+      <button class="btn" data-a="undo" ${V.started ? '' : 'disabled'}>UNDO</button>
+      <button class="btn" data-a="fill" ${V.open && V.queue.length + V.out.length <= V.open + 0 ? '' : 'disabled'} title="when the players left = open slots (or fewer)">FILL</button>
+      <button class="btn" data-a="reset">RESET</button>
+      <span style="margin-left:8px;color:var(--mute)">gold:</span>
+      ${['EQUAL', 'HANDICAP', 'BIG HANDICAP'].map((t, i) => `<button class="btn" data-a="hand" data-v="${i}" aria-pressed="${V.hand === i}" ${V.started ? 'disabled' : ''}>${t}</button>`).join('')}`;
+  }
+
+  // login
+  const seat = document.getElementById('seat'), mine = me && capV[me];
+  if (me) {
+    seat.innerHTML = `<span class="lbl">YOU ARE</span><span class="you">${esc(byId[me].n)}</span><span style="color:var(--mute)">${mine ? 'captain, you can bid' : 'not a captain, watching'}</span><button class="btn" id="logout">LOG OUT</button>`;
+  } else {
+    seat.innerHTML = `<span class="lbl">LOG IN</span><input id="nm" maxlength="17" inputmode="numeric" placeholder="your Steam ID"><button class="btn sold" id="login">GO</button>
+      <span style="color:var(--mute)">test mode: any Steam ID from the player list. Or just watch.</span>`;
+  }
+
+  // stage
+  const stage = document.getElementById('stage');
+  if (!lot) stage.innerHTML = V.open ? `<div class="bidbox" style="grid-column:1/-1"><div class="lbl">NOBODY LEFT ON THE BLOCK</div><div class="lead">${V.open} open slots. The admin hands out the rest with FILL.</div></div>` : '';
+  else {
+    const myMax = mine ? mine.max : 0, floor = bid ? bid.amt + V.min : V.min;
+    const canBid = mine && V.running && V.frozen == null && mine.open && myMax >= floor && !(bid && bid.c === me);
+    stage.innerHTML = `<div class="lot"><div class="lbl">ON THE BLOCK${V.lap === 2 ? ' · <span class="lap2">LAP 2 (passed once)</span>' : ''}</div>
+      ${medalImg(lot)}<div class="nm">${esc(lot.n)}</div>
+      <div class="info"><span>${lot.mem ? 'AD ' + lot.mem : 'no AD rating'}</span><span>${rankTxt(lot)}</span><span><img src="../${LOGO[lot.t]}" alt=""> ${esc(lot.tn)}</span></div>
+      <div class="est">value <b>${lot.v}</b> · suggested price <b>${lot.p}</b></div></div>
+      <div class="bidbox"><div class="lbl">HIGHEST BID</div>
+      <div class="big">${bid ? bid.amt : '—'}</div>
+      <div class="lead">${bid ? `<b>${esc(byId[bid.c].n)}</b> leads${bid.c === me ? ' (you)' : ''}` : `opening bid ${V.min}+`}</div>
+      <div class="timer" id="timer"><i></i></div><div class="secs" id="secs"></div>
+      ${mine ? `<div class="mybid">${[5, 10, 25].map(d => { const a = (bid ? bid.amt : 0) + d; return `<button class="btn" data-bid="${a}" ${canBid && a <= myMax && a >= floor ? '' : 'disabled'}>${bid ? '+' + d : d}</button>`; }).join('')}
+        <input id="amt" type="number" min="${floor}" step="5" placeholder="${floor}" ${canBid ? '' : 'disabled'}><button class="btn sold" id="bidgo" ${canBid ? '' : 'disabled'}>BID</button>
+        <span class="note">your max ${myMax}</span></div>` : ''}
+      <div class="hist">${bid ? bid.hist.slice().reverse().map(([c, a]) => esc(byId[c].n) + ' ' + a).join(' · ') : ''}</div></div>`;
+  }
+
+  for (const id of ['amt', 'nm']) { const el = document.getElementById(id); if (el && keep[id]) el.value = keep[id]; if (el && keep.f === id) el.focus(); }
+
+  // captains
+  document.getElementById('caps').innerHTML = V.caps.map(cv => {
+    const c = byId[cv.id], vals = [c.v, ...cv.roster.map(k => byId[k.id].v)];
+    const avg = Math.round(vals.reduce((x, y) => x + y, 0) / vals.length);
+    return `<div class="cap${bid && bid.c === cv.id ? ' leading' : ''}${cv.id === me ? ' me' : ''}${cv.open ? '' : ' full'}">
+      <div class="cap-top"><img class="logo" src="../${LOGO[c.t]}" alt=""><div class="cap-name">${esc(c.n)}<small>captain · ${rankTxt(c)}</small></div></div>
+      <div class="seat">${cv.online ? `<b>● online</b>${cv.online > 1 ? ' x' + cv.online : ''}` : 'offline'}</div>
+      <div class="budget"><span>gold ${cv.budget}</span><b>${cv.left}</b></div>
+      <div class="bar"><i style="width:${Math.max(0, cv.left / cv.budget * 100)}%"></i></div>
+      <div class="slots">${[0, 1, 2, 3].map(i => { const k = cv.roster[i]; if (!k) return `<div class="slot">open slot</div>`;
+        return `<div class="slot full"><span>${esc(byId[k.id].n)}${k.fill ? ' <span class="f">fill</span>' : ''}</span><span class="g">${k.paid}</span></div>`; }).join('')}</div>
+      <div class="maxb">${cv.open ? `max bid ${cv.max}` : 'team full'}</div>
+      <div class="strength">avg value ${avg}${cv.open ? '' : ' · done'}</div></div>`;
+  }).join('');
+
+  // queue
+  const owner = Object.fromEntries(V.sold.map(k => [k.id, byId[k.c].n]));
+  document.getElementById('left').textContent = `${V.queue.length} LEFT · ${V.open} SLOTS OPEN`;
+  document.getElementById('queue').innerHTML = [
+    ...V.queue.map(q => `<div class="q${q.id === V.lot ? ' now' : ''}${q.lap2 ? ' passed' : ''}"><span class="n">${esc(byId[q.id].n)}</span><span class="e">${q.lap2 ? 'lap 2' : 'sugg. ' + byId[q.id].p}</span></div>`),
+    ...V.out.map(id => `<div class="q out"><span class="n">${esc(byId[id].n)}</span><span class="e">unsold</span></div>`),
+    ...V.sold.map(k => `<div class="q sold"><span class="n">${esc(byId[k.id].n)}</span><span class="e">${esc(owner[k.id])} ${k.paid}</span></div>`)].join('');
+  tick();
+}
+
+function tick() {
+  const t = document.getElementById('timer'), s = document.getElementById('secs');
+  if (!t || !V) return;
+  let ms, total = V.bid && V.bid.p === V.lot ? 12000 : 25000;
+  if (!V.running) { t.firstChild.style.width = '0%'; s.textContent = V.lot ? 'waiting for the admin to start' : ''; return; }
+  if (V.frozen != null) { ms = V.frozen; s.textContent = `PAUSED · ${Math.ceil(ms / 1000)}s`; }
+  else { ms = Math.max(0, V.deadline - (Date.now() + skew)); s.textContent = `${Math.ceil(ms / 1000)}s`; }
+  t.firstChild.style.width = Math.min(100, ms / total * 100) + '%';
+  t.classList.toggle('low', ms < 4000);
+}
+setInterval(tick, 100);
+
+async function login() {
+  const v = document.getElementById('nm').value.trim();
+  if (!v) return toast('enter a Steam ID');
+  try {
+    const r = await fetch(API + '/api/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ steam: v }) });
+    const j = await r.json(); if (j.err) return toast(j.err);
+    tok = j.tok; try { localStorage.setItem('rumble-auction-tok', tok); } catch (e) {}
+    reconnect();
+  } catch (e) { toast('connection problem'); }
+}
+const bidAmt = v => { if (v) send({ t: 'bid', amt: v }); };
+document.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || b.disabled) return;
+  if (b.id === 'login') login();
+  else if (b.id === 'logout') { tok = null; me = null; try { localStorage.removeItem('rumble-auction-tok'); } catch (e) {} reconnect(); }
+  else if (b.dataset.bid) bidAmt(+b.dataset.bid);
+  else if (b.id === 'bidgo') bidAmt(parseInt(document.getElementById('amt').value, 10));
+  else if (b.dataset.a) {
+    if (b.dataset.a === 'reset' && !confirm('Reset the whole auction?')) return;
+    admin(b.dataset.a, { v: b.dataset.v != null ? +b.dataset.v : undefined });
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (e.target.id === 'amt') bidAmt(parseInt(e.target.value, 10));
+  if (e.target.id === 'nm') login();
+});
+connect();
+</script>
+</body>
+</html>
